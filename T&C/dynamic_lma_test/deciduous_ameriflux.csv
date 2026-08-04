@@ -1,0 +1,42 @@
+﻿ECO_IDX,US_L3CODE,US_L3NAME,ForestType,PLSR_TemporalQ2,nStations,Rank,StationID,StationName,Lat,Lon,IGBP,DataStart,DataEnd,nYears,Status,StationURL
+5,84,Atlantic Coastal Pine Barrens,deciduous,0.114358,1,1,US-Slt,Silas Little- New Jersey,39.9138,-74.596,DBF,2004,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Slt
+7,66,Blue Ridge,deciduous,0.051101,3,1,US-Cwt,Coweeta,35.0592,-83.4275,DBF,2011,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Cwt
+7,66,Blue Ridge,deciduous,0.051101,3,2,US-xGR,"NEON Great Smoky Mountains National Park, Twin Creeks (GRSM)",35.689,-83.5019,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xGR
+7,66,Blue Ridge,deciduous,0.051101,3,3,US-xSC,NEON Smithsonian Conservation Biology Institute (SCBI),38.8929,-78.1395,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xSC
+17,40,Central Irregular Plains,deciduous,0.175465,1,1,US-xUK,NEON The University of Kansas Field Station (UKFS),39.0404,-95.1921,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xUK
+32,57,Huron/Erie Lake Plains,deciduous,0.144272,1,1,US-Oho,Oak Openings,41.5545,-83.8438,DBF,2004,2013,10,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Oho
+34,71,Interior Plateau,deciduous,0.163261,1,1,US-MMS,Morgan Monroe State Forest,39.3232,-86.4133,DBF,1999,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-MMS
+35,72,Interior River Valleys and Hills,deciduous,0.093308,1,1,US-MOz,Missouri Ozark Site,38.7441,-92.2,DBF,2004,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-MOz
+49,58,Northeastern Highlands,deciduous,0.084519,6,1,US-Bar,Bartlett Experimental Forest,44.0646,-71.2881,DBF,2004,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Bar
+49,58,Northeastern Highlands,deciduous,0.084519,6,2,US-Ha1,Harvard Forest EMS Tower (HFR1),42.5378,-72.1715,DBF,1991,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Ha1
+49,58,Northeastern Highlands,deciduous,0.084519,6,3,US-HBK,Hubbard Brook Experimental Forest,43.9397,-71.7181,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-HBK
+49,58,Northeastern Highlands,deciduous,0.084519,6,4,US-LPH,Little Prospect Hill,42.5419,-72.185,DBF,2002,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-LPH
+49,58,Northeastern Highlands,deciduous,0.084519,6,5,US-xBR,NEON Bartlett Experimental Forest (BART),44.0639,-71.2873,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xBR
+49,58,Northeastern Highlands,deciduous,0.084519,6,6,US-xHA,NEON Harvard Forest (HARV),42.5369,-72.1727,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xHA
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,1,US-Wi3,Mature hardwood (MHW),46.6347,-91.0987,DBF,2002,2004,3,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi3
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,2,US-PFc,NW2 Aspen-1 CHEESEHEAD 2019,45.9677,-90.3088,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFc
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,3,US-PFi,NE3 Hardwood-1 CHEESEHEAD 2019,45.9749,-90.2327,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFi
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,4,US-PFj,NE4 Maple-1 CHEESEHEAD 2019,45.9619,-90.227,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFj
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,5,US-PFk,SW1 Aspen-2 CHEESEHEAD 2019,45.9149,-90.3425,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFk
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,6,US-PFL,SW2 Aspen-3 CHEESEHEAD 2019,45.9409,-90.3177,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFL
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,7,US-PFm,SW3 Hardwood-2 CHEESEHEAD 2019,45.9207,-90.3099,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFm
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,8,US-PFn,SW4 Hardwood-3 CHEESEHEAD 2019,45.9392,-90.2823,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFn
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,9,US-PFp,SE2 Hardwood-4 CHEESEHEAD 2019,45.9365,-90.2641,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFp
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,10,US-PFq,SE3 Aspen-4 CHEESEHEAD 2019,45.9271,-90.2475,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFq
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,11,US-PFs,SE5 Aspen-5 CHEESEHEAD 2019,45.9381,-90.2382,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFs
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,12,US-Wi1,Intermediate hardwood (IHW),46.7305,-91.2329,DBF,2003,2003,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi1
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,13,US-Wi8,Young hardwood clearcut (YHW),46.7223,-91.2524,DBF,2002,2002,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi8
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,14,US-UMB,Univ. of Mich. Biological Station,45.5598,-84.7138,DBF,1999,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-UMB
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,15,US-UMd,UMBS Disturbance,45.5625,-84.6975,DBF,2007,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-UMd
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,16,US-WCr,Willow Creek,45.8058,-90.0795,DBF,1999,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-WCr
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,17,US-xST,NEON Steigerwaldt Land Services (STEI),45.5089,-89.5864,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xST
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,18,US-xTR,NEON Treehaven (TREE),45.4937,-89.5857,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xTR
+61,45,Piedmont,deciduous,0.050584,1,1,US-Dk2,Duke Forest-hardwoods,35.9736,-79.1004,DBF,2001,2008,8,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Dk2
+63,67,Ridge and Valley,deciduous,0.052154,6,1,US-WBW,Walker Branch Watershed,35.9588,-84.2874,DBF,1995,1999,5,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-WBW
+63,67,Ridge and Valley,deciduous,0.052154,6,2,US-ChR,Chestnut Ridge,35.9311,-84.3324,DBF,2005,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-ChR
+63,67,Ridge and Valley,deciduous,0.052154,6,3,US-SSH,Susquehanna Shale Hills Critical Zone Observatory,40.6658,-77.9041,DBF,2009,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SSH
+63,67,Ridge and Valley,deciduous,0.052154,6,4,US-xBL,NEON Blandy Experimental Farm (BLAN),39.0603,-78.0716,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xBL
+63,67,Ridge and Valley,deciduous,0.052154,6,5,US-xML,NEON Mountain Lake Biological Station (MLBS),37.3783,-80.5248,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xML
+63,67,Ridge and Valley,deciduous,0.052154,6,6,US-xRN,NEON Oak Ridge National Lab (ORNL),35.9641,-84.2826,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xRN
+68,65,Southeastern Plains,deciduous,0.145904,2,1,US-xLE,NEON Lenoir Landing (LENO),31.8539,-88.1612,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xLE
+68,65,Southeastern Plains,deciduous,0.145904,2,2,US-xSE,NEON Smithsonian Environmental Research Center (SERC),38.8901,-76.56,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xSE

@@ -1,0 +1,170 @@
+ECO_IDX,US_L3CODE,US_L3NAME,ForestType,PLSR_TemporalQ2,nStations,Rank,StationID,StationName,Lat,Lon,IGBP,DataStart,DataEnd,nYears,Status,StationURL
+4,37,Arkansas Valley,deciduous,0.222916,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+5,84,Atlantic Coastal Pine Barrens,deciduous,0.114358,1,1,US-Slt,Silas Little- New Jersey,39.9138,-74.596,DBF,2004,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Slt
+7,66,Blue Ridge,deciduous,0.051101,3,1,US-Cwt,Coweeta,35.0592,-83.4275,DBF,2011,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Cwt
+7,66,Blue Ridge,deciduous,0.051101,3,2,US-xGR,"NEON Great Smoky Mountains National Park, Twin Creeks (GRSM)",35.689,-83.5019,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xGR
+7,66,Blue Ridge,deciduous,0.051101,3,3,US-xSC,NEON Smithsonian Conservation Biology Institute (SCBI),38.8929,-78.1395,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xSC
+8,38,Boston Mountains,deciduous,0.313099,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+11,69,Central Appalachians,deciduous,0.124143,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+17,40,Central Irregular Plains,deciduous,0.175465,1,1,US-xUK,NEON The University of Kansas Field Station (UKFS),39.0404,-95.1921,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xUK
+20,20,Colorado Plateaus,deciduous,0.109501,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+22,29,Cross Timbers,deciduous,0.242463,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+23,52,Driftless Area,deciduous,0.262979,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+26,55,Eastern Corn Belt Plains,deciduous,0.145867,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+27,83,Eastern Great Lakes Lowlands,deciduous,0.048489,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+29,61,Erie Drift Plain,deciduous,0.114982,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+32,57,Huron/Erie Lake Plains,deciduous,0.144272,1,1,US-Oho,Oak Openings,41.5545,-83.8438,DBF,2004,2013,10,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Oho
+34,71,Interior Plateau,deciduous,0.163261,1,1,US-MMS,Morgan Monroe State Forest,39.3232,-86.4133,DBF,1999,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-MMS
+35,72,Interior River Valleys and Hills,deciduous,0.093308,1,1,US-MOz,Missouri Ozark Site,38.7441,-92.2,DBF,2004,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-MOz
+42,74,Mississippi Valley Loess Plains,deciduous,0.066367,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+46,62,North Central Appalachians,deciduous,0.109825,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+47,51,North Central Hardwood Forests,deciduous,0.181497,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+48,59,Northeastern Coastal Zone,deciduous,0.039545,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+49,58,Northeastern Highlands,deciduous,0.084519,6,1,US-Bar,Bartlett Experimental Forest,44.0646,-71.2881,DBF,2004,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Bar
+49,58,Northeastern Highlands,deciduous,0.084519,6,2,US-Ha1,Harvard Forest EMS Tower (HFR1),42.5378,-72.1715,DBF,1991,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Ha1
+49,58,Northeastern Highlands,deciduous,0.084519,6,3,US-HBK,Hubbard Brook Experimental Forest,43.9397,-71.7181,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-HBK
+49,58,Northeastern Highlands,deciduous,0.084519,6,4,US-LPH,Little Prospect Hill,42.5419,-72.185,DBF,2002,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-LPH
+49,58,Northeastern Highlands,deciduous,0.084519,6,5,US-xBR,NEON Bartlett Experimental Forest (BART),44.0639,-71.2873,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xBR
+49,58,Northeastern Highlands,deciduous,0.084519,6,6,US-xHA,NEON Harvard Forest (HARV),42.5369,-72.1727,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xHA
+50,60,Northern Allegheny Plateau,deciduous,0.082927,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+52,46,Northern Glaciated Plains,deciduous,0.026662,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,1,US-Wi3,Mature hardwood (MHW),46.6347,-91.0987,DBF,2002,2004,3,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi3
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,2,US-PFc,NW2 Aspen-1 CHEESEHEAD 2019,45.9677,-90.3088,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFc
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,3,US-PFi,NE3 Hardwood-1 CHEESEHEAD 2019,45.9749,-90.2327,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFi
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,4,US-PFj,NE4 Maple-1 CHEESEHEAD 2019,45.9619,-90.227,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFj
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,5,US-PFk,SW1 Aspen-2 CHEESEHEAD 2019,45.9149,-90.3425,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFk
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,6,US-PFL,SW2 Aspen-3 CHEESEHEAD 2019,45.9409,-90.3177,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFL
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,7,US-PFm,SW3 Hardwood-2 CHEESEHEAD 2019,45.9207,-90.3099,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFm
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,8,US-PFn,SW4 Hardwood-3 CHEESEHEAD 2019,45.9392,-90.2823,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFn
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,9,US-PFp,SE2 Hardwood-4 CHEESEHEAD 2019,45.9365,-90.2641,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFp
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,10,US-PFq,SE3 Aspen-4 CHEESEHEAD 2019,45.9271,-90.2475,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFq
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,11,US-PFs,SE5 Aspen-5 CHEESEHEAD 2019,45.9381,-90.2382,DBF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFs
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,12,US-Wi1,Intermediate hardwood (IHW),46.7305,-91.2329,DBF,2003,2003,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi1
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,13,US-Wi8,Young hardwood clearcut (YHW),46.7223,-91.2524,DBF,2002,2002,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi8
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,14,US-UMB,Univ. of Mich. Biological Station,45.5598,-84.7138,DBF,1999,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-UMB
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,15,US-UMd,UMBS Disturbance,45.5625,-84.6975,DBF,2007,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-UMd
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,16,US-WCr,Willow Creek,45.8058,-90.0795,DBF,1999,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-WCr
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,17,US-xST,NEON Steigerwaldt Land Services (STEI),45.5089,-89.5864,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xST
+53,50,Northern Lakes and Forests,deciduous,0.097791,18,18,US-xTR,NEON Treehaven (TREE),45.4937,-89.5857,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xTR
+55,64,Northern Piedmont,deciduous,0.163975,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+59,36,Ouachita Mountains,deciduous,0.157682,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+60,39,Ozark Highlands,deciduous,0.307495,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+61,45,Piedmont,deciduous,0.050584,1,1,US-Dk2,Duke Forest-hardwoods,35.9736,-79.1004,DBF,2001,2008,8,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Dk2
+63,67,Ridge and Valley,deciduous,0.052154,6,1,US-WBW,Walker Branch Watershed,35.9588,-84.2874,DBF,1995,1999,5,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-WBW
+63,67,Ridge and Valley,deciduous,0.052154,6,2,US-ChR,Chestnut Ridge,35.9311,-84.3324,DBF,2005,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-ChR
+63,67,Ridge and Valley,deciduous,0.052154,6,3,US-SSH,Susquehanna Shale Hills Critical Zone Observatory,40.6658,-77.9041,DBF,2009,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SSH
+63,67,Ridge and Valley,deciduous,0.052154,6,4,US-xBL,NEON Blandy Experimental Farm (BLAN),39.0603,-78.0716,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xBL
+63,67,Ridge and Valley,deciduous,0.052154,6,5,US-xML,NEON Mountain Lake Biological Station (MLBS),37.3783,-80.5248,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xML
+63,67,Ridge and Valley,deciduous,0.052154,6,6,US-xRN,NEON Oak Ridge National Lab (ORNL),35.9641,-84.2826,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xRN
+67,35,South Central Plains,deciduous,0.16317,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+68,65,Southeastern Plains,deciduous,0.145904,2,1,US-xLE,NEON Lenoir Landing (LENO),31.8539,-88.1612,DBF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xLE
+68,65,Southeastern Plains,deciduous,0.145904,2,2,US-xSE,NEON Smithsonian Environmental Research Center (SERC),38.8901,-76.56,DBF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xSE
+74,56,Southern Michigan/Northern Indiana Drift Plains,deciduous,0.099249,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+75,21,Southern Rockies,deciduous,0.123206,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+77,68,Southwestern Appalachians,deciduous,0.133306,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+80,19,Wasatch and Uinta Mountains,deciduous,0.040427,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+81,70,Western Allegheny Plateau,deciduous,0.106225,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+82,47,Western Corn Belt Plains,deciduous,0.149231,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+1,82,Acadian Plains and Hills,evergreen,0.140004,3,1,US-Ho1,Howland Forest (main tower),45.204,-68.7402,ENF,1996,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Ho1
+1,82,Acadian Plains and Hills,evergreen,0.140004,3,2,US-Ho2,Howland Forest (west tower),45.209,-68.747,ENF,1999,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Ho2
+1,82,Acadian Plains and Hills,evergreen,0.140004,3,3,US-Ho3,Howland Forest (harvest site),45.2072,-68.7265,ENF,2000,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Ho3
+2,23,Arizona/New Mexico Mountains,evergreen,0.171277,2,1,US-Fmf,Flagstaff - Managed Forest,35.1426,-111.7273,ENF,2006,2010,5,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Fmf
+2,23,Arizona/New Mexico Mountains,evergreen,0.171277,2,2,US-Fuf,Flagstaff - Unmanaged Forest,35.089,-111.762,ENF,2006,2010,5,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Fuf
+3,22,Arizona/New Mexico Plateau,evergreen,0.070096,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+4,37,Arkansas Valley,evergreen,0.29643,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+5,84,Atlantic Coastal Pine Barrens,evergreen,0.129169,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+6,11,Blue Mountains,evergreen,0.206998,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+9,41,Canadian Rockies,evergreen,0.200495,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+10,4,Cascades,evergreen,0.027939,3,1,US-Wrc,Wind River Crane Site,45.8205,-121.9519,ENF,1998,2016,19,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wrc
+10,4,Cascades,evergreen,0.027939,3,2,US-xAB,NEON Abby Road (ABBY),45.7624,-122.3303,ENF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xAB
+10,4,Cascades,evergreen,0.027939,3,3,US-xWR,NEON Wind River Experimental Forest (WREF),45.8205,-121.9519,ENF,2018,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xWR
+12,13,Central Basin and Range,evergreen,0.31064,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+13,6,Central California Foothills and Coastal Mountains,evergreen,0.02105,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+19,1,Coast Range,evergreen,0.114646,3,1,US-MRf,Mary's River (Fir) site,44.6465,-123.5515,ENF,2006,2011,6,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-MRf
+19,1,Coast Range,evergreen,0.114646,3,2,US-JFM,"Mitchell Creek: Jackson Demonstration State Forest, Intermediate Second-Growth Redwood",39.3757,-123.752,ENF,2025,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-JFM
+19,1,Coast Range,evergreen,0.114646,3,3,US-JFP,"South Parlin: Jackson Demonstration State Forest, Young Second-Growth Redwood",39.3616,-123.6562,ENF,2025,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-JFP
+20,20,Colorado Plateaus,evergreen,0.054648,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+21,10,Columbia Plateau,evergreen,0.089586,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+22,29,Cross Timbers,evergreen,0.095138,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+25,9,Eastern Cascades Slopes and Foothills,evergreen,-0.045699,7,1,US-Me3,Metolius-second young aged pine,44.3154,-121.6078,ENF,2004,2009,6,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Me3
+25,9,Eastern Cascades Slopes and Foothills,evergreen,-0.045699,7,2,US-Me5,Metolius-first young aged pine,44.4372,-121.5668,ENF,2000,2002,3,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Me5
+25,9,Eastern Cascades Slopes and Foothills,evergreen,-0.045699,7,3,US-Me1,Metolius - Eyerly burn,44.5794,-121.5,ENF,2004,2005,2,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Me1
+25,9,Eastern Cascades Slopes and Foothills,evergreen,-0.045699,7,4,US-Me7,Metolius Low Burn Severity Subcanopy,44.4534,-121.5619,ENF,2022,2023,2,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Me7
+25,9,Eastern Cascades Slopes and Foothills,evergreen,-0.045699,7,5,US-Me2,Metolius mature ponderosa pine,44.4526,-121.5589,ENF,2002,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Me2
+25,9,Eastern Cascades Slopes and Foothills,evergreen,-0.045699,7,6,US-Me4,Metolius-old aged ponderosa pine,44.499,-121.6236,ENF,1996,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Me4
+25,9,Eastern Cascades Slopes and Foothills,evergreen,-0.045699,7,7,US-Me6,Metolius Young Pine Burn,44.3232,-121.6044,ENF,2010,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Me6
+28,30,Edwards Plateau,evergreen,0.05461,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+33,16,Idaho Batholith,evergreen,0.269774,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+36,78,Klamath Mountains/California High North Coast Range,evergreen,0.022058,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+38,79,Madrean Archipelago,evergreen,0.452906,1,1,US-MtB,Mt Bigelow,32.416,-110.7256,ENF,2009,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-MtB
+39,63,Middle Atlantic Coastal Plain,evergreen,0.08256,5,1,US-NC1,NC_Clearcut,35.8118,-76.7119,ENF,2005,2013,9,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-NC1
+39,63,Middle Atlantic Coastal Plain,evergreen,0.08256,5,2,US-NC3,NC_Clearcut#3,35.799,-76.656,ENF,2013,2021,9,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-NC3
+39,63,Middle Atlantic Coastal Plain,evergreen,0.08256,5,3,US-HB6,Loblolly rotation - well drained soils,33.4903,-79.4172,ENF,2025,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-HB6
+39,63,Middle Atlantic Coastal Plain,evergreen,0.08256,5,4,US-NC2,NC_Loblolly Plantation,35.803,-76.6685,ENF,2005,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-NC2
+39,63,Middle Atlantic Coastal Plain,evergreen,0.08256,5,5,US-Sx2,Santee Experimental Forest Longleaf Pine Thinned,33.1404,-79.7718,ENF,2024,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Sx2
+40,17,Middle Rockies,evergreen,0.10307,3,1,US-Blk,Black Hills,44.158,-103.65,ENF,2003,2008,6,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Blk
+40,17,Middle Rockies,evergreen,0.10307,3,2,US-TEF,Tenderfoot Creek Experimental Forest,46.9522,-110.8851,ENF,2005,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-TEF
+40,17,Middle Rockies,evergreen,0.10307,3,3,US-xYE,NEON Yellowstone Northern Range (Frog Rock) (YELL),44.9535,-110.5391,ENF,2018,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xYE
+42,74,Mississippi Valley Loess Plains,evergreen,0.154933,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+45,77,North Cascades,evergreen,0.174454,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+47,51,North Central Hardwood Forests,evergreen,0.123469,2,1,US-CS2,Tri county school Pine Forest,44.1467,-89.5002,ENF,2018,2022,5,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-CS2
+47,51,North Central Hardwood Forests,evergreen,0.123469,2,2,US-CS7,Central Sands Forest,44.4375,-89.5443,ENF,2022,2023,2,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-CS7
+49,58,Northeastern Highlands,evergreen,0.102742,1,1,US-Ha2,Harvard Forest Hemlock Site,42.5393,-72.1779,ENF,2004,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Ha2
+51,80,Northern Basin and Range,evergreen,0.217362,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,1,US-NMj,Northern Michigan Jack Pine Stand,46.6465,-88.5194,ENF,2001,2007,7,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-NMj
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,2,US-Wi4,Mature red pine (MRP),46.7393,-91.1663,ENF,2002,2005,4,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi4
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,3,US-Wi9,Young Jack pine (YJP),46.7385,-91.0746,ENF,2004,2005,2,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi9
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,4,US-PFb,NW1 Pine-1 CHEESEHEAD 2019,45.972,-90.3232,ENF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFb
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,5,US-PFg,NE1 Pine-2 CHEESEHEAD 2019,45.9735,-90.2723,ENF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFg
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,6,US-PFh,NE2 Pine-3 CHEESEHEAD 2019,45.9557,-90.2406,ENF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFh
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,7,US-PFt,SE6 Pine-4 CHEESEHEAD 2019,45.9197,-90.2288,ENF,2019,2019,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-PFt
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,8,US-Wi0,Young red pine (YRP),46.6188,-91.0814,ENF,2002,2002,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi0
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,9,US-Wi2,Intermediate red pine (IRP),46.6869,-91.1528,ENF,2003,2003,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi2
+53,50,Northern Lakes and Forests,evergreen,0.051928,10,10,US-Wi5,Mixed young jack pine (MYJP),46.6531,-91.0858,ENF,2004,2004,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Wi5
+56,15,Northern Rockies,evergreen,0.219646,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+58,43,Northwestern Great Plains,evergreen,0.181955,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+59,36,Ouachita Mountains,evergreen,0.241531,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+61,45,Piedmont,evergreen,0.011663,4,1,US-SB1,Sweet Briar Land-Atmosphere Research Station,37.5734,-79.0848,ENF,2015,2024,10,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SB1
+61,45,Piedmont,evergreen,0.011663,4,2,US-Dk3,Duke Forest - loblolly pine,35.9782,-79.0942,ENF,2001,2008,8,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Dk3
+61,45,Piedmont,evergreen,0.011663,4,3,US-SB3,Sweet Briar Clearcut,37.5752,-79.0872,ENF,2018,2024,7,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SB3
+61,45,Piedmont,evergreen,0.011663,4,4,US-NC5,NC Butner Farm,36.1565,-78.7878,ENF,2025,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-NC5
+62,2,Puget Lowland,evergreen,0.108522,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+63,67,Ridge and Valley,evergreen,0.063728,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+64,5,Sierra Nevada,evergreen,0.217571,7,1,US-Blo,Blodgett Forest,38.8953,-120.6328,ENF,1997,2006,10,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Blo
+64,5,Sierra Nevada,evergreen,0.217571,7,2,US-CZ2,"Sierra Critical Zone, Sierra Transect, Ponderosa Pine Forest, Soaproot Saddle",37.0311,-119.2566,ENF,2010,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-CZ2
+64,5,Sierra Nevada,evergreen,0.217571,7,3,US-CZ3,"Sierra Critical Zone, Sierra Transect, Sierran Mixed Conifer, P301",37.0674,-119.1951,ENF,2008,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-CZ3
+64,5,Sierra Nevada,evergreen,0.217571,7,4,US-CZ4,"Sierra Critical Zone, Sierra Transect, Subalpine Forest, Shorthair",37.0675,-118.9867,ENF,2009,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-CZ4
+64,5,Sierra Nevada,evergreen,0.217571,7,5,US-SHC,Sagehen Creek Field Station,39.4315,-120.2398,ENF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SHC
+64,5,Sierra Nevada,evergreen,0.217571,7,6,US-xSP,NEON Soaproot Saddle (SOAP),37.0334,-119.2622,ENF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xSP
+64,5,Sierra Nevada,evergreen,0.217571,7,7,US-xTE,NEON Lower Teakettle (TEAK),37.0058,-119.006,ENF,2018,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xTE
+67,35,South Central Plains,evergreen,0.096339,2,1,US-CRK,Davy Crockett National Forest,31.4629,-95.3415,ENF,2021,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-CRK
+67,35,South Central Plains,evergreen,0.096339,2,2,US-Cst,Crossett Experimental Forest,33.0442,-91.9204,ENF,2012,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Cst
+68,65,Southeastern Plains,evergreen,0.012734,2,1,US-xJE,NEON Jones Ecological Research Center (JERC),31.1948,-84.4686,ENF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xJE
+68,65,Southeastern Plains,evergreen,0.012734,2,2,US-xTA,NEON Talladega National Forest (TALL),32.9505,-87.3933,ENF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xTA
+70,8,Southern California Mountains,evergreen,0.150803,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,1,US-SP3,Slashpine-Donaldson-mid-rot- 12yrs,29.7548,-82.1633,ENF,1999,2013,15,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SP3
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,2,US-SP2,"Slashpine-Mize-clearcut-3yr,regen",29.7648,-82.2448,ENF,1999,2009,11,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SP2
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,3,US-DPP,Disney Wilderness Preserve Pine Flatwoods,28.1046,-81.419,ENF,2010,2016,7,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-DPP
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,4,US-KS1,Kennedy Space Center (slash pine),28.4583,-80.6709,ENF,2002,2006,5,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-KS1
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,5,US-SP4,Slashpine-Rayonier-mid-rot- 12yrs,29.8028,-82.2031,ENF,1998,1998,1,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SP4
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,6,US-HB2,Hobcaw Barony Mature Longleaf Pine,33.3242,-79.244,ENF,2018,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-HB2
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,7,US-HB3,Hobcaw Barony Longleaf Pine Restoration,33.3482,-79.2322,ENF,2019,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-HB3
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,8,US-HB5,Francis Marion National Forest Longleaf Pine Restoration,33.079,-79.538,ENF,2024,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-HB5
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,9,US-SP1,Slashpine-Austin Cary- 65yrs nat regen,29.7381,-82.2188,ENF,2000,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-SP1
+72,75,Southern Coastal Plain,evergreen,-0.062337,10,10,US-xSB,NEON Ordway-Swisher Biological Station (OSBS),29.6893,-81.9934,ENF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xSB
+75,21,Southern Rockies,evergreen,0.077684,12,1,US-NR2,Niwot Ridge Forest (USGS site),40.0325,-105.5469,ENF,2000,2016,17,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-NR2
+75,21,Southern Rockies,evergreen,0.077684,12,2,US-GBT,GLEES Brooklyn Tower,41.3658,-106.2397,ENF,1991,2006,16,ge10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-GBT
+75,21,Southern Rockies,evergreen,0.077684,12,3,US-CPF,Cameron Peak,40.5855,-105.8696,ENF,2021,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-CPF
+75,21,Southern Rockies,evergreen,0.077684,12,4,US-CPk,Chimney Park,41.068,-106.1187,ENF,2009,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-CPk
+75,21,Southern Rockies,evergreen,0.077684,12,5,US-GLE,GLEES,41.3665,-106.2399,ENF,1999,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-GLE
+75,21,Southern Rockies,evergreen,0.077684,12,6,US-MEF,Manitou Experimental Forest,39.1006,-105.1024,ENF,2023,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-MEF
+75,21,Southern Rockies,evergreen,0.077684,12,7,US-NR1,Niwot Ridge Forest (LTER NWT1),40.0329,-105.547,ENF,1998,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-NR1
+75,21,Southern Rockies,evergreen,0.077684,12,8,US-Vcm,Valles Caldera Mixed Conifer,35.8885,-106.5322,ENF,2007,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Vcm
+75,21,Southern Rockies,evergreen,0.077684,12,9,US-Vcp,Valles Caldera Ponderosa Pine,35.8641,-106.5965,ENF,2007,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Vcp
+75,21,Southern Rockies,evergreen,0.077684,12,10,US-Vcs,Valles Caldera Sulphur Springs Mixed Conifer,35.9193,-106.6147,ENF,2016,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-Vcs
+75,21,Southern Rockies,evergreen,0.077684,12,11,US-xNW,NEON Niwot Ridge Mountain Research Station (NIWO),40.0543,-105.5824,ENF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xNW
+75,21,Southern Rockies,evergreen,0.077684,12,12,US-xRM,"NEON Rocky Mountain National Park, CASTNET (RMNP)",40.2759,-105.5459,ENF,2017,NaN,NaN,under_10yr,https://ameriflux.lbl.gov/sites/siteinfo/US-xRM
+77,68,Southwestern Appalachians,evergreen,0.14577,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+78,26,Southwestern Tablelands,evergreen,0.12645,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+80,19,Wasatch and Uinta Mountains,evergreen,0.104467,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,
+84,3,Willamette Valley,evergreen,0.348847,0,NaN,,,NaN,NaN,,NaN,NaN,NaN,not_available,

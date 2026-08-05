@@ -1,0 +1,43 @@
+job        : 35233
+node       : soeepyc16
+started    : 2026-08-05T03:34:11Z
+repo       : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/data/era5_land
+
+  ! US-Blk sits on a grid-cell boundary; downloading it separately rather than sharing a cell
+stations           : 118
+unique grid cells  : 80
+mode               : timeseries (reanalysis-era5-land-timeseries)
+period             : 1985-01-01 .. 2021-12-31 (hourly)
+variables          : 2m_temperature, surface_pressure, 2m_dewpoint_temperature, total_precipitation, 10m_u_component_of_wind, 10m_v_component_of_wind, surface_solar_radiation_downwards
+CDS requests       : 80
+output             : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/data/era5_land
+
+  > US-SP1: requesting US-SP1_ERA5_Land.nc
+  > US-xSB: requesting US-xSB_ERA5_Land.nc
+  > US-DPP: requesting US-DPP_ERA5_Land.nc
+  > US-KS1: requesting US-KS1_ERA5_Land.nc
+  ! attempt 1/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind6q91ip9z.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperaturenlkrmm76.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatqy5ze9wx.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationcsyq67jr.nc']); retrying in 20s
+  ! attempt 1/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind01ty9ejg.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureki0jeanb.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heat2aof_wvu.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationmauuqqt0.nc']); retrying in 20s
+  ! attempt 1/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind9nbw4iyr.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureareivdo3.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatnituvgs1.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitation30rskqfu.nc']); retrying in 20s
+  ! attempt 1/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-windzoe1ip__.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperature096elo52.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heaty2aczyfj.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationfg2lxmr5.nc']); retrying in 20s
+  ! attempt 2/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind6q91ip9z.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperaturenlkrmm76.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatqy5ze9wx.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationcsyq67jr.nc']); retrying in 40s
+  ! attempt 2/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind01ty9ejg.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureki0jeanb.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heat2aof_wvu.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationmauuqqt0.nc']); retrying in 40s
+  ! attempt 2/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind9nbw4iyr.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureareivdo3.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatnituvgs1.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitation30rskqfu.nc']); retrying in 40s
+  ! attempt 2/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-windzoe1ip__.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperature096elo52.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heaty2aczyfj.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationfg2lxmr5.nc']); retrying in 40s
+  ! attempt 3/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind6q91ip9z.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperaturenlkrmm76.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatqy5ze9wx.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationcsyq67jr.nc']); retrying in 80s
+  ! attempt 3/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind01ty9ejg.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureki0jeanb.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heat2aof_wvu.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationmauuqqt0.nc']); retrying in 80s
+  ! attempt 3/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind9nbw4iyr.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureareivdo3.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatnituvgs1.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitation30rskqfu.nc']); retrying in 80s
+  ! attempt 3/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-windzoe1ip__.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperature096elo52.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heaty2aczyfj.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationfg2lxmr5.nc']); retrying in 80s
+  X US-KS1: FAILED -- all 4 attempts failed; last error: expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind6q91ip9z.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperaturenlkrmm76.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatqy5ze9wx.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationcsyq67jr.nc']
+  > US-SP2: requesting US-SP2_ERA5_Land.nc
+  X US-xSB: FAILED -- all 4 attempts failed; last error: expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind01ty9ejg.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureki0jeanb.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heat2aof_wvu.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationmauuqqt0.nc']
+  > US-xJE: requesting US-xJE_ERA5_Land.nc
+  X US-SP1: FAILED -- all 4 attempts failed; last error: expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind9nbw4iyr.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureareivdo3.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatnituvgs1.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitation30rskqfu.nc']
+  > US-CRK: requesting US-CRK_ERA5_Land.nc
+  X US-DPP: FAILED -- all 4 attempts failed; last error: expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-windzoe1ip__.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperature096elo52.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heaty2aczyfj.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationfg2lxmr5.nc']
+  > US-xLE: requesting US-xLE_ERA5_Land.nc
+  ! attempt 1/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind6iu19fmx.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperatureajjpdwib.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heatagz9y6oe.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitatione_ue_bgu.nc']); retrying in 20s
+  ! attempt 1/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-wind8dl8r2q9.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperature6v0n6qa0.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heat5w2opu92.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationyxw2bv8g.nc']); retrying in 20s
+  ! attempt 1/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-windhnru9862.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperature6yipw166.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heat0zq0u9s7.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationkd12yibc.nc']); retrying in 20s
+  ! attempt 1/4 failed (expected exactly one .nc inside the returned archive, got ['reanalysis-era5-land-timeseries-sfc-windhe2iq0dt.nc', 'reanalysis-era5-land-timeseries-sfc-2m-temperaturegf632rgu.nc', 'reanalysis-era5-land-timeseries-sfc-radiation-heat8yq_yza8.nc', 'reanalysis-era5-land-timeseries-sfc-pressure-precipitationv1y9s8vo.nc']); retrying in 20s

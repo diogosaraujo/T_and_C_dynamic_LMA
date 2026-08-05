@@ -61,8 +61,13 @@ from era5_variables import (
     DELIBERATELY_OMITTED,
     GRIDDED_DATASET,
     TIMESERIES_DATASET,
+    TIMESERIES_GROUPS,
     VARIABLES,
+    group_of_member,
 )
+
+# Key used when a request yields one file rather than one file per variable group.
+SINGLE = "__single__"
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SITE_LISTS = [
@@ -237,6 +242,14 @@ def build_metadata(
         },
         "time_reference": COORDINATE_NOTES["time"],
         "accumulation_note": ACCUMULATION_NOTE,
+        "file_layout": (
+            "The CDS time-series collection returns one netCDF per variable GROUP, not a "
+            "single merged file, so each station has several .nc files in its own "
+            "directory. Match a variable to its file via the 'timeseries_group' field "
+            "below: <StationID>_ERA5_Land_<group>.nc. All groups share the same hourly "
+            "time axis, so the forcing builder can open them together "
+            "(e.g. xarray.open_mfdataset)."
+        ),
         "variables": VARIABLES,
         "variables_deliberately_omitted": DELIBERATELY_OMITTED,
         "files": files,
@@ -255,34 +268,86 @@ def build_metadata(
 # --------------------------------------------------------------------------------------
 
 
-def normalise_download(tmp: Path, final: Path) -> None:
-    """Move a completed download into place, unwrapping a zip if CDS returned one."""
+class PermanentError(Exception):
+    """A failure that retrying cannot fix -- unexpected payload shape, bad response.
+
+    Kept distinct from transport errors so the retry loop does not spend four rounds of
+    exponential backoff re-downloading a response it will reject the same way again.
+    """
+
+
+NETCDF_MAGIC = (b"CDF\x01", b"CDF\x02", b"\x89HDF")
+
+
+def deliver(tmp: Path, outputs: dict[str, Path]) -> None:
+    """Move a completed download into place, unwrapping the CDS archive if present.
+
+    `outputs` maps group name -> destination path. The time-series collection returns a
+    zip holding one netCDF per variable GROUP (wind, 2m-temperature, radiation-heat,
+    pressure-precipitation) rather than a single merged file, so each member is routed to
+    its own destination. A plain (unarchived) netCDF is accepted when a single output is
+    expected, which is what the gridded fallback returns.
+    """
     with tmp.open("rb") as fh:
         magic = fh.read(4)
 
     if magic[:2] == b"PK":
         with zipfile.ZipFile(tmp) as zf:
             members = [n for n in zf.namelist() if n.lower().endswith(".nc")]
-            if len(members) != 1:
-                raise RuntimeError(
-                    f"expected exactly one .nc inside the returned archive, got {members}"
-                )
-            with zf.open(members[0]) as src, final.open("wb") as dst:
-                shutil.copyfileobj(src, dst)
+            if not members:
+                raise PermanentError(f"no .nc inside the returned archive: {zf.namelist()}")
+
+            if set(outputs) == {SINGLE}:
+                if len(members) != 1:
+                    raise PermanentError(
+                        f"expected one .nc for this request, got {len(members)}: {members}"
+                    )
+                pairs = [(members[0], outputs[SINGLE])]
+            else:
+                matched = {}
+                for member in members:
+                    group = group_of_member(member)
+                    if group in outputs:
+                        matched[group] = member
+                missing = sorted(set(outputs) - set(matched))
+                if missing:
+                    raise PermanentError(
+                        f"archive is missing variable group(s) {missing}; "
+                        f"members were {members}"
+                    )
+                pairs = [(matched[g], outputs[g]) for g in sorted(matched)]
+
+            for member, dest in pairs:
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                part = dest.with_suffix(dest.suffix + ".part")
+                with zf.open(member) as src, part.open("wb") as dst:
+                    shutil.copyfileobj(src, dst)
+                if part.open("rb").read(4) not in NETCDF_MAGIC:
+                    part.unlink()
+                    raise PermanentError(f"archive member {member} is not netCDF")
+                part.replace(dest)
         tmp.unlink()
         return
 
-    if magic not in (b"CDF\x01", b"CDF\x02", b"\x89HDF"):
-        raise RuntimeError(
+    if magic not in NETCDF_MAGIC:
+        raise PermanentError(
             f"downloaded file is not netCDF (leading bytes {magic!r}); "
             "the CDS may have returned an error document"
         )
-    tmp.replace(final)
+    if len(outputs) != 1:
+        raise PermanentError(
+            f"got a single unarchived netCDF but expected {len(outputs)} variable groups"
+        )
+    dest = next(iter(outputs.values()))
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp.replace(dest)
 
 
-def retrieve(client, dataset: str, request: dict, target: Path, retries: int) -> None:
-    """Run one CDS retrieval with retries, writing atomically via a .part file."""
-    tmp = target.with_suffix(target.suffix + ".part")
+def retrieve(client, dataset: str, request: dict, outputs: dict[str, Path], retries: int) -> None:
+    """Run one CDS retrieval with retries, writing atomically via .part files."""
+    anchor = next(iter(outputs.values()))
+    tmp = anchor.parent / (anchor.name + ".download")
+    tmp.parent.mkdir(parents=True, exist_ok=True)
     if tmp.exists():
         tmp.unlink()
 
@@ -290,8 +355,12 @@ def retrieve(client, dataset: str, request: dict, target: Path, retries: int) ->
     for attempt in range(1, retries + 1):
         try:
             client.retrieve(dataset, request, str(tmp))
-            normalise_download(tmp, target)
+            deliver(tmp, outputs)
             return
+        except PermanentError:
+            if tmp.exists():
+                tmp.unlink()
+            raise  # retrying cannot help; fail fast rather than burning backoff
         except Exception as exc:  # cdsapi raises a variety of transport/server errors
             last = exc
             if tmp.exists():
@@ -333,14 +402,37 @@ def gridded_request(group: dict, year: int) -> dict:
     }
 
 
-def station_files(station_id: str, out_dir: Path, args) -> list[Path]:
-    """Output paths for one station, in the same order for every station in a cell."""
+def station_requests(station_id: str, out_dir: Path, group: dict, args) -> list[tuple]:
+    """(label, request, {group_key: output path}) for one station's downloads.
+
+    Time-series responses arrive split across one netCDF per variable group, so a single
+    request produces several files. They go in a per-station subdirectory to keep four
+    files x 118 stations from flooding one flat folder.
+    """
     if args.mode == "timeseries":
-        return [out_dir / f"{station_id}_ERA5_Land.nc"]
+        station_dir = out_dir / station_id
+        return [(
+            f"{station_id}_ERA5_Land",
+            timeseries_request(group, args.start_year, args.end_year),
+            {g: station_dir / f"{station_id}_ERA5_Land_{g}.nc" for g in TIMESERIES_GROUPS},
+        )]
+    station_dir = out_dir / station_id
     return [
-        out_dir / station_id / f"{station_id}_ERA5_Land_{yr}.nc"
+        (
+            f"{station_id}_ERA5_Land_{yr}",
+            gridded_request(group, yr),
+            {SINGLE: station_dir / f"{station_id}_ERA5_Land_{yr}.nc"},
+        )
         for yr in range(args.start_year, args.end_year + 1)
     ]
+
+
+def station_files(station_id: str, out_dir: Path, group: dict, args) -> list[Path]:
+    """Every output file for one station, in a stable order."""
+    files: list[Path] = []
+    for _, _, outputs in station_requests(station_id, out_dir, group, args):
+        files.extend(outputs[k] for k in sorted(outputs))
+    return files
 
 
 def process_group(
@@ -351,34 +443,35 @@ def process_group(
     sid = primary["station_id"]
     results: list[dict] = []
 
-    primary_files = station_files(sid, out_dir, args)
-    if args.mode == "timeseries":
-        requests = [timeseries_request(group, args.start_year, args.end_year)]
-    else:
-        requests = [gridded_request(group, yr) for yr in range(args.start_year, args.end_year + 1)]
-        if not args.dry_run:
-            primary_files[0].parent.mkdir(parents=True, exist_ok=True)
-    targets = list(zip(primary_files, requests))
+    units = station_requests(sid, out_dir, group, args)
 
-    pending = [(t, r) for t, r in targets if args.overwrite or not (t.exists() and t.stat().st_size > 0)]
-    skipped = len(targets) - len(pending)
+    def complete(outputs: dict) -> bool:
+        return all(p.exists() and p.stat().st_size > 0 for p in outputs.values())
+
+    pending = [u for u in units if args.overwrite or not complete(u[2])]
+    skipped = len(units) - len(pending)
     if skipped:
-        log(f"  = {sid}: {skipped} file(s) already present, skipping")
+        log(f"  = {sid}: {skipped} request(s) already complete, skipping")
 
     if args.dry_run:
-        for target, request in pending:
-            log(f"  [dry-run] {target.name}  <-  {json.dumps(request, sort_keys=True)}")
+        for label, request, outputs in pending:
+            log(f"  [dry-run] {label} -> {len(outputs)} file(s)  <-  "
+                f"{json.dumps(request, sort_keys=True)}")
     elif pending:
         client = client_factory()
         dataset = TIMESERIES_DATASET if args.mode == "timeseries" else GRIDDED_DATASET
-        for target, request in pending:
-            log(f"  > {sid}: requesting {target.name}")
-            retrieve(client, dataset, request, target, args.retries)
-            log(f"  + {sid}: wrote {target.name} ({target.stat().st_size / 1e6:.1f} MB)")
+        for label, request, outputs in pending:
+            log(f"  > {sid}: requesting {label}")
+            retrieve(client, dataset, request, outputs, args.retries)
+            total = sum(p.stat().st_size for p in outputs.values())
+            log(f"  + {sid}: wrote {len(outputs)} file(s) for {label} "
+                f"({total / 1e6:.1f} MB)")
+
+    primary_files = station_files(sid, out_dir, group, args)
 
     # Every station in the cell gets its own file set, copied from the primary.
     for station in group["members"]:
-        own_files = station_files(station["station_id"], out_dir, args)
+        own_files = station_files(station["station_id"], out_dir, group, args)
         if station["station_id"] != sid and not args.dry_run:
             for src, dst in zip(primary_files, own_files):
                 dst.parent.mkdir(parents=True, exist_ok=True)

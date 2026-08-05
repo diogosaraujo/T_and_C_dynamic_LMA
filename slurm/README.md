@@ -127,11 +127,18 @@ before the copy-back step.
 
 ```
 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land/
-    US-Ho1_ERA5_Land.nc      # hourly 1985-2021, all 7 variables
-    US-Ho1_ERA5_Land.json    # metadata sidecar
+    US-Ho1/
+        US-Ho1_ERA5_Land_2m-temperature.nc          # t2m, d2m
+        US-Ho1_ERA5_Land_pressure-precipitation.nc  # sp, tp
+        US-Ho1_ERA5_Land_radiation-heat.nc          # ssrd
+        US-Ho1_ERA5_Land_wind.nc                    # u10, v10
+        US-Ho1_ERA5_Land.json                       # metadata sidecar
     ...
     manifest.csv
 ```
+
+Four netCDFs per station, one per variable group — the CDS returns the time series split
+that way rather than merged. All four share the same hourly time axis.
 
 Outside the repo, so ~1 GB of netCDF can never be accidentally staged and pushed. The
 path is set once in [config.sh](config.sh) as `TC_INPUT_DATA`; change it there if it ever

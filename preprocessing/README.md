@@ -76,11 +76,22 @@ radiation partition), and **relative humidity** (`ea` comes from `Tdew` via Tete
 
 ```
 <output dir>/
-  US-Ho1_ERA5_Land.nc      # hourly, 1985-2021, all 7 variables
-  US-Ho1_ERA5_Land.json    # metadata sidecar
+  US-Ho1/
+    US-Ho1_ERA5_Land_2m-temperature.nc         # t2m, d2m
+    US-Ho1_ERA5_Land_pressure-precipitation.nc # sp, tp
+    US-Ho1_ERA5_Land_radiation-heat.nc         # ssrd
+    US-Ho1_ERA5_Land_wind.nc                   # u10, v10
+    US-Ho1_ERA5_Land.json                      # metadata sidecar
   ...
-  manifest.csv             # one row per station
+  manifest.csv                                 # one row per station
 ```
+
+**Four files per station, not one.** The CDS time-series collection splits its response
+by variable group and returns them zipped together; it does not merge them. The download
+step unpacks the archive and routes each member to a predictable filename. All four share
+the same hourly time axis, so the forcing builder can open them as one dataset
+(`xarray.open_mfdataset`). The `timeseries_group` field in the sidecar maps each variable
+to its file.
 
 The output directory defaults to:
 

@@ -25,6 +25,16 @@ ACCUMULATION_NOTE = (
     "day the first time a new download batch is processed."
 )
 
+# The time-series collection does NOT return one merged file. It splits the response
+# into one netCDF per variable GROUP, delivered together in a zip. These are the group
+# names the CDS uses in the archive member names
+# (reanalysis-era5-land-timeseries-sfc-<group><random>.nc), so the download step can map
+# each member to a predictable output filename.
+GROUP_2M = "2m-temperature"
+GROUP_PRESSURE_PRECIP = "pressure-precipitation"
+GROUP_RADIATION = "radiation-heat"
+GROUP_WIND = "wind"
+
 # Ordered so requests and metadata always list variables the same way.
 VARIABLES = [
     {
@@ -33,6 +43,7 @@ VARIABLES = [
         "long_name": "2 metre temperature",
         "units": "K",
         "time_convention": INSTANT,
+        "timeseries_group": GROUP_2M,
         "tc_field": "Ta",
         "notes": "Air temperature. T&C expects degrees Celsius (subtract 273.15).",
     },
@@ -42,6 +53,7 @@ VARIABLES = [
         "long_name": "Surface pressure",
         "units": "Pa",
         "time_convention": INSTANT,
+        "timeseries_group": GROUP_PRESSURE_PRECIP,
         "tc_field": "Pre",
         "notes": (
             "Surface pressure at the ERA5-Land grid-cell elevation, which may differ from "
@@ -55,6 +67,7 @@ VARIABLES = [
         "long_name": "2 metre dewpoint temperature",
         "units": "K",
         "time_convention": INSTANT,
+        "timeseries_group": GROUP_2M,
         "tc_field": "Tdew",
         "notes": (
             "Dewpoint temperature. Feeds ea via Tetens; also an input to the radiation "
@@ -67,6 +80,7 @@ VARIABLES = [
         "long_name": "Total precipitation",
         "units": "m",
         "time_convention": ACCUM,
+        "timeseries_group": GROUP_PRESSURE_PRECIP,
         "tc_field": "Pr",
         "notes": (
             "De-accumulate, then multiply by 1000 for mm/h. Also drives the N=1 "
@@ -79,6 +93,7 @@ VARIABLES = [
         "long_name": "10 metre U wind component",
         "units": "m s**-1",
         "time_convention": INSTANT,
+        "timeseries_group": GROUP_WIND,
         "tc_field": "Ws",
         "notes": "Eastward component. Ws = sqrt(u10^2 + v10^2).",
     },
@@ -88,6 +103,7 @@ VARIABLES = [
         "long_name": "10 metre V wind component",
         "units": "m s**-1",
         "time_convention": INSTANT,
+        "timeseries_group": GROUP_WIND,
         "tc_field": "Ws",
         "notes": (
             "Northward component. Ws = sqrt(u10^2 + v10^2) at 10 m, whereas the T&C run "
@@ -101,6 +117,7 @@ VARIABLES = [
         "long_name": "Surface solar radiation downwards",
         "units": "J m**-2",
         "time_convention": ACCUM,
+        "timeseries_group": GROUP_RADIATION,
         "tc_field": "Rsw",
         "notes": (
             "De-accumulate, then divide by 3600 for W/m2. Feeds "
@@ -112,6 +129,28 @@ VARIABLES = [
 ]
 
 CDS_VARIABLE_NAMES = [v["cds_name"] for v in VARIABLES]
+
+# Groups the time-series response will be split across, given the variables above.
+# One output netCDF per group, per station. Sorted longest-first so prefix matching
+# against archive member names never stops at a shorter group that is also a prefix.
+TIMESERIES_GROUPS = sorted({v["timeseries_group"] for v in VARIABLES})
+_GROUPS_BY_MATCH_ORDER = sorted(TIMESERIES_GROUPS, key=len, reverse=True)
+
+# Archive members look like: reanalysis-era5-land-timeseries-sfc-<group><random>.nc
+ARCHIVE_MEMBER_PREFIX = "reanalysis-era5-land-timeseries-sfc-"
+
+
+def group_of_member(member_name: str) -> str | None:
+    """Map a CDS archive member filename to one of TIMESERIES_GROUPS, or None."""
+    stem = member_name.rsplit("/", 1)[-1]
+    if stem.endswith(".nc"):
+        stem = stem[:-3]
+    if stem.startswith(ARCHIVE_MEMBER_PREFIX):
+        stem = stem[len(ARCHIVE_MEMBER_PREFIX):]
+    for group in _GROUPS_BY_MATCH_ORDER:
+        if stem.startswith(group):
+            return group
+    return None
 
 # Fields the download carries implicitly rather than as a requested variable.
 COORDINATE_NOTES = {

@@ -1,0 +1,26 @@
+job        : 35272
+node       : soeepyc16
+started    : 2026-08-05T17:18:00Z
+repo       : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+
+stations           : 2
+unique grid cells  : 2
+mode               : timeseries (reanalysis-era5-land-timeseries)
+period             : 1985-01-01 .. 2021-12-31 (hourly)
+variables          : 2m_temperature, surface_pressure, 2m_dewpoint_temperature, total_precipitation, 10m_u_component_of_wind, 10m_v_component_of_wind, surface_solar_radiation_downwards
+CDS requests       : 2
+output             : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+
+  > US-Ha2: requesting US-Ha2_ERA5_Land
+  > US-HBK: requesting US-HBK_ERA5_Land
+  + US-Ha2: wrote 4 file(s) for US-Ha2_ERA5_Land (19.5 MB)
+  + US-HBK: wrote 4 file(s) for US-HBK_ERA5_Land (19.5 MB)
+
+manifest: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land/manifest.csv
+
+stations completed: 2/2
+
+finished   : 2026-08-05T17:19:27Z
+exit status: 0
+13M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land

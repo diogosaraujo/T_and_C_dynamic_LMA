@@ -1,0 +1,35 @@
+job        : 35283
+node       : soeepyc16
+started    : 2026-08-05T18:59:52Z
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+amf user   : dd1136
+
+stations       : 2
+product        : BASE-BADM
+output         : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+intended use   : Research - Land model/Earth system model
+test download  : True
+
+fetching public site metadata ...
+  + site metadata for 2/2 station(s)
+  CCBY4.0: 2 site(s)
+
+  requesting 2 site(s) under CCBY4.0 ...
+  > AMF_US-Ha2_BASE-BADM_16-5.zip
+  X failed to fetch AMF_US-Ha2_BASE-BADM_16-5.zip: HTTP Error 403: Forbidden
+  > AMF_US-HBK_BASE-BADM_3-5.zip
+  X failed to fetch AMF_US-HBK_BASE-BADM_3-5.zip: HTTP Error 403: Forbidden
+
+
+stations with downloaded data: 0/2
+no data returned for: ['US-HBK', 'US-Ha2']
+  (a site may have no shared BASE data, or a different data policy)
+manifest: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux/files_manifest.csv
+
+Next: python inspect_ameriflux_badm.py
+
+=== BADM parameter coverage ===
+
+finished   : 2026-08-05T18:59:54Z
+exit status: 1
+2.5K	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux

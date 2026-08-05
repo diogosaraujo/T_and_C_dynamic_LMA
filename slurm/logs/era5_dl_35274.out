@@ -1,0 +1,182 @@
+job        : 35274
+node       : soeepyc16
+started    : 2026-08-05T17:24:23Z
+repo       : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+
+  ! US-Blk sits on a grid-cell boundary; downloading it separately rather than sharing a cell
+stations           : 118
+unique grid cells  : 80
+mode               : timeseries (reanalysis-era5-land-timeseries)
+period             : 1985-01-01 .. 2021-12-31 (hourly)
+variables          : 2m_temperature, surface_pressure, 2m_dewpoint_temperature, total_precipitation, 10m_u_component_of_wind, 10m_v_component_of_wind, surface_solar_radiation_downwards
+CDS requests       : 80
+output             : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+
+  > US-SP1: requesting US-SP1_ERA5_Land
+  > US-xSB: requesting US-xSB_ERA5_Land
+  > US-DPP: requesting US-DPP_ERA5_Land
+  > US-KS1: requesting US-KS1_ERA5_Land
+  + US-DPP: wrote 4 file(s) for US-DPP_ERA5_Land (19.5 MB)
+  > US-SP2: requesting US-SP2_ERA5_Land
+  + US-xSB: wrote 4 file(s) for US-xSB_ERA5_Land (19.5 MB)
+  > US-xJE: requesting US-xJE_ERA5_Land
+  + US-KS1: wrote 4 file(s) for US-KS1_ERA5_Land (19.5 MB)
+  > US-CRK: requesting US-CRK_ERA5_Land
+  + US-SP1: wrote 4 file(s) for US-SP1_ERA5_Land (19.5 MB)
+  > US-xLE: requesting US-xLE_ERA5_Land
+  + US-xJE: wrote 4 file(s) for US-xJE_ERA5_Land (19.5 MB)
+  > US-MtB: requesting US-MtB_ERA5_Land
+  + US-SP2: wrote 4 file(s) for US-SP2_ERA5_Land (19.5 MB)
+  > US-xTA: requesting US-xTA_ERA5_Land
+  + US-CRK: wrote 4 file(s) for US-CRK_ERA5_Land (19.5 MB)
+  > US-Cst: requesting US-Cst_ERA5_Land
+  + US-xLE: wrote 4 file(s) for US-xLE_ERA5_Land (19.5 MB)
+  > US-HB5: requesting US-HB5_ERA5_Land
+  + US-MtB: wrote 4 file(s) for US-MtB_ERA5_Land (19.5 MB)
+  > US-Sx2: requesting US-Sx2_ERA5_Land
+  + US-xTA: wrote 4 file(s) for US-xTA_ERA5_Land (19.5 MB)
+  > US-HB2: requesting US-HB2_ERA5_Land
+  + US-Cst: wrote 4 file(s) for US-Cst_ERA5_Land (19.5 MB)
+  > US-HB6: requesting US-HB6_ERA5_Land
+  + US-HB5: wrote 4 file(s) for US-HB5_ERA5_Land (19.5 MB)
+  > US-Fmf: requesting US-Fmf_ERA5_Land
+  + US-Sx2: wrote 4 file(s) for US-Sx2_ERA5_Land (19.5 MB)
+  > US-Fuf: requesting US-Fuf_ERA5_Land
+  + US-HB2: wrote 4 file(s) for US-HB2_ERA5_Land (19.5 MB)
+  > US-Cwt: requesting US-Cwt_ERA5_Land
+  + US-HB6: wrote 4 file(s) for US-HB6_ERA5_Land (19.5 MB)
+  > US-xGR: requesting US-xGR_ERA5_Land
+  + US-Fmf: wrote 4 file(s) for US-Fmf_ERA5_Land (19.5 MB)
+  > US-NC1: requesting US-NC1_ERA5_Land
+  + US-Cwt: wrote 4 file(s) for US-Cwt_ERA5_Land (19.5 MB)
+  > US-Vcm: requesting US-Vcm_ERA5_Land
+  + US-Fuf: wrote 4 file(s) for US-Fuf_ERA5_Land (19.5 MB)
+  > US-Vcp: requesting US-Vcp_ERA5_Land
+  + US-xGR: wrote 4 file(s) for US-xGR_ERA5_Land (19.5 MB)
+  > US-ChR: requesting US-ChR_ERA5_Land
+  + US-NC1: wrote 4 file(s) for US-NC1_ERA5_Land (19.5 MB)
+  > US-Dk2: requesting US-Dk2_ERA5_Land
+  + US-Vcp: wrote 4 file(s) for US-Vcp_ERA5_Land (19.5 MB)
+  > US-WBW: requesting US-WBW_ERA5_Land
+  + US-ChR: wrote 4 file(s) for US-ChR_ERA5_Land (19.5 MB)
+  > US-NC5: requesting US-NC5_ERA5_Land
+  + US-Vcm: wrote 4 file(s) for US-Vcm_ERA5_Land (19.5 MB)
+  > US-xTE: requesting US-xTE_ERA5_Land
+  + US-Dk2: wrote 4 file(s) for US-Dk2_ERA5_Land (19.5 MB)
+  > US-CZ2: requesting US-CZ2_ERA5_Land
+  + US-NC5: wrote 4 file(s) for US-NC5_ERA5_Land (19.5 MB)
+  > US-CZ4: requesting US-CZ4_ERA5_Land
+  + US-WBW: wrote 4 file(s) for US-WBW_ERA5_Land (19.5 MB)
+  + US-xTE: wrote 4 file(s) for US-xTE_ERA5_Land (19.5 MB)
+  > US-CZ3: requesting US-CZ3_ERA5_Land
+  > US-xML: requesting US-xML_ERA5_Land
+  + US-CZ2: wrote 4 file(s) for US-CZ2_ERA5_Land (19.5 MB)
+  > US-SB1: requesting US-SB1_ERA5_Land
+  + US-CZ4: wrote 4 file(s) for US-CZ4_ERA5_Land (19.5 MB)
+  > US-MOz: requesting US-MOz_ERA5_Land
+  + US-xML: wrote 4 file(s) for US-xML_ERA5_Land (19.5 MB)
+  > US-Blo: requesting US-Blo_ERA5_Land
+  + US-SB1: wrote 4 file(s) for US-SB1_ERA5_Land (19.5 MB)
+  > US-xSE: requesting US-xSE_ERA5_Land
+  + US-CZ3: wrote 4 file(s) for US-CZ3_ERA5_Land (19.5 MB)
+  > US-xSC: requesting US-xSC_ERA5_Land
+  + US-MOz: wrote 4 file(s) for US-MOz_ERA5_Land (19.5 MB)
+  > US-xUK: requesting US-xUK_ERA5_Land
+  + US-Blo: wrote 4 file(s) for US-Blo_ERA5_Land (19.5 MB)
+  > US-MEF: requesting US-MEF_ERA5_Land
+  + US-xSE: wrote 4 file(s) for US-xSE_ERA5_Land (19.5 MB)
+  > US-xBL: requesting US-xBL_ERA5_Land
+  + US-xUK: wrote 4 file(s) for US-xUK_ERA5_Land (19.5 MB)
+  > US-MMS: requesting US-MMS_ERA5_Land
+  + US-xSC: wrote 4 file(s) for US-xSC_ERA5_Land (19.5 MB)
+  > US-SHC: requesting US-SHC_ERA5_Land
+  + US-MEF: wrote 4 file(s) for US-MEF_ERA5_Land (19.5 MB)
+  > US-JFP: requesting US-JFP_ERA5_Land
+  + US-xBL: wrote 4 file(s) for US-xBL_ERA5_Land (19.5 MB)
+  > US-JFM: requesting US-JFM_ERA5_Land
+  + US-MMS: wrote 4 file(s) for US-MMS_ERA5_Land (19.5 MB)
+  > US-Slt: requesting US-Slt_ERA5_Land
+  + US-JFP: wrote 4 file(s) for US-JFP_ERA5_Land (19.5 MB)
+  > US-NR1: requesting US-NR1_ERA5_Land
+  + US-JFM: wrote 4 file(s) for US-JFM_ERA5_Land (19.5 MB)
+  > US-xNW: requesting US-xNW_ERA5_Land
+  + US-SHC: wrote 4 file(s) for US-SHC_ERA5_Land (19.5 MB)
+  > US-xRM: requesting US-xRM_ERA5_Land
+  + US-Slt: wrote 4 file(s) for US-Slt_ERA5_Land (19.5 MB)
+  > US-CPF: requesting US-CPF_ERA5_Land
+  + US-NR1: wrote 4 file(s) for US-NR1_ERA5_Land (19.5 MB)
+  > US-SSH: requesting US-SSH_ERA5_Land
+  + US-xNW: wrote 4 file(s) for US-xNW_ERA5_Land (19.5 MB)
+  > US-CPk: requesting US-CPk_ERA5_Land
+  + US-xRM: wrote 4 file(s) for US-xRM_ERA5_Land (19.5 MB)
+  > US-GBT: requesting US-GBT_ERA5_Land
+  + US-CPF: wrote 4 file(s) for US-CPF_ERA5_Land (19.5 MB)
+  > US-Oho: requesting US-Oho_ERA5_Land
+  + US-SSH: wrote 4 file(s) for US-SSH_ERA5_Land (19.5 MB)
+  > US-Ha1: requesting US-Ha1_ERA5_Land
+  + US-GBT: wrote 4 file(s) for US-GBT_ERA5_Land (19.5 MB)
+  = US-HBK: 1 request(s) already complete, skipping
+  > US-Bar: requesting US-Bar_ERA5_Land
+  + US-CPk: wrote 4 file(s) for US-CPk_ERA5_Land (19.5 MB)
+  > US-CS2: requesting US-CS2_ERA5_Land
+  + US-Oho: wrote 4 file(s) for US-Oho_ERA5_Land (19.5 MB)
+  > US-Me3: requesting US-Me3_ERA5_Land
+  + US-Bar: wrote 4 file(s) for US-Bar_ERA5_Land (19.5 MB)
+  + US-Ha1: wrote 4 file(s) for US-Ha1_ERA5_Land (19.5 MB)
+  > US-Me5: requesting US-Me5_ERA5_Land
+  > US-CS7: requesting US-CS7_ERA5_Land
+  + US-CS2: wrote 4 file(s) for US-CS2_ERA5_Land (19.5 MB)
+  > US-Me2: requesting US-Me2_ERA5_Land
+  + US-Me3: wrote 4 file(s) for US-Me3_ERA5_Land (19.5 MB)
+  > US-Me1: requesting US-Me1_ERA5_Land
+  + US-Me5: wrote 4 file(s) for US-Me5_ERA5_Land (19.5 MB)
+  > US-MRf: requesting US-MRf_ERA5_Land
+  + US-CS7: wrote 4 file(s) for US-CS7_ERA5_Land (19.5 MB)
+  > US-xYE: requesting US-xYE_ERA5_Land
+  + US-Me2: wrote 4 file(s) for US-Me2_ERA5_Land (19.5 MB)
+  > US-Ho1: requesting US-Ho1_ERA5_Land
+  + US-xYE: wrote 4 file(s) for US-xYE_ERA5_Land (19.5 MB)
+  > US-xST: requesting US-xST_ERA5_Land
+  + US-MRf: wrote 4 file(s) for US-MRf_ERA5_Land (19.5 MB)
+  > US-UMB: requesting US-UMB_ERA5_Land
+  + US-Ho1: wrote 4 file(s) for US-Ho1_ERA5_Land (19.5 MB)
+  > US-Wrc: requesting US-Wrc_ERA5_Land
+  + US-xST: wrote 4 file(s) for US-xST_ERA5_Land (19.5 MB)
+  > US-xAB: requesting US-xAB_ERA5_Land
+  + US-UMB: wrote 4 file(s) for US-UMB_ERA5_Land (19.5 MB)
+  > US-WCr: requesting US-WCr_ERA5_Land
+  + US-Wrc: wrote 4 file(s) for US-Wrc_ERA5_Land (19.5 MB)
+  > US-PFq: requesting US-PFq_ERA5_Land
+  + US-xAB: wrote 4 file(s) for US-xAB_ERA5_Land (19.5 MB)
+  > US-PFL: requesting US-PFL_ERA5_Land
+  + US-PFq: wrote 4 file(s) for US-PFq_ERA5_Land (19.5 MB)
+  + US-WCr: wrote 4 file(s) for US-WCr_ERA5_Land (19.5 MB)
+  > US-PFh: requesting US-PFh_ERA5_Land
+  > US-PFb: requesting US-PFb_ERA5_Land
+  + US-PFL: wrote 4 file(s) for US-PFL_ERA5_Land (19.5 MB)
+  > US-NMj: requesting US-NMj_ERA5_Land
+  + US-Me1: wrote 4 file(s) for US-Me1_ERA5_Land (19.5 MB)
+  > US-Wi0: requesting US-Wi0_ERA5_Land
+  + US-PFb: wrote 4 file(s) for US-PFb_ERA5_Land (19.5 MB)
+  > US-Wi5: requesting US-Wi5_ERA5_Land
+  + US-PFh: wrote 4 file(s) for US-PFh_ERA5_Land (19.5 MB)
+  > US-Wi1: requesting US-Wi1_ERA5_Land
+  + US-NMj: wrote 4 file(s) for US-NMj_ERA5_Land (19.5 MB)
+  > US-Wi8: requesting US-Wi8_ERA5_Land
+  + US-Wi5: wrote 4 file(s) for US-Wi5_ERA5_Land (19.5 MB)
+  + US-Wi0: wrote 4 file(s) for US-Wi0_ERA5_Land (19.5 MB)
+  > US-TEF: requesting US-TEF_ERA5_Land
+  > US-Blk: requesting US-Blk_ERA5_Land
+  + US-Wi1: wrote 4 file(s) for US-Wi1_ERA5_Land (19.5 MB)
+  + US-Wi8: wrote 4 file(s) for US-Wi8_ERA5_Land (19.5 MB)
+  + US-TEF: wrote 4 file(s) for US-TEF_ERA5_Land (19.5 MB)
+  + US-Blk: wrote 4 file(s) for US-Blk_ERA5_Land (19.5 MB)
+
+manifest: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land/manifest.csv
+
+stations completed: 118/118
+
+finished   : 2026-08-05T17:35:10Z
+exit status: 0
+1.5G	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land

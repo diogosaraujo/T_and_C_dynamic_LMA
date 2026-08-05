@@ -1,0 +1,611 @@
+job        : 35277
+node       : soeepyc16
+started    : 2026-08-05T17:53:03Z
+data       : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+
+verifying 118 station(s) in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+expected period: 1985-01-01 .. 2021-12-31, hourly
+
+  FAIL  US-Bar
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.818e-08 .. 0.01955) -- check whether the units are what the registry claims
+          ERROR: tp: 34.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.635e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Blk
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.01263) -- check whether the units are what the registry claims
+          ERROR: tp: 30.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.672e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Blo
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -6.308e-08 .. 0.01053) -- check whether the units are what the registry claims
+          ERROR: tp: 21.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.791e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-CPF
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.435e-08 .. 0.00744) -- check whether the units are what the registry claims
+          ERROR: tp: 33.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.876e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-CPk
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.007206) -- check whether the units are what the registry claims
+          ERROR: tp: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.829e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-CRK
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.65e-08 .. 0.02573) -- check whether the units are what the registry claims
+          ERROR: tp: 25.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.748e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-CS2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -6.985e-08 .. 0.02082) -- check whether the units are what the registry claims
+          ERROR: tp: 28.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.559e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-CS7
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.191e-08 .. 0.02135) -- check whether the units are what the registry claims
+          ERROR: tp: 29.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.547e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-CZ2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.274e-08 .. 0.0105) -- check whether the units are what the registry claims
+          ERROR: tp: 22.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.8e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-CZ3
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.618e-08 .. 0.009901) -- check whether the units are what the registry claims
+          ERROR: tp: 22.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.833e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-CZ4
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.009369) -- check whether the units are what the registry claims
+          ERROR: tp: 24.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.873e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-ChR
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.02138) -- check whether the units are what the registry claims
+          ERROR: tp: 28.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.729e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Cst
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.877e-08 .. 0.03399) -- check whether the units are what the registry claims
+          ERROR: tp: 24.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.704e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Cwt
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.01514) -- check whether the units are what the registry claims
+          ERROR: tp: 30.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.785e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-DPP
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.937e-08 .. 0.01725) -- check whether the units are what the registry claims
+          ERROR: tp: 27.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.781e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Dk2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.02064) -- check whether the units are what the registry claims
+          ERROR: tp: 24.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.697e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Dk3
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.02064) -- check whether the units are what the registry claims
+          ERROR: tp: 24.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.697e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Fmf
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.01196) -- check whether the units are what the registry claims
+          ERROR: tp: 20.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.944e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Fuf
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.818e-08 .. 0.009365) -- check whether the units are what the registry claims
+          ERROR: tp: 20.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.945e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 34.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-GBT
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.008693) -- check whether the units are what the registry claims
+          ERROR: tp: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.818e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-GLE
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.008693) -- check whether the units are what the registry claims
+          ERROR: tp: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.818e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-HB2
+          ERROR: d2m: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: t2m: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: sp: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: tp: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: ssrd: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: u10: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: v10: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+  FAIL  US-HB3
+          ERROR: d2m: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: t2m: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: sp: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: tp: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: ssrd: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: u10: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+          ERROR: v10: all values missing -- the grid point most likely resolved over water (ERA5-Land is land-only)
+  FAIL  US-HB5
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.284e-08 .. 0.02247) -- check whether the units are what the registry claims
+          ERROR: tp: 28.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.728e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-HB6
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.378e-08 .. 0.02579) -- check whether the units are what the registry claims
+          ERROR: tp: 27.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.74e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-HBK
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.615e-08 .. 0.0197) -- check whether the units are what the registry claims
+          ERROR: tp: 33.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.586e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Ha1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.02373) -- check whether the units are what the registry claims
+          ERROR: tp: 28.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.612e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Ha2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.02373) -- check whether the units are what the registry claims
+          ERROR: tp: 28.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.612e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Ho1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.93e-08 .. 0.0195) -- check whether the units are what the registry claims
+          ERROR: tp: 28.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.556e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Ho2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.93e-08 .. 0.0195) -- check whether the units are what the registry claims
+          ERROR: tp: 28.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.556e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Ho3
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.93e-08 .. 0.0195) -- check whether the units are what the registry claims
+          ERROR: tp: 28.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.556e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-JFM
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.274e-08 .. 0.01464) -- check whether the units are what the registry claims
+          ERROR: tp: 25.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.719e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-JFP
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.342e-08 .. 0.01465) -- check whether the units are what the registry claims
+          ERROR: tp: 25.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.727e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-KS1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.01852) -- check whether the units are what the registry claims
+          ERROR: tp: 32.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.741e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-LPH
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.02373) -- check whether the units are what the registry claims
+          ERROR: tp: 28.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.612e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-MEF
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.009802) -- check whether the units are what the registry claims
+          ERROR: tp: 29.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.898e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-MMS
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.342e-08 .. 0.0272) -- check whether the units are what the registry claims
+          ERROR: tp: 27.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.659e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-MOz
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.01713) -- check whether the units are what the registry claims
+          ERROR: tp: 24.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.659e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-MRf
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.274e-08 .. 0.0101) -- check whether the units are what the registry claims
+          ERROR: tp: 30.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.585e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Me1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.006371) -- check whether the units are what the registry claims
+          ERROR: tp: 30.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.669e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Me2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.006933) -- check whether the units are what the registry claims
+          ERROR: tp: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.73e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Me3
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.005887) -- check whether the units are what the registry claims
+          ERROR: tp: 31.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.77e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Me4
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.006933) -- check whether the units are what the registry claims
+          ERROR: tp: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.73e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Me5
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.006324) -- check whether the units are what the registry claims
+          ERROR: tp: 31.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.75e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Me6
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.005887) -- check whether the units are what the registry claims
+          ERROR: tp: 31.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.77e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Me7
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.006933) -- check whether the units are what the registry claims
+          ERROR: tp: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.73e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-MtB
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.01463) -- check whether the units are what the registry claims
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.967e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          warn : tp: only 5.8% of decreases occur at 00 UTC; the reset may not be on the day boundary this pipeline assumes.
+  FAIL  US-NC1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.02911) -- check whether the units are what the registry claims
+          ERROR: tp: 25.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.695e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-NC2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.02911) -- check whether the units are what the registry claims
+          ERROR: tp: 25.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.695e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-NC3
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.02911) -- check whether the units are what the registry claims
+          ERROR: tp: 25.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.695e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-NC5
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.02321) -- check whether the units are what the registry claims
+          ERROR: tp: 24.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.694e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-NMj
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01503) -- check whether the units are what the registry claims
+          ERROR: tp: 35.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.515e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-NR1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.008617) -- check whether the units are what the registry claims
+          ERROR: tp: 33.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.865e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-NR2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.008617) -- check whether the units are what the registry claims
+          ERROR: tp: 33.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.865e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Oho
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.238e-08 .. 0.01728) -- check whether the units are what the registry claims
+          ERROR: tp: 29.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.629e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFL
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01354) -- check whether the units are what the registry claims
+          ERROR: tp: 33.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.531e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFb
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.657e-08 .. 0.01472) -- check whether the units are what the registry claims
+          ERROR: tp: 34.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.528e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFc
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.657e-08 .. 0.01472) -- check whether the units are what the registry claims
+          ERROR: tp: 34.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.528e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFg
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.657e-08 .. 0.01472) -- check whether the units are what the registry claims
+          ERROR: tp: 34.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.528e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFh
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.0148) -- check whether the units are what the registry claims
+          ERROR: tp: 33.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.534e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFi
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.0148) -- check whether the units are what the registry claims
+          ERROR: tp: 33.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.534e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFj
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.0148) -- check whether the units are what the registry claims
+          ERROR: tp: 33.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.534e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFk
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01354) -- check whether the units are what the registry claims
+          ERROR: tp: 33.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.531e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFm
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01354) -- check whether the units are what the registry claims
+          ERROR: tp: 33.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.531e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFn
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01354) -- check whether the units are what the registry claims
+          ERROR: tp: 33.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.531e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFp
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01354) -- check whether the units are what the registry claims
+          ERROR: tp: 33.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.531e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFq
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01335) -- check whether the units are what the registry claims
+          ERROR: tp: 33.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.541e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFs
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01335) -- check whether the units are what the registry claims
+          ERROR: tp: 33.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.541e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-PFt
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01335) -- check whether the units are what the registry claims
+          ERROR: tp: 33.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.541e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-SB1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.0193) -- check whether the units are what the registry claims
+          ERROR: tp: 25.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.688e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-SB3
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.0193) -- check whether the units are what the registry claims
+          ERROR: tp: 25.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.688e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-SHC
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.93e-08 .. 0.007376) -- check whether the units are what the registry claims
+          ERROR: tp: 23.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.869e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-SP1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.02114) -- check whether the units are what the registry claims
+          ERROR: tp: 26.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.761e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-SP2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.758e-08 .. 0.0201) -- check whether the units are what the registry claims
+          ERROR: tp: 26.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.761e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-SP3
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.758e-08 .. 0.0201) -- check whether the units are what the registry claims
+          ERROR: tp: 26.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.761e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-SP4
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.758e-08 .. 0.0201) -- check whether the units are what the registry claims
+          ERROR: tp: 26.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.761e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-SSH
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.439e-08 .. 0.0172) -- check whether the units are what the registry claims
+          ERROR: tp: 30.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.643e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Slt
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.01926) -- check whether the units are what the registry claims
+          ERROR: tp: 23.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.629e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Sx2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.367e-08 .. 0.02316) -- check whether the units are what the registry claims
+          ERROR: tp: 26.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.735e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-TEF
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.553e-08 .. 0.00727) -- check whether the units are what the registry claims
+          ERROR: tp: 32.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.601e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-UMB
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.632e-08 .. 0.01911) -- check whether the units are what the registry claims
+          ERROR: tp: 34.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.562e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-UMd
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.632e-08 .. 0.01911) -- check whether the units are what the registry claims
+          ERROR: tp: 34.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.562e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Vcm
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.00918) -- check whether the units are what the registry claims
+          ERROR: tp: 26.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.953e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Vcp
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.009891) -- check whether the units are what the registry claims
+          ERROR: tp: 26.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.952e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Vcs
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.009891) -- check whether the units are what the registry claims
+          ERROR: tp: 26.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.952e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-WBW
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.0231) -- check whether the units are what the registry claims
+          ERROR: tp: 28.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.725e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-WCr
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01415) -- check whether the units are what the registry claims
+          ERROR: tp: 33.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.552e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wi0
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01553) -- check whether the units are what the registry claims
+          ERROR: tp: 34.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.514e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wi1
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.01585) -- check whether the units are what the registry claims
+          ERROR: tp: 34.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.505e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wi2
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.01585) -- check whether the units are what the registry claims
+          ERROR: tp: 34.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.505e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wi3
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01553) -- check whether the units are what the registry claims
+          ERROR: tp: 34.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.514e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wi4
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.01585) -- check whether the units are what the registry claims
+          ERROR: tp: 34.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.505e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wi5
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.0157) -- check whether the units are what the registry claims
+          ERROR: tp: 34.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.503e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wi8
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.01599) -- check whether the units are what the registry claims
+          ERROR: tp: 34.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.505e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wi9
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.403e-08 .. 0.0157) -- check whether the units are what the registry claims
+          ERROR: tp: 34.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.503e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-Wrc
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.009358) -- check whether the units are what the registry claims
+          ERROR: tp: 32.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.574e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xAB
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.981e-08 .. 0.0105) -- check whether the units are what the registry claims
+          ERROR: tp: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.573e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xBL
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.01797) -- check whether the units are what the registry claims
+          ERROR: tp: 25.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.671e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xBR
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.818e-08 .. 0.01955) -- check whether the units are what the registry claims
+          ERROR: tp: 34.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.635e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xGR
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.01625) -- check whether the units are what the registry claims
+          ERROR: tp: 31.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.778e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xHA
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.02373) -- check whether the units are what the registry claims
+          ERROR: tp: 28.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.612e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xJE
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.02219) -- check whether the units are what the registry claims
+          ERROR: tp: 25.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.775e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xLE
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.02325) -- check whether the units are what the registry claims
+          ERROR: tp: 25.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.799e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xML
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.378e-08 .. 0.01962) -- check whether the units are what the registry claims
+          ERROR: tp: 29.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.741e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xNW
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.005988) -- check whether the units are what the registry claims
+          ERROR: tp: 33.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.862e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xRM
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.009725) -- check whether the units are what the registry claims
+          ERROR: tp: 33.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.845e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xRN
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.875e-08 .. 0.0231) -- check whether the units are what the registry claims
+          ERROR: tp: 28.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.725e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xSB
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.96e-08 .. 0.0191) -- check whether the units are what the registry claims
+          ERROR: tp: 26.9% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.763e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.3% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xSC
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.0195) -- check whether the units are what the registry claims
+          ERROR: tp: 24.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.672e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xSE
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.069e-08 .. 0.01778) -- check whether the units are what the registry claims
+          ERROR: tp: 25.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.618e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 30.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xSP
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.274e-08 .. 0.0105) -- check whether the units are what the registry claims
+          ERROR: tp: 22.1% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.8e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xST
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -6.102e-08 .. 0.01857) -- check whether the units are what the registry claims
+          ERROR: tp: 32.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.556e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xTA
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.272e-08 .. 0.02269) -- check whether the units are what the registry claims
+          ERROR: tp: 24.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.715e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.2% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xTE
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -4.028e-08 .. 0.009625) -- check whether the units are what the registry claims
+          ERROR: tp: 24.4% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.853e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xTR
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -6.102e-08 .. 0.01857) -- check whether the units are what the registry claims
+          ERROR: tp: 32.6% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -2 .. 3.556e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xUK
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -5.93e-08 .. 0.01742) -- check whether the units are what the registry claims
+          ERROR: tp: 23.8% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.644e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 31.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xWR
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.792e-08 .. 0.009358) -- check whether the units are what the registry claims
+          ERROR: tp: 32.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.574e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 33.0% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+  FAIL  US-xYE
+          ERROR: tp: values outside the plausible range [0.0, 2.0] m accumulated/day (got -3.745e-08 .. 0.006182) -- check whether the units are what the registry claims
+          ERROR: tp: 35.7% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+          ERROR: ssrd: values outside the plausible range [0.0, 50000000.0] J/m2 accumulated/day (got -4 .. 3.787e+06) -- check whether the units are what the registry claims
+          ERROR: ssrd: 32.5% of hourly steps decrease -- this does NOT look like the documented accumulate-from-00-UTC convention (expected ~4%). The de-accumulation logic in the forcing builder would be wrong; inspect a day of raw values before proceeding.
+
+0 passed, 0 with warnings, 118 failed (of 118)
+report: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land_verification.json
+
+finished   : 2026-08-05T17:53:40Z
+exit status: 1
+At least one station FAILED -- do not feed this data to the forcing builder yet.

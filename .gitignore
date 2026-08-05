@@ -1,0 +1,21 @@
+# Downloaded forcing data -- large, reproducible from the scripts, never committed.
+preprocessing/data/
+*.nc
+*.grib
+
+# Large model output / inputs that must not go to GitHub (100 MB hard limit).
+T&C/Thanos_US_xRM/RES_US_xRM.mat
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# CDS credentials -- never commit
+.cdsapirc
+
+# MATLAB
+*.asv
+*.autosave
+slprj/

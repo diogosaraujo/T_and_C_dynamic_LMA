@@ -69,7 +69,7 @@ successfully at that moment.
 sbatch slurm/submit_era5_download.sh
 ```
 
-80 requests, 1985–2021, all 118 stations, ~1 GB. One node, 4 threads, 7-day walltime.
+80 requests, 1985–2021, all 118 stations, ~2 GB, roughly 30 min. One node, 4 threads, 7-day walltime.
 
 Extra flags pass straight through to the Python script:
 
@@ -90,6 +90,27 @@ sacct -j <jobid> --format=JobID,JobName,State,Elapsed,MaxRSS
 
 If the job dies or hits the walltime, **just resubmit the same command** — completed
 files are skipped, so it resumes where it stopped.
+
+## Verify the download
+
+```bash
+sbatch slurm/submit_era5_verify.sh
+```
+
+Or run it directly on the login node — a few minutes of reading, no network:
+
+```bash
+source ~/envs/tc-preproc/bin/activate
+python preprocessing/verify_era5_land.py
+```
+
+Checks time axis, variable presence, coverage, physical ranges, and empirically confirms
+the `tp`/`ssrd` accumulation convention. Writes a JSON report next to the data and exits
+non-zero if any station fails. See [preprocessing/README.md](../preprocessing/README.md)
+for what each check catches.
+
+This needs `xarray` and `netCDF4`, added to `requirements.txt` after the download step
+was built — **rerun `bash slurm/setup_env.sh`** to install them into the existing venv.
 
 ## Job array — gridded fallback only
 
@@ -140,17 +161,23 @@ before the copy-back step.
 Four netCDFs per station, one per variable group — the CDS returns the time series split
 that way rather than merged. All four share the same hourly time axis.
 
-Outside the repo, so ~1 GB of netCDF can never be accidentally staged and pushed. The
+Outside the repo, so ~2 GB of netCDF can never be accidentally staged and pushed. The
 path is set once in [config.sh](config.sh) as `TC_INPUT_DATA`; change it there if it ever
 needs to move.
 
 ## Expected timing
 
-The bottleneck is the ECMWF queue, not the cluster. Observed on 2026-08-04, a trivial
-probe request (1 variable, 2 days, 1 point) took **~2 minutes end to end** — ~80 s
-queued in `accepted` before it even started running. That latency is per request and
-largely independent of size, so the real 37-year × 7-variable requests will take
-substantially longer each.
+Measured from job 35235 (2026-08-04), which completed all 320 CDS retrievals server-side:
 
-With 80 requests at `--jobs 4`, budget a day or more of mostly-idle walltime. That is why
-the walltime is 7 days and `--jobs` stays low.
+| | |
+|---|---|
+| One full 37-year, 7-variable request | **~82 s** (queue + generate + transfer) |
+| Payload per station | **~18.6 MB** compressed (4 netCDFs in one zip) |
+| Full run: 80 requests at `--jobs 4` | **~30 min** |
+| 2-station test | **~2 min** |
+
+Add SLURM queue time before the job starts, which on `SOE_main` is usually short.
+
+The 7-day walltime is deliberate headroom, not an expectation — CDS load varies and a
+slow day should not kill a run mid-way. Latency is dominated by ECMWF queueing, so
+raising `--jobs` past 4 buys little: the CDS throttles per user.

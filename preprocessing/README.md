@@ -99,13 +99,43 @@ The output directory defaults to:
 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land/
 ```
 
-Outside the repo, because ~1 GB of netCDF has no business in git. Override with
+Outside the repo, because ~2 GB of netCDF has no business in git. Override with
 `--out <path>` for a one-off; to change it permanently, edit `TC_INPUT_DATA` in
 `slurm/config.sh`.
 
 The `.json` sidecar records station and grid coordinates, the variable table with units
 and time conventions, the CDS collection and citation, the UTC/`DeltaGMT`/`t_bef`/`t_aft`
 convention, and which stations shared a download.
+
+## Verification
+
+The download only checks that a file is netCDF and non-empty. `verify_era5_land.py`
+checks that the contents are actually usable:
+
+```bash
+python verify_era5_land.py                      # every station on disk
+python verify_era5_land.py --stations US-HBK,US-Ha2
+python verify_era5_land.py --report report.json
+```
+
+| Check | Catches |
+|---|---|
+| structure | missing group file or sidecar, unreadable netCDF |
+| variables | a requested variable absent, or in the wrong group |
+| time axis | gaps, duplicates, non-hourly steps, truncated period, group files that disagree |
+| coverage | all-NaN variables — the grid point resolved over water (ERA5-Land is land-only) |
+| ranges | values outside physical bounds, which catches unit surprises (K vs °C) |
+| accumulation | `tp`/`ssrd` stored as per-hour fluxes rather than accumulating from 00 UTC |
+
+Exit status is 0 only if every station passes; warnings don't fail the run.
+
+The accumulation check is the important one. It's empirical rather than trusting the
+documentation: ERA5-Land accumulations rise through the day and drop once at 00 UTC, so
+~1/24 ≈ 4% of hourly steps decrease. A per-hour flux series would decrease ~50% of the
+time. The check also confirms the drops land on the 00 UTC boundary. If this assumption
+is ever wrong, de-accumulation would silently inflate precipitation and shortwave through
+each day — plausible-looking forcing, wrong physics, discovered much later as bad ET
+and GPP.
 
 ## Two things to know before using the data
 
@@ -138,10 +168,11 @@ subdirectories as `<StationID>/<StationID>_ERA5_Land_<year>.nc`.
 
 ## Notes
 
-- Downloads are **not** committed — `preprocessing/data/` is gitignored. Rerun the
+- Downloads are **not** committed — they land outside the repo (see above). Rerun the
   script on the cluster rather than pushing netCDFs through GitHub.
-- CDS requests queue server-side; a full run takes hours to days depending on load.
-  `--jobs 4` is deliberately modest, since the CDS throttles per user.
+- Measured on 2026-08-04: **~82 s per full 37-year request**, ~18.6 MB per station. The
+  full 80-request run takes roughly **30 min** at `--jobs 4`. Raising `--jobs` buys
+  little — latency is ECMWF queueing, and the CDS throttles per user.
 - ERA5-Land is land-only. A grid point that resolves over water returns missing values —
   the manifest's `grid_offset_km` column is the first place to look if a station's data
   comes back empty.

@@ -2,3 +2,8 @@
 # cdsapi >= 0.7.2 is required: the legacy CDS was retired in September 2024 and older
 # clients cannot talk to the current Climate Data Store.
 cdsapi>=0.7.4
+
+# Verification step (verify_era5_land.py) -- reads the downloaded netCDFs.
+xarray>=2024.1.0
+netCDF4>=1.6.0
+numpy>=1.24

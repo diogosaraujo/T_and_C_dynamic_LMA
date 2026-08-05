@@ -68,8 +68,22 @@ def log(msg: str = "") -> None:
 # --------------------------------------------------------------------------------------
 
 
+# urllib's default User-Agent is "Python-urllib/3.x", which CDNs and WAFs routinely
+# block with a 403. Identify the client honestly first; only fall back to a generic
+# browser string if that is rejected.
+USER_AGENT = (
+    "T_and_C_dynamic_LMA/1.0 (research use; "
+    "https://github.com/diogosaraujo/T_and_C_dynamic_LMA)"
+)
+FALLBACK_USER_AGENT = (
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/124.0.0.0 Safari/537.36"
+)
+
+
 def get_json(url: str):
-    req = urllib.request.Request(url, headers={"Accept": "application/json"})
+    req = urllib.request.Request(
+        url, headers={"Accept": "application/json", "User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
@@ -78,20 +92,57 @@ def post_json(url: str, payload: dict):
     body = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         url, data=body,
-        headers={"Content-Type": "application/json", "Accept": "application/json"},
+        headers={"Content-Type": "application/json", "Accept": "application/json",
+                 "User-Agent": USER_AGENT},
     )
     with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
+def _describe_http_error(exc: urllib.error.HTTPError) -> str:
+    """Include the server's own explanation -- a bare status code is rarely enough."""
+    try:
+        body = exc.read()[:400].decode("utf-8", errors="replace").strip()
+    except Exception:
+        body = ""
+    detail = f" | server said: {body}" if body else ""
+    return f"HTTP {exc.code} {exc.reason}{detail}"
+
+
 def fetch_file(url: str, dest: Path) -> None:
-    """Download to a .part file then rename, so an interrupted run leaves no half file."""
+    """Download to a .part file then rename, so an interrupted run leaves no half file.
+
+    Retries once with a generic browser User-Agent when the first attempt is refused,
+    since 401/403 on these archive URLs is usually client-string filtering rather than a
+    genuine permission problem.
+    """
     dest.parent.mkdir(parents=True, exist_ok=True)
     part = dest.with_suffix(dest.suffix + ".part")
-    with urllib.request.urlopen(url, timeout=TIMEOUT) as resp, part.open("wb") as fh:
-        while chunk := resp.read(1 << 20):
-            fh.write(chunk)
-    part.replace(dest)
+    last = ""
+
+    for attempt, agent in enumerate((USER_AGENT, FALLBACK_USER_AGENT), 1):
+        req = urllib.request.Request(url, headers={"User-Agent": agent, "Accept": "*/*"})
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as resp, part.open("wb") as fh:
+                while chunk := resp.read(1 << 20):
+                    fh.write(chunk)
+            part.replace(dest)
+            if attempt > 1:
+                log("    (succeeded on the fallback User-Agent)")
+            return
+        except urllib.error.HTTPError as exc:
+            last = _describe_http_error(exc)
+            if part.exists():
+                part.unlink()
+            if exc.code not in (401, 403):
+                break
+        except (urllib.error.URLError, OSError) as exc:
+            last = str(exc)
+            if part.exists():
+                part.unlink()
+            break
+
+    raise RuntimeError(f"{last}\n      url: {url}")
 
 
 # --------------------------------------------------------------------------------------
@@ -248,7 +299,8 @@ def unpack(archive: Path, dest: Path) -> list[dict]:
     return found
 
 
-def download_for_policy(policy: str, sids: list[str], out_dir: Path, args) -> list[Path]:
+def download_for_policy(policy: str, sids: list[str], out_dir: Path,
+                        args) -> tuple[list[Path], list[str]]:
     payload = {
         "user_id": args.user_id,
         "user_email": args.user_email,
@@ -268,11 +320,12 @@ def download_for_policy(policy: str, sids: list[str], out_dir: Path, args) -> li
             f"{sorted(response) if isinstance(response, dict) else type(response).__name__}")
         (out_dir / f"_response_{policy.replace('.', '')}.json").write_text(
             json.dumps(response, indent=2), encoding="utf-8")
-        return []
+        return [], [f"{policy}: no download URLs returned"]
 
     archive_dir = out_dir / "_archives"
     archive_dir.mkdir(parents=True, exist_ok=True)
-    paths = []
+    paths: list[Path] = []
+    failures: list[str] = []
     for url in urls:
         name = url.split("?")[0].rstrip("/").split("/")[-1]
         dest = archive_dir / name
@@ -283,12 +336,13 @@ def download_for_policy(policy: str, sids: list[str], out_dir: Path, args) -> li
         log(f"  > {name}")
         try:
             fetch_file(url, dest)
-        except (urllib.error.URLError, OSError) as exc:
+        except Exception as exc:
             log(f"  X failed to fetch {name}: {exc}")
+            failures.append(f"{name}: {exc}")
             continue
         log(f"  + {name} ({dest.stat().st_size / 1e6:.1f} MB)")
         paths.append(dest)
-    return paths
+    return paths, failures
 
 
 # --------------------------------------------------------------------------------------
@@ -387,6 +441,7 @@ def main(argv: list[str] | None = None) -> int:
     # Archives already on disk are skipped, so re-running resumes.
     archives: list[Path] = []
     failed_batches: list[tuple[str, list[str]]] = []
+    fetch_failures: list[str] = []
     for pol, sids in sorted(by_policy.items()):
         ordered = sorted(sids)
         batches = [ordered[i:i + args.batch_size]
@@ -395,7 +450,9 @@ def main(argv: list[str] | None = None) -> int:
             if len(batches) > 1:
                 log(f"  [{pol} batch {n}/{len(batches)}]")
             try:
-                archives.extend(download_for_policy(pol, batch, args.out, args))
+                paths, failures = download_for_policy(pol, batch, args.out, args)
+                archives.extend(paths)
+                fetch_failures.extend(failures)
             except Exception as exc:
                 log(f"  X {pol} batch {n} failed: {exc}")
                 failed_batches.append((pol, batch))
@@ -448,11 +505,17 @@ def main(argv: list[str] | None = None) -> int:
         log("  (a site may have no shared BASE data, or a different data policy)")
     log(f"manifest: {args.out / 'files_manifest.csv'}")
 
+    if fetch_failures:
+        log(f"\n{len(fetch_failures)} archive(s) could NOT be downloaded:")
+        for msg in fetch_failures:
+            log(f"  - {msg}")
     if failed_batches:
         log(f"\n{len(failed_batches)} batch(es) FAILED:")
         for pol, batch in failed_batches:
             log(f"  {pol}: {', '.join(batch)}")
-        log("Re-run the same command -- archives already downloaded are skipped.")
+
+    if fetch_failures or failed_batches:
+        log("\nRe-run the same command -- archives already downloaded are skipped.")
         return 1
 
     log("\nNext: python inspect_ameriflux_badm.py")

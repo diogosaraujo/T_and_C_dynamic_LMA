@@ -250,9 +250,12 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - **Partitions:** `SOE_main` (new Epyc) / `SOE_legacy` (older Xeon) for general CPU — no
   `--account` needed. `SOE_nyg` + `--account=nyg` in the SOE docs belongs to the
   GPU-owning group, not us. Interactive: `srun -p SOE_main --cpus-per-task=4 --mem=24G --pty bash`.
-- ⚠️ **Compute-node internet access is unverified.** The ERA5-Land download needs
-  outbound HTTPS to the CDS; many clusters firewall compute nodes even when login nodes
-  have a route. Run `slurm/check_cds_access.sh` before submitting any download job.
+- ✅ **Compute nodes CAN reach the CDS** (verified 2026-08-04 on `soeepyc16` via `srun`:
+  a real ERA5-Land retrieval succeeded). So download jobs can be submitted normally —
+  no proxy, no login-node workaround needed.
+- ⚠️ **`curl` is not installed** on the login or compute nodes. Use Python
+  (`urllib.request`) for connectivity checks in scripts; a missing-`curl` error looks
+  exactly like a firewall block and will send you chasing the wrong problem.
 - **Run:** `matlab -nodisplay -nosplash -batch "GO_<site>"`. Single-node CPU on **SOE_main**.
   Stage inputs to `/tmp` scratch, copy `RES_*.mat` back. Default runtime 3 days (→14 with
   `#SBATCH --time=`).
@@ -276,7 +279,7 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - [ ] Extend AmeriFlux fetch: `HEIGHTC`, `AG_BIOMASS`, `LAI`, BADM soil texture.
 - [ ] POLARIS/SoilGrids depth-resolved texture + depth-to-bedrock sampling.
 - [ ] Verify Mapping Toolbox on the cluster.
-- [ ] Verify compute-node outbound access to the CDS (`slurm/check_cds_access.sh`).
+- [x] Verify compute-node outbound access to the CDS — confirmed working 2026-08-04.
 - [x] ERA5-Land download (`preprocessing/download_era5_land.py` + `slurm/` wrappers).
 - [ ] Build remaining Python preprocessing modules (GCM, radiation port, soil, params).
 - [ ] Confirm the unit T&C expects for `Pre` (Pa vs mbar) against the US_xRM forcing.

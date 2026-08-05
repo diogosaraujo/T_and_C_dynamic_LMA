@@ -48,12 +48,15 @@ key: <your-api-key>
 bash slurm/check_cds_access.sh
 ```
 
-**Do not skip this.** Compute nodes on many clusters have no outbound internet even when
-login nodes do. A download job on a firewalled node fails every request and wastes its
-walltime. The script tests the login node, then grabs a short `srun` allocation and tests
-from a compute node, then tries a real one-day CDS retrieval. If the compute-node checks
-fail, the script prints the fallback options — a proxy, running on the login node under
-`tmux`, or downloading locally and rsyncing up.
+**Already verified once (2026-08-04): compute nodes CAN reach the CDS**, confirmed by a
+real ERA5-Land retrieval on `soeepyc16`. Rerun the check if downloads start failing, or
+after any cluster networking change.
+
+The script probes the login node, then a compute node via `srun`, then performs a real
+CDS retrieval — and its verdict depends on that last step, not on the probes. Note
+**`curl` is not installed on the SOE nodes**, so the probes use Python `urllib`; an
+earlier curl-based version reported "NO route to the CDS" on a node that was downloading
+successfully at that moment.
 
 ## Submit the download
 
@@ -121,6 +124,11 @@ remember beegfs is not backed up.
 
 ## Expected timing
 
-The bottleneck is the ECMWF queue, not the cluster. Individual requests can sit for
-minutes to hours depending on CDS load, so a full run plausibly takes a day or more of
-mostly-idle walltime. That is why the walltime is 7 days and `--jobs` stays low.
+The bottleneck is the ECMWF queue, not the cluster. Observed on 2026-08-04, a trivial
+probe request (1 variable, 2 days, 1 point) took **~2 minutes end to end** — ~80 s
+queued in `accepted` before it even started running. That latency is per request and
+largely independent of size, so the real 37-year × 7-variable requests will take
+substantially longer each.
+
+With 80 requests at `--jobs 4`, budget a day or more of mostly-idle walltime. That is why
+the walltime is 7 days and `--jobs` stays low.

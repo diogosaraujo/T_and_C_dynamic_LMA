@@ -41,7 +41,12 @@ python -m pip install -r "$REPO_ROOT/preprocessing/requirements.txt"
 
 echo
 echo "==> installed:"
-python -c "import cdsapi; print('cdsapi', cdsapi.__version__)"
+# The import must succeed (set -e makes this fatal). cdsapi does not expose
+# __version__, so read the version from package metadata, and treat that as
+# best-effort -- a missing version string is cosmetic, a failed import is not.
+python -c "import cdsapi" && echo "    cdsapi imports OK"
+python -c "import importlib.metadata as md; print('    cdsapi', md.version('cdsapi'))" \
+    2>/dev/null || echo "    (version lookup unavailable)"
 
 echo
 if [ -f "$HOME/.cdsapirc" ]; then

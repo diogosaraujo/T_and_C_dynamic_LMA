@@ -1,0 +1,11 @@
+# Developed on Windows, executed on the Linux cluster. Shell scripts and SLURM submit
+# files must stay LF: a CRLF shebang makes bash fail with a confusing
+# "/bin/bash^M: bad interpreter" error.
+*.sh text eol=lf
+*.slurm text eol=lf
+*.py text eol=lf
+
+# Binary data -- never touch, never diff.
+*.mat binary
+*.nc binary
+*.grib binary

@@ -56,15 +56,19 @@ vegetation; Low/understory off).
 ```
 repo/
   preprocessing/   # Python: builds T&C-ready .mat forcing structs + site params
-  tc_model/        # MATLAB: T&C source + GO_<site>.m / run_site.m
+    download_era5_land.py   # DONE: hourly ERA5-Land per AmeriFlux station
+    era5_variables.py       #       variable registry (units, T&C field mapping)
   slurm/           # SLURM submit scripts + job-array wrappers
-  config/          # per-site config (coords, PFT, soil depth, scenario)
-  docs/            # this file + notes
+    setup_env.sh, check_cds_access.sh, submit_era5_download*.sh
+  T&C/             # MATLAB: T&C source + per-site run dirs (current layout)
+  tc_model/        # planned: consolidated T&C source + GO_<site>.m / run_site.m
+  config/          # planned: per-site config (coords, PFT, soil depth, scenario)
 ```
 
-- **Preprocessing in Python** (testable locally): ERA5-Land / GCM pulls, humidity,
-  radiation partition port, soil sampling, AmeriFlux metadata → writes the `.mat` structs
-  T&C loads.
+- **Preprocessing in Python** — developed and tested locally, but **executed on the SOE
+  cluster** (SLURM) for the real runs: ERA5-Land / GCM pulls, humidity, radiation
+  partition port, soil sampling, AmeriFlux metadata → writes the `.mat` structs T&C loads.
+  Every step gets a `slurm/` wrapper, not just the MATLAB ones.
 - **Modeling in MATLAB** (runs on SOE HPC): T&C proper.
 - **git/GitHub is the bridge:** develop in VS Code (+ Claude Code), push; on the cluster
   `git clone`/`git pull` and run MATLAB via SLURM job arrays.
@@ -238,6 +242,17 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
   `soenfs1.hpc.rutgers.edu` **port 22** (FileZilla: soenfs1:22, key `id_rsa`).
 - **Modules (LMOD):** `ml Matlab/2025a` available → run T&C natively (no Compiler needed).
   ⚠️ verify Mapping Toolbox for the geospatial pairing (`matlab -batch "ver"`).
+  LMOD is only initialised for shells that read `.bashrc` (snippet sourcing
+  `/opt/apps/lmod/lmod/init/profile`) — batch scripts must source it defensively.
+- **Python:** `ml Python/3.13.7` or `Python/3.14.6`, or shared conda at
+  `/opt/apps/miniconda3` (`conda activate` / `conda activate py3146`). Preprocessing uses
+  a venv at `~/envs/tc-preproc` built by `slurm/setup_env.sh`.
+- **Partitions:** `SOE_main` (new Epyc) / `SOE_legacy` (older Xeon) for general CPU — no
+  `--account` needed. `SOE_nyg` + `--account=nyg` in the SOE docs belongs to the
+  GPU-owning group, not us. Interactive: `srun -p SOE_main --cpus-per-task=4 --mem=24G --pty bash`.
+- ⚠️ **Compute-node internet access is unverified.** The ERA5-Land download needs
+  outbound HTTPS to the CDS; many clusters firewall compute nodes even when login nodes
+  have a route. Run `slurm/check_cds_access.sh` before submitting any download job.
 - **Run:** `matlab -nodisplay -nosplash -batch "GO_<site>"`. Single-node CPU on **SOE_main**.
   Stage inputs to `/tmp` scratch, copy `RES_*.mat` back. Default runtime 3 days (→14 with
   `#SBATCH --time=`).
@@ -261,6 +276,9 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - [ ] Extend AmeriFlux fetch: `HEIGHTC`, `AG_BIOMASS`, `LAI`, BADM soil texture.
 - [ ] POLARIS/SoilGrids depth-resolved texture + depth-to-bedrock sampling.
 - [ ] Verify Mapping Toolbox on the cluster.
-- [ ] Build Python preprocessing modules (ERA5-Land, GCM, radiation port, soil, params).
+- [ ] Verify compute-node outbound access to the CDS (`slurm/check_cds_access.sh`).
+- [x] ERA5-Land download (`preprocessing/download_era5_land.py` + `slurm/` wrappers).
+- [ ] Build remaining Python preprocessing modules (GCM, radiation port, soil, params).
+- [ ] Confirm the unit T&C expects for `Pre` (Pa vs mbar) against the US_xRM forcing.
 - [ ] `run_site.m` + SLURM job-array wrapper.
 - [ ] Spin-up protocol (common baseline, then fixed/dynamic branch).

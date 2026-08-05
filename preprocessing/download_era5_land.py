@@ -428,6 +428,10 @@ def parse_args(argv: list[str] | None = None):
     p.add_argument("--stations", default=None,
                    help="comma-separated StationIDs to restrict the run to")
     p.add_argument("--jobs", type=int, default=4, help="concurrent CDS requests")
+    p.add_argument("--shard", type=int, default=0,
+                   help="0-based index of this shard, for SLURM job arrays")
+    p.add_argument("--num-shards", type=int, default=1,
+                   help="total number of shards; grid cells are split round-robin across them")
     p.add_argument("--retries", type=int, default=4, help="attempts per request")
     p.add_argument("--no-dedup", action="store_true",
                    help="download every station separately even when they share a grid cell")
@@ -455,10 +459,25 @@ def main(argv: list[str] | None = None) -> int:
             log(f"  ! requested station(s) not found in the site lists: {sorted(missing)}")
 
     groups = group_by_grid_cell(stations, dedup=not args.no_dedup)
+    all_cells = len(groups)
+
+    if args.num_shards < 1 or not 0 <= args.shard < args.num_shards:
+        raise SystemExit("--shard must satisfy 0 <= shard < --num-shards")
+    if args.num_shards > 1:
+        # Shard whole grid cells, never individual stations, so stations sharing a cell
+        # stay in the same task and the copy step always finds its source file.
+        groups = [g for i, g in enumerate(groups) if i % args.num_shards == args.shard]
+        if not groups:
+            log(f"shard {args.shard}/{args.num_shards}: no grid cells assigned, nothing to do")
+            return 0
 
     per_group = 1 if args.mode == "timeseries" else (args.end_year - args.start_year + 1)
     log(f"stations           : {len(stations)}")
-    log(f"unique grid cells  : {len(groups)}")
+    if args.num_shards > 1:
+        log(f"shard              : {args.shard} of {args.num_shards}")
+        log(f"unique grid cells  : {len(groups)} of {all_cells} (this shard)")
+    else:
+        log(f"unique grid cells  : {len(groups)}")
     log(f"mode               : {args.mode} ({TIMESERIES_DATASET if args.mode == 'timeseries' else GRIDDED_DATASET})")
     log(f"period             : {args.start_year}-01-01 .. {args.end_year}-12-31 (hourly)")
     log(f"variables          : {', '.join(CDS_VARIABLE_NAMES)}")
@@ -502,14 +521,18 @@ def main(argv: list[str] | None = None) -> int:
                 failures.append((sid, str(exc)))
 
     if not args.dry_run and rows:
-        manifest = args.out / "manifest.csv"
+        # Array tasks each write their own manifest, otherwise they would clobber
+        # each other. Concatenate them afterwards (see slurm/README.md).
+        name = "manifest.csv" if args.num_shards == 1 else f"manifest.shard{args.shard:03d}.csv"
+        manifest = args.out / name
         with manifest.open("w", newline="", encoding="utf-8") as fh:
             writer = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
             writer.writeheader()
             writer.writerows(sorted(rows, key=lambda r: r["station_id"]))
         log(f"\nmanifest: {manifest}")
 
-    log(f"\nstations completed: {len(rows)}/{len(stations)}")
+    expected = sum(len(g["members"]) for g in groups)
+    log(f"\nstations completed: {len(rows)}/{expected}")
     if failures:
         log(f"failed grid cells : {len(failures)}")
         for sid, err in failures:

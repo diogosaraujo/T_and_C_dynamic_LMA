@@ -28,8 +28,9 @@
 set -uo pipefail
 
 REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
-TC_VENV="${TC_VENV:-$HOME/envs/tc-preproc}"
-OUT_DIR="${OUT_DIR:-$REPO_ROOT/preprocessing/data/era5_land}"
+# shellcheck disable=SC1091
+source "$REPO_ROOT/slurm/config.sh"
+OUT_DIR="${OUT_DIR:-$TC_INPUT_DATA/era5_land}"
 JOBS="${JOBS:-2}"
 
 SHARD="${SLURM_ARRAY_TASK_ID:-0}"

@@ -75,12 +75,22 @@ radiation partition), and **relative humidity** (`ea` comes from `Tdew` via Tete
 ## Output
 
 ```
-preprocessing/data/era5_land/
+<output dir>/
   US-Ho1_ERA5_Land.nc      # hourly, 1985-2021, all 7 variables
   US-Ho1_ERA5_Land.json    # metadata sidecar
   ...
   manifest.csv             # one row per station
 ```
+
+The output directory defaults to:
+
+```
+/vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land/
+```
+
+Outside the repo, because ~1 GB of netCDF has no business in git. Override with
+`--out <path>` for a one-off; to change it permanently, edit `TC_INPUT_DATA` in
+`slurm/config.sh`.
 
 The `.json` sidecar records station and grid coordinates, the variable table with units
 and time conventions, the CDS collection and citation, the UTC/`DeltaGMT`/`t_bef`/`t_aft`

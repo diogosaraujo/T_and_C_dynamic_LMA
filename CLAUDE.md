@@ -240,6 +240,11 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - **Filesystems:** home `/volume/NFS/$USER` (backed up, slow) · scratch `/mnt/beegfs/$USER`
   (fast, NOT backed up) · node-local `/tmp/$USER/$SLURM_JOB_ID`. **File transfer:**
   `soenfs1.hpc.rutgers.edu` **port 22** (FileZilla: soenfs1:22, key `id_rsa`).
+- **Data lives OUTSIDE the repo:** model inputs under
+  `/vol_efthymios/NFS07/dd1136/T_and_C/input_data/<dataset>/` (`era5_land/` so far), set
+  once in `slurm/config.sh` as `$TC_INPUT_DATA` and honoured by the Python scripts. Keeps
+  ~1 GB of netCDF out of git — repo checkout is `.../T_and_C/T_and_C_dynamic_LMA`, a
+  sibling of `input_data`.
 - **Modules (LMOD):** `ml Matlab/2025a` available → run T&C natively (no Compiler needed).
   ⚠️ verify Mapping Toolbox for the geospatial pairing (`matlab -batch "ver"`).
   LMOD is only initialised for shells that read `.bashrc` (snippet sourcing

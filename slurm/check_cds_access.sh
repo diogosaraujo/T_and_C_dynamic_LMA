@@ -14,9 +14,8 @@
 set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TC_VENV="${TC_VENV:-$HOME/envs/tc-preproc}"
-PARTITION="${PARTITION:-SOE_main}"
-PYTHON_MODULE="${PYTHON_MODULE:-Python/3.13.7}"
+# shellcheck disable=SC1091
+source "$REPO_ROOT/slurm/config.sh"
 
 if [ ! -d "$TC_VENV" ]; then
     echo "ERROR: venv not found at $TC_VENV -- run 'bash slurm/setup_env.sh' first" >&2

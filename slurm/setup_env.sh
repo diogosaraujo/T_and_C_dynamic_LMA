@@ -10,8 +10,8 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TC_VENV="${TC_VENV:-$HOME/envs/tc-preproc}"
-PYTHON_MODULE="${PYTHON_MODULE:-Python/3.13.7}"
+# shellcheck disable=SC1091
+source "$REPO_ROOT/slurm/config.sh"
 
 # LMOD is not initialised in non-interactive shells unless .bashrc ran, so do it here.
 if ! command -v module >/dev/null 2>&1; then

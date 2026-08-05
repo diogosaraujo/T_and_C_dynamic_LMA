@@ -15,6 +15,11 @@ T&C model job-array wrapper comes later.
 | CPU partitions | `SOE_main` (new Epyc), `SOE_legacy` (older Xeon) |
 | Walltime | 3 days default, up to 14 with `#SBATCH --time=` |
 | Python | `ml Python/3.13.7` or `Python/3.14.6`, or conda at `/opt/apps/miniconda3` |
+| Input data | `/vol_efthymios/NFS07/dd1136/T_and_C/input_data` — outside the repo, set in [config.sh](config.sh) |
+| `curl` | **not installed** — use Python `urllib` for connectivity checks |
+
+All shared paths live in [config.sh](config.sh), sourced by every script here. Change a
+path there once rather than editing each script.
 
 `SOE_nyg` and `--account=nyg` in the SOE docs are for the GPU-owning group — not us. The
 general CPU partitions need no `--account`.
@@ -118,9 +123,19 @@ Writing in place means a walltime kill loses only the file in flight, and a resu
 continues. Staging to `/tmp` would discard days of downloads if the job were killed
 before the copy-back step.
 
-Output lands in `preprocessing/data/era5_land/`, which is gitignored — never push netCDF
-to GitHub. Move it to `/mnt/beegfs/$USER` with `OUT_DIR=...` if home quota is tight, but
-remember beegfs is not backed up.
+## Where the data lands
+
+```
+/vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land/
+    US-Ho1_ERA5_Land.nc      # hourly 1985-2021, all 7 variables
+    US-Ho1_ERA5_Land.json    # metadata sidecar
+    ...
+    manifest.csv
+```
+
+Outside the repo, so ~1 GB of netCDF can never be accidentally staged and pushed. The
+path is set once in [config.sh](config.sh) as `TC_INPUT_DATA`; change it there if it ever
+needs to move.
 
 ## Expected timing
 

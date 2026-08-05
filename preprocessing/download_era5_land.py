@@ -44,6 +44,7 @@ import argparse
 import csv
 import json
 import math
+import os
 import shutil
 import sys
 import threading
@@ -68,7 +69,9 @@ DEFAULT_SITE_LISTS = [
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv",
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "evergreen_ameriflux.csv",
 ]
-DEFAULT_OUT = Path(__file__).resolve().parent / "data" / "era5_land"
+# Downloads live outside the repo: ~1 GB of netCDF has no business in git.
+INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA", "/vol_efthymios/NFS07/dd1136/T_and_C/input_data"))
+DEFAULT_OUT = INPUT_ROOT / "era5_land"
 
 GRID_STEP = 0.1  # ERA5-Land resolution, degrees
 # A station sitting this close to a cell boundary is not safe to group with others,

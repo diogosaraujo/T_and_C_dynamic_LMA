@@ -261,6 +261,9 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - ⚠️ **`curl` is not installed** on the login or compute nodes. Use Python
   (`urllib.request`) for connectivity checks in scripts; a missing-`curl` error looks
   exactly like a firewall block and will send you chasing the wrong problem.
+- ⚠️ **Nothing runs in the login shell** — every step (downloads, verification, even the
+  `pip install`) goes through `sbatch`. Each preprocessing step has a wrapper in `slurm/`;
+  `check_cds_access.sh` is invoked directly but only orchestrates `srun`.
 - **Run:** `matlab -nodisplay -nosplash -batch "GO_<site>"`. Single-node CPU on **SOE_main**.
   Stage inputs to `/tmp` scratch, copy `RES_*.mat` back. Default runtime 3 days (→14 with
   `#SBATCH --time=`).
@@ -281,7 +284,10 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - **f_C = 0.5** (§2): confirm LMA basis with data provider.
 
 ## 10. Open TODOs
-- [ ] Extend AmeriFlux fetch: `HEIGHTC`, `AG_BIOMASS`, `LAI`, BADM soil texture.
+- [x] AmeriFlux BASE + BADM fetch (`preprocessing/download_ameriflux.py`) and a coverage
+      report mapping BADM → T&C parameters (`inspect_ameriflux_badm.py`).
+- [ ] Decide per-site parameter sources from `badm_coverage.csv` (which sites use in-situ
+      values vs PFT/gridded fallbacks) — this split belongs in the methods.
 - [ ] POLARIS/SoilGrids depth-resolved texture + depth-to-bedrock sampling.
 - [ ] Verify Mapping Toolbox on the cluster.
 - [x] Verify compute-node outbound access to the CDS — confirmed working 2026-08-04.

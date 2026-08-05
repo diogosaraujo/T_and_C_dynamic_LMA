@@ -1,11 +1,12 @@
 #!/bin/bash
-# One-time setup of the Python environment for the preprocessing step on the SOE cluster.
+# Sets up the Python environment for the preprocessing steps on the SOE cluster.
 #
-# Run this ONCE on the login node (it only pip-installs, no heavy compute):
-#     bash slurm/setup_env.sh
+# Do not run this directly in the login shell -- submit it:
+#     sbatch slurm/submit_setup_env.sh
 #
-# Creates a venv at $TC_VENV (default ~/envs/tc-preproc) with cdsapi installed, and
-# checks that the CDS credentials file exists.
+# Creates a venv at $TC_VENV (default ~/envs/tc-preproc) from requirements.txt, and
+# checks that the CDS credentials file exists. Re-run it whenever requirements.txt
+# changes; the venv is reused, so it is quick.
 
 set -euo pipefail
 

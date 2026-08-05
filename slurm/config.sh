@@ -17,3 +17,9 @@ PYTHON_MODULE="${PYTHON_MODULE:-Python/3.13.7}"
 
 # Exported so download_era5_land.py picks up TC_INPUT_DATA as its default output root.
 export TC_INPUT_DATA TC_VENV PARTITION PYTHON_MODULE
+
+# AmeriFlux credentials are NOT set here -- never commit them. Export them in your shell
+# before submitting; SLURM copies the submitting environment into the job:
+#     export AMF_USER_ID=<your ameriflux username>
+#     export AMF_USER_EMAIL=<your email>
+# Put those two lines in ~/.bashrc on the cluster if you would rather not repeat them.

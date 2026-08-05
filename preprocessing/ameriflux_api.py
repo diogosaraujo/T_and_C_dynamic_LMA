@@ -1,0 +1,152 @@
+"""AmeriFlux Data Services endpoints and the BADM -> T&C parameter wish list.
+
+Endpoint URLs and the data_download request/response shape follow the `amerifluxr` R
+package (chuhousen/amerifluxr), which is the reference client for these services.
+
+Nothing here is guessed about payload *contents*: the download step unpacks whatever the
+archive holds and reports it, and the BADM inspector discovers the variables actually
+present rather than assuming a fixed schema.
+"""
+
+from __future__ import annotations
+
+BASE = "https://amfcdn.lbl.gov/api/v1"
+
+ENDPOINTS = {
+    # Public, no credentials needed.
+    "sitemap": f"{BASE}/site_display/AmeriFlux",
+    "site_ccby4": f"{BASE}/site_availability/AmeriFlux/BIF/CCBY4.0",
+    "data_year": f"{BASE}/data_availability/AmeriFlux",
+    "variables": f"{BASE}/fp_var?limits=True",
+    # Requires an AmeriFlux account (user_id + user_email in the POST body).
+    "data_download": f"{BASE}/data_download",
+}
+
+# Only BASE-BADM is supported by the service for AmeriFlux sites; it bundles the BASE
+# measurement files and that site's BADM metadata in one archive.
+DATA_PRODUCT = "BASE-BADM"
+
+# Sites are shared under one of two policies; requesting the wrong one returns nothing
+# for that site, so the station list is split by policy before requesting.
+POLICY_CCBY4 = "CCBY4.0"
+POLICY_LEGACY = "LEGACY"
+
+# Values the service accepts for intended_use.
+INTENDED_USE_CHOICES = [
+    "Research - Multi-site synthesis",
+    "Research - Remote sensing",
+    "Research - Land model/Earth system model",
+    "Research - Other",
+    "Education (Teacher or Student)",
+    "Other",
+]
+DEFAULT_INTENDED_USE = "Research - Land model/Earth system model"
+DEFAULT_DESCRIPTION = (
+    "Driving and validating the Tethys-Chloris (T&C) ecohydrological model at forested "
+    "AmeriFlux sites across CONUS ecoregions, to test how remote-sensing-derived dynamic "
+    "leaf mass per area (LMA) alters simulated water, energy and carbon fluxes relative "
+    "to a fixed-LMA baseline."
+)
+
+# ----------------------------------------------------------------------------------
+# What we are hoping to find in BADM, expressed as patterns rather than exact names.
+#
+# BADM variable naming is not fully documented in one place and varies by site, so the
+# inspector MATCHES on these patterns and also reports everything it did not match. That
+# way a renamed or unexpected variable shows up as "other available" instead of being
+# silently reported as absent.
+#
+# `tc_use` ties each item back to the parameters in CLAUDE.md sections 5-7.
+# `fallback` records what happens when a site does not report it.
+# ----------------------------------------------------------------------------------
+PARAMETER_TARGETS = [
+    {
+        "key": "canopy_height",
+        "patterns": ["HEIGHTC"],
+        "tc_use": "hc — canopy height (High vegetation layer)",
+        "fallback": "global canopy-height product (Potapov 2021 / Simard 2011)",
+    },
+    {
+        "key": "lai",
+        "patterns": ["LAI"],
+        "tc_use": "validation target for LAI = Sl*B(1); also seeds/checks spin-up",
+        "fallback": "spin-up equilibrium only, no observational check",
+    },
+    {
+        "key": "biomass",
+        "patterns": ["AG_BIOMASS", "BIOMASS", "AGB"],
+        "tc_use": "seed/validate initial carbon pools B_H(1:8)",
+        "fallback": "spin-up from a plausible guess; NBCD/GEDI for a cross-check",
+    },
+    {
+        "key": "soil_texture",
+        "patterns": ["SOIL_TEX"],
+        "tc_use": "Psan / Pcla — Saxton & Rawls inputs, per layer",
+        "fallback": "POLARIS (CONUS 30 m) / SSURGO / SoilGrids",
+    },
+    {
+        "key": "soil_chem",
+        "patterns": ["SOIL_CHEM"],
+        "tc_use": "Porg — organic fraction (OM = SOC x 1.72)",
+        "fallback": "POLARIS / SoilGrids SOC",
+    },
+    {
+        "key": "soil_depth",
+        "patterns": ["SOIL_DEPTH", "DEPTH_TO_BEDROCK", "BEDROCK"],
+        "tc_use": "soil column depth — do NOT inherit US_xRM's 1 m for deep-rooted forest",
+        "fallback": "Pelletier 2016 / Shangguan 2017 / SoilGrids BDTICM",
+    },
+    {
+        "key": "root",
+        "patterns": ["ROOT"],
+        "tc_use": "ZR95 — rooting depth (must stay <= soil column depth)",
+        "fallback": "Schenk & Jackson 2002 / Fan 2017 / PFT lookup (expected: rarely reported)",
+    },
+    {
+        "key": "species",
+        "patterns": ["SPP", "SPECIES"],
+        "tc_use": "sanity-check the PFT choice and the deciduous/evergreen split",
+        "fallback": "IGBP class alone",
+    },
+    {
+        "key": "disturbance",
+        "patterns": ["DOM_DIST", "DM_", "DISTURBANCE", "MGMT"],
+        "tc_use": "flag sites whose fluxes reflect harvest/fire rather than climate",
+        "fallback": "none — unflagged disturbance can contaminate the LMA signal",
+    },
+    {
+        "key": "elevation",
+        "patterns": ["LOCATION_ELEV"],
+        "tc_use": "Zbas — site elevation (orthometric) for the radiation partition",
+        "fallback": "Copernicus GLO-30",
+    },
+    {
+        "key": "igbp",
+        "patterns": ["IGBP"],
+        "tc_use": "PFT selection and the phenology switch aSE (0 evergreen, 1 deciduous)",
+        "fallback": "already in the ecoregion pairing CSVs",
+    },
+    {
+        "key": "utc_offset",
+        "patterns": ["UTC_OFFSET"],
+        "tc_use": "align tower observations with the UTC ERA5-Land forcing for validation",
+        "fallback": "infer from longitude (error-prone near boundaries)",
+    },
+]
+
+
+def classify_member(name: str) -> str:
+    """Label a file unpacked from an AmeriFlux archive.
+
+    Deliberately permissive: unrecognised members are kept and reported as "other"
+    rather than discarded, so a change in packaging shows up in the manifest instead of
+    silently losing data.
+    """
+    stem = name.rsplit("/", 1)[-1].upper()
+    if "BIF" in stem or "BADM" in stem:
+        return "badm"
+    if "BASE" in stem and stem.endswith(".CSV"):
+        return "base"
+    if stem.endswith(".PDF") or "README" in stem or stem.endswith(".TXT"):
+        return "doc"
+    return "other"

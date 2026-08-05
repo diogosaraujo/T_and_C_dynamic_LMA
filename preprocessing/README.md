@@ -27,6 +27,16 @@ On Windows that path is `C:\Users\<you>\.cdsapirc`.
 
 ## Usage
 
+> **On the cluster, submit everything — never run these in the login shell.** The bare
+> `python ...` commands below document the CLI; the SLURM wrappers in
+> [../slurm/](../slurm/) are how they actually get run, and every flag shown here passes
+> straight through:
+>
+> ```bash
+> sbatch slurm/submit_era5_download.sh --dry-run
+> sbatch slurm/submit_era5_download.sh --stations US-HBK,US-Ha2
+> ```
+
 ```bash
 # See exactly what would be requested, without contacting the CDS
 python download_era5_land.py --dry-run

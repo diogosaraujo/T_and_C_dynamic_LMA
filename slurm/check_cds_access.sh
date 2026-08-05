@@ -7,7 +7,10 @@
 #
 #     bash slurm/check_cds_access.sh
 #
-# Uses Python for the reachability probes rather than curl, which is not installed on the
+# All work runs on compute nodes via srun; this script only orchestrates. Nothing heavier
+# than the srun calls themselves executes in the login shell.
+#
+# Uses Python for the reachability probe rather than curl, which is not installed on the
 # SOE nodes. The authoritative test is the real CDS retrieval at the end: a reachability
 # probe only proves a route exists, not that credentials and the licence are in order.
 
@@ -47,10 +50,6 @@ except Exception as e:
     sys.exit(1)
 PY
 
-echo "==> probing CDS reachability from the login node"
-"$PY" -c "$PROBE"
-
-echo
 echo "==> probing from a compute node on $PARTITION"
 srun --partition="$PARTITION" --nodes=1 --cpus-per-task=1 --mem=2G --time=00:05:00 \
      bash -c "echo \"    running on \$(hostname)\"; '$PY' -c '$PROBE'"
@@ -94,9 +93,8 @@ https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land-timeseries
 If the compute-node probe also failed, compute nodes have no outbound internet. Options:
   1. Ask SOE support (help@soe.rutgers.edu) about an HTTPS proxy, then export
      https_proxy in the submit script.
-  2. Run the download on the login node inside tmux. It is network-bound, not CPU-bound,
-     so it is light on the node -- keep --jobs low (2) to stay polite.
-  3. Download locally and rsync the ~1 GB of netCDF up to the cluster.
+  2. Download on a machine that does have access and rsync the result up to
+     $TC_INPUT_DATA.
 EOF
 fi
 exit $probe_status

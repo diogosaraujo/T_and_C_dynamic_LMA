@@ -32,11 +32,19 @@ found, add the snippet from the SOE docs to your `.bashrc`; the scripts here als
 
 ```bash
 ssh -p 222 <netid>@soemaster2.hpc.rutgers.edu
-git clone https://github.com/diogosaraujo/T_and_C_dynamic_LMA.git
+git clone git@github.com:diogosaraujo/T_and_C_dynamic_LMA.git
 cd T_and_C_dynamic_LMA
 
-bash slurm/setup_env.sh          # venv at ~/envs/tc-preproc + cdsapi
+sbatch slurm/submit_setup_env.sh          # venv at ~/envs/tc-preproc
+tail -f slurm/logs/setup_env_<jobid>.out
 ```
+
+> **Everything runs through SLURM.** No work belongs in the login shell — not the
+> downloads, not the verification, not even the `pip install`. Every step here has a
+> submit script; `check_cds_access.sh` is the one script you invoke directly, and it only
+> orchestrates `srun` calls that execute on compute nodes.
+
+Re-run `submit_setup_env.sh` whenever `requirements.txt` changes; the venv is reused.
 
 Then create `~/.cdsapirc` with your key from <https://cds.climate.copernicus.eu/profile>:
 
@@ -57,11 +65,11 @@ bash slurm/check_cds_access.sh
 real ERA5-Land retrieval on `soeepyc16`. Rerun the check if downloads start failing, or
 after any cluster networking change.
 
-The script probes the login node, then a compute node via `srun`, then performs a real
-CDS retrieval — and its verdict depends on that last step, not on the probes. Note
-**`curl` is not installed on the SOE nodes**, so the probes use Python `urllib`; an
-earlier curl-based version reported "NO route to the CDS" on a node that was downloading
-successfully at that moment.
+All work runs on compute nodes via `srun` — the script only orchestrates. It probes
+reachability, then performs a real CDS retrieval, and its verdict depends on that last
+step rather than the probe. Note **`curl` is not installed on the SOE nodes**, so the
+probe uses Python `urllib`; an earlier curl-based version reported "NO route to the CDS"
+on a node that was downloading successfully at that moment.
 
 ## Submit the download
 
@@ -97,11 +105,10 @@ files are skipped, so it resumes where it stopped.
 sbatch slurm/submit_era5_verify.sh
 ```
 
-Or run it directly on the login node — a few minutes of reading, no network:
+Subset:
 
 ```bash
-source ~/envs/tc-preproc/bin/activate
-python preprocessing/verify_era5_land.py
+sbatch slurm/submit_era5_verify.sh --stations US-HBK,US-Ha2
 ```
 
 Checks time axis, variable presence, coverage, physical ranges, and empirically confirms
@@ -111,6 +118,22 @@ for what each check catches.
 
 This needs `xarray` and `netCDF4`, added to `requirements.txt` after the download step
 was built — **rerun `bash slurm/setup_env.sh`** to install them into the existing venv.
+
+## AmeriFlux measurements + BADM
+
+```bash
+export AMF_USER_ID=<ameriflux username> AMF_USER_EMAIL=<email>
+sbatch slurm/submit_ameriflux_download.sh --agree-policy --is-test --stations US-HBK,US-Ha2
+sbatch slurm/submit_ameriflux_download.sh --agree-policy          # full run
+```
+
+Credentials travel via the submitting environment (SLURM copies it into the job) — never
+put them in `config.sh` or any tracked file. Output goes to
+`$TC_INPUT_DATA/ameriflux/`. The submit script runs the BADM inspector afterwards, so the
+parameter-coverage table appears in the job log.
+
+`--is-test` suppresses the emails AmeriFlux sends to site teams; use it while testing,
+drop it for the real run. See [preprocessing/AMERIFLUX.md](../preprocessing/AMERIFLUX.md).
 
 ## Job array — gridded fallback only
 

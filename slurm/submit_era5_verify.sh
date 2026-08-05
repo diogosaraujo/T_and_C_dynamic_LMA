@@ -3,11 +3,7 @@
 ##
 ## Submit from the repo root, after the download job finishes:
 ##     sbatch slurm/submit_era5_verify.sh
-##
-## Or just run it directly on the login node -- it is a few minutes of reading, no
-## network:
-##     source ~/envs/tc-preproc/bin/activate
-##     python preprocessing/verify_era5_land.py
+##     sbatch slurm/submit_era5_verify.sh --stations US-HBK,US-Ha2    # subset
 ##
 ## Exits non-zero if any station fails, so the log tail tells you whether the data is
 ## safe to feed the forcing builder.

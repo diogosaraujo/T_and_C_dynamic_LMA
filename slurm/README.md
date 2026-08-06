@@ -158,6 +158,31 @@ Needs `rasterio`, added to `requirements.txt` for this step: **re-run
 `sbatch slurm/submit_setup_env.sh`** before the first use. The job checks for it and
 exits with that instruction if it is missing.
 
+## Rooting depth (Schenk & Jackson)
+
+Needs a free [NASA Earthdata Login](https://urs.earthdata.nasa.gov), once:
+
+```bash
+printf 'machine urs.earthdata.nasa.gov login <user> password <pass>\n' >> ~/.netrc
+chmod 600 ~/.netrc
+sbatch slurm/submit_root_depth.sh
+```
+
+`EARTHDATA_USER`/`EARTHDATA_PASS` or `EARTHDATA_TOKEN` work too. The job checks before
+doing any work and exits with instructions if none are visible.
+
+Samples the ISLSCP II Ecosystem Rooting Depths grids (doi:10.3334/ORNLDAAC/929) and
+writes `ZR95_H` and `ZR50_H` in mm to `$TC_INPUT_DATA/root_depth/`.
+
+⚠️ **The grid is 1° (~110 km)** — only 54 distinct cells across 118 stations, so 15
+CHEESEHEAD towers share one value, as do 8 Wisconsin and 7 Metolius sites. The output
+carries `n_stations_sharing_cell` so this is visible rather than implied. Treat it as a
+regional lookup, not a site measurement. **BADM has no rooting-depth variable at all**, so
+unlike canopy height there is no measured alternative for any station.
+
+⚠️ T&C aborts if `ZR95_H` exceeds the deepest `Zs` layer, so this has to be reconciled
+with the soil-depth step when the `.mat` files are built.
+
 ## Job array — gridded fallback only
 
 ```bash

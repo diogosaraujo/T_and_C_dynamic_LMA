@@ -140,21 +140,40 @@ def main(argv: list[str] | None = None) -> int:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     p.add_argument("--dir", type=Path, default=DEFAULT_DIR, help="ameriflux output directory")
+    p.add_argument("--bif", type=Path, default=None,
+                   help="read a NETWORK-WIDE BIF workbook (from --bif-only) and split it "
+                        "by SITE_ID, instead of scanning per-station directories")
     p.add_argument("--stations", default=None, help="comma-separated StationIDs")
     p.add_argument("--show-unmatched", type=int, default=12,
                    help="how many unmatched variable groups to list per station (0 = none)")
     args = p.parse_args(argv)
 
-    if not args.dir.is_dir():
-        raise SystemExit(f"not a directory: {args.dir}  (run download_ameriflux.py first)")
-
     wanted = {s.strip() for s in args.stations.split(",") if s.strip()} if args.stations else None
-    station_dirs = sorted(d for d in args.dir.iterdir()
-                          if d.is_dir() and not d.name.startswith("_"))
-    if wanted is not None:
-        station_dirs = [d for d in station_dirs if d.name in wanted]
-    if not station_dirs:
-        raise SystemExit(f"no station directories in {args.dir}")
+
+    # A network-wide BIF holds every site in one table, so split it into per-station
+    # row groups and hand those to the same matcher used for per-station files.
+    network_rows: dict[str, list[dict]] = {}
+    if args.bif:
+        if not args.bif.exists():
+            raise SystemExit(f"BIF file not found: {args.bif}")
+        log(f"reading network-wide BIF: {args.bif.name}")
+        for row in read_badm_rows(args.bif):
+            sid = (row.get("SITE_ID") or "").strip()
+            if sid and (wanted is None or sid in wanted):
+                network_rows.setdefault(sid, []).append(row)
+        if not network_rows:
+            raise SystemExit("no matching SITE_ID rows in that BIF file")
+        log(f"  {len(network_rows)} station(s) present\n")
+        station_dirs = [args.dir / sid for sid in sorted(network_rows)]
+    else:
+        if not args.dir.is_dir():
+            raise SystemExit(f"not a directory: {args.dir}  (run download_ameriflux.py first)")
+        station_dirs = sorted(d for d in args.dir.iterdir()
+                              if d.is_dir() and not d.name.startswith("_"))
+        if wanted is not None:
+            station_dirs = [d for d in station_dirs if d.name in wanted]
+        if not station_dirs:
+            raise SystemExit(f"no station directories in {args.dir}")
 
     # Site-level metadata fills in elevation/IGBP even when BADM does not report them.
     site_meta = {}
@@ -170,19 +189,24 @@ def main(argv: list[str] | None = None) -> int:
 
     for station_dir in station_dirs:
         sid = station_dir.name
-        badm_files = find_badm_files(station_dir)
+        if network_rows:
+            rows = network_rows[sid]
+            badm_files = [args.bif]
+        else:
+            rows = []
+            badm_files = find_badm_files(station_dir)
         if not badm_files:
             log(f"  {sid}: no BADM file found")
             coverage_rows.append({"station_id": sid, "has_badm": "no",
                                   **{t["key"]: "" for t in PARAMETER_TARGETS}})
             continue
 
-        rows: list[dict] = []
-        for path in badm_files:
-            try:
-                rows.extend(read_badm_rows(path))
-            except Exception as exc:
-                log(f"  ! {sid}: cannot read {path.name} ({exc})")
+        if not network_rows:
+            for path in badm_files:
+                try:
+                    rows.extend(read_badm_rows(path))
+                except Exception as exc:
+                    log(f"  ! {sid}: cannot read {path.name} ({exc})")
         if not rows:
             log(f"  {sid}: BADM file present but no readable rows")
             continue
@@ -233,6 +257,7 @@ def main(argv: list[str] | None = None) -> int:
                 + (f" (+{more} more)" if more > 0 else ""))
 
     # ---------------- outputs ----------------
+    args.dir.mkdir(parents=True, exist_ok=True)   # may not exist yet in --bif mode
     if coverage_rows:
         fields = ["station_id", "has_badm"] + [t["key"] for t in PARAMETER_TARGETS]
         with (args.dir / "badm_coverage.csv").open("w", newline="", encoding="utf-8") as fh:

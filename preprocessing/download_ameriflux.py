@@ -370,6 +370,11 @@ def main(argv: list[str] | None = None) -> int:
                         "use this while shaking out the pipeline")
     p.add_argument("--metadata-only", action="store_true",
                    help="fetch only the public site metadata (no account needed)")
+    p.add_argument("--bif-only", action="store_true",
+                   help="download the NETWORK-WIDE BADM/BIF workbook (every AmeriFlux "
+                        "site's metadata in one file, a few MB) instead of per-site "
+                        "BASE-BADM archives (~19-38 GB for 118 stations). This is all you "
+                        "need for parameterisation; fetch BASE only where you validate.")
     p.add_argument("--batch-size", type=int, default=25,
                    help="site IDs per download request; a failed batch costs only its "
                         "own sites, and completed archives are skipped on re-run")
@@ -432,8 +437,16 @@ def main(argv: list[str] | None = None) -> int:
     by_policy: dict[str, list[str]] = {}
     for sid, pol in policies.items():
         by_policy.setdefault(pol, []).append(sid)
+
+    if args.bif_only:
+        # "AA-Flx" is the service's pseudo-site for every AmeriFlux site with data; it
+        # returns one BADM workbook covering the whole network instead of per-site
+        # archives. Same request shape, so nothing else changes.
+        by_policy = {pol: ["AA-Flx"] for pol in by_policy}
+        log("  BIF-only: requesting the network-wide BADM workbook (site_ids = AA-Flx)")
     for pol, sids in sorted(by_policy.items()):
-        log(f"  {pol}: {len(sids)} site(s)")
+        log(f"  {pol}: {len(sids)} site(s)" if not args.bif_only
+            else f"  {pol}: network-wide BIF")
     log("")
 
     # Requests are chunked rather than sent as one 118-site POST: the service does not

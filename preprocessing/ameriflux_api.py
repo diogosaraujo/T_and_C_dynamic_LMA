@@ -103,6 +103,15 @@ PARAMETER_TARGETS = [
         "fallback": "spin-up equilibrium only, no observational check",
     },
     {
+        # MUST come before "biomass": matching takes the first hit, and the generic
+        # BIOMASS pattern would otherwise swallow every ROOT_BIOMASS_* variable and
+        # report root biomass as absent while inflating above-ground coverage.
+        "key": "root_biomass",
+        "patterns": ["ROOT_BIOMASS"],
+        "tc_use": "seeds the fine-root carbon pool B_H(3); PROFILE_MAX bounds sampling depth",
+        "fallback": "spin-up only",
+    },
+    {
         "key": "biomass",
         "patterns": ["AG_BIOMASS", "BIOMASS", "AGB"],
         "tc_use": "seed/validate initial carbon pools B_H(1:8)",
@@ -127,10 +136,13 @@ PARAMETER_TARGETS = [
         "fallback": "Pelletier 2016 / Shangguan 2017 / SoilGrids BDTICM",
     },
     {
-        "key": "root",
-        "patterns": ["ROOT"],
+        # NOT just "ROOT": that matched ROOT_BIOMASS_* and ROOT_PROD_* and reported
+        # 12/110 coverage for a variable BADM does not contain at all. Verified across
+        # 110 stations: no rooting-DEPTH variable exists in the BADM schema.
+        "key": "root_depth",
+        "patterns": ["ROOT_DEPTH", "ROOTING_DEPTH", "ZR95"],
         "tc_use": "ZR95 — rooting depth (must stay <= soil column depth)",
-        "fallback": "Schenk & Jackson 2002 / Fan 2017 / PFT lookup (expected: rarely reported)",
+        "fallback": "NOT IN BADM — Schenk & Jackson 2002 / Fan 2017 / PFT lookup, always",
     },
     {
         "key": "species",

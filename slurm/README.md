@@ -135,6 +135,29 @@ parameter-coverage table appears in the job log.
 `--is-test` suppresses the emails AmeriFlux sends to site teams; use it while testing,
 drop it for the real run. See [preprocessing/AMERIFLUX.md](../preprocessing/AMERIFLUX.md).
 
+## Canopy height (GEDI/Landsat)
+
+```bash
+sbatch slurm/submit_canopy_height.sh                          # all stations
+sbatch slurm/submit_canopy_height.sh --stations US-HBK,US-Ha2 # a subset
+```
+
+Samples Potapov et al. (2021) UMD GLAD 30 m canopy height — GEDI lidar calibrated onto
+Landsat — at every station. The multi-GB continental mosaic is read over `/vsicurl/`, so
+only the scanlines covering each station transfer; ~5 minutes for 118 stations.
+
+Output goes to its own folder outside the repo, `$TC_INPUT_DATA/canopy_height/`, as
+`canopy_height_gedi.csv` plus a JSON provenance sidecar.
+
+This step **only downloads**. Where the AmeriFlux download is present it adds a validation
+column comparing against measured BADM `HEIGHTC`, but it does not merge them — the
+selection rule (BADM where present, GEDI as fallback) is applied later, when the `.mat`
+files are built.
+
+Needs `rasterio`, added to `requirements.txt` for this step: **re-run
+`sbatch slurm/submit_setup_env.sh`** before the first use. The job checks for it and
+exits with that instruction if it is missing.
+
 ## Job array — gridded fallback only
 
 ```bash

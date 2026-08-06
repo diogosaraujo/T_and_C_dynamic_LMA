@@ -11,3 +11,8 @@ numpy>=1.24
 # AmeriFlux BADM inspection -- BADM/BIF metadata ships as .xlsx.
 # download_ameriflux.py itself needs nothing beyond the standard library.
 openpyxl>=3.1
+
+# Gap-filling from gridded products (fetch_canopy_height.py and the soil/root
+# fetchers to come). rasterio bundles GDAL, which reads the remote mosaics over
+# /vsicurl/ so multi-GB rasters never have to be downloaded.
+rasterio>=1.3

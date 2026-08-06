@@ -1,0 +1,3 @@
+ERROR: AMF_USER_ID / AMF_USER_EMAIL are not set in the job environment.
+       export them in your shell BEFORE running sbatch, or pass
+       --metadata-only to fetch just the public site registry.

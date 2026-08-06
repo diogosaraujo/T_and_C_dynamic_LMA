@@ -1,0 +1,3 @@
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fetch_canopy_height.py:131: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  data = src.read(1, window=Window(c0, r0, c1 - c0, r1 - r0)).astype(np.int16)

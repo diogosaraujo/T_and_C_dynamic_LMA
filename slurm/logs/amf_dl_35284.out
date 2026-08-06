@@ -1,0 +1,62 @@
+job        : 35284
+node       : soeepyc16
+started    : 2026-08-05T19:09:27Z
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+amf user   : dd1136
+
+stations       : 2
+product        : BASE-BADM
+output         : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+intended use   : Research - Land model/Earth system model
+test download  : True
+
+fetching public site metadata ...
+  + site metadata for 2/2 station(s)
+  CCBY4.0: 2 site(s)
+
+  requesting 2 site(s) under CCBY4.0 ...
+  > AMF_US-Ha2_BASE-BADM_16-5.zip
+  + AMF_US-Ha2_BASE-BADM_16-5.zip (44.2 MB)
+  > AMF_US-HBK_BASE-BADM_3-5.zip
+  + AMF_US-HBK_BASE-BADM_3-5.zip (11.1 MB)
+
+  + AMF_US-Ha2_BASE-BADM_16-5.zip -> US-Ha2/ (2 files: badm, base)
+  + AMF_US-HBK_BASE-BADM_3-5.zip -> US-HBK/ (2 files: badm, base)
+
+stations with downloaded data: 2/2
+manifest: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux/files_manifest.csv
+
+Next: python inspect_ameriflux_badm.py
+
+=== BADM parameter coverage ===
+inspecting 2 station(s) in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+
+  US-HBK: 68 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SHIPPING_ADDRESS (+8 more)
+  US-Ha2: 168 BADM rows | supplies: canopy_height, lai, biomass, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LMA, GRP_LOCATION, GRP_NEP, GRP_NETWORK (+14 more)
+
+parameter           sites   T&C use                                               fallback when absent
+--------------------------------------------------------------------------------------------------------------------------------------------
+canopy_height         1/2   hc — canopy height (High vegetation layer)            global canopy-height product (Potapov 2021 / Simard 2011)
+lai                   1/2   validation target for LAI = Sl*B(1); also seeds/che…  spin-up equilibrium only, no observational check
+biomass               1/2   seed/validate initial carbon pools B_H(1:8)           spin-up from a plausible guess; NBCD/GEDI for a cross-che…
+soil_texture          0/2   Psan / Pcla — Saxton & Rawls inputs, per layer        POLARIS (CONUS 30 m) / SSURGO / SoilGrids
+soil_chem             1/2   Porg — organic fraction (OM = SOC x 1.72)             POLARIS / SoilGrids SOC
+soil_depth            1/2   soil column depth — do NOT inherit US_xRM's 1 m for…  Pelletier 2016 / Shangguan 2017 / SoilGrids BDTICM
+root                  0/2   ZR95 — rooting depth (must stay <= soil column dept…  Schenk & Jackson 2002 / Fan 2017 / PFT lookup (expected: …
+species               1/2   sanity-check the PFT choice and the deciduous/everg…  IGBP class alone
+disturbance           2/2   flag sites whose fluxes reflect harvest/fire rather…  none — unflagged disturbance can contaminate the LMA sign…
+elevation             2/2   Zbas — site elevation (orthometric) for the radiati…  Copernicus GLO-30
+igbp                  2/2   PFT selection and the phenology switch aSE (0 everg…  already in the ecoregion pairing CSVs
+utc_offset            2/2   align tower observations with the UTC ERA5-Land for…  infer from longitude (error-prone near boundaries)
+
+2/2 station(s) had a readable BADM file
+written: badm_coverage.csv, badm_values.csv, badm_inventory.csv (in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux)
+
+badm_inventory.csv lists every variable reported, including ones outside the
+wish list -- check it before concluding a parameter is unavailable.
+
+finished   : 2026-08-05T19:09:38Z
+exit status: 0
+53M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux

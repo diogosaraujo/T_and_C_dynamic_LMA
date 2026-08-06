@@ -1,0 +1,143 @@
+job        : 35374
+node       : soeepyc08
+started    : 2026-08-06T18:29:30Z
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth
+
+stations : 118
+source   : ISLSCP II Ecosystem Rooting Depths (Schenk & Jackson), 1 degree
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth
+
+  + 95ecosys_rootdepth_1d.asc (413 KB) from https://daac.ornl.gov/daacdata/islscp_ii/vegetation/ecosystem_roots_1deg/data
+    95ecosys_rootdepth_1d.asc: 360x180 @ 1.0 deg, header=True, nodata=-99, 15237 valid cells, range 0.30-4.60 m
+  + 50ecosys_rootdepth_1d.asc (413 KB) from https://daac.ornl.gov/daacdata/islscp_ii/vegetation/ecosystem_roots_1deg/data
+    50ecosys_rootdepth_1d.asc: 360x180 @ 1.0 deg, header=True, nodata=-99, 15237 valid cells, range 0.10-0.50 m
+
+  US-Bar   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 2
+  US-Blk   ZR95=   900 mm  ZR50=   100 mm  cell shared by 1
+  US-Blo   ZR95=  2900 mm  ZR50=   300 mm  cell shared by 1
+  US-CPF   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-CPk   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 3
+  US-CRK   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 1
+  US-CS2   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 2
+  US-CS7   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 2
+  US-CZ2   ZR95=  2500 mm  ZR50=   300 mm  cell shared by 4
+  US-CZ3   ZR95=  2500 mm  ZR50=   300 mm  cell shared by 4
+  US-CZ4   ZR95=  1700 mm  ZR50=   200 mm  cell shared by 1
+  US-ChR   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 3
+  US-Cst   ZR95=  1300 mm  ZR50=   200 mm  cell shared by 1
+  US-Cwt   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 2
+  US-DPP   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 1
+  US-Dk2   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 2
+  US-Dk3   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 2
+  US-Fmf   ZR95=  1700 mm  ZR50=   200 mm  cell shared by 2
+  US-Fuf   ZR95=  1700 mm  ZR50=   200 mm  cell shared by 2
+  US-GBT   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 3
+  US-GLE   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 3
+  US-HB2   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-HB3   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-HB5   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-HB6   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-HBK   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 1
+  US-Ha1   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 4
+  US-Ha2   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 4
+  US-Ho1   ZR95=   900 mm  ZR50=   200 mm  cell shared by 3
+  US-Ho2   ZR95=   900 mm  ZR50=   200 mm  cell shared by 3
+  US-Ho3   ZR95=   900 mm  ZR50=   200 mm  cell shared by 3
+  US-JFM   ZR95=  2400 mm  ZR50=   300 mm  cell shared by 2
+  US-JFP   ZR95=  2400 mm  ZR50=   300 mm  cell shared by 2
+  US-KS1   ZR95=       mm  ZR50=       mm  cell shared by 1   <- NO DATA
+  US-LPH   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 4
+  US-MEF   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 1
+  US-MMS   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 1
+  US-MOz   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 1
+  US-MRf   ZR95=  1600 mm  ZR50=   200 mm  cell shared by 1
+  US-Me1   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 7
+  US-Me2   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 7
+  US-Me3   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 7
+  US-Me4   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 7
+  US-Me5   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 7
+  US-Me6   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 7
+  US-Me7   ZR95=  1500 mm  ZR50=   200 mm  cell shared by 7
+  US-MtB   ZR95=  1600 mm  ZR50=   200 mm  cell shared by 1
+  US-NC1   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 3
+  US-NC2   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 3
+  US-NC3   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 3
+  US-NC5   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 1
+  US-NMj   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 1
+  US-NR1   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-NR2   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-Oho   ZR95=   900 mm  ZR50=   100 mm  cell shared by 1
+  US-PFL   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFb   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFc   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFg   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFh   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFi   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFj   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFk   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFm   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFn   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFp   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFq   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFs   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-PFt   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-SB1   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 2
+  US-SB3   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 2
+  US-SHC   ZR95=  2300 mm  ZR50=   300 mm  cell shared by 1
+  US-SP1   ZR95=  1600 mm  ZR50=   200 mm  cell shared by 4
+  US-SP2   ZR95=  1600 mm  ZR50=   200 mm  cell shared by 4
+  US-SP3   ZR95=  1600 mm  ZR50=   200 mm  cell shared by 4
+  US-SP4   ZR95=  1600 mm  ZR50=   200 mm  cell shared by 4
+  US-SSH   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 1
+  US-Slt   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 1
+  US-Sx2   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-TEF   ZR95=   900 mm  ZR50=   100 mm  cell shared by 1
+  US-UMB   ZR95=   800 mm  ZR50=   100 mm  cell shared by 2
+  US-UMd   ZR95=   800 mm  ZR50=   100 mm  cell shared by 2
+  US-Vcm   ZR95=  1700 mm  ZR50=   200 mm  cell shared by 3
+  US-Vcp   ZR95=  1700 mm  ZR50=   200 mm  cell shared by 3
+  US-Vcs   ZR95=  1700 mm  ZR50=   200 mm  cell shared by 3
+  US-WBW   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 3
+  US-WCr   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 15
+  US-Wi0   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 8
+  US-Wi1   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 8
+  US-Wi2   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 8
+  US-Wi3   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 8
+  US-Wi4   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 8
+  US-Wi5   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 8
+  US-Wi8   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 8
+  US-Wi9   ZR95=  1000 mm  ZR50=   200 mm  cell shared by 8
+  US-Wrc   ZR95=  1800 mm  ZR50=   200 mm  cell shared by 2
+  US-xAB   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 1
+  US-xBL   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 1
+  US-xBR   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 2
+  US-xGR   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 2
+  US-xHA   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 4
+  US-xJE   ZR95=  1600 mm  ZR50=   200 mm  cell shared by 1
+  US-xLE   ZR95=  1400 mm  ZR50=   200 mm  cell shared by 1
+  US-xML   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 1
+  US-xNW   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-xRM   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 5
+  US-xRN   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 3
+  US-xSB   ZR95=  1400 mm  ZR50=   200 mm  cell shared by 1
+  US-xSC   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 1
+  US-xSE   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 1
+  US-xSP   ZR95=  2500 mm  ZR50=   300 mm  cell shared by 4
+  US-xST   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 2
+  US-xTA   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 1
+  US-xTE   ZR95=  2500 mm  ZR50=   300 mm  cell shared by 4
+  US-xTR   ZR95=  1100 mm  ZR50=   200 mm  cell shared by 2
+  US-xUK   ZR95=  1100 mm  ZR50=   100 mm  cell shared by 1
+  US-xWR   ZR95=  1800 mm  ZR50=   200 mm  cell shared by 2
+  US-xYE   ZR95=  1200 mm  ZR50=   200 mm  cell shared by 1
+
+117/118 stations got a rooting depth
+ZR95 range 800-2900 mm (median 1100 mm)
+resolution: 54 distinct 1-degree cells for 118 stations
+no value at: US-KS1
+
+written: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth/root_depth_schenk_jackson.csv
+
+finished   : 2026-08-06T18:29:37Z
+exit status: 0
+2.5K	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth

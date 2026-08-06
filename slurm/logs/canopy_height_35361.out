@@ -1,0 +1,146 @@
+job        : 35361
+node       : soeepyc16
+started    : 2026-08-06T15:02:55Z
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/canopy_height
+
+cross-checking against BADM HEIGHTC in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+
+stations   : 118
+source     : https://glad.geog.umd.edu/Potapov/Forest_height_2019/Forest_height_2019_NAM.tif
+window     : +/-100 m around each station
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/canopy_height
+
+comparing against BADM HEIGHTC for 44 station(s)
+
+opened mosaic: 436004 x 156004, EPSG:4326
+
+   US-Bar   hc= 16.14 m  valid= 84.8%  BADM=19 m  diff=-2.86   ok (agrees with BADM)
+   US-Blk   hc=  9.25 m  valid= 85.9%   ok
+ ! US-Blo   hc= 13.79 m  valid= 99.0%  BADM=2.59 m  diff=+11.2   DISAGREES with BADM by 11 m
+   US-CPF   hc= 14.13 m  valid=100.0%   ok
+   US-CPk   hc=  9.94 m  valid= 85.9%   ok
+   US-CRK   hc= 17.56 m  valid=100.0%   ok
+   US-CS2   hc= 16.85 m  valid=100.0%   ok
+   US-CS7   hc= 16.63 m  valid=100.0%   ok
+   US-CZ2   hc= 10.06 m  valid= 93.9%   ok
+   US-CZ3   hc= 17.51 m  valid=100.0%   ok
+   US-CZ4   hc= 15.27 m  valid=100.0%   ok
+   US-ChR   hc= 26.23 m  valid=100.0%   ok
+   US-Cst   hc= 20.83 m  valid=100.0%   ok
+   US-Cwt   hc= 26.77 m  valid= 98.8%   ok
+   US-DPP   hc=  3.08 m  valid= 14.8%   SPARSE — under half the window is forest
+   US-Dk2   hc= 24.73 m  valid=100.0%  BADM=25 m  diff=-0.27   ok (agrees with BADM)
+   US-Dk3   hc= 19.79 m  valid=100.0%  BADM=19 m  diff=+0.79   ok (agrees with BADM)
+   US-Fmf   hc=  13.8 m  valid=100.0%  BADM=18 m  diff=-4.2   ok (agrees with BADM)
+ ! US-Fuf   hc=  6.52 m  valid= 64.2%  BADM=18 m  diff=-11.48   DISAGREES with BADM by 11 m
+ ! US-GBT   hc= 13.21 m  valid= 90.9%  BADM=27.7 m  diff=-14.49   DISAGREES with BADM by 14 m
+ ! US-GLE   hc= 13.55 m  valid=100.0%  BADM=27.7 m  diff=-14.15   DISAGREES with BADM by 14 m
+   US-HB2   hc= 18.09 m  valid=100.0%   ok
+   US-HB3   hc= 11.38 m  valid=  9.9%   SPARSE — under half the window is forest
+   US-HB5   hc= 11.34 m  valid= 93.8%   ok
+   US-HB6   hc=  20.4 m  valid=100.0%   ok
+   US-HBK   hc= 21.58 m  valid=100.0%   ok
+   US-Ha1   hc= 21.93 m  valid=100.0%  BADM=25.4 m  diff=-3.47   ok (agrees with BADM)
+   US-Ha2   hc= 21.05 m  valid=100.0%  BADM=21 m  diff=+0.05   ok (agrees with BADM)
+   US-Ho1   hc= 13.41 m  valid=100.0%  BADM=20 m  diff=-6.59   differs from BADM by 7 m
+   US-Ho2   hc= 14.52 m  valid= 99.0%  BADM=20 m  diff=-5.48   differs from BADM by 5 m
+   US-Ho3   hc= 14.67 m  valid=100.0%  BADM=18 m  diff=-3.33   ok (agrees with BADM)
+   US-JFM   hc= 31.94 m  valid=100.0%   ok
+   US-JFP   hc= 22.31 m  valid=100.0%   ok
+   US-KS1   hc=  3.38 m  valid= 45.7%  BADM=13 m  diff=-9.62   SPARSE — under half the window is forest
+   US-LPH   hc= 20.95 m  valid=100.0%  BADM=16.5 m  diff=+4.45   ok (agrees with BADM)
+   US-MEF   hc= 12.16 m  valid=100.0%   ok
+ ! US-MMS   hc= 24.76 m  valid=100.0%  BADM=36.3 m  diff=-11.54   DISAGREES with BADM by 12 m
+   US-MOz   hc= 19.42 m  valid=100.0%  BADM=24.2 m  diff=-4.78   ok (agrees with BADM)
+   US-MRf   hc= 29.24 m  valid=100.0%   ok
+   US-Me1   hc=  5.25 m  valid= 20.2%  BADM=7.2 m  diff=-1.95   SPARSE — under half the window is forest
+   US-Me2   hc=  17.0 m  valid=100.0%  BADM=16.5 m  diff=+0.5   ok (agrees with BADM)
+   US-Me3   hc=  8.25 m  valid=100.0%  BADM=3.11 m  diff=+5.14   differs from BADM by 5 m
+   US-Me4   hc= 15.43 m  valid=100.0%  BADM=16.5 m  diff=-1.07   ok (agrees with BADM)
+   US-Me5   hc= 14.03 m  valid=100.0%  BADM=4.3 m  diff=+9.73   differs from BADM by 10 m
+   US-Me6   hc=  9.37 m  valid=100.0%  BADM=6.51 m  diff=+2.86   ok (agrees with BADM)
+   US-Me7   hc= 18.16 m  valid=100.0%   ok
+   US-MtB   hc= 19.33 m  valid=100.0%   ok
+ ! US-NC1   hc= 19.42 m  valid=100.0%  BADM=0.35 m  diff=+19.07   DISAGREES with BADM by 19 m
+   US-NC2   hc= 17.46 m  valid= 98.8%  BADM=14 m  diff=+3.46   ok (agrees with BADM)
+   US-NC3   hc= 21.93 m  valid=100.0%   ok
+   US-NC5   hc= 19.56 m  valid= 95.1%   ok
+   US-NMj   hc=  10.0 m  valid=100.0%   ok
+   US-NR1   hc= 17.24 m  valid=100.0%  BADM=15.9 m  diff=+1.34   ok (agrees with BADM)
+   US-NR2   hc= 17.21 m  valid=100.0%   ok
+   US-Oho   hc= 23.49 m  valid=100.0%  BADM=24.5 m  diff=-1.01   ok (agrees with BADM)
+   US-PFL   hc= 17.52 m  valid=100.0%   ok
+   US-PFb   hc= 14.18 m  valid=100.0%   ok
+   US-PFc   hc= 14.82 m  valid=100.0%   ok
+   US-PFg   hc= 17.19 m  valid=100.0%   ok
+   US-PFh   hc= 15.07 m  valid=100.0%   ok
+   US-PFi   hc= 18.74 m  valid=100.0%   ok
+   US-PFj   hc= 15.74 m  valid=100.0%   ok
+   US-PFk   hc= 12.84 m  valid= 97.0%   ok
+   US-PFm   hc= 16.58 m  valid=100.0%   ok
+   US-PFn   hc= 16.93 m  valid=100.0%   ok
+   US-PFp   hc= 19.27 m  valid=100.0%   ok
+   US-PFq   hc= 15.59 m  valid=100.0%   ok
+   US-PFs   hc=  9.61 m  valid= 89.9%   ok
+   US-PFt   hc= 14.86 m  valid=100.0%   ok
+   US-SB1   hc= 18.69 m  valid=100.0%   ok
+   US-SB3   hc= 13.62 m  valid= 13.1%   SPARSE — under half the window is forest
+   US-SHC   hc= 11.32 m  valid= 97.0%   ok
+ ! US-SP1   hc=  13.2 m  valid=100.0%  BADM=24.2 m  diff=-11   DISAGREES with BADM by 11 m
+   US-SP2   hc= 17.91 m  valid=100.0%  BADM=10.1 m  diff=+7.81   differs from BADM by 8 m
+ ! US-SP3   hc=       m  valid=  0.0%   NO_VALID_PIXELS
+   US-SP4   hc= 15.79 m  valid=100.0%   ok
+   US-SSH   hc=  21.8 m  valid=100.0%   ok
+   US-Slt   hc= 18.18 m  valid=100.0%  BADM=9.52 m  diff=+8.66   differs from BADM by 9 m
+   US-Sx2   hc= 18.65 m  valid=100.0%   ok
+   US-TEF   hc= 14.86 m  valid=100.0%   ok
+   US-UMB   hc= 21.38 m  valid=100.0%  BADM=23 m  diff=-1.62   ok (agrees with BADM)
+   US-UMd   hc= 20.26 m  valid=100.0%  BADM=23 m  diff=-2.74   ok (agrees with BADM)
+ ! US-Vcm   hc=       m  valid=  0.0%   NO_VALID_PIXELS
+   US-Vcp   hc= 16.47 m  valid=100.0%   ok
+   US-Vcs   hc= 14.74 m  valid=100.0%   ok
+   US-WBW   hc= 26.11 m  valid=100.0%  BADM=25 m  diff=+1.11   ok (agrees with BADM)
+   US-WCr   hc= 22.43 m  valid=100.0%  BADM=24.3 m  diff=-1.87   ok (agrees with BADM)
+ ! US-Wi0   hc= 15.53 m  valid=100.0%  BADM=4 m  diff=+11.53   DISAGREES with BADM by 12 m
+ ! US-Wi1   hc= 20.65 m  valid=100.0%  BADM=6 m  diff=+14.65   DISAGREES with BADM by 15 m
+   US-Wi2   hc= 13.22 m  valid=100.0%  BADM=6 m  diff=+7.22   differs from BADM by 7 m
+   US-Wi3   hc=  20.4 m  valid= 83.8%  BADM=23 m  diff=-2.6   ok (agrees with BADM)
+   US-Wi4   hc=  16.3 m  valid=100.0%  BADM=19 m  diff=-2.7   ok (agrees with BADM)
+   US-Wi5   hc= 13.67 m  valid=100.0%  BADM=4 m  diff=+9.67   differs from BADM by 10 m
+ ! US-Wi8   hc= 20.87 m  valid=100.0%  BADM=1.5 m  diff=+19.37   DISAGREES with BADM by 19 m
+ ! US-Wi9   hc= 14.12 m  valid=100.0%  BADM=2.3 m  diff=+11.82   DISAGREES with BADM by 12 m
+ ! US-Wrc   hc= 32.43 m  valid=100.0%  BADM=60 m  diff=-27.57   DISAGREES with BADM by 28 m
+   US-xAB   hc= 11.76 m  valid=100.0%   ok
+   US-xBL   hc=  4.42 m  valid= 50.5%   ok
+   US-xBR   hc= 17.34 m  valid= 94.9%   ok
+   US-xGR   hc= 28.46 m  valid=100.0%   ok
+   US-xHA   hc= 22.17 m  valid=100.0%   ok
+   US-xJE   hc= 14.87 m  valid= 95.1%   ok
+   US-xLE   hc= 21.13 m  valid= 95.1%   ok
+   US-xML   hc= 22.48 m  valid= 99.0%   ok
+   US-xNW   hc=  3.64 m  valid= 11.1%   SPARSE — under half the window is forest
+   US-xRM   hc= 13.15 m  valid=100.0%   ok
+   US-xRN   hc= 25.52 m  valid=100.0%   ok
+   US-xSB   hc=  5.83 m  valid= 14.8%   SPARSE — under half the window is forest
+   US-xSC   hc= 25.02 m  valid=100.0%   ok
+   US-xSE   hc= 24.21 m  valid=100.0%   ok
+   US-xSP   hc=  7.14 m  valid= 70.7%   ok
+   US-xST   hc= 20.96 m  valid=100.0%   ok
+   US-xTA   hc= 18.32 m  valid=100.0%   ok
+   US-xTE   hc= 18.32 m  valid=100.0%   ok
+   US-xTR   hc= 20.61 m  valid=100.0%   ok
+   US-xUK   hc= 15.63 m  valid= 99.0%   ok
+   US-xWR   hc= 32.43 m  valid=100.0%   ok
+   US-xYE   hc=  9.41 m  valid=100.0%   ok
+
+116/118 stations returned a height (89 of them flagged clean)
+validated against BADM at 43 station(s): mean |difference| = 6.9 m, max = 27.6 m
+12 disagree with BADM by >10 m: US-Blo, US-Fuf, US-GBT, US-GLE, US-MMS, US-NC1, US-SP1, US-Wi0, US-Wi1, US-Wi8, US-Wi9, US-Wrc
+  Usually a DATE mismatch, not an error: this product is 2019, while BADM records a measurement date. Regenerating stands legitimately differ by 10-20 m. Check HEIGHTC_DATE and the disturbance record before choosing.
+2 with no usable value: US-SP3, US-Vcm
+
+written: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/canopy_height/canopy_height_gedi.csv
+
+finished   : 2026-08-06T15:03:19Z
+exit status: 0
+1.5K	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/canopy_height

@@ -1,0 +1,618 @@
+job        : 35338
+node       : soeepyc14
+started    : 2026-08-06T04:51:05Z
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+amf user   : dd1136
+
+stations       : 118
+product        : BASE-BADM
+output         : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+intended use   : Research - Land model/Earth system model
+test download  : False
+
+fetching public site metadata ...
+  + site metadata for 118/118 station(s)
+  CCBY4.0: 109 site(s)
+  LEGACY: 9 site(s)
+
+  [CCBY4.0 batch 1/5]
+  requesting 25 site(s) under CCBY4.0 ...
+  > AMF_US-Bar_BASE-BADM_7-5.zip
+  + AMF_US-Bar_BASE-BADM_7-5.zip (35.7 MB)
+  > AMF_US-Blo_BASE-BADM_4-5.zip
+  + AMF_US-Blo_BASE-BADM_4-5.zip (7.0 MB)
+  > AMF_US-ChR_BASE-BADM_3-5.zip
+  + AMF_US-ChR_BASE-BADM_3-5.zip (50.8 MB)
+  > AMF_US-CPF_BASE-BADM_1-5.zip
+  + AMF_US-CPF_BASE-BADM_1-5.zip (8.4 MB)
+  > AMF_US-CPk_BASE-BADM_2-1.zip
+  + AMF_US-CPk_BASE-BADM_2-1.zip (5.4 MB)
+  > AMF_US-CRK_BASE-BADM_9-5.zip
+  + AMF_US-CRK_BASE-BADM_9-5.zip (9.1 MB)
+  > AMF_US-CS2_BASE-BADM_5-5.zip
+  + AMF_US-CS2_BASE-BADM_5-5.zip (4.9 MB)
+  > AMF_US-Cst_BASE-BADM_1-5.zip
+  + AMF_US-Cst_BASE-BADM_1-5.zip (5.5 MB)
+  > AMF_US-Cwt_BASE-BADM_2-5.zip
+  + AMF_US-Cwt_BASE-BADM_2-5.zip (27.0 MB)
+  > AMF_US-Dk2_BASE-BADM_5-5.zip
+  + AMF_US-Dk2_BASE-BADM_5-5.zip (10.0 MB)
+  > AMF_US-Dk3_BASE-BADM_5-5.zip
+  + AMF_US-Dk3_BASE-BADM_5-5.zip (9.1 MB)
+  > AMF_US-DPP_BASE-BADM_1-5.zip
+  + AMF_US-DPP_BASE-BADM_1-5.zip (13.9 MB)
+  > AMF_US-Fmf_BASE-BADM_6-5.zip
+  + AMF_US-Fmf_BASE-BADM_6-5.zip (7.2 MB)
+  > AMF_US-Fuf_BASE-BADM_6-5.zip
+  + AMF_US-Fuf_BASE-BADM_6-5.zip (7.0 MB)
+  > AMF_US-GBT_BASE-BADM_1-1.zip
+  + AMF_US-GBT_BASE-BADM_1-1.zip (6.1 MB)
+  > AMF_US-GLE_BASE-BADM_9-5.zip
+  + AMF_US-GLE_BASE-BADM_9-5.zip (191.7 MB)
+  > AMF_US-Ha1_BASE-BADM_27-5.zip
+  + AMF_US-Ha1_BASE-BADM_27-5.zip (27.9 MB)
+  = AMF_US-Ha2_BASE-BADM_16-5.zip already downloaded, skipping
+  > AMF_US-HB2_BASE-BADM_2-5.zip
+  + AMF_US-HB2_BASE-BADM_2-5.zip (45.4 MB)
+  > AMF_US-HB3_BASE-BADM_3-5.zip
+  + AMF_US-HB3_BASE-BADM_3-5.zip (33.9 MB)
+  = AMF_US-HBK_BASE-BADM_3-5.zip already downloaded, skipping
+  > AMF_US-Ho1_BASE-BADM_15-5.zip
+  + AMF_US-Ho1_BASE-BADM_15-5.zip (75.0 MB)
+  [CCBY4.0 batch 2/5]
+  requesting 25 site(s) under CCBY4.0 ...
+  > AMF_US-Ho2_BASE-BADM_10-5.zip
+  + AMF_US-Ho2_BASE-BADM_10-5.zip (42.8 MB)
+  > AMF_US-Ho3_BASE-BADM_5-5.zip
+  + AMF_US-Ho3_BASE-BADM_5-5.zip (22.0 MB)
+  > AMF_US-KS1_BASE-BADM_3-5.zip
+  + AMF_US-KS1_BASE-BADM_3-5.zip (0.8 MB)
+  > AMF_US-Me1_BASE-BADM_3-5.zip
+  + AMF_US-Me1_BASE-BADM_3-5.zip (1.0 MB)
+  > AMF_US-Me2_BASE-BADM_23-5.zip
+  + AMF_US-Me2_BASE-BADM_23-5.zip (46.6 MB)
+  > AMF_US-Me3_BASE-BADM_4-5.zip
+  + AMF_US-Me3_BASE-BADM_4-5.zip (5.4 MB)
+  > AMF_US-Me4_BASE-BADM_9-5.zip
+  + AMF_US-Me4_BASE-BADM_9-5.zip (7.1 MB)
+  > AMF_US-Me5_BASE-BADM_3-5.zip
+  + AMF_US-Me5_BASE-BADM_3-5.zip (3.1 MB)
+  > AMF_US-Me6_BASE-BADM_20-5.zip
+  + AMF_US-Me6_BASE-BADM_20-5.zip (30.0 MB)
+  > AMF_US-Me7_BASE-BADM_2-5.zip
+  + AMF_US-Me7_BASE-BADM_2-5.zip (2.3 MB)
+  > AMF_US-MEF_BASE-BADM_3-5.zip
+  + AMF_US-MEF_BASE-BADM_3-5.zip (10.8 MB)
+  > AMF_US-MMS_BASE-BADM_32-5.zip
+  + AMF_US-MMS_BASE-BADM_32-5.zip (32.1 MB)
+  > AMF_US-MOz_BASE-BADM_11-5.zip
+  + AMF_US-MOz_BASE-BADM_11-5.zip (32.1 MB)
+  > AMF_US-MtB_BASE-BADM_5-5.zip
+  + AMF_US-MtB_BASE-BADM_5-5.zip (38.0 MB)
+  > AMF_US-NC1_BASE-BADM_3-5.zip
+  + AMF_US-NC1_BASE-BADM_3-5.zip (15.7 MB)
+  > AMF_US-NC2_BASE-BADM_22-5.zip
+  + AMF_US-NC2_BASE-BADM_22-5.zip (42.6 MB)
+  > AMF_US-NC3_BASE-BADM_4-5.zip
+  + AMF_US-NC3_BASE-BADM_4-5.zip (18.3 MB)
+  > AMF_US-NC5_BASE-BADM_1-5.zip
+  + AMF_US-NC5_BASE-BADM_1-5.zip (1.6 MB)
+  > AMF_US-NMj_BASE-BADM_3-5.zip
+  + AMF_US-NMj_BASE-BADM_3-5.zip (1.0 MB)
+  > AMF_US-NR1_BASE-BADM_26-5.zip
+  + AMF_US-NR1_BASE-BADM_26-5.zip (57.2 MB)
+  > AMF_US-Oho_BASE-BADM_7-5.zip
+  + AMF_US-Oho_BASE-BADM_7-5.zip (26.4 MB)
+  > AMF_US-PFb_BASE-BADM_1-5.zip
+  + AMF_US-PFb_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFL_BASE-BADM_1-5.zip
+  + AMF_US-PFL_BASE-BADM_1-5.zip (0.6 MB)
+  [CCBY4.0 batch 3/5]
+  requesting 25 site(s) under CCBY4.0 ...
+  > AMF_US-PFc_BASE-BADM_1-5.zip
+  + AMF_US-PFc_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFg_BASE-BADM_1-5.zip
+  + AMF_US-PFg_BASE-BADM_1-5.zip (0.5 MB)
+  > AMF_US-PFh_BASE-BADM_1-5.zip
+  + AMF_US-PFh_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFi_BASE-BADM_1-5.zip
+  + AMF_US-PFi_BASE-BADM_1-5.zip (0.5 MB)
+  > AMF_US-PFj_BASE-BADM_1-5.zip
+  + AMF_US-PFj_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFk_BASE-BADM_1-5.zip
+  + AMF_US-PFk_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFm_BASE-BADM_1-5.zip
+  + AMF_US-PFm_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFn_BASE-BADM_1-5.zip
+  + AMF_US-PFn_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFp_BASE-BADM_1-5.zip
+  + AMF_US-PFp_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFq_BASE-BADM_1-5.zip
+  + AMF_US-PFq_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-PFs_BASE-BADM_1-5.zip
+  + AMF_US-PFs_BASE-BADM_1-5.zip (0.5 MB)
+  > AMF_US-PFt_BASE-BADM_1-5.zip
+  + AMF_US-PFt_BASE-BADM_1-5.zip (0.6 MB)
+  > AMF_US-SB1_BASE-BADM_1-5.zip
+  + AMF_US-SB1_BASE-BADM_1-5.zip (39.9 MB)
+  > AMF_US-SHC_BASE-BADM_1-5.zip
+  + AMF_US-SHC_BASE-BADM_1-5.zip (5.6 MB)
+  > AMF_US-Slt_BASE-BADM_8-5.zip
+  + AMF_US-Slt_BASE-BADM_8-5.zip (39.3 MB)
+  > AMF_US-SP1_BASE-BADM_5-5.zip
+  + AMF_US-SP1_BASE-BADM_5-5.zip (29.5 MB)
+  > AMF_US-SP2_BASE-BADM_3-1.zip
+  + AMF_US-SP2_BASE-BADM_3-1.zip (7.4 MB)
+  > AMF_US-SP3_BASE-BADM_3-1.zip
+  + AMF_US-SP3_BASE-BADM_3-1.zip (9.3 MB)
+  > AMF_US-SP4_BASE-BADM_3-5.zip
+  + AMF_US-SP4_BASE-BADM_3-5.zip (0.3 MB)
+  > AMF_US-SSH_BASE-BADM_1-5.zip
+  + AMF_US-SSH_BASE-BADM_1-5.zip (6.2 MB)
+  > AMF_US-TEF_BASE-BADM_1-5.zip
+  + AMF_US-TEF_BASE-BADM_1-5.zip (2.7 MB)
+  > AMF_US-UMB_BASE-BADM_25-5.zip
+  + AMF_US-UMB_BASE-BADM_25-5.zip (55.0 MB)
+  > AMF_US-UMd_BASE-BADM_20-5.zip
+  + AMF_US-UMd_BASE-BADM_20-5.zip (30.6 MB)
+  > AMF_US-Vcm_BASE-BADM_30-5.zip
+  + AMF_US-Vcm_BASE-BADM_30-5.zip (28.0 MB)
+  [CCBY4.0 batch 4/5]
+  requesting 25 site(s) under CCBY4.0 ...
+  > AMF_US-Vcp_BASE-BADM_29-5.zip
+  + AMF_US-Vcp_BASE-BADM_29-5.zip (27.8 MB)
+  > AMF_US-Vcs_BASE-BADM_22-5.zip
+  + AMF_US-Vcs_BASE-BADM_22-5.zip (16.6 MB)
+  > AMF_US-WCr_BASE-BADM_35-5.zip
+  + AMF_US-WCr_BASE-BADM_35-5.zip (104.7 MB)
+  > AMF_US-Wi0_BASE-BADM_3-5.zip
+  + AMF_US-Wi0_BASE-BADM_3-5.zip (0.6 MB)
+  > AMF_US-Wi1_BASE-BADM_3-5.zip
+  + AMF_US-Wi1_BASE-BADM_3-5.zip (0.5 MB)
+  > AMF_US-Wi2_BASE-BADM_3-5.zip
+  + AMF_US-Wi2_BASE-BADM_3-5.zip (0.4 MB)
+  > AMF_US-Wi3_BASE-BADM_3-5.zip
+  + AMF_US-Wi3_BASE-BADM_3-5.zip (1.6 MB)
+  > AMF_US-Wi4_BASE-BADM_3-5.zip
+  + AMF_US-Wi4_BASE-BADM_3-5.zip (2.0 MB)
+  > AMF_US-Wi5_BASE-BADM_3-5.zip
+  + AMF_US-Wi5_BASE-BADM_3-5.zip (0.5 MB)
+  > AMF_US-Wi8_BASE-BADM_3-5.zip
+  + AMF_US-Wi8_BASE-BADM_3-5.zip (0.5 MB)
+  > AMF_US-Wi9_BASE-BADM_3-5.zip
+  + AMF_US-Wi9_BASE-BADM_3-5.zip (1.0 MB)
+  > AMF_US-Wrc_BASE-BADM_8-1.zip
+  + AMF_US-Wrc_BASE-BADM_8-1.zip (18.3 MB)
+  > AMF_US-xAB_BASE-BADM_10-5.zip
+  + AMF_US-xAB_BASE-BADM_10-5.zip (44.5 MB)
+  > AMF_US-xBL_BASE-BADM_9-5.zip
+  + AMF_US-xBL_BASE-BADM_9-5.zip (48.2 MB)
+  > AMF_US-xBR_BASE-BADM_10-5.zip
+  + AMF_US-xBR_BASE-BADM_10-5.zip (49.1 MB)
+  > AMF_US-xGR_BASE-BADM_10-5.zip
+  + AMF_US-xGR_BASE-BADM_10-5.zip (40.8 MB)
+  > AMF_US-xHA_BASE-BADM_11-5.zip
+  + AMF_US-xHA_BASE-BADM_11-5.zip (45.9 MB)
+  > AMF_US-xJE_BASE-BADM_10-5.zip
+  + AMF_US-xJE_BASE-BADM_10-5.zip (54.5 MB)
+  > AMF_US-xLE_BASE-BADM_8-5.zip
+  + AMF_US-xLE_BASE-BADM_8-5.zip (42.5 MB)
+  > AMF_US-xML_BASE-BADM_9-5.zip
+  + AMF_US-xML_BASE-BADM_9-5.zip (47.5 MB)
+  > AMF_US-xNW_BASE-BADM_9-5.zip
+  + AMF_US-xNW_BASE-BADM_9-5.zip (38.0 MB)
+  > AMF_US-xRM_BASE-BADM_10-5.zip
+  + AMF_US-xRM_BASE-BADM_10-5.zip (47.7 MB)
+  > AMF_US-xRN_BASE-BADM_8-5.zip
+  + AMF_US-xRN_BASE-BADM_8-5.zip (49.3 MB)
+  > AMF_US-xSB_BASE-BADM_9-5.zip
+  + AMF_US-xSB_BASE-BADM_9-5.zip (49.5 MB)
+  > AMF_US-xSC_BASE-BADM_9-5.zip
+  + AMF_US-xSC_BASE-BADM_9-5.zip (53.2 MB)
+  [CCBY4.0 batch 5/5]
+  requesting 9 site(s) under CCBY4.0 ...
+  > AMF_US-xSE_BASE-BADM_10-5.zip
+  + AMF_US-xSE_BASE-BADM_10-5.zip (51.7 MB)
+  > AMF_US-xSP_BASE-BADM_10-5.zip
+  + AMF_US-xSP_BASE-BADM_10-5.zip (48.7 MB)
+  > AMF_US-xST_BASE-BADM_10-5.zip
+  + AMF_US-xST_BASE-BADM_10-5.zip (49.0 MB)
+  > AMF_US-xTA_BASE-BADM_9-5.zip
+  + AMF_US-xTA_BASE-BADM_9-5.zip (44.2 MB)
+  > AMF_US-xTE_BASE-BADM_10-5.zip
+  + AMF_US-xTE_BASE-BADM_10-5.zip (41.5 MB)
+  > AMF_US-xTR_BASE-BADM_10-5.zip
+  + AMF_US-xTR_BASE-BADM_10-5.zip (52.0 MB)
+  > AMF_US-xUK_BASE-BADM_10-5.zip
+  + AMF_US-xUK_BASE-BADM_10-5.zip (50.0 MB)
+  > AMF_US-xWR_BASE-BADM_10-5.zip
+  + AMF_US-xWR_BASE-BADM_10-5.zip (47.3 MB)
+  > AMF_US-xYE_BASE-BADM_10-5.zip
+  + AMF_US-xYE_BASE-BADM_10-5.zip (31.6 MB)
+  requesting 9 site(s) under LEGACY ...
+  > AMF_US-Blk_BASE-BADM_2-1.zip
+  + AMF_US-Blk_BASE-BADM_2-1.zip (3.6 MB)
+  > AMF_US-CZ2_BASE-BADM_1-5.zip
+  + AMF_US-CZ2_BASE-BADM_1-5.zip (4.0 MB)
+  > AMF_US-CZ3_BASE-BADM_1-5.zip
+  + AMF_US-CZ3_BASE-BADM_1-5.zip (5.2 MB)
+  > AMF_US-CZ4_BASE-BADM_1-5.zip
+  + AMF_US-CZ4_BASE-BADM_1-5.zip (2.5 MB)
+  > AMF_US-LPH_BASE-BADM_1-1.zip
+  + AMF_US-LPH_BASE-BADM_1-1.zip (1.8 MB)
+  > AMF_US-MRf_BASE-BADM_4-1.zip
+  + AMF_US-MRf_BASE-BADM_4-1.zip (5.9 MB)
+  > AMF_US-WBW_BASE-BADM_2-1.zip
+  + AMF_US-WBW_BASE-BADM_2-1.zip (9.4 MB)
+
+  + AMF_US-Bar_BASE-BADM_7-5.zip -> US-Bar/ (2 files: badm, base)
+  + AMF_US-Blo_BASE-BADM_4-5.zip -> US-Blo/ (2 files: badm, base)
+  + AMF_US-ChR_BASE-BADM_3-5.zip -> US-ChR/ (2 files: badm, base)
+  + AMF_US-CPF_BASE-BADM_1-5.zip -> US-CPF/ (2 files: badm, base)
+  + AMF_US-CPk_BASE-BADM_2-1.zip -> US-CPk/ (2 files: badm, base)
+  + AMF_US-CRK_BASE-BADM_9-5.zip -> US-CRK/ (2 files: badm, base)
+  + AMF_US-CS2_BASE-BADM_5-5.zip -> US-CS2/ (2 files: badm, base)
+  + AMF_US-Cst_BASE-BADM_1-5.zip -> US-Cst/ (2 files: badm, base)
+  + AMF_US-Cwt_BASE-BADM_2-5.zip -> US-Cwt/ (2 files: badm, base)
+  + AMF_US-Dk2_BASE-BADM_5-5.zip -> US-Dk2/ (2 files: badm, base)
+  + AMF_US-Dk3_BASE-BADM_5-5.zip -> US-Dk3/ (2 files: badm, base)
+  + AMF_US-DPP_BASE-BADM_1-5.zip -> US-DPP/ (2 files: badm, base)
+  + AMF_US-Fmf_BASE-BADM_6-5.zip -> US-Fmf/ (2 files: badm, base)
+  + AMF_US-Fuf_BASE-BADM_6-5.zip -> US-Fuf/ (2 files: badm, base)
+  + AMF_US-GBT_BASE-BADM_1-1.zip -> US-GBT/ (2 files: badm, base)
+  + AMF_US-GLE_BASE-BADM_9-5.zip -> US-GLE/ (2 files: badm, base)
+  + AMF_US-Ha1_BASE-BADM_27-5.zip -> US-Ha1/ (2 files: badm, base)
+  + AMF_US-Ha2_BASE-BADM_16-5.zip -> US-Ha2/ (2 files: badm, base)
+  + AMF_US-HB2_BASE-BADM_2-5.zip -> US-HB2/ (2 files: badm, base)
+  + AMF_US-HB3_BASE-BADM_3-5.zip -> US-HB3/ (2 files: badm, base)
+  + AMF_US-HBK_BASE-BADM_3-5.zip -> US-HBK/ (2 files: badm, base)
+  + AMF_US-Ho1_BASE-BADM_15-5.zip -> US-Ho1/ (2 files: badm, base)
+  + AMF_US-Ho2_BASE-BADM_10-5.zip -> US-Ho2/ (2 files: badm, base)
+  + AMF_US-Ho3_BASE-BADM_5-5.zip -> US-Ho3/ (2 files: badm, base)
+  + AMF_US-KS1_BASE-BADM_3-5.zip -> US-KS1/ (2 files: badm, base)
+  + AMF_US-Me1_BASE-BADM_3-5.zip -> US-Me1/ (2 files: badm, base)
+  + AMF_US-Me2_BASE-BADM_23-5.zip -> US-Me2/ (2 files: badm, base)
+  + AMF_US-Me3_BASE-BADM_4-5.zip -> US-Me3/ (2 files: badm, base)
+  + AMF_US-Me4_BASE-BADM_9-5.zip -> US-Me4/ (2 files: badm, base)
+  + AMF_US-Me5_BASE-BADM_3-5.zip -> US-Me5/ (2 files: badm, base)
+  + AMF_US-Me6_BASE-BADM_20-5.zip -> US-Me6/ (2 files: badm, base)
+  + AMF_US-Me7_BASE-BADM_2-5.zip -> US-Me7/ (2 files: badm, base)
+  + AMF_US-MEF_BASE-BADM_3-5.zip -> US-MEF/ (2 files: badm, base)
+  + AMF_US-MMS_BASE-BADM_32-5.zip -> US-MMS/ (2 files: badm, base)
+  + AMF_US-MOz_BASE-BADM_11-5.zip -> US-MOz/ (2 files: badm, base)
+  + AMF_US-MtB_BASE-BADM_5-5.zip -> US-MtB/ (2 files: badm, base)
+  + AMF_US-NC1_BASE-BADM_3-5.zip -> US-NC1/ (2 files: badm, base)
+  + AMF_US-NC2_BASE-BADM_22-5.zip -> US-NC2/ (2 files: badm, base)
+  + AMF_US-NC3_BASE-BADM_4-5.zip -> US-NC3/ (2 files: badm, base)
+  + AMF_US-NC5_BASE-BADM_1-5.zip -> US-NC5/ (2 files: badm, base)
+  + AMF_US-NMj_BASE-BADM_3-5.zip -> US-NMj/ (2 files: badm, base)
+  + AMF_US-NR1_BASE-BADM_26-5.zip -> US-NR1/ (2 files: badm, base)
+  + AMF_US-Oho_BASE-BADM_7-5.zip -> US-Oho/ (2 files: badm, base)
+  + AMF_US-PFb_BASE-BADM_1-5.zip -> US-PFb/ (2 files: badm, base)
+  + AMF_US-PFL_BASE-BADM_1-5.zip -> US-PFL/ (2 files: badm, base)
+  + AMF_US-PFc_BASE-BADM_1-5.zip -> US-PFc/ (2 files: badm, base)
+  + AMF_US-PFg_BASE-BADM_1-5.zip -> US-PFg/ (2 files: badm, base)
+  + AMF_US-PFh_BASE-BADM_1-5.zip -> US-PFh/ (2 files: badm, base)
+  + AMF_US-PFi_BASE-BADM_1-5.zip -> US-PFi/ (2 files: badm, base)
+  + AMF_US-PFj_BASE-BADM_1-5.zip -> US-PFj/ (2 files: badm, base)
+  + AMF_US-PFk_BASE-BADM_1-5.zip -> US-PFk/ (2 files: badm, base)
+  + AMF_US-PFm_BASE-BADM_1-5.zip -> US-PFm/ (2 files: badm, base)
+  + AMF_US-PFn_BASE-BADM_1-5.zip -> US-PFn/ (2 files: badm, base)
+  + AMF_US-PFp_BASE-BADM_1-5.zip -> US-PFp/ (2 files: badm, base)
+  + AMF_US-PFq_BASE-BADM_1-5.zip -> US-PFq/ (2 files: badm, base)
+  + AMF_US-PFs_BASE-BADM_1-5.zip -> US-PFs/ (2 files: badm, base)
+  + AMF_US-PFt_BASE-BADM_1-5.zip -> US-PFt/ (2 files: badm, base)
+  + AMF_US-SB1_BASE-BADM_1-5.zip -> US-SB1/ (2 files: badm, base)
+  + AMF_US-SHC_BASE-BADM_1-5.zip -> US-SHC/ (2 files: badm, base)
+  + AMF_US-Slt_BASE-BADM_8-5.zip -> US-Slt/ (2 files: badm, base)
+  + AMF_US-SP1_BASE-BADM_5-5.zip -> US-SP1/ (2 files: badm, base)
+  + AMF_US-SP2_BASE-BADM_3-1.zip -> US-SP2/ (2 files: badm, base)
+  + AMF_US-SP3_BASE-BADM_3-1.zip -> US-SP3/ (2 files: badm, base)
+  + AMF_US-SP4_BASE-BADM_3-5.zip -> US-SP4/ (2 files: badm, base)
+  + AMF_US-SSH_BASE-BADM_1-5.zip -> US-SSH/ (2 files: badm, base)
+  + AMF_US-TEF_BASE-BADM_1-5.zip -> US-TEF/ (2 files: badm, base)
+  + AMF_US-UMB_BASE-BADM_25-5.zip -> US-UMB/ (3 files: badm, base)
+  + AMF_US-UMd_BASE-BADM_20-5.zip -> US-UMd/ (2 files: badm, base)
+  + AMF_US-Vcm_BASE-BADM_30-5.zip -> US-Vcm/ (2 files: badm, base)
+  + AMF_US-Vcp_BASE-BADM_29-5.zip -> US-Vcp/ (2 files: badm, base)
+  + AMF_US-Vcs_BASE-BADM_22-5.zip -> US-Vcs/ (2 files: badm, base)
+  + AMF_US-WCr_BASE-BADM_35-5.zip -> US-WCr/ (2 files: badm, base)
+  + AMF_US-Wi0_BASE-BADM_3-5.zip -> US-Wi0/ (2 files: badm, base)
+  + AMF_US-Wi1_BASE-BADM_3-5.zip -> US-Wi1/ (2 files: badm, base)
+  + AMF_US-Wi2_BASE-BADM_3-5.zip -> US-Wi2/ (2 files: badm, base)
+  + AMF_US-Wi3_BASE-BADM_3-5.zip -> US-Wi3/ (2 files: badm, base)
+  + AMF_US-Wi4_BASE-BADM_3-5.zip -> US-Wi4/ (2 files: badm, base)
+  + AMF_US-Wi5_BASE-BADM_3-5.zip -> US-Wi5/ (2 files: badm, base)
+  + AMF_US-Wi8_BASE-BADM_3-5.zip -> US-Wi8/ (2 files: badm, base)
+  + AMF_US-Wi9_BASE-BADM_3-5.zip -> US-Wi9/ (2 files: badm, base)
+  + AMF_US-Wrc_BASE-BADM_8-1.zip -> US-Wrc/ (2 files: badm, base)
+  + AMF_US-xAB_BASE-BADM_10-5.zip -> US-xAB/ (2 files: badm, base)
+  + AMF_US-xBL_BASE-BADM_9-5.zip -> US-xBL/ (2 files: badm, base)
+  + AMF_US-xBR_BASE-BADM_10-5.zip -> US-xBR/ (2 files: badm, base)
+  + AMF_US-xGR_BASE-BADM_10-5.zip -> US-xGR/ (2 files: badm, base)
+  + AMF_US-xHA_BASE-BADM_11-5.zip -> US-xHA/ (2 files: badm, base)
+  + AMF_US-xJE_BASE-BADM_10-5.zip -> US-xJE/ (2 files: badm, base)
+  + AMF_US-xLE_BASE-BADM_8-5.zip -> US-xLE/ (2 files: badm, base)
+  + AMF_US-xML_BASE-BADM_9-5.zip -> US-xML/ (2 files: badm, base)
+  + AMF_US-xNW_BASE-BADM_9-5.zip -> US-xNW/ (2 files: badm, base)
+  + AMF_US-xRM_BASE-BADM_10-5.zip -> US-xRM/ (2 files: badm, base)
+  + AMF_US-xRN_BASE-BADM_8-5.zip -> US-xRN/ (2 files: badm, base)
+  + AMF_US-xSB_BASE-BADM_9-5.zip -> US-xSB/ (2 files: badm, base)
+  + AMF_US-xSC_BASE-BADM_9-5.zip -> US-xSC/ (2 files: badm, base)
+  + AMF_US-xSE_BASE-BADM_10-5.zip -> US-xSE/ (2 files: badm, base)
+  + AMF_US-xSP_BASE-BADM_10-5.zip -> US-xSP/ (2 files: badm, base)
+  + AMF_US-xST_BASE-BADM_10-5.zip -> US-xST/ (2 files: badm, base)
+  + AMF_US-xTA_BASE-BADM_9-5.zip -> US-xTA/ (2 files: badm, base)
+  + AMF_US-xTE_BASE-BADM_10-5.zip -> US-xTE/ (2 files: badm, base)
+  + AMF_US-xTR_BASE-BADM_10-5.zip -> US-xTR/ (2 files: badm, base)
+  + AMF_US-xUK_BASE-BADM_10-5.zip -> US-xUK/ (2 files: badm, base)
+  + AMF_US-xWR_BASE-BADM_10-5.zip -> US-xWR/ (2 files: badm, base)
+  + AMF_US-xYE_BASE-BADM_10-5.zip -> US-xYE/ (2 files: badm, base)
+  + AMF_US-Blk_BASE-BADM_2-1.zip -> US-Blk/ (2 files: badm, base)
+  + AMF_US-CZ2_BASE-BADM_1-5.zip -> US-CZ2/ (2 files: badm, base)
+  + AMF_US-CZ3_BASE-BADM_1-5.zip -> US-CZ3/ (2 files: badm, base)
+  + AMF_US-CZ4_BASE-BADM_1-5.zip -> US-CZ4/ (2 files: badm, base)
+  + AMF_US-LPH_BASE-BADM_1-1.zip -> US-LPH/ (2 files: badm, base)
+  + AMF_US-MRf_BASE-BADM_4-1.zip -> US-MRf/ (2 files: badm, base)
+  + AMF_US-WBW_BASE-BADM_2-1.zip -> US-WBW/ (2 files: badm, base)
+
+stations with downloaded data: 110/118
+no data returned for: ['US-CS7', 'US-HB5', 'US-HB6', 'US-JFM', 'US-JFP', 'US-NR2', 'US-SB3', 'US-Sx2']
+  (a site may have no shared BASE data, or a different data policy)
+manifest: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux/files_manifest.csv
+
+Next: python inspect_ameriflux_badm.py
+
+=== BADM parameter coverage ===
+inspecting 110 station(s) in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+
+  US-Bar: 393 BADM rows | supplies: lma, sapwood_area, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK (+14 more)
+  US-Blk: 51 BADM rows | supplies: species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_SITE_DESC, GRP_SITE_FUNDING (+3 more)
+  US-Blo: 248 BADM rows | supplies: lma, sapwood_area, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-CPF: 60 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SHIPPING_ADDRESS (+8 more)
+  US-CPk: 100 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC (+8 more)
+  US-CRK: 108 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SHIPPING_ADDRESS (+7 more)
+  US-CS2: 69 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-CZ2: 43 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_SITE_DESC, GRP_SITE_FUNDING, GRP_STATE (+5 more)
+  US-CZ3: 42 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_SITE_DESC, GRP_SITE_FUNDING, GRP_STATE (+5 more)
+  US-CZ4: 41 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_SITE_DESC, GRP_SITE_FUNDING, GRP_STATE (+5 more)
+  US-ChR: 82 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM, GRP_REFERENCE_PAPER, GRP_SITE_DESC (+5 more)
+  US-Cst: 86 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER (+9 more)
+  US-Cwt: 66 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+11 more)
+  US-DPP: 65 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SHIPPING_ADDRESS (+7 more)
+  US-Dk2: 354 BADM rows | supplies: lma, sapwood_area, terrain, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM, GRP_REFERENCE_PAPER (+10 more)
+  US-Dk3: 846 BADM rows | supplies: lma, sapwood_area, terrain, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_CHEM, GRP_AG_LIT_PROD, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION (+10 more)
+  US-Fmf: 237 BADM rows | supplies: lma, sapwood_area, terrain, snow_cover, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_CHEM, GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+14 more)
+  US-Fuf: 247 BADM rows | supplies: lma, sapwood_area, terrain, snow_cover, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_CHEM, GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+14 more)
+  US-GBT: 170 BADM rows | supplies: terrain, snow_cover, canopy_height, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC (+9 more)
+  US-GLE: 322 BADM rows | supplies: terrain, snow_cover, canopy_height, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC (+9 more)
+  US-HB2: 74 BADM rows | supplies: terrain, snow_cover, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+9 more)
+  US-HB3: 79 BADM rows | supplies: terrain, snow_cover, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-HBK: 68 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SHIPPING_ADDRESS (+8 more)
+  US-Ha1: 6763 BADM rows | supplies: lma, sapwood_area, terrain, snow_cover, nep, canopy_height, lai, biomass, soil_texture, soil_chem, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_CHEM, GRP_AG_LIT_PROD, GRP_AG_PROD_TREE, GRP_BASAL_AREA, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DBH, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS (+23 more)
+  US-Ha2: 168 BADM rows | supplies: lma, sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_N_DEP, GRP_PHENOCAM (+11 more)
+  US-Ho1: 426 BADM rows | supplies: lma, sapwood_area, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_CHEM, GRP_AG_LIT_PROD, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_DOI_RELATED_DATA_DOI, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION (+17 more)
+  US-Ho2: 334 BADM rows | supplies: lma, sapwood_area, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_CHEM, GRP_AG_LIT_PROD, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK (+14 more)
+  US-Ho3: 227 BADM rows | supplies: lma, sapwood_area, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_CHEM, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER (+12 more)
+  US-KS1: 118 BADM rows | supplies: terrain, snow_cover, canopy_height, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC (+9 more)
+  US-LPH: 98 BADM rows | supplies: lma, sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_chem, soil_depth, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_N_DEP, GRP_PHENOCAM, GRP_REFERENCE_PAPER (+6 more)
+  US-MEF: 69 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SHIPPING_ADDRESS (+8 more)
+  US-MMS: 711 BADM rows | supplies: lma, sapwood_area, terrain, nep, canopy_height, biomass, soil_texture, soil_chem, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_CHEM, GRP_AG_PROD_OTHER, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+17 more)
+  US-MOz: 438 BADM rows | supplies: lma, sapwood_area, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_PROD, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK (+12 more)
+  US-MRf: 70 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Me1: 187 BADM rows | supplies: sapwood_area, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+11 more)
+  US-Me2: 770 BADM rows | supplies: lma, sapwood_area, terrain, snow_cover, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_BASAL_AREA, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DBH, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION (+21 more)
+  US-Me3: 224 BADM rows | supplies: lma, sapwood_area, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER (+13 more)
+  US-Me4: 568 BADM rows | supplies: lma, sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER (+17 more)
+  US-Me5: 294 BADM rows | supplies: lma, sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER (+14 more)
+  US-Me6: 358 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, biomass, soil_texture, soil_chem, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_PROD, GRP_BASAL_AREA, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DBH, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+17 more)
+  US-Me7: 72 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+8 more)
+  US-MtB: 141 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_INST, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK (+12 more)
+  US-NC1: 142 BADM rows | supplies: sapwood_area, terrain, snow_cover, canopy_height, lai, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC (+11 more)
+  US-NC2: 228 BADM rows | supplies: sapwood_area, terrain, snow_cover, canopy_height, lai, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM, GRP_REFERENCE_PAPER (+12 more)
+  US-NC3: 121 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC (+9 more)
+  US-NC5: 90 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SHIPPING_ADDRESS (+7 more)
+  US-NMj: 38 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SITE_DESC, GRP_SITE_FUNDING (+3 more)
+  US-NR1: 578 BADM rows | supplies: lma, sapwood_area, terrain, snow_cover, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_AG_LIT_PROD, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK (+14 more)
+  US-Oho: 148 BADM rows | supplies: sapwood_area, terrain, snow_cover, nep, canopy_height, lai, biomass, soil_chem, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER (+12 more)
+  US-PFL: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFb: 87 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFc: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFg: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFh: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFi: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFj: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFk: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFm: 87 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFn: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFp: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFq: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFs: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-PFt: 86 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC (+10 more)
+  US-SB1: 109 BADM rows | supplies: terrain, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+9 more)
+  US-SHC: 81 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM, GRP_REFERENCE_PAPER (+10 more)
+  US-SP1: 553 BADM rows | supplies: sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_texture, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+12 more)
+  US-SP2: 530 BADM rows | supplies: lma, sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+13 more)
+  US-SP3: 729 BADM rows | supplies: lma, sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+13 more)
+  US-SP4: 80 BADM rows | supplies: terrain, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-SSH: 102 BADM rows | supplies: terrain, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+12 more)
+  US-Slt: 709 BADM rows | supplies: sapwood_area, terrain, snow_cover, canopy_height, lai, biomass, soil_texture, soil_chem, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_PROD, GRP_AG_PROD_OTHER, GRP_AG_PROD_SHRUB, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP (+15 more)
+  US-TEF: 79 BADM rows | supplies: terrain, snow_cover, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_RESEARCH_TOPIC, GRP_SHIPPING_ADDRESS (+8 more)
+  US-UMB: 7697 BADM rows | supplies: lma, sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_CHEM, GRP_AG_LIT_PROD, GRP_AG_PROD_TREE, GRP_BASAL_AREA, GRP_BG_LIT_PROD, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DBH, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS (+25 more)
+  US-UMd: 3186 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, biomass, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_PROD, GRP_AG_PROD_TREE, GRP_BASAL_AREA, GRP_BG_LIT_PROD, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DBH, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER (+24 more)
+  US-Vcm: 115 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM, GRP_REFERENCE_PAPER (+11 more)
+  US-Vcp: 105 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM, GRP_REFERENCE_PAPER (+11 more)
+  US-Vcs: 73 BADM rows | supplies: terrain, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM, GRP_REFERENCE_PAPER (+9 more)
+  US-WBW: 276 BADM rows | supplies: sapwood_area, nep, canopy_height, lai, soil_chem, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-WCr: 754 BADM rows | supplies: lma, sapwood_area, terrain, snow_cover, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, root, species, disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_AG_LIT_CHEM, GRP_AG_LIT_PROD, GRP_AG_PROD_TREE, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION (+16 more)
+  US-Wi0: 64 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Wi1: 64 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Wi2: 58 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Wi3: 82 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, biomass, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Wi4: 82 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, biomass, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Wi5: 57 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Wi8: 64 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Wi9: 55 BADM rows | supplies: sapwood_area, terrain, canopy_height, lai, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC, GRP_SITE_DESC (+6 more)
+  US-Wrc: 153 BADM rows | supplies: sapwood_area, terrain, nep, canopy_height, lai, biomass, soil_texture, soil_chem, soil_depth, species, elevation, igbp, utc_offset
+      other groups reported: GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM, GRP_REFERENCE_PAPER, GRP_RESEARCH_TOPIC (+7 more)
+  US-xAB: 85 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xBL: 82 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xBR: 90 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+11 more)
+  US-xGR: 82 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xHA: 86 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xJE: 79 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xLE: 82 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xML: 81 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+9 more)
+  US-xNW: 81 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+9 more)
+  US-xRM: 85 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xRN: 82 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xSB: 82 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+9 more)
+  US-xSC: 82 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xSE: 79 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xSP: 84 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xST: 82 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+9 more)
+  US-xTA: 83 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xTE: 77 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER (+9 more)
+  US-xTR: 83 BADM rows | supplies: disturbance, elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xUK: 82 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xWR: 82 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_PHENOCAM (+10 more)
+  US-xYE: 80 BADM rows | supplies: elevation, igbp, utc_offset
+      other groups reported: GRP_ACKNOWLEDGEMENT, GRP_CLIM_AVG, GRP_COUNTRY, GRP_DOI, GRP_DOI_CONTRIBUTOR, GRP_DOI_ORGANIZATION, GRP_FLUX_MEASUREMENTS, GRP_HEADER, GRP_LAND_OWNERSHIP, GRP_LOCATION, GRP_NETWORK, GRP_REFERENCE_PAPER (+9 more)
+
+parameter           sites   T&C use                                               fallback when absent
+--------------------------------------------------------------------------------------------------------------------------------------------
+lma                23/110   Sl_H = 1/(LMA x f_C) — GROUND TRUTH for the study's…  PLSR remote-sensing LMA only, with no in-situ check
+sapwood_area       41/110   Axyl_H — sapwood area per unit ground area            PFT-prescribed (15 cm2/m2 at US_xRM)
+terrain            73/110   Slo_top / SvF — plot-scale runs assume flat; a slop…  assume flat (Slo_top = 0), as at US_xRM
+snow_cover         31/110   validation target for the snow module (TminS/TmaxS,…  no observational check on simulated snow duration
+nep                19/110   reported net ecosystem production — independent flu…  tower BASE fluxes only
+canopy_height      44/110   hc — canopy height (High vegetation layer)            global canopy-height product (Potapov 2021 / Simard 2011)
+lai                40/110   validation target for LAI = Sl*B(1); also seeds/che…  spin-up equilibrium only, no observational check
+biomass            32/110   seed/validate initial carbon pools B_H(1:8)           spin-up from a plausible guess; NBCD/GEDI for a cross-che…
+soil_texture       26/110   Psan / Pcla — Saxton & Rawls inputs, per layer        POLARIS (CONUS 30 m) / SSURGO / SoilGrids
+soil_chem          29/110   Porg — organic fraction (OM = SOC x 1.72)             POLARIS / SoilGrids SOC
+soil_depth         24/110   soil column depth — do NOT inherit US_xRM's 1 m for…  Pelletier 2016 / Shangguan 2017 / SoilGrids BDTICM
+root               12/110   ZR95 — rooting depth (must stay <= soil column dept…  Schenk & Jackson 2002 / Fan 2017 / PFT lookup (expected: …
+species            42/110   sanity-check the PFT choice and the deciduous/everg…  IGBP class alone
+disturbance        62/110   flag sites whose fluxes reflect harvest/fire rather…  none — unflagged disturbance can contaminate the LMA sign…
+elevation         110/110   Zbas — site elevation (orthometric) for the radiati…  Copernicus GLO-30
+igbp              110/110   PFT selection and the phenology switch aSE (0 everg…  already in the ecoregion pairing CSVs
+utc_offset        110/110   align tower observations with the UTC ERA5-Land for…  infer from longitude (error-prone near boundaries)
+
+110/110 station(s) had a readable BADM file
+written: badm_coverage.csv, badm_values.csv, badm_inventory.csv (in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux)
+
+badm_inventory.csv lists every variable reported, including ones outside the
+wish list -- check it before concluding a parameter is unavailable.
+
+finished   : 2026-08-06T04:56:29Z
+exit status: 0
+6.8G	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux

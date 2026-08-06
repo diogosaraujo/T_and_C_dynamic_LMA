@@ -70,6 +70,24 @@ def log(msg: str = "") -> None:
     print(msg, flush=True)
 
 
+# Stations dropped from the study for lack of data. Kept in one CSV so every step
+# excludes the same set and the reason is recorded rather than remembered.
+DEFAULT_EXCLUDED = Path(__file__).resolve().parent / "excluded_stations.csv"
+
+
+def read_excluded(path: Path | None) -> dict[str, str]:
+    """station_id -> reason, from the shared exclusion list. Missing file is not an error."""
+    out: dict[str, str] = {}
+    if not path or not Path(path).is_file():   # '' -> Path('.'), a directory
+        return out
+    with Path(path).open(newline="", encoding="utf-8-sig") as fh:
+        for row in csv.DictReader(fh):
+            sid = (row.get("station_id") or "").strip()
+            if sid:
+                out[sid] = (row.get("reason") or "").strip()
+    return out
+
+
 def read_stations(paths: list[Path], wanted: set[str] | None) -> list[dict]:
     stations: dict[str, dict] = {}
     for path in paths:
@@ -177,7 +195,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--stations", default=None,
                    help="comma-separated StationIDs to restrict the run to")
     p.add_argument("--exclude", default=None,
-                   help="comma-separated StationIDs to skip (e.g. the ones being dropped)")
+                   help="comma-separated StationIDs to skip, on top of --exclude-file")
+    p.add_argument("--exclude-file", type=Path, default=DEFAULT_EXCLUDED,
+                   help="CSV of stations dropped from the study (station_id,reason,...); "
+                        "pass an empty string to ignore it")
     p.add_argument("--out", type=Path, default=DEFAULT_OUT, help="output directory")
     p.add_argument("--region", default="NAM",
                    help="GLAD continental mosaic: NAM, SAM, AUS, NAFR, SAFR, NASIA, SASIA")
@@ -192,7 +213,10 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
 
     wanted = {s.strip() for s in args.stations.split(",") if s.strip()} if args.stations else None
-    excluded = {s.strip() for s in args.exclude.split(",") if s.strip()} if args.exclude else set()
+    dropped = read_excluded(args.exclude_file)
+    excluded = set(dropped)
+    if args.exclude:
+        excluded |= {s.strip() for s in args.exclude.split(",") if s.strip()}
     stations = [s for s in read_stations(args.site_list or DEFAULT_SITE_LISTS, wanted)
                 if s["station_id"] not in excluded]
     if not stations:

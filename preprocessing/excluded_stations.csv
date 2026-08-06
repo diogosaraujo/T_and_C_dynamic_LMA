@@ -1,0 +1,18 @@
+station_id,forest_type,reason,detail,flagged_by
+US-CS7,evergreen,no BADM returned,AmeriFlux returned no BADM archive for this site; no elevation/IGBP/soil/canopy metadata at all,download_ameriflux.py
+US-HB5,evergreen,no BADM returned,AmeriFlux returned no BADM archive for this site,download_ameriflux.py
+US-HB6,evergreen,no BADM returned,AmeriFlux returned no BADM archive for this site,download_ameriflux.py
+US-JFM,evergreen,no BADM returned,AmeriFlux returned no BADM archive for this site,download_ameriflux.py
+US-JFP,evergreen,no BADM returned,AmeriFlux returned no BADM archive for this site,download_ameriflux.py
+US-NR2,evergreen,no BADM returned,AmeriFlux returned no BADM archive for this site,download_ameriflux.py
+US-SB3,evergreen,no BADM returned,AmeriFlux returned no BADM archive for this site,download_ameriflux.py
+US-Sx2,evergreen,no BADM returned,AmeriFlux returned no BADM archive for this site,download_ameriflux.py
+US-Blo,evergreen,young or disturbed stand,BADM canopy height 2.59 m vs GEDI 2019 13.79 m - regenerating; stand not at equilibrium for spin-up,fetch_canopy_height.py
+US-Me3,evergreen,young or disturbed stand,BADM 3.11 m vs GEDI 2019 8.25 m - young ponderosa; not at equilibrium,fetch_canopy_height.py
+US-Me5,evergreen,young or disturbed stand,BADM 4.3 m vs GEDI 2019 14.03 m - young ponderosa; not at equilibrium,fetch_canopy_height.py
+US-NC1,evergreen,young or disturbed stand,BADM 0.35 m vs GEDI 2019 19.42 m - clearcut pine plantation; not at equilibrium,fetch_canopy_height.py
+US-Wi0,evergreen,young or disturbed stand,BADM 4.0 m vs GEDI 2019 15.53 m - regenerating; not at equilibrium,fetch_canopy_height.py
+US-Wi5,evergreen,young or disturbed stand,BADM 4.0 m vs GEDI 2019 13.67 m - regenerating; not at equilibrium,fetch_canopy_height.py
+US-Wi8,deciduous,young or disturbed stand,BADM 1.5 m (2002 clearcut) vs GEDI 2019 20.87 m - regenerating; not at equilibrium,fetch_canopy_height.py
+US-Wi9,evergreen,young or disturbed stand,BADM 2.3 m vs GEDI 2019 14.12 m - regenerating; not at equilibrium,fetch_canopy_height.py
+US-KS1,evergreen,no rooting depth,1-degree Schenk & Jackson cell is nodata (likely scored as water); GEDI window also only 3.4 m and mostly non-forest,fetch_root_depth.py

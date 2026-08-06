@@ -16,3 +16,10 @@ openpyxl>=3.1
 # fetchers to come). rasterio bundles GDAL, which reads the remote mosaics over
 # /vsicurl/ so multi-GB rasters never have to be downloaded.
 rasterio>=1.3
+
+# Time-varying LMA (build_lma_input.py). The PLSR pipeline saves its outputs with
+# MATLAB's '-v7.3', which is HDF5 and unreadable by scipy.io.loadmat -- hence h5py.
+# scipy stays in the list because an older run could have produced a v7 file, and
+# the loader falls back to it automatically.
+h5py>=3.8
+scipy>=1.10

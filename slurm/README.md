@@ -183,6 +183,42 @@ unlike canopy height there is no measured alternative for any station.
 ⚠️ T&C aborts if `ZR95_H` exceeds the deepest `Zs` layer, so this has to be reconciled
 with the soil-depth step when the `.mat` files are built.
 
+## Time-varying LMA (PLSR temporal CV)
+
+```bash
+sbatch slurm/submit_lma_input.sh                          # all stations
+sbatch slurm/submit_lma_input.sh --stations US-HBK,US-Ha2 # a subset
+sbatch slurm/submit_lma_input.sh --dry-run                # resolve inputs only
+```
+
+Reads the PLSR temporal-CV output already on the cluster — nothing is downloaded:
+
+```
+$ECOREGION_ROOT/PLSR_temporal_cv_pixel_climatology_DOY/LMA/eco<ii>/time/PLSR_predictions_eco<ii>_<forest>_oofcv.mat
+$ECOREGION_ROOT/ecoregion_no<ii>.csv
+```
+
+Override either with `PLSR_ROOT=... ECOREGION_ROOT=... sbatch ...`. Two series come
+out per station — `Y_plot_abs` (observed) and `yfit_plot_abs` (PLSR modelled) — into
+`$TC_INPUT_DATA/lma/<station>/`, in **g/m²**.
+
+Each station takes the nearest ecoregion pixel **that appears in the predictions**;
+matching against the ecoregion at large could land on a pixel the model never saw,
+since `predict_with_fit` drops pixels absent from the training set. Where that pixel
+has no usable data, or sits more than `--max-distance-km` away (default 50), the
+ecoregion median is used instead and every row records which it was. `--fill-gaps`
+extends the fallback to individual missing years — off by default, because the filler
+comes from a different pixel with a different mean and introduces a step change.
+
+Needs `h5py`: the PLSR files are MATLAB `-v7.3`, i.e. HDF5, which `scipy.io.loadmat`
+cannot read. **Re-run `sbatch slurm/submit_setup_env.sh`** before first use; the job
+checks and exits with that instruction if it is missing.
+
+⚠️ The SLA conversion is deliberately **not** applied here. `Sl = 1/(LMA·f_C)` happens
+at `.mat` build time so that revisiting `f_C` never means re-reading the PLSR output.
+Note the shipped `LMA_US_xRM.mat` uses `SLA_H = 1/LMA` with **no** `f_C` — under the
+project's `f_C = 0.5` every value there should double.
+
 ## Job array — gridded fallback only
 
 ```bash

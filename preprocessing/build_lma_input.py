@@ -298,6 +298,9 @@ def main() -> int:
                    help="fill individual missing years from the ecoregion median "
                         "(default: fall back only when the pixel has no data at all)")
     p.add_argument("--dry-run", action="store_true", help="resolve inputs, write nothing")
+    p.add_argument("--audit", action="store_true",
+                   help="read everything and report year coverage; write only lma_audit.csv. "
+                        "Use this to check completeness before committing to a series.")
     args = p.parse_args()
 
     wanted = {s.strip() for s in args.stations.split(",") if s.strip()} if args.stations else None
@@ -326,6 +329,7 @@ def main() -> int:
         groups.setdefault((st["eco_idx"], st["forest_type"]), []).append(st)
 
     manifest, failures = [], 0
+    year_hits: dict[int, int] = {}
     for (eco, forest), members in sorted(groups.items()):
         tag = f"eco{eco} {forest} ({len(members)} station{'s' if len(members) > 1 else ''})"
         mat = resolve_prediction_file(args.plsr_root, eco, forest)
@@ -355,9 +359,20 @@ def main() -> int:
         for st in members:
             res = build_station(st, pred, coords, years_wanted, args.max_distance_km,
                                 args.fill_gaps)
-            sdir = args.out / st["station_id"]
-            write_series(sdir / f"{st['station_id']}_LMA_observed.csv", res.pop("observed"))
-            write_series(sdir / f"{st['station_id']}_LMA_modelled.csv", res.pop("modelled"))
+            obs_rows, mod_rows = res.pop("observed"), res.pop("modelled")
+            if args.audit:
+                # Which years does the modelled series actually carry? This is the
+                # question -- the pipeline drops rows with a missing response before
+                # predicting, so 'modelled' is not necessarily gap-free.
+                res["missing_years"] = " ".join(
+                    str(r["year"]) for r in mod_rows if r["LMA_g_m2"] == "")
+                for r in mod_rows:
+                    year_hits.setdefault(r["year"], 0)
+                    year_hits[r["year"]] += r["LMA_g_m2"] != ""
+            else:
+                sdir = args.out / st["station_id"]
+                write_series(sdir / f"{st['station_id']}_LMA_observed.csv", obs_rows)
+                write_series(sdir / f"{st['station_id']}_LMA_modelled.csv", mod_rows)
             status = "ok" if res["modelled_n_years"] else "no_data"
             if status != "ok":
                 failures += 1
@@ -377,6 +392,35 @@ def main() -> int:
             "observed_source", "observed_n_years", "observed_mean", "observed_min", "observed_max",
             "modelled_source", "modelled_n_years", "modelled_mean", "modelled_min", "modelled_max",
             "status", "note"]
+
+    if args.audit:
+        n_st = len(manifest)
+        want = len(years_wanted)
+        complete = [m for m in manifest if m.get("modelled_n_years") == want]
+        print(f"\n{'=' * 62}\nAUDIT: modelled series coverage, {args.start_year}-{args.end_year}"
+              f" ({want} years)\n{'=' * 62}")
+        print(f"stations with a COMPLETE modelled series : {len(complete)}/{n_st}")
+        if year_hits:
+            worst = sorted(year_hits.items(), key=lambda kv: kv[1])
+            print(f"\nyears no station has  : "
+                  f"{' '.join(str(y) for y, n in worst if n == 0) or '(none)'}")
+            print("thinnest years        : " +
+                  ", ".join(f"{y}:{n}/{n_st}" for y, n in worst[:8] if n))
+            full = [y for y, n in year_hits.items() if n == n_st]
+            print(f"years all stations have: {len(full)}/{want}")
+        with open(args.out / "lma_audit.csv", "w", newline="", encoding="utf-8") as fh:
+            w = csv.DictWriter(fh, fieldnames=cols + ["missing_years"], extrasaction="ignore")
+            w.writeheader()
+            w.writerows(manifest)
+        print(f"\nper-station detail: {args.out / 'lma_audit.csv'}")
+        if len(complete) < n_st:
+            print("\nThe modelled series is NOT gap-free. The pipeline drops rows whose\n"
+                  "response (iLMA) is missing before predicting, so yfit_plot_abs exists\n"
+                  "only where an observation existed. Regenerating a complete series means\n"
+                  "re-applying PLSR_fitting_coeff_*_TEMPORAL.mat to the full predictor\n"
+                  "table, which is ~98% complete in every year.")
+        return 0 if len(complete) == n_st else 1
+
     with open(args.out / "lma_manifest.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=cols, extrasaction="ignore")
         w.writeheader()

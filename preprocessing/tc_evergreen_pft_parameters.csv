@@ -1,0 +1,181 @@
+variable,value,units,description,category,layer,active_at_US_xRM,typical_range_fatichi2012,source,source_confidence,notes
+aSE_H,0,-,"Plant type / phenology switch: 0 evergreen, 1 seasonal (deciduous), 2 grass, 3 crop",phenology,H,yes,,MOD_PARAM_US_xRM.m code comment,code_comment,Defines the site as evergreen; the single most important switch when reusing this set.
+CT_H,3,-,"Photosynthetic pathway: 3 = C3, 4 = C4",photosynthesis,H,yes,,Farquhar et al. (1980); Collatz et al. (1991),formulation_origin,C3 for all conifers and temperate broadleaf trees.
+FI_H,0.081,umolCO2/umolPhotons,Intrinsic quantum efficiency of photosynthesis,photosynthesis,H,yes,epsilon: 0.040-0.090,Fatichi et al. (2012a) JAMES 4 M05002,tc_model_description,
+Do_H,700,Pa,Vapour-pressure-deficit sensitivity parameter of stomatal conductance,photosynthesis,H,yes,D0: 700-3000 Pa,Leuning (1995) Plant Cell Environ 18:339-355,formulation_origin,Lower than the Low-vegetation value (2000 Pa): conifers close stomata at lower VPD.
+a1_H,5,-,Empirical slope relating stomatal conductance to assimilation,photosynthesis,H,yes,a: 3-18,Leuning (1995),formulation_origin,Code notes an alternative value of 9; 5 is conservative (water-saving).
+go_H,0.01,mol/(s m^2),Minimum (cuticular) stomatal conductance,photosynthesis,H,yes,"g0,CO2: 0.005-0.04",Leuning (1995),formulation_origin,
+DSE_H,0.649,kJ/(mol K),Entropy factor in the Vmax/Jmax temperature response,photosynthesis,H,yes,DeltaS: 0.625-0.665 kJ/(mol K),"Fatichi et al. (2012a) Table 3; underlying Kattge & Knorr (2007) Plant Cell Environ 30:1176-1190",tc_model_description,"RESOLVED: the code comment mislabels this as 'Activation Energy [kJ/mol]'. Table 3 lists DeltaS (entropy factor) as 0.625-0.665 kJ/(mol K) and 0.649 sits inside it, so the VALUE is correct and only the comment is wrong. Names/units are swapped with Ha_H in the source file."
+Ha_H,89,kJ/mol,Activation energy in the Vmax/Jmax temperature response,photosynthesis,H,yes,Ha: 40-95 kJ/mol,"Fatichi et al. (2012a) Table 3; underlying Kattge & Knorr (2007)",tc_model_description,"RESOLVED: the code comment mislabels this as 'entropy factor [kJ/mol K]'. Table 3 lists Ha (activation energy) as 40-95 kJ/mol and 89 sits inside it. Value correct, comment wrong - swapped with DSE_H."
+gmes_H,Inf,mol CO2/(s m^2),Mesophyll conductance; Inf disables mesophyll limitation,photosynthesis,H,yes,,Fatichi et al. (2012a),tc_model_description,Infinite = CO2 drawdown from intercellular space to chloroplast neglected.
+rjv_H,1.8,umol electrons/umolCO2,Ratio scaling Jmax to Vmax,photosynthesis,H,yes,rjv: 1.5-2.5,Fatichi et al. (2012a),tc_model_description,
+Vmax_H,32,umolCO2/(m^2 s),Maximum Rubisco carboxylation capacity at 25 degC,photosynthesis,H,yes,VLmax: 10-150,Fatichi et al. (2012a); typical NET values in Kattge et al. (2009),needs_verification,"Set DIRECTLY here - the Maximum_Rubisco_Capacity(Sl,PLNR,Nl) call is commented out. This is why dynamic LMA does NOT propagate to photosynthetic capacity (CLAUDE.md 1-2)."
+KnitH,0.35,-,Canopy nitrogen decay coefficient with cumulative LAI,photosynthesis,H,yes,KN: 0.15-0.5,Fatichi et al. (2012a),tc_model_description,Code retains an alternative commented value of 0.5.
+Nl_H,62,kgC/kgN,Leaf carbon-to-nitrogen ratio,stoichiometry,H,yes,Nl: 15-42 gC/gN,"White et al. (2000) BIOME-BGC: evergreen needleleaf leaf C:N = 59.6",tc_model_description,"EXPLAINED: 62 is outside Table 3's 15-42, but that range does not span conifers. White et al. (2000) - the source Fatichi cites for PFT physiology - gives leaf C:N of 59.6 for evergreen needleleaf vs 19.8 for deciduous broadleaf, so 62 is essentially the standard ENF value. Use ~20-30 for a deciduous set, NOT this."
+mSl_H,0.0,m^2 PFT/gC,Linear increase of specific leaf area with LAI,vegetation_structure,H,yes,-: not tabulated,MOD_PARAM_US_xRM.m,code_comment,Zero = SLA constant through the canopy.
+Psi_sto_00_H,-0.8,MPa,Water potential at incipient (2%) stomatal conductance loss,plant_hydraulics,H,yes,Psi_ss: -0.03 to -1.0 MPa,Fatichi et al. (2012a),tc_model_description,
+Psi_sto_50_H,-2.5,MPa,Water potential at 50% stomatal conductance loss,plant_hydraulics,H,yes,Psi_wp: -1.0 to -10.0 MPa,Fatichi et al. (2012a),tc_model_description,
+PsiL00_H,-1.0,MPa,Leaf water potential at incipient (2%) conductivity loss,plant_hydraulics,H,yes,,Fatichi et al. (2012a),tc_model_description,
+PsiL50_H,-3.2,MPa,Leaf water potential at 50% conductivity loss,plant_hydraulics,H,yes,,Fatichi et al. (2012a),tc_model_description,
+Kleaf_max_H,10,mmolH2O/(m^2 leaf s MPa),Maximum leaf hydraulic conductance,plant_hydraulics,H,yes,,Fatichi et al. (2012a),tc_model_description,
+Cl_H,1200,mmolH2O/(m^2 leaf MPa),Leaf hydraulic capacitance,plant_hydraulics,H,yes,,MOD_PARAM_US_xRM.m,code_comment,Code notes a plausible range of 500-3000.
+Axyl_H,15.0,cm^2 stem/m^2 PFT,Xylem (sapwood) cross-sectional area per unit ground area,plant_hydraulics,H,yes,,Fatichi et al. (2012a),tc_model_description,Scales with stand basal area; check for very young or very dense stands.
+Kx_max_H,80000,mmolH2O/(m s MPa),Maximum xylem specific hydraulic conductivity,plant_hydraulics,H,yes,,MOD_PARAM_US_xRM.m,code_comment,Code notes a range of 5550-555550.
+PsiX50_H,-5.0,MPa,Xylem water potential at 50% conductivity loss (P50),plant_hydraulics,H,yes,,Fatichi et al. (2012a); species P50 compendium in Choat et al. (2012),needs_verification,-5.0 MPa is a drought-resistant conifer value; consider revising for mesic eastern conifers.
+Cx_H,150,kg/(m^3 sapwood MPa),Xylem (sapwood) hydraulic capacitance,plant_hydraulics,H,yes,,Fatichi et al. (2012a),tc_model_description,
+PsiG50_H,-0.8,MPa,Water potential at 50% reduction of growth/expansion,growth,H,yes,,Fatichi et al. (2012a),tc_model_description,
+PsiG99_H,-2.5,MPa,Water potential at 99% reduction of growth/expansion,growth,H,yes,,Fatichi et al. (2012a),tc_model_description,
+gcoef_H,3.5,gC/(m^2 day),Maximum growth (expansion) coefficient,growth,H,yes,,Fatichi et al. (2012a),tc_model_description,
+r_H,0.055,gC/(gN d),Maintenance respiration rate at 10 degC per unit nitrogen,carbon_turnover,H,yes,rm: 0.020-0.066,Code comment: Bonan (2003),code_comment,Code notes a range of 0.011-0.066.
+gR_H,0.25,-,"Growth respiration fraction, Rg/(GPP-Rm)",carbon_turnover,H,yes,omega_grw: 0.15-0.30,MOD_PARAM_US_xRM.m,code_comment,Code notes a range of 0.22-0.28.
+dd_max_H,0.005,1/d,Maximum drought-induced mortality rate (1/200),carbon_turnover,H,yes,dd_max: 1/600-1/30 = 0.0017-0.033,MOD_PARAM_US_xRM.m,code_comment,Code notes a range of 0.005-0.025.
+dc_C_H,0.21370,1/(d degC),Factor of increasing cold-induced mortality (78/365),carbon_turnover,H,yes,d_cold: 1/365-1/15 = 0.0027-0.067,Fatichi et al. (2012a),needs_verification,"OUT OF PUBLISHED RANGE: 78/365 = 0.214 vs Table 3's 1/365-1/15 (0.0027-0.067), ~3x the upper bound. Largely moot at US_xRM because Tcold_H = -50 degC never triggers cold shedding, but it WOULD bite in a deciduous set where Tcold is active. Check before reuse."
+Tcold_H,-50,degC,Temperature threshold for cold-induced leaf shedding,phenology,H,yes,Tcold: -12 to +10 degC,MOD_PARAM_US_xRM.m,code_comment,"Outside Table 3's -12 to +10 degC range DELIBERATELY: -50 degC is an off-switch, not a physical threshold, disabling cold shedding for an evergreen. A deciduous set must bring this back inside the published range."
+drn_H,0.00125,1/d,Fine-root turnover rate (1/800),carbon_turnover,H,yes,d_root: 1/1500-1/240 = 0.00067-0.0042,Fatichi et al. (2012a),tc_model_description,
+dsn_H,0.0016667,1/d,Normal sapwood-to-heartwood transfer rate (1/600),carbon_turnover,H,yes,d_sapw: 1/2500-1/365 = 0.0004-0.0027,Fatichi et al. (2012a),tc_model_description,
+age_cr_H,1220,day,Critical leaf age (needle longevity),phenology,H,yes,Acr: 50-1500 day,Fatichi et al. (2012a),tc_model_description,~3.3 yr needle retention - a defining evergreen trait. Revisit per species (Pinus vs Picea vs Tsuga differ).
+Bfac_lo_H,0.99,-,Soil-water stress threshold for leaf onset,phenology,H,yes,beta_LO: 0.7-1,Fatichi et al. (2012a),tc_model_description,
+Bfac_ls_H,NaN,-,Soil-water stress threshold for leaf shedding,phenology,H,yes,,MOD_PARAM_US_xRM.m,code_comment,NaN = water-triggered shedding disabled for evergreen.
+Tlo_H,1.5,degC,Mean temperature threshold for leaf onset,phenology,H,yes,,Fatichi et al. (2012a),tc_model_description,
+Tls_H,NaN NaN,degC,Mean temperature threshold for leaf shedding,phenology,H,yes,,MOD_PARAM_US_xRM.m,code_comment,NaN = disabled for evergreen.
+PAR_th_H,NaN,umol/(m^2 s),PAR threshold for phenological transition,phenology,H,yes,,MOD_PARAM_US_xRM.m,code_comment,NaN = disabled.
+dmg_H,30,day,Day of maximum growth (tree = 30; grasses = 25),phenology,H,yes,dMG: 15-40 day,MOD_PARAM_US_xRM.m,code_comment,
+LAI_min_H,0.001,m^2/m^2,Minimum allowed leaf area index,phenology,H,yes,LAImin: 0.001-0.05,Fatichi et al. (2012a),tc_model_description,
+Trr_H,0.5,gC/(m^2 d),Translocation rate from reserves,carbon_allocation,H,yes,TrC: 0.2-6 gC/(m2 d),Fatichi et al. (2012a),tc_model_description,
+mjDay_H,220,day of year,Maximum Julian day allowed for leaf onset,phenology,H,yes,,Fatichi et al. (2012a),tc_model_description,Northern-hemisphere convention.
+LDay_min_H,14.1,h,Minimum day length for leaf onset,phenology,H,yes,,Fatichi et al. (2012a),tc_model_description,Day-length thresholds are LATITUDE SENSITIVE - review when moving far from 40 degN.
+LtR_H,0.8,-,Maximum leaf-to-root allocation ratio,carbon_allocation,H,yes,Rltr: 0.25-1.5,Fatichi et al. (2012a),tc_model_description,
+Mf_H,0.02,1/d,Fruit maturation turnover rate (1/50),carbon_turnover,H,yes,,Fatichi et al. (2012a),tc_model_description,
+Wm_H,0,1/d,Wood turnover coefficient,carbon_turnover,H,yes,,MOD_PARAM_US_xRM.m,code_comment,Zero = no background wood mortality.
+eps_ac_H,0.8,-,Allocation-to-reserve parameter,carbon_allocation,H,yes,eps_al: 0-1,Fatichi et al. (2012a),tc_model_description,
+LDay_cr_H,11.8,h,Day-length threshold triggering senescence,phenology,H,yes,"DLH,SE: 10-13 h",Fatichi et al. (2012a),tc_model_description,Latitude sensitive - see LDay_min_H.
+Klf_H,0.033333,1/d,Dead-leaf fall turnover rate (1/30),carbon_turnover,H,yes,,Fatichi et al. (2012a),tc_model_description,
+fab_H,0.74,-,Fraction of sapwood and reserves allocated above ground,carbon_allocation,H,yes,,Fatichi et al. (2012a),tc_model_description,fab_H + fbe_H must equal 1.
+fbe_H,0.26,-,Fraction of sapwood and reserves allocated below ground,carbon_allocation,H,yes,,Fatichi et al. (2012a),tc_model_description,
+ff_r_H,0.1,-,Reference allocation fraction to fruit and reproduction,carbon_allocation,H,yes,,Fatichi et al. (2012a),tc_model_description,
+d_leaf_H,0.25,cm,Characteristic leaf dimension (needle width) for the boundary layer,canopy_structure,H,yes,d_leaf: 0.1-15 cm,Fatichi et al. (2012a),tc_model_description,Needle-scale; the Low/broadleaf value is 0.8 cm.
+Sp_LAI_H_In,0.1,mm/LAI,Specific rainfall interception storage per unit LAI,interception,H,yes,"Sp,In: 0.1-0.4 mm",Fatichi et al. (2012a),tc_model_description,
+OM_H,1,-,Organic-matter / leaf-clumping-related optical multiplier,canopy_optics,H,yes,,Fatichi et al. (2012a),needs_verification,
+PFT_opt_H,Veg_Optical_Parameter(2),-,Leaf/stem optical property set; class 2 = NET Boreal (needleleaf evergreen tree),canopy_optics,H,yes,chiL / alpha_L / tau_L: chiL -0.30 to 0.25; refl 0.07-0.58; transm 0.001-0.38,Oleson et al. (2010) CLM4 Tech Note; Dorman & Sellers (1989); Asner et al. (1998); chiL after Ross (1975),tc_source_code,"Classes 1 (NET Temperate), 2 (NET Boreal) and 3 (NDT Boreal) are NUMERICALLY IDENTICAL in Veg_Optical_Parameter.m, so class 1 vs 2 does not change results. Yields chiL=0.01, leaf reflectance vis/nir = 0.07/0.35, transmittance 0.05/0.10."
+CASE_ROOT,1,-,Root vertical profile type; 1 = exponential,roots,both,yes,,Arora & Boer (2005) Earth Interact 9:1-17,tc_source_code,"Options in Root_Fraction_General.m: 1 exponential, 2 linear dose response, 3 constant, 4 deep/tap."
+ZR95_H,800,mm,Rooting depth containing 95% of roots,roots,H,yes,,PFT-prescribed placeholder; see Schenk & Jackson (2002) J Ecol 90:480-494; Fan et al. (2017) PNAS 114:10572-10577,needs_verification,"PFT value FOR NOW, to be overwritten if site data appear. HARD CONSTRAINT: ZR95_H must be <= the deepest soil layer (Zs end), or Root_Fraction_General aborts."
+ZR50_H,NaN,mm,Rooting depth containing 50% of roots,roots,H,yes,,MOD_PARAM_US_xRM.m,code_comment,Unused when CASE_ROOT = 1.
+ZRmax_H,NaN,mm,Maximum rooting depth,roots,H,yes,,MOD_PARAM_US_xRM.m,code_comment,Unused when CASE_ROOT = 1.
+Vx_H,10,mm/m^2 PFT,Maximum xylem water storage volume,plant_hydraulics,H,yes,,Fatichi et al. (2012a),tc_model_description,
+Vl_H,10,mm/m^2 PFT,Maximum leaf water storage volume,plant_hydraulics,H,yes,,Fatichi et al. (2012a),tc_model_description,
+ParEx_H,Exudation_Parameter(1),-,Root exudation parameter set (1 = active),biogeochemistry,H,yes,,Fatichi et al. (2012a),needs_verification,Only relevant when OPT_SoilBiogeochemistry = 1.
+Mpar_H,Vegetation_Management_Parameter,-,Vegetation management parameter set (defaults = unmanaged),management,H,yes,,Fatichi et al. (2012a),tc_model_description,Revisit for managed/harvested sites flagged by BADM disturbance records.
+Kct,0.75,-,Vegetation cover factor for throughfall partitioning,interception,both,yes,,Fatichi et al. (2012a),tc_model_description,
+gcI,3.7,1/mm,Interception storage decay coefficient,interception,both,yes,gc: 3.7 1/mm,Fatichi et al. (2012a),tc_model_description,
+KcI,0.06,mm,Interception drainage coefficient,interception,both,yes,Kc: 0.06 mm/h,Code comment: Mahfouf & Jacquemin (1989),code_comment,
+Sp_SN_In,5.9,mm/LAI,Specific snow interception storage per unit LAI,interception,both,yes,"Sp_sno,In: 5.9-6.6 kg/m2",Fatichi et al. (2012a),tc_model_description,Important at snowy sites: controls canopy snow load and sublimation.
+Sllit,2,m^2 litter/kg DM,Litter specific leaf area,litter,both,yes,,Fatichi et al. (2012a),tc_model_description,
+ExEM,1.0,-,Ectomycorrhizal / exudation exchange fraction,biogeochemistry,both,yes,,Fatichi et al. (2012a),needs_verification,
+Ccrown,1.0,-,Crown area fraction of the vegetation patch,land_cover,H,yes,,MOD_PARAM_US_xRM.m,code_comment,1.0 = single PFT covering the whole plot; correct for closed-canopy forest.
+Cwat,0,-,Water-covered fraction of the cell,land_cover,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+Curb,0,-,Urban fraction of the cell,land_cover,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+Crock,0,-,Rock fraction of the cell,land_cover,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+Cbare,0,-,Bare-soil fraction of the cell,land_cover,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+TminS,-0.8,degC,Air temperature below which precipitation falls entirely as snow,snow_physics,n/a,yes,Tmin: -1.5 to 0.0 degC,Fatichi et al. (2012a),tc_model_description,
+TmaxS,2.8,degC,Air temperature above which precipitation falls entirely as rain,snow_physics,n/a,yes,Tmax: 2.0-3.3 degC,Fatichi et al. (2012a),tc_model_description,
+ros_max1,550,kg/m^3,Maximum snow density (parameter set 1),snow_physics,n/a,yes,rho_sno_M1: 520 kg/m3 (melting),Fatichi et al. (2012a),tc_model_description,Code retains an alternative commented value of 600.
+ros_max2,260,kg/m^3,Maximum snow density (parameter set 2),snow_physics,n/a,yes,rho_sno_M2: 320 kg/m3 (freezing),Fatichi et al. (2012a),tc_model_description,Code retains an alternative commented value of 450.
+Th_Pr_sno,10.0,mm/day,Snowfall intensity threshold defining a new snowfall event,snow_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+Ice_wc_sp,0.01,-,Specific maximum liquid water content of ice,ice_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+ros_Ice_thr,500,kg/m^3,Snow density threshold for transformation into ice,ice_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+Aice,0.35,-,Ice albedo,ice_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+WatFreez_Th,-8,degC,Temperature threshold for freezing of soil water,ice_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+dz_ice,0.54,mm/h,Freezing-layer depth growth rate,ice_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+snow_alb.dir_vis,0.7,-,Initial snow albedo - direct visible,snow_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,Initial condition; evolves with snow age.
+snow_alb.dif_vis,0.7,-,Initial snow albedo - diffuse visible,snow_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+snow_alb.dir_nir,0.7,-,Initial snow albedo - direct near-infrared,snow_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+snow_alb.dif_nir,0.7,-,Initial snow albedo - diffuse near-infrared,snow_physics,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+e_sno,0.97,-,Snow surface emissivity,snow_physics,n/a,yes,,Fatichi et al. (2012a),tc_model_description,
+SPAR,2,-,"Soil hydraulic parameterisation: 1 = van Genuchten, 2 = Saxton-Rawls",soil_mesh_and_solver,n/a,yes,,Saxton & Rawls (2006) SSSAJ 70:1569-1578,tc_model_description,Choice of scheme is prescribed; the texture it consumes is site data.
+Kfc,0.2,mm/h,Drainage rate defining field capacity,soil_mesh_and_solver,n/a,yes,,Fatichi et al. (2012a),tc_model_description,
+Phy,10000,kPa,Matric potential defining the hygroscopic (residual) water content,soil_mesh_and_solver,n/a,yes,,Fatichi et al. (2012a),tc_model_description,
+Zs,[0 10 20 50 100 150 200 300 400 500 600 700 800 1000],mm,Soil layer interface depths; length must equal ms+1,soil_mesh_and_solver,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,13 layers to 1 m. CLAUDE.md 6 flags 1 m as TOO SHALLOW for deep-rooted forest - deepen per site (often 2-5 m) and keep ZR95_H <= the deepest layer.
+Zdes,10,mm,Depth of the soil layer contributing to bare-soil evaporation,soil_mesh_and_solver,n/a,yes,,Fatichi et al. (2012a),tc_model_description,
+Zinf,10,mm,Depth of the infiltration control layer,soil_mesh_and_solver,n/a,yes,,Fatichi et al. (2012a),tc_model_description,
+Zbio,250,mm,Depth of the biologically active soil layer,soil_mesh_and_solver,n/a,yes,,Fatichi et al. (2012a),tc_model_description,
+Oice,0,-,Initial soil ice content,soil_mesh_and_solver,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+In_max_urb,5,mm,Maximum interception storage on urban surfaces,interception,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,Inactive (Curb = 0).
+In_max_rock,0.1,mm,Maximum interception storage on rock surfaces,interception,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,Inactive (Crock = 0).
+fpr,1,-,Fraction of precipitation reaching the cell,domain_geometry,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+SvF,1,-,Sky view factor,domain_geometry,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,"1 = flat, unobstructed horizon. Revisit for steep/valley terrain."
+SN,0,-,Stream identifier,domain_geometry,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+Slo_top,0,fraction dy/dx,Topographic slope at the surface,domain_geometry,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,Plot-scale runs assume flat; Asur is derived from this.
+Slo_pot,0,fraction dy/dx,Slope of the hydraulic potential per soil layer,domain_geometry,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+Ared,1,-,Area reduction factor due to rock content (1 - Frock),domain_geometry,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+aR,1,-,Anisotropy ratio of hydraulic conductivity (Kh/Kv),domain_geometry,n/a,yes,ar: 0-1000,MOD_PARAM_US_xRM.m,code_comment,
+cellsize,1,m^2,Grid cell size for the plot-scale configuration,domain_geometry,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+Kbot,NaN,mm/h,Hydraulic conductivity at the bedrock lower boundary,domain_geometry,n/a,yes,Kbot: 0-2 mm/h,MOD_PARAM_US_xRM.m,code_comment,NaN = free drainage. CLAUDE.md 6 warns this is WRONG for shallow-water-table or riparian sites.
+Krock,NaN,mm/h,Hydraulic conductivity of fractured rock,domain_geometry,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,
+a_dis,NaN,-,Rainfall disaggregation parameter,forcing_options,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,NaN = disaggregation off; forcing is already hourly.
+pow_dis,NaN,-,Rainfall disaggregation exponent,forcing_options,n/a,yes,,MOD_PARAM_US_xRM.m,code_comment,NaN = disaggregation off.
+Sl_L,0.028,m^2/gC,Specific leaf area of the Low vegetation layer,vegetation_structure,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer INACTIVE at US_xRM (Ccrown high-only). Retained for completeness.
+Nl_L,23,kgC/kgN,Leaf carbon-to-nitrogen ratio - Low layer,stoichiometry,L,no,Nl: 15-42 gC/gN,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+aSE_L,2,-,Plant type - Low layer (2 = grass),phenology,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Vmax_L,0,umolCO2/(m^2 s),Maximum Rubisco capacity - Low layer,photosynthesis,L,no,,MOD_PARAM_US_xRM.m,code_comment,Zero disables Low-layer photosynthesis.
+ZR95_L,0,mm,Rooting depth (95%) - Low layer,roots,L,no,,MOD_PARAM_US_xRM.m,code_comment,Zero = no Low-layer roots.
+FI_L,0.081,umolCO2/umolPhotons,Intrinsic quantum efficiency - Low layer,photosynthesis,L,no,epsilon: 0.040-0.090,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Do_L,2000,Pa,VPD sensitivity - Low layer,photosynthesis,L,no,D0: 700-3000 Pa,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+a1_L,7,-,Stomatal slope - Low layer,photosynthesis,L,no,a: 3-18,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+go_L,0.01,mol/(s m^2),Minimum stomatal conductance - Low layer,photosynthesis,L,no,"g0,CO2: 0.005-0.04",MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+CT_L,3,-,Photosynthetic pathway - Low layer,photosynthesis,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+DSE_L,0.660,kJ/(mol K),Entropy factor - Low layer,photosynthesis,L,no,DeltaS: 0.625-0.665 kJ/(mol K),MOD_PARAM_US_xRM.m,code_comment,Low layer inactive; same label swap as DSE_H.
+Ha_L,48,kJ/mol,Activation energy - Low layer,photosynthesis,L,no,Ha: 40-95 kJ/mol,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive; same label swap as Ha_H.
+gmes_L,Inf,mol CO2/(s m^2),Mesophyll conductance - Low layer,photosynthesis,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+rjv_L,2.6,umol electrons/umolCO2,Jmax:Vmax ratio - Low layer,photosynthesis,L,no,rjv: 1.5-2.5,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+KnitL,0.0,-,Canopy nitrogen decay - Low layer,photosynthesis,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+mSl_L,0.0,m^2 PFT/gC,SLA increase with LAI - Low layer,vegetation_structure,L,no,,MOD_PARAM_US_xRM.m,code_comment,Code notes 0.0-0.004 for broadleaf deciduous trees.
+d_leaf_L,0.8,cm,Characteristic leaf dimension - Low layer,canopy_structure,L,no,d_leaf: 0.1-15 cm,MOD_PARAM_US_xRM.m,code_comment,Broadleaf value; relevant if a deciduous understorey is ever activated.
+Sp_LAI_L_In,0.2,mm/LAI,Specific interception storage per LAI - Low layer,interception,L,no,"Sp,In: 0.1-0.4 mm",MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Psi_sto_00_L,-0.8,MPa,Stomatal closure onset potential - Low layer,plant_hydraulics,L,no,Psi_ss: -0.03 to -1.0 MPa,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Psi_sto_50_L,-3.0,MPa,Potential at 50% stomatal loss - Low layer,plant_hydraulics,L,no,Psi_wp: -1.0 to -10.0 MPa,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+PsiL00_L,-1.1,MPa,Leaf potential at 2% conductivity loss - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+PsiL50_L,-4.0,MPa,Leaf potential at 50% conductivity loss - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Kleaf_max_L,5,mmolH2O/(m^2 leaf s MPa),Maximum leaf hydraulic conductance - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Cl_L,1200,mmolH2O/(m^2 leaf MPa),Leaf capacitance - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Axyl_L,0.0,cm^2 stem/m^2 PFT,Sapwood area - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Zero for herbaceous.
+Kx_max_L,80000,mmolH2O/(m s MPa),Maximum xylem conductivity - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+PsiX50_L,-4.5,MPa,Xylem P50 - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Cx_L,150,kg/(m^3 sapwood MPa),Xylem capacitance - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+PsiG50_L,-1.45,MPa,Potential at 50% growth reduction - Low layer,growth,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+PsiG99_L,-4.0,MPa,Potential at 99% growth reduction - Low layer,growth,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+gcoef_L,3.5,gC/(m^2 day),Growth coefficient - Low layer,growth,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+r_L,0.055,gC/(gN d),Respiration rate at 10 degC - Low layer,carbon_turnover,L,no,rm: 0.020-0.066,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+gR_L,0.25,-,Growth respiration fraction - Low layer,carbon_turnover,L,no,omega_grw: 0.15-0.30,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+dd_max_L,0.0027778,1/d,Maximum drought mortality (1/360) - Low layer,carbon_turnover,L,no,dd_max: 1/600-1/30 = 0.0017-0.033,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+dc_C_L,0.019178,1/(d degC),Cold mortality factor (7/365) - Low layer,carbon_turnover,L,no,d_cold: 1/365-1/15 = 0.0027-0.067,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Tcold_L,0.0,degC,Cold leaf-shed threshold - Low layer,phenology,L,no,Tcold: -12 to +10 degC,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+drn_L,0.0017544,1/d,Root turnover (1/570) - Low layer,carbon_turnover,L,no,d_root: 1/1500-1/240 = 0.00067-0.0042,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+dsn_L,0.0027397,1/d,Sapwood transfer rate (1/365) - Low layer,carbon_turnover,L,no,d_sapw: 1/2500-1/365 = 0.0004-0.0027,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+age_cr_L,180,day,Critical leaf age - Low layer,phenology,L,no,Acr: 50-1500 day,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Bfac_lo_L,0.99,-,Leaf onset water stress - Low layer,phenology,L,no,beta_LO: 0.7-1,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Bfac_ls_L,NaN,-,Leaf shed water stress - Low layer,phenology,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Tlo_L,6.0,degC,Mean temperature for leaf onset - Low layer,phenology,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Tls_L,NaN,degC,Mean temperature for leaf shed - Low layer,phenology,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+PAR_th_L,NaN,umol/(m^2 s),PAR threshold - Low layer,phenology,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+dmg_L,25,day,Day of maximum growth - Low layer,phenology,L,no,dMG: 15-40 day,MOD_PARAM_US_xRM.m,code_comment,Grass value.
+LAI_min_L,0.1,m^2/m^2,Minimum LAI - Low layer,phenology,L,no,LAImin: 0.001-0.05,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Trr_L,4.0,gC/(m^2 d),Translocation rate - Low layer,carbon_allocation,L,no,TrC: 0.2-6 gC/(m2 d),MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+mjDay_L,220,day of year,Maximum Julian day for leaf onset - Low layer,phenology,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+LDay_min_L,NaN,h,Minimum day length for leaf onset - Low layer,phenology,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+LtR_L,0.8,-,Leaf-to-root ratio - Low layer,carbon_allocation,L,no,Rltr: 0.25-1.5,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Mf_L,NaN,1/d,Fruit maturation turnover - Low layer,carbon_turnover,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Wm_L,NaN,1/d,Wood turnover - Low layer,carbon_turnover,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+eps_ac_L,0.5,-,Allocation to reserve - Low layer,carbon_allocation,L,no,eps_al: 0-1,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+LDay_cr_L,11.5,h,Senescence day-length threshold - Low layer,phenology,L,no,"DLH,SE: 10-13 h",MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Klf_L,NaN,1/d,Dead-leaf fall turnover - Low layer,carbon_turnover,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+fab_L,NaN,-,Above-ground sapwood fraction - Low layer,carbon_allocation,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+fbe_L,NaN,-,Below-ground sapwood fraction - Low layer,carbon_allocation,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+ff_r_L,NaN,-,Fruit/reproduction allocation - Low layer,carbon_allocation,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+ZR50_L,NaN,mm,Rooting depth (50%) - Low layer,roots,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+ZRmax_L,NaN,mm,Maximum rooting depth - Low layer,roots,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Vx_L,10,mm/m^2 PFT,Xylem water storage - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+Vl_L,10,mm/m^2 PFT,Leaf water storage - Low layer,plant_hydraulics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+OM_L,1,-,Optical multiplier - Low layer,canopy_optics,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.
+PFT_opt_L,Veg_Optical_Parameter(0),-,Optical property set - Low layer; class 0 returns NaN (disabled),canopy_optics,L,no,chiL / alpha_L / tau_L: chiL -0.30 to 0.25; refl 0.07-0.58; transm 0.001-0.38,Veg_Optical_Parameter.m,tc_source_code,PFT_Class <= 0 returns NaN optics - confirms the Low layer is switched off.
+ParEx_L,Exudation_Parameter(0),-,Root exudation parameter set - Low layer (0 = inactive),biogeochemistry,L,no,,Exudation_Parameter.m,tc_source_code,Low layer inactive.
+Mpar_L,Vegetation_Management_Parameter,-,Management parameter set - Low layer,management,L,no,,MOD_PARAM_US_xRM.m,code_comment,Low layer inactive.

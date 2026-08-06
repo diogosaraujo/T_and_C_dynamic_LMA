@@ -1,0 +1,41 @@
+variable,value_at_US_xRM,units,description,source_for_new_sites,category,notes
+Lat,40.28,degrees N,Site latitude,AmeriFlux site registry (site_metadata.csv),forcing_metadata,"Also drives solar geometry; use the TRUE tower coordinate, not the ERA5 grid point."
+Lon,-105.55,degrees E,Site longitude,AmeriFlux site registry,forcing_metadata,Same - true tower coordinate.
+DeltaGMT,0,h,Offset of the forcing timestamps from UTC,Set to 0: ERA5-Land forcing is UTC,forcing_metadata,CLAUDE.md 4.
+t_bef,1,h,Sun-averaging window before the hour,Per-PRODUCT constant: ERA5-Land = 1,forcing_metadata,"Set once per forcing product, not per site."
+t_aft,0,h,Sun-averaging window after the hour,Per-PRODUCT constant: ERA5-Land = 0,forcing_metadata,"Set once per forcing product, not per site."
+Zbas,2753,m a.s.l.,Site elevation used by the radiation partition,"AmeriFlux LOCATION_ELEV, else Copernicus GLO-30 (orthometric)",forcing_metadata,Already retrieved for all stations by download_ameriflux.py --metadata-only.
+zatm,31,m,Reference (measurement) height for the atmospheric forcing,AmeriFlux BADM tower height; must exceed canopy height hc,site_geometry,Site-specific: tied to the tower. Sanity-check zatm > hc_H at every site.
+Ta / Pr / Ws / Pre / Tdew / ea / esat / Ca,-,various,Meteorological forcing series,ERA5-Land (download_era5_land.py); Ca from NOAA/Scripps + SSP,forcing,See preprocessing/README.md.
+SAB1 / SAB2 / SAD1 / SAD2 / PARB / PARD / N,-,W/m^2 and -,Radiation bands and cloudiness,Derived by C_Automatic_Radiation_Partition from ssrd,forcing,"N is DERIVED from the clearness index, never downloaded."
+Pcla,0.1,fraction,Clay fraction of the soil,"AmeriFlux BADM SOIL_TEX, else POLARIS / SSURGO / SoilGrids",soil,Sampled per layer for the layered profile (CLAUDE.md 6).
+Psan,0.45,fraction,Sand fraction of the soil,"AmeriFlux BADM SOIL_TEX, else POLARIS / SSURGO / SoilGrids",soil,Sampled per layer.
+Porg,0.07,fraction,Organic fraction of the soil,"AmeriFlux BADM SOIL_CHEM (OM = SOC x 1.72), else SoilGrids",soil,Sampled per layer.
+Color_Class,0,-,Soil colour class controlling soil albedo,Soil survey / imagery; PFT-region default otherwise,soil,"Kept out of the PFT table because it follows soil, not vegetation."
+"Osat, L, Pe, Ks, O33, rsd, lan_dry, lan_s, cv_s, K_usle",derived,various,Soil hydraulic and thermal properties,"DERIVED by Soil_parameters(Psan,Pcla,Porg) - Saxton & Rawls (2006)",soil,Never set by hand; they follow from texture. SPAR=2 selects the scheme and IS in the PFT table.
+"nVG, alpVG, m, p",derived,various,Van Genuchten retention parameters,DERIVED from L and Pe inside MOD_PARAM,soil,"Computed, not prescribed."
+Zs (deepest layer),1000,mm,Total soil column depth,Depth to bedrock: Pelletier (2016) / Shangguan (2017) / SoilGrids BDTICM,soil,"IN the PFT table as a starting mesh, but CLAUDE.md 6 warns 1 m is too shallow for deep-rooted forest - deepen per site (often 2-5 m)."
+hc_H,8,m,Canopy height of the High vegetation layer,"AmeriFlux BADM HEIGHTC, else Potapov (2021) / Simard (2011)",vegetation_site,"Initial condition, evolves during the run. Excluded from the PFT table: it varies strongly between stands of the same PFT."
+SAI_H,0.1,m^2/m^2,Stem area index - initial condition,Spin-up,initial_condition,
+Sl_H,0.017,m^2/gC,Specific leaf area,"PLSR remote-sensing LMA: Sl = 1/(LMA x f_C), f_C = 0.5",vegetation_site,THE experimental variable. Overwritten yearly by MAIN_FRAME_SLA.m in the dynamic-LMA branch and held fixed in the control.
+LAI_H,4.03,m^2/m^2,Leaf area index - initial condition,Spin-up (validate against BADM LAI),initial_condition,Diagnostic in the run: LAI = Sl x B(1).
+B_H,[215 327 262 244 1 0 5 0],gC/m^2,"Carbon pools: leaf, sapwood, fine root, reserve, fruit, heartwood, standing dead, idling",Spin-up to equilibrium; seed/validate with BADM AG_BIOMASS or NBCD/GEDI,initial_condition,"CLAUDE.md 5: spin up to a COMMON baseline, then branch fixed vs dynamic LMA."
+Rrootl_H,4200,m root/m^2,Root length density - initial condition,Spin-up,initial_condition,
+PHE_S_H,4,-,Phenological state - initial condition,Spin-up,initial_condition,
+dflo_H,0,day,Days from leaf onset - initial condition,Spin-up,initial_condition,
+AgeL_H,1172,day,Mean leaf age - initial condition,Spin-up,initial_condition,
+e_rel_H,1,-,Relative leaf efficiency - initial condition,Spin-up,initial_condition,
+TBio_H,300,ton DM/ha,Total standing biomass,"BADM AG_BIOMASS, else NBCD / GEDI",vegetation_site,
+"Nreserve_H, Preserve_H, Kreserve_H, FNC_H, NupI_H",various,various,Nutrient reserves and uptake - initial conditions,Spin-up,initial_condition,Only active with OPT_SoilBiogeochemistry = 1.
+"SWE, SND, ros, t_sls, tau_sno, In_SWE, SP_wc",0,various,Snowpack state - initial conditions,Spin-up,initial_condition,
+"Ts, Tdamp, Tdp, Sdp, TdpI_H, TdpI_L",from Ta(1),degC,Soil and surface temperature - initial conditions,Spin-up,initial_condition,
+"O, V",Ohy+0.15,fraction and mm,Soil moisture - initial conditions,Spin-up,initial_condition,
+"WAT, ICE, ICE_D, IP_wc, EK, FROCK, Ws_under, In_L, In_H, In_urb, In_rock, In_Litter, BLit",0,various,Miscellaneous state - initial conditions,Spin-up,initial_condition,
+"Ci_sunH, Ci_shdH, Ci_sunL, Ci_shdL",Ca(1),umolCO2/mol,Intercellular CO2 - initial conditions,Set from the first CO2 forcing value,initial_condition,
+"LAI_L, B_L, Rrootl_L, PHE_S_L, dflo_L, AgeL_L, e_rel_L, hc_L, SAI_L, TBio_L",0,various,Low-vegetation-layer initial conditions,All zero while the Low layer is disabled; from spin-up if an understorey is ever activated,initial_condition,PHE_S_L = 1 and the rest 0 at US_xRM. Keep zeroed for closed-canopy forest sites.
+"Nreserve_L, Preserve_L, Kreserve_L, FNC_L, NupI_L",1 or 0,various,Low-layer nutrient reserves - initial conditions,Spin-up,initial_condition,Only active with OPT_SoilBiogeochemistry = 1; Low layer disabled here.
+RexmyI,[0 0 0],various,Root exudation / mycorrhizal exchange - initial condition,Spin-up,initial_condition,Only active with OPT_SoilBiogeochemistry = 1.
+ms,13,-,Number of soil layers,Follows the chosen Zs mesh: length(Zs) == ms+1,soil_mesh,"Set in the launcher (GO_<site>.m), not MOD_PARAM."
+"NN, NNd, Datam",-,-,Time-stepping counters and date matrix,Derived from the forcing length,forcing_metadata,
+Lmax_day,derived,h,Maximum day length over the run,Computed by SetSunVariables from Lat/Lon/date,forcing_metadata,Latitude dependent - recomputed automatically per site.
+id_location,-,-,Site identifier,Set in the launcher AFTER the forcing load,forcing_metadata,CLAUDE.md 4.

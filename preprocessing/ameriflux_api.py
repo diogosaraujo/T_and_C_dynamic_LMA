@@ -61,6 +61,36 @@ DEFAULT_DESCRIPTION = (
 # ----------------------------------------------------------------------------------
 PARAMETER_TARGETS = [
     {
+        "key": "lma",
+        "patterns": ["LMA"],
+        "tc_use": "Sl_H = 1/(LMA x f_C) — GROUND TRUTH for the study's central variable",
+        "fallback": "PLSR remote-sensing LMA only, with no in-situ check",
+    },
+    {
+        "key": "sapwood_area",
+        "patterns": ["GRP_SA", "SA_MAX", "SAPWOOD"],
+        "tc_use": "Axyl_H — sapwood area per unit ground area",
+        "fallback": "PFT-prescribed (15 cm2/m2 at US_xRM)",
+    },
+    {
+        "key": "terrain",
+        "patterns": ["TERRAIN", "ASPECT", "SURFACE_HOMOGENEITY"],
+        "tc_use": "Slo_top / SvF — plot-scale runs assume flat; a sloping site breaks that",
+        "fallback": "assume flat (Slo_top = 0), as at US_xRM",
+    },
+    {
+        "key": "snow_cover",
+        "patterns": ["SNOW_COVER"],
+        "tc_use": "validation target for the snow module (TminS/TmaxS, sublimation)",
+        "fallback": "no observational check on simulated snow duration",
+    },
+    {
+        "key": "nep",
+        "patterns": ["GRP_NEP", "NEP"],
+        "tc_use": "reported net ecosystem production — independent flux validation target",
+        "fallback": "tower BASE fluxes only",
+    },
+    {
         "key": "canopy_height",
         "patterns": ["HEIGHTC"],
         "tc_use": "hc — canopy height (High vegetation layer)",

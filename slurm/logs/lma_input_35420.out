@@ -1,0 +1,155 @@
+job        : 35420
+node       : soeepyc16
+started    : 2026-08-07T04:29:03Z
+plsr root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+eco root   : /vol_efthymios/NFS07/dd1136/ecoregions
+pred root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_inputs_pixel_climatology_DOY/LMA
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+
+pred tables: 78 LMA_ecoregion_no*.csv
+stations   : 101 (17 excluded)
+years      : 1985-2021
+plsr root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+eco root   : /vol_efthymios/NFS07/dd1136/ecoregions
+pred root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_inputs_pixel_climatology_DOY/LMA/LMA_ecoregion_no<ii>.csv
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+modelled   : RECONSTRUCTED from fit coefficients
+matching   : nearest pixel outright; its own mean if the fit has one, else the ecoregion mean
+
+  eco1 evergreen (3 stations): 453 pixels, reconstructed from PLSR_fitting_coeff_eco1_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no1.csv: 16173 pixel-years over 450 pixel(s) (132 with a pixel mean, the rest on the ecoregion mean 88.3 g/m2), 5 predictor(s), 111 row(s) with an imputed predictor, 46 fit pixel(s) changed class, dropped 3 pixel(s) with no usable predictor in any year
+      US-Ho1    pixel    209    3.181 km  obs  0y mod 37y  [ecoregion_mean]
+      US-Ho2    pixel    209    3.816 km  obs  0y mod 37y  [ecoregion_mean]
+      US-Ho3    pixel    209    2.225 km  obs  0y mod 37y  [ecoregion_mean]
+  eco2 evergreen (2 stations): 621 pixels, reconstructed from PLSR_fitting_coeff_eco2_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no2.csv: 21829 pixel-years over 621 pixel(s) (611 with a pixel mean, the rest on the ecoregion mean 121.3 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-Fmf    pixel    238    5.348 km  obs 15y mod 37y  [pixel_mean]
+      US-Fuf    pixel    220    3.667 km  obs 14y mod 37y  [pixel_mean]
+  eco5 deciduous (1 station): 31 pixels, reconstructed from PLSR_fitting_coeff_eco5_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no5.csv: 957 pixel-years over 31 pixel(s) (14 with a pixel mean, the rest on the ecoregion mean 81.5 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 1 fit pixel(s) changed class
+      US-Slt    pixel     60   12.659 km  obs  0y mod 37y  [ecoregion_mean]
+  eco7 deciduous (3 stations): 445 pixels, reconstructed from PLSR_fitting_coeff_eco7_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no7.csv: 16340 pixel-years over 445 pixel(s) (382 with a pixel mean, the rest on the ecoregion mean 82.4 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 12 fit pixel(s) changed class
+      US-Cwt    pixel    142    5.181 km  obs 17y mod 37y  [pixel_mean]
+      US-xGR    pixel    124    1.235 km  obs  5y mod 37y  [pixel_mean]
+      US-xSC    pixel    447    3.508 km  obs 21y mod 37y  [pixel_mean]
+  eco10 evergreen (3 stations): 650 pixels, reconstructed from PLSR_fitting_coeff_eco10_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no10.csv: 23503 pixel-years over 650 pixel(s) (647 with a pixel mean, the rest on the ecoregion mean 148.6 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 1 fit pixel(s) changed class
+      US-Wrc    pixel    477     4.37 km  obs 14y mod 37y  [pixel_mean]
+      US-xAB    pixel    339    4.796 km  obs 12y mod 37y  [pixel_mean]
+      US-xWR    pixel    477     4.37 km  obs 14y mod 37y  [pixel_mean]
+  eco17 deciduous (1 station): 61 pixels, reconstructed from PLSR_fitting_coeff_eco17_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no17.csv: 1913 pixel-years over 61 pixel(s) (61 with a pixel mean, the rest on the ecoregion mean 119.5 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-xUK    pixel    199   25.231 km  obs 29y mod 37y  [pixel_mean]
+  eco19 evergreen (1 station): 584 pixels, reconstructed from PLSR_fitting_coeff_eco19_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no19.csv: 20546 pixel-years over 571 pixel(s) (558 with a pixel mean, the rest on the ecoregion mean 134.9 g/m2), 5 predictor(s), 420 row(s) with an imputed predictor, 3 fit pixel(s) changed class, dropped 13 pixel(s) with no usable predictor in any year
+      US-MRf    pixel    428     6.44 km  obs 14y mod 37y  [pixel_mean]
+  eco25 evergreen (5 stations): 355 pixels, reconstructed from PLSR_fitting_coeff_eco25_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no25.csv: 12125 pixel-years over 355 pixel(s) (349 with a pixel mean, the rest on the ecoregion mean 152.2 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-Me1    pixel    159    2.291 km  obs 13y mod 18y  [pixel_mean]
+      US-Me7    pixel    119    5.999 km  obs 13y mod 37y  [pixel_mean]
+      US-Me2    pixel    119    6.198 km  obs 13y mod 37y  [pixel_mean]
+      US-Me4    pixel    119    1.875 km  obs 13y mod 37y  [pixel_mean]
+      US-Me6    pixel    121    2.603 km  obs 14y mod 37y  [pixel_mean]
+  eco32 deciduous (1 station): 13 pixels, reconstructed from PLSR_fitting_coeff_eco32_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no32.csv: 364 pixel-years over 13 pixel(s) (13 with a pixel mean, the rest on the ecoregion mean 74.2 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-Oho    pixel    142    6.235 km  obs 24y mod 37y  [pixel_mean]
+  eco34 deciduous (1 station): 712 pixels, reconstructed from PLSR_fitting_coeff_eco34_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no34.csv: 24864 pixel-years over 712 pixel(s) (712 with a pixel mean, the rest on the ecoregion mean 105.4 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-MMS    pixel    566    2.822 km  obs 21y mod 37y  [pixel_mean]
+  eco35 deciduous (1 station): 272 pixels, reconstructed from PLSR_fitting_coeff_eco35_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no35.csv: 9106 pixel-years over 272 pixel(s) (271 with a pixel mean, the rest on the ecoregion mean 113.8 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-MOz    pixel     46    4.904 km  obs 26y mod 37y  [pixel_mean]
+  eco38 evergreen (1 station): 20 pixels, reconstructed from PLSR_fitting_coeff_eco38_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no38.csv: 561 pixel-years over 20 pixel(s) (20 with a pixel mean, the rest on the ecoregion mean 111.7 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-MtB    pixel     66     2.99 km  obs 12y mod 19y  [pixel_mean]
+  eco39 evergreen (2 stations): 163 pixels, reconstructed from PLSR_fitting_coeff_eco39_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no39.csv: 4810 pixel-years over 162 pixel(s) (158 with a pixel mean, the rest on the ecoregion mean 88.8 g/m2), 5 predictor(s), 35 row(s) with an imputed predictor, 0 fit pixel(s) changed class, dropped 1 pixel(s) with no usable predictor in any year
+      US-NC3    pixel    419   24.618 km  obs 17y mod 37y  [pixel_mean]
+      US-NC2    pixel    419   23.825 km  obs 17y mod 37y  [pixel_mean]
+  eco40 evergreen (3 stations): 1083 pixels, reconstructed from PLSR_fitting_coeff_eco40_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no40.csv: 35693 pixel-years over 1083 pixel(s) (1074 with a pixel mean, the rest on the ecoregion mean 121.0 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-Blk    pixel    124    6.141 km  obs 29y mod 37y  [pixel_mean]
+      US-TEF    pixel    291    5.434 km  obs 32y mod 37y  [pixel_mean]
+      US-xYE    pixel   1528    6.016 km  obs 28y mod 37y  [pixel_mean]
+  eco47 evergreen (1 station): 229 pixels, reconstructed from PLSR_fitting_coeff_eco47_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no47.csv: 7659 pixel-years over 229 pixel(s) (12 with a pixel mean, the rest on the ecoregion mean 115.9 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 5 fit pixel(s) changed class
+      US-CS2    pixel    869   16.312 km  obs  0y mod 37y  [ecoregion_mean]
+  eco49 deciduous (6 stations): 1337 pixels, reconstructed from PLSR_fitting_coeff_eco49_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no49.csv: 49019 pixel-years over 1337 pixel(s) (759 with a pixel mean, the rest on the ecoregion mean 81.5 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 48 fit pixel(s) changed class
+      US-Bar    pixel    926    4.049 km  obs 22y mod 37y  [pixel_mean]
+      US-Ha1    pixel    761    7.211 km  obs  0y mod 37y  [ecoregion_mean]
+      US-HBK    pixel    851    4.646 km  obs  0y mod 37y  [ecoregion_mean]
+      US-LPH    pixel    735    6.576 km  obs  0y mod 37y  [ecoregion_mean]
+      US-xBR    pixel    926     4.14 km  obs 22y mod 37y  [pixel_mean]
+      US-xHA    pixel    761    7.234 km  obs  0y mod 37y  [ecoregion_mean]
+  eco49 evergreen (1 station): 1337 pixels, reconstructed from PLSR_fitting_coeff_eco49_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no49.csv: 49019 pixel-years over 1337 pixel(s) (214 with a pixel mean, the rest on the ecoregion mean 94.9 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 67 fit pixel(s) changed class
+      US-Ha2    pixel    735    6.988 km  obs  0y mod 37y  [ecoregion_mean]
+  eco53 deciduous (17 stations): 1168 pixels, reconstructed from PLSR_fitting_coeff_eco53_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no53.csv: 40636 pixel-years over 1168 pixel(s) (942 with a pixel mean, the rest on the ecoregion mean 104.2 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 33 fit pixel(s) changed class
+      US-Wi3    pixel   1311     3.86 km  obs 33y mod 37y  [pixel_mean]
+      US-PFc    pixel   1470   16.309 km  obs 32y mod 37y  [pixel_mean]
+      US-PFi    pixel   1470   18.981 km  obs 32y mod 37y  [pixel_mean]
+      US-PFj    pixel   1470   20.351 km  obs 32y mod 37y  [pixel_mean]
+      US-PFk    pixel   1437   19.992 km  obs 32y mod 37y  [pixel_mean]
+      US-PFL    pixel   1470   18.798 km  obs 32y mod 37y  [pixel_mean]
+      US-PFm    pixel   1526   21.079 km  obs 32y mod 37y  [pixel_mean]
+      US-PFn    pixel   1470   20.057 km  obs 32y mod 37y  [pixel_mean]
+      US-PFp    pixel   1526   19.794 km  obs 32y mod 37y  [pixel_mean]
+      US-PFq    pixel   1526   18.171 km  obs 32y mod 37y  [pixel_mean]
+      US-PFs    pixel   1526   18.716 km  obs 32y mod 37y  [pixel_mean]
+      US-Wi1    pixel   1284    4.218 km  obs 32y mod 37y  [pixel_mean]
+      US-UMB    pixel    196    8.062 km  obs 27y mod 37y  [pixel_mean]
+      US-UMd    pixel    196    9.001 km  obs 27y mod 37y  [pixel_mean]
+      US-WCr    pixel   1526    1.715 km  obs 32y mod 37y  [pixel_mean]
+      US-xST    pixel   1613     1.45 km  obs 21y mod 22y  [pixel_mean]
+      US-xTR    pixel   1613    1.317 km  obs 21y mod 22y  [pixel_mean]
+  eco53 evergreen (7 stations): 1168 pixels, reconstructed from PLSR_fitting_coeff_eco53_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no53.csv: 40636 pixel-years over 1168 pixel(s) (96 with a pixel mean, the rest on the ecoregion mean 103.1 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 16 fit pixel(s) changed class
+      US-NMj    pixel   1800    5.379 km  obs  0y mod 37y  [ecoregion_mean]
+      US-Wi4    pixel   1284    5.069 km  obs  0y mod 37y  [ecoregion_mean]
+      US-PFb    pixel   1470   15.418 km  obs  0y mod 37y  [ecoregion_mean]
+      US-PFg    pixel   1470   17.176 km  obs  0y mod 37y  [ecoregion_mean]
+      US-PFh    pixel   1470   20.221 km  obs  0y mod 37y  [ecoregion_mean]
+      US-PFt    pixel   1526   16.632 km  obs  0y mod 37y  [ecoregion_mean]
+      US-Wi2    pixel   1284    3.884 km  obs  0y mod 37y  [ecoregion_mean]
+  eco61 deciduous (1 station): 1410 pixels, reconstructed from PLSR_fitting_coeff_eco61_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no61.csv: 47396 pixel-years over 1410 pixel(s) (948 with a pixel mean, the rest on the ecoregion mean 89.4 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 202 fit pixel(s) changed class
+      US-Dk2    pixel   1296    2.936 km  obs 17y mod 37y  [pixel_mean]
+  eco61 evergreen (3 stations): 1410 pixels, reconstructed from PLSR_fitting_coeff_eco61_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no61.csv: 47396 pixel-years over 1410 pixel(s) (586 with a pixel mean, the rest on the ecoregion mean 95.2 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 213 fit pixel(s) changed class
+      US-SB1    pixel   1304    8.036 km  obs  0y mod 37y  [ecoregion_mean]
+      US-Dk3    pixel   1296     2.48 km  obs  0y mod 37y  [ecoregion_mean]
+      US-NC5    pixel   1363    4.959 km  obs  0y mod 37y  [ecoregion_mean]
+  eco63 deciduous (6 stations): 939 pixels, reconstructed from PLSR_fitting_coeff_eco63_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no63.csv: 33542 pixel-years over 939 pixel(s) (919 with a pixel mean, the rest on the ecoregion mean 83.2 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 30 fit pixel(s) changed class
+      US-WBW    pixel    243    4.719 km  obs 21y mod 37y  [pixel_mean]
+      US-ChR    pixel    244    4.525 km  obs 21y mod 37y  [pixel_mean]
+      US-SSH    pixel    868    3.819 km  obs 22y mod 37y  [pixel_mean]
+      US-xBL    pixel    830    12.96 km  obs  4y mod  4y  [pixel_mean]
+      US-xML    pixel    479    3.259 km  obs 21y mod 37y  [pixel_mean]
+      US-xRN    pixel    243    4.288 km  obs 21y mod 37y  [pixel_mean]
+  eco64 evergreen (6 stations): 382 pixels, reconstructed from PLSR_fitting_coeff_eco64_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no64.csv: 13183 pixel-years over 382 pixel(s) (381 with a pixel mean, the rest on the ecoregion mean 150.0 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 0 fit pixel(s) changed class
+      US-CZ2    pixel    344    5.178 km  obs 15y mod 37y  [pixel_mean]
+      US-CZ3    pixel    354    3.651 km  obs 15y mod 37y  [pixel_mean]
+      US-CZ4    pixel    374    3.802 km  obs 11y mod 37y  [pixel_mean]
+      US-SHC    pixel    188    4.895 km  obs  8y mod 31y  [pixel_mean]
+      US-xSP    pixel    344    5.006 km  obs 15y mod 37y  [pixel_mean]
+      US-xTE    pixel    375    0.836 km  obs 14y mod 37y  [pixel_mean]
+  eco67 evergreen (2 stations): 1004 pixels, reconstructed from PLSR_fitting_coeff_eco67_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no67.csv: 34604 pixel-years over 1004 pixel(s) (980 with a pixel mean, the rest on the ecoregion mean 137.0 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 18 fit pixel(s) changed class
+      US-CRK    pixel    172    5.701 km  obs 20y mod 37y  [pixel_mean]
+      US-Cst    pixel   1434     5.27 km  obs 22y mod 37y  [pixel_mean]
+  eco68 deciduous (2 stations): 1903 pixels, reconstructed from PLSR_fitting_coeff_eco68_deciduos_oofcv_TEMPORAL.mat over LMA_ecoregion_no68.csv: 61973 pixel-years over 1903 pixel(s) (389 with a pixel mean, the rest on the ecoregion mean 107.1 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 139 fit pixel(s) changed class
+      US-xLE    pixel    925    6.301 km  obs  0y mod 37y  [ecoregion_mean]
+      US-xSE    pixel   3135    3.633 km  obs 21y mod 37y  [pixel_mean]
+  eco68 evergreen (2 stations): 1903 pixels, reconstructed from PLSR_fitting_coeff_eco68_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no68.csv: 61973 pixel-years over 1903 pixel(s) (1560 with a pixel mean, the rest on the ecoregion mean 115.0 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 260 fit pixel(s) changed class
+      US-xJE    pixel   1879   12.073 km  obs 16y mod 37y  [pixel_mean]
+      US-xTA    pixel   1214     5.54 km  obs 12y mod 37y  [pixel_mean]
+  eco72 evergreen (8 stations): 402 pixels, reconstructed from PLSR_fitting_coeff_eco72_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no72.csv: 11394 pixel-years over 400 pixel(s) (395 with a pixel mean, the rest on the ecoregion mean 110.6 g/m2), 5 predictor(s), 74 row(s) with an imputed predictor, 0 fit pixel(s) changed class, dropped 2 pixel(s) with no usable predictor in any year
+      US-SP3    pixel    556    6.149 km  obs 16y mod 37y  [pixel_mean]
+      US-SP2    pixel    556    5.832 km  obs 16y mod 37y  [pixel_mean]
+      US-DPP    pixel   1069    35.83 km  obs  1y mod 16y  [pixel_mean]
+      US-SP4    pixel    556    0.432 km  obs 16y mod 37y  [pixel_mean]
+      US-HB2    pixel   1317    9.904 km  obs 17y mod 37y  [pixel_mean]
+      US-HB3    pixel   1317    8.533 km  obs 17y mod 37y  [pixel_mean]
+      US-SP1    pixel    557    4.609 km  obs 16y mod 37y  [pixel_mean]
+      US-xSB    pixel    656     1.35 km  obs 15y mod 37y  [pixel_mean]
+  eco75 evergreen (11 stations): 1033 pixels, reconstructed from PLSR_fitting_coeff_eco75_evergreen_oofcv_TEMPORAL.mat over LMA_ecoregion_no75.csv: 35886 pixel-years over 1033 pixel(s) (899 with a pixel mean, the rest on the ecoregion mean 130.8 g/m2), 5 predictor(s), 0 row(s) with an imputed predictor, 9 fit pixel(s) changed class
+      US-GBT    pixel    842    5.043 km  obs 16y mod 37y  [pixel_mean]
+      US-CPF    pixel    967    3.031 km  obs 21y mod 36y  [pixel_mean]
+      US-CPk    pixel    890    3.888 km  obs 26y mod 35y  [pixel_mean]
+      US-GLE    pixel    842    4.996 km  obs 16y mod 37y  [pixel_mean]
+      US-MEF    pixel   1395    0.217 km  obs 23y mod 37y  [pixel_mean]
+      US-NR1    pixel   1150    5.422 km  obs 28y mod 37y  [pixel_mean]
+      US-Vcm    pixel    714     3.17 km  obs 15y mod 28y  [pixel_mean]
+      US-Vcp    pixel    656    4.004 km  obs 24y mod 37y  [pixel_mean]
+      US-Vcs    pixel    656    2.522 km  obs 24y mod 37y  [pixel_mean]
+      US-xNW    pixel   1094    5.298 km  obs 22y mod 37y  [pixel_mean]
+      US-xRM    pixel   1147    4.726 km  obs 17y mod 37y  [pixel_mean]
+
+wrote 101/101 stations to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+  21 station(s) sit on a pixel the fit never saw as their forest type -- ecoregion mean used as the baseline
+  manifest: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma/lma_manifest.csv
+
+finished   : 2026-08-07T04:30:06Z
+exit status: 0
+1.7M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma

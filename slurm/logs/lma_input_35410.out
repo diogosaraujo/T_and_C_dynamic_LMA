@@ -1,0 +1,50 @@
+job        : 35410
+node       : soeepyc16
+started    : 2026-08-07T01:38:59Z
+plsr root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+eco root   : /vol_efthymios/NFS07/dd1136/ecoregions
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+
+stations   : 101 (17 excluded)
+years      : 1985-2021
+plsr root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+eco root   : /vol_efthymios/NFS07/dd1136/ecoregions
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+modelled   : RECONSTRUCTED from fit coefficients
+fallback   : whole-series ecoregion median
+
+  ! eco1 evergreen (3 stations): RuntimeError: ecoregion_no1.csv: predictor column(s) absent: SSRD - 7mo
+  ! eco2 evergreen (2 stations): RuntimeError: ecoregion_no2.csv: predictor column(s) absent: SSRD - 10mo
+  ! eco5 deciduous (1 station): RuntimeError: ecoregion_no5.csv: predictor column(s) absent: SSRD - Fall
+  ! eco7 deciduous (3 stations): RuntimeError: ecoregion_no7.csv: predictor column(s) absent: SSRD
+  ! eco10 evergreen (3 stations): RuntimeError: ecoregion_no10.csv: predictor column(s) absent: SSRD - 3mo
+  ! eco17 deciduous (1 station): RuntimeError: ecoregion_no17.csv: predictor column(s) absent: SSRD - Fall
+  ! eco19 evergreen (1 station): RuntimeError: ecoregion_no19.csv: predictor column(s) absent: SSRD - Winter
+  ! eco25 evergreen (5 stations): RuntimeError: ecoregion_no25.csv: predictor column(s) absent: SSRD
+  ! eco32 deciduous (1 station): RuntimeError: ecoregion_no32.csv: predictor column(s) absent: SSRD - 0mo
+  ! eco34 deciduous (1 station): RuntimeError: ecoregion_no34.csv: predictor column(s) absent: SSRD - Fall
+  ! eco35 deciduous (1 station): RuntimeError: ecoregion_no35.csv: predictor column(s) absent: SSRD - Fall
+  ! eco38 evergreen (1 station): RuntimeError: ecoregion_no38.csv: predictor column(s) absent: SSRD - 9mo
+  ! eco39 evergreen (2 stations): RuntimeError: ecoregion_no39.csv: predictor column(s) absent: SSRD - 1mo
+  ! eco40 evergreen (3 stations): RuntimeError: ecoregion_no40.csv: predictor column(s) absent: SSRD - Fall
+  ! eco47 evergreen (1 station): RuntimeError: ecoregion_no47.csv: predictor column(s) absent: SSRD - 8mo
+  ! eco49 deciduous (6 stations): RuntimeError: ecoregion_no49.csv: predictor column(s) absent: SSRD - 11mo
+  ! eco49 evergreen (1 station): RuntimeError: ecoregion_no49.csv: predictor column(s) absent: SSRD - 0mo
+  ! eco53 deciduous (17 stations): RuntimeError: ecoregion_no53.csv: predictor column(s) absent: SSRD - 8mo
+  ! eco53 evergreen (7 stations): RuntimeError: ecoregion_no53.csv: predictor column(s) absent: SSRD - 4mo
+  ! eco61 deciduous (1 station): RuntimeError: ecoregion_no61.csv: predictor column(s) absent: SSRD - 6mo
+  ! eco61 evergreen (3 stations): RuntimeError: ecoregion_no61.csv: predictor column(s) absent: SSRD
+  ! eco63 deciduous (6 stations): RuntimeError: ecoregion_no63.csv: predictor column(s) absent: SSRD
+  ! eco64 evergreen (6 stations): RuntimeError: ecoregion_no64.csv: predictor column(s) absent: SSRD - 6mo
+  ! eco67 evergreen (2 stations): RuntimeError: ecoregion_no67.csv: predictor column(s) absent: SSRD - 2mo
+  ! eco68 deciduous (2 stations): RuntimeError: ecoregion_no68.csv: predictor column(s) absent: SSRD - Fall
+  ! eco68 evergreen (2 stations): RuntimeError: ecoregion_no68.csv: predictor column(s) absent: SSRD - Winter
+  ! eco72 evergreen (8 stations): RuntimeError: ecoregion_no72.csv: predictor column(s) absent: SSRD - 5mo
+  ! eco75 evergreen (11 stations): RuntimeError: ecoregion_no75.csv: predictor column(s) absent: SSRD - Winter
+
+wrote 0/101 stations to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+  manifest: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma/lma_manifest.csv
+
+finished   : 2026-08-07T01:39:55Z
+exit status: 1
+29K	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma

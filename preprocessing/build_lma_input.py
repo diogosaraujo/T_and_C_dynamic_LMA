@@ -14,7 +14,15 @@ which of the two it came from, so the fallback is never silent.
 Inputs (on the cluster, outside this repo):
 
     <plsr-root>/eco<ii>/time/PLSR_predictions_eco<ii>_<forest>_oofcv.mat
-    <ecoregion-root>/ecoregion_no<ii>.csv        -- Pixel ID, lat, lon
+    <plsr-root>/eco<ii>/time/PLSR_fitting_coeff_eco<ii>_<forest>_oofcv_TEMPORAL.mat
+    <predictor-root>/LMA_ecoregion_no<ii>.csv    -- Pixel ID, lat, lon, LU, time, predictors
+
+The predictor table is the one the MATLAB fit itself read (resolve_input_table:
+<OutRoot>/PLSR_inputs_pixel_climatology_DOY/LMA/). It is also the coordinate
+source, so pixel IDs, coordinates and predictors always come from a single
+vintage. The older ecoregion_no<ii>.csv at the ecoregions root lacks the SSRD
+columns every fit selected and may index pixels differently; it is used only if
+nothing else is present, and then it is flagged in the log.
 
 Output:
 
@@ -50,6 +58,9 @@ DEFAULT_OUT = INPUT_ROOT / "lma"
 
 ECOREGION_ROOT = Path("/vol_efthymios/NFS07/dd1136/ecoregions")
 DEFAULT_PLSR_ROOT = ECOREGION_ROOT / "PLSR_temporal_cv_pixel_climatology_DOY" / "LMA"
+# opts.InputDir in the MATLAB pipeline: fullfile(OutRoot, this, target_name).
+PLSR_INPUT_SUBDIR = Path("PLSR_inputs_pixel_climatology_DOY")
+DEFAULT_PREDICTOR_ROOT = ECOREGION_ROOT / PLSR_INPUT_SUBDIR / "LMA"
 
 # PLSR_TEMPORAL_CV_OOF_METRICS_PIXEL_DOY_CORE.m spells the first class 'deciduos'
 # (missing a 'u'). Try the typo first, then the correct spelling, so the script
@@ -257,7 +268,7 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[np.nd
     The pipeline only predicted rows that survived rmmissing on the response, so
     yfit_plot_abs inherits the observations' gaps. The predictors are ~98% complete
     in every year, so evaluating the same coefficients over every row of
-    ecoregion_no<ii>.csv fills those years. This reproduces predict_with_fit exactly:
+    LMA_ecoregion_no<ii>.csv fills those years. This reproduces predict_with_fit exactly:
 
         X_anom   = X_raw - mu_X_pix_final(pix,:)
         X        = (X_anom - mu_X) ./ sigma_X ;  non-finite -> 0
@@ -387,10 +398,9 @@ def resolve_tables(predictor_root: Path, ecoregion_root: Path, eco: int,
 
     Mirrors resolve_input_table in the MATLAB pipeline, which reads from
     OutRoot/PLSR_inputs_pixel_climatology_DOY/<TARGET>/ and tries
-    '<TARGET>_ecoregion_no<ii>.csv' then 'ecoregion_no<ii>.csv'. The copy sitting
-    at the ecoregions root is a thinner vintage -- it has no SSRD columns at all,
-    and every fitted model selected an SSRD champion -- so it is tried last and
-    only serves as a coordinate source.
+    '<TARGET>_ecoregion_no<ii>.csv' then 'ecoregion_no<ii>.csv'. Those two are the
+    real inputs; the copies at the ecoregions root are an older vintage kept only
+    as a last resort (see is_legacy_table).
     """
     cands = [predictor_root / f"{target}_ecoregion_no{eco}.csv",
              predictor_root / f"ecoregion_no{eco}.csv",
@@ -404,11 +414,31 @@ def resolve_tables(predictor_root: Path, ecoregion_root: Path, eco: int,
     return out
 
 
-def missing_columns(path: Path, cols) -> list[str]:
+def is_legacy_table(path: Path, predictor_root: Path) -> bool:
+    """True for the older tables outside the directory the fit read.
+
+    Those lack the SSRD columns every fit selected, so they cannot support
+    --reconstruct, and there is no guarantee they index pixels the same way --
+    which matters because the pixel IDs in the .mat are resolved against them.
+    """
+    return path.parent.resolve() != predictor_root.resolve()
+
+
+def table_columns(path: Path) -> list[str]:
     with open(path, newline="", encoding="utf-8-sig") as fh:
-        header = next(csv.reader(fh), [])
-    have = {c.strip() for c in header}
+        return [c.strip() for c in next(csv.reader(fh), [])]
+
+
+def missing_columns(path: Path, cols) -> list[str]:
+    have = set(table_columns(path))
     return [c for c in cols if c not in have]
+
+
+def has_coord_columns(path: Path) -> bool:
+    cols = {c.lower() for c in table_columns(path)}
+    return (bool(cols & {"pixel id", "pixel_id", "pixelid"})
+            and bool(cols & {"lat", "latitude"})
+            and bool(cols & {"lon", "longitude"}))
 
 
 def pick_predictor_table(cands: list[Path], predictors) -> tuple[Path, dict[str, list[str]]]:
@@ -533,11 +563,12 @@ def main() -> int:
     p.add_argument("--plsr-root", type=Path, default=DEFAULT_PLSR_ROOT,
                    help="directory holding eco<ii>/time/PLSR_predictions_*.mat")
     p.add_argument("--ecoregion-root", type=Path, default=ECOREGION_ROOT,
-                   help="directory holding ecoregion_no<ii>.csv (pixel coordinates)")
+                   help="PLSR output root; only used to derive --predictor-root and as a "
+                        "last-resort source of the older ecoregion_no<ii>.csv")
     p.add_argument("--predictor-root", type=Path, default=None,
-                   help="directory holding the tables the fit was run on; defaults to "
-                        "<ecoregion-root>/PLSR_inputs_pixel_climatology_DOY/LMA. The copy at "
-                        "the ecoregions root has no SSRD columns, which every fit selected.")
+                   help="directory holding LMA_ecoregion_no<ii>.csv -- the tables the fit "
+                        "read, and this script's source of pixel coordinates AND predictors. "
+                        f"Default: <ecoregion-root>/{PLSR_INPUT_SUBDIR.as_posix()}/LMA")
     p.add_argument("--out", type=Path, default=DEFAULT_OUT)
     p.add_argument("--start-year", type=int, default=1985)
     p.add_argument("--end-year", type=int, default=2021)
@@ -558,7 +589,7 @@ def main() -> int:
     args = p.parse_args()
 
     if args.predictor_root is None:
-        args.predictor_root = args.ecoregion_root / "PLSR_inputs_pixel_climatology_DOY" / "LMA"
+        args.predictor_root = args.ecoregion_root / PLSR_INPUT_SUBDIR / "LMA"
 
     wanted = {s.strip() for s in args.stations.split(",") if s.strip()} if args.stations else None
     dropped = read_excluded(args.exclude_file)
@@ -577,7 +608,7 @@ def main() -> int:
     print(f"years      : {args.start_year}-{args.end_year}")
     print(f"plsr root  : {args.plsr_root}")
     print(f"eco root   : {args.ecoregion_root}")
-    print(f"pred root  : {args.predictor_root}"
+    print(f"pred root  : {args.predictor_root}/LMA_ecoregion_no<ii>.csv"
           f"{'' if args.predictor_root.is_dir() else '   <-- NOT FOUND'}")
     print(f"output     : {args.out}")
     print(f"modelled   : {'RECONSTRUCTED from fit coefficients' if args.reconstruct else 'yfit_plot_abs as stored'}")
@@ -594,21 +625,24 @@ def main() -> int:
         tag = f"eco{eco} {forest} ({len(members)} station{'s' if len(members) > 1 else ''})"
         mat = resolve_prediction_file(args.plsr_root, eco, forest)
         tables = resolve_tables(args.predictor_root, args.ecoregion_root, eco)
-        eco_csv = tables[0] if tables else args.ecoregion_root / f"ecoregion_no{eco}.csv"
         if mat is None or not tables:
-            why = "no prediction .mat" if mat is None else f"no ecoregion_no{eco}.csv"
+            why = ("no prediction .mat" if mat is None else
+                   f"no LMA_ecoregion_no{eco}.csv under {args.predictor_root}")
             print(f"  ! {tag}: {why} -- skipped")
             failures += 1
             for st in members:
                 manifest.append({**st, "status": "missing_input", "note": why})
             continue
         if args.dry_run:
-            print(f"  - {tag}: would read {mat.name} + {eco_csv.name}")
+            cols = table_columns(tables[0])
+            print(f"  - {tag}: would read {mat.name} + {tables[0]}")
+            print(f"      {len(cols)} columns, coords {'OK' if has_coord_columns(tables[0]) else 'MISSING'}"
+                  f", {sum(c.upper().startswith('SSRD') for c in cols)} SSRD column(s)"
+                  f"{'   <-- LEGACY TABLE' if is_legacy_table(tables[0], args.predictor_root) else ''}")
             continue
 
         try:
             pred = load_prediction_mat(mat)
-            coords = read_pixel_coords(eco_csv)
             obs = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),
                    np.asarray(pred["Y_plot_abs"], dtype=float))
             if args.reconstruct:
@@ -617,6 +651,9 @@ def main() -> int:
                     raise RuntimeError("no PLSR_fitting_coeff_*_TEMPORAL.mat to reconstruct from")
                 fit = read_fit_mat(fit_path)
                 ptab, _ = pick_predictor_table(tables, fit["predictors"])
+                # Coordinates come from the predictor table itself, so pixel IDs,
+                # coordinates and predictors are guaranteed to be one vintage.
+                eco_csv = ptab
                 ry, rp, rv, diag = reconstruct_modelled(fit, ptab, LU_BASE + FOREST_LU[forest])
                 if not len(rv):
                     raise RuntimeError(f"reconstruction produced no rows (LU filter: {diag})")
@@ -628,6 +665,15 @@ def main() -> int:
                 modelled = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),
                             np.asarray(pred["yfit_plot_abs"], dtype=float))
                 src = f"{mat.name}"
+                eco_csv = next((t for t in tables if has_coord_columns(t)), None)
+                if eco_csv is None:
+                    raise RuntimeError(
+                        "no candidate table carries Pixel ID/lat/lon: "
+                        + ", ".join(str(t) for t in tables))
+            coords = read_pixel_coords(eco_csv)
+            if is_legacy_table(eco_csv, args.predictor_root):
+                print(f"    ! coordinates from the legacy {eco_csv} -- pixel IDs may "
+                      f"not match the fit; check {args.predictor_root}")
         except Exception as exc:                                   # noqa: BLE001
             print(f"  ! {tag}: {type(exc).__name__}: {exc}")
             failures += 1
@@ -711,11 +757,13 @@ def main() -> int:
         json.dump({
             "plsr_root": str(args.plsr_root),
             "ecoregion_root": str(args.ecoregion_root),
+            "predictor_root": str(args.predictor_root),
+            "predictor_table": f"{args.predictor_root}/LMA_ecoregion_no<ii>.csv",
             "years": [args.start_year, args.end_year],
             "observed_field": "Y_plot_abs",
             "modelled_field": ("reconstructed: beta/mu/sigma from "
                                "PLSR_fitting_coeff_*_TEMPORAL.mat re-applied to the full "
-                               "ecoregion_no<ii>.csv predictor table, restricted to "
+                               "LMA_ecoregion_no<ii>.csv predictor table, restricted to "
                                "uniq_pix_final and LU = 40 + forest id")
                               if args.reconstruct else "yfit_plot_abs",
             "units": "g/m2 (leaf dry mass per unit leaf area)",

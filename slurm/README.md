@@ -186,21 +186,43 @@ with the soil-depth step when the `.mat` files are built.
 ## Time-varying LMA (PLSR temporal CV)
 
 ```bash
-sbatch slurm/submit_lma_input.sh                          # all stations
-sbatch slurm/submit_lma_input.sh --stations US-HBK,US-Ha2 # a subset
-sbatch slurm/submit_lma_input.sh --dry-run                # resolve inputs only
+sbatch slurm/submit_lma_input.sh --reconstruct             # all stations, gap-free
+sbatch slurm/submit_lma_input.sh --stations US-HBK,US-Ha2  # a subset
+sbatch slurm/submit_lma_input.sh --dry-run                 # resolve inputs only
+sbatch slurm/submit_lma_input.sh --audit                   # coverage, writes no series
 ```
 
 Reads the PLSR temporal-CV output already on the cluster — nothing is downloaded:
 
 ```
-$ECOREGION_ROOT/PLSR_temporal_cv_pixel_climatology_DOY/LMA/eco<ii>/time/PLSR_predictions_eco<ii>_<forest>_oofcv.mat
-$ECOREGION_ROOT/ecoregion_no<ii>.csv
+$PLSR_ROOT/eco<ii>/time/PLSR_predictions_eco<ii>_<forest>_oofcv.mat
+$PLSR_ROOT/eco<ii>/time/PLSR_fitting_coeff_eco<ii>_<forest>_oofcv_TEMPORAL.mat
+$PREDICTOR_ROOT/LMA_ecoregion_no<ii>.csv
 ```
 
-Override either with `PLSR_ROOT=... ECOREGION_ROOT=... sbatch ...`. Two series come
-out per station — `Y_plot_abs` (observed) and `yfit_plot_abs` (PLSR modelled) — into
-`$TC_INPUT_DATA/lma/<station>/`, in **g/m²**.
+with the defaults
+
+```
+PLSR_ROOT      = $ECOREGION_ROOT/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+PREDICTOR_ROOT = $ECOREGION_ROOT/PLSR_inputs_pixel_climatology_DOY/LMA
+```
+
+`PREDICTOR_ROOT` is `opts.InputDir` from the MATLAB pipeline — the table the fit
+itself read — and it supplies **both** the pixel coordinates and the predictors, so
+the two can never come from different vintages. The older `ecoregion_no<ii>.csv` at
+the ecoregions root carries no SSRD columns, which every fit selected as a champion;
+it is used only when nothing else is present, and the log says so. Override any of
+the three with `PLSR_ROOT=... ECOREGION_ROOT=... PREDICTOR_ROOT=... sbatch ...`.
+
+Two series come out per station — `Y_plot_abs` (observed) and `yfit_plot_abs` (PLSR
+modelled) — into `$TC_INPUT_DATA/lma/<station>/`, in **g/m²**.
+
+`--reconstruct` rebuilds the modelled series by re-applying
+`PLSR_fitting_coeff_*_TEMPORAL.mat` to every row of the predictor table instead of
+reading the stored `yfit_plot_abs`. Use it: the pipeline drops rows whose response is
+missing *before* predicting, so `yfit_plot_abs` exists only where an observation did
+and the stored series is **not** gap-free. Only pixels in `uniq_pix_final` (those that
+contributed to the fit) are used.
 
 Each station takes the nearest ecoregion pixel **that appears in the predictions**;
 matching against the ecoregion at large could land on a pixel the model never saw,

@@ -268,6 +268,40 @@ Pixels whose predictors are non-finite in **every** year are dropped outright (e
 a constant equal to their baseline — a flat series that would enter the experiment as
 a dynamic input while carrying no dynamics.
 
+### ERA5-Land fallback for years the table never emitted
+
+`PLSR_PREPROCESS_PIXEL_CLIM_DOY_CORE.m` writes a row only where the pixel's dominant
+NLCD class that year was forest **and** a DOY-climatology key existed, so a pixel-year
+can be missing even though the ERA5-Land forcing behind it exists. That is why ten
+stations came out with fewer than 37 years in job 35420 (US-xBL had 4).
+
+`era5_predictors.py` recomputes the predictors a fit selected straight from the
+monthly stacks in `/vol_efthymios/NFS07/Data/ERA5_Land/monthly/`, at the same
+sampling DOY (a per-`(pixel, LU)` constant, verified: 505 keys, none with two
+values), and predicts with the same baseline the rest of the station's series uses.
+Filled rows are labelled `pixel_mean_era5` / `ecoregion_mean_era5`. `--no-era5-fallback`
+leaves them blank.
+
+**Verify the port before trusting it:**
+
+```bash
+sbatch slurm/submit_verify_era5_predictors.sh 1 7 49 75
+```
+
+It recomputes predictors for rows that *are* in the table and compares against the
+stored values, so a transposed grid, a shifted time axis or an unflipped PET sign
+shows up as a mismatch rather than as a plausible wrong number. The 146 predictor
+names already match the real table header column-for-column.
+
+Two conventions the port has to honour and that are easy to get wrong: PET
+predictors are **negated** (`-1 * pet`), and two georeferences are in play —
+SPEI12/SPI3/SPI6/SPI12 are indexed `[lat, lon]` on a −180..180 grid, while
+SPEI3/SPEI6 and tp/tas/pet/ssrd are `[lon, lat]` on the native 0..360 grid.
+
+⚠️ `SI_to_SIdroughts` (behind the `-sev` predictors) lives in
+`/vol_efthymios/NFS07/dd1136/functions/` and is **inferred**, not ported. It is only
+reached if a fit selected a `-sev` predictor, and the run log says so when it happens.
+
 Needs `h5py`: the PLSR files are MATLAB `-v7.3`, i.e. HDF5, which `scipy.io.loadmat`
 cannot read. **Re-run `sbatch slurm/submit_setup_env.sh`** before first use; the job
 checks and exits with that instruction if it is missing.

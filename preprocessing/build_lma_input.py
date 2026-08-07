@@ -53,6 +53,8 @@ from pathlib import Path
 
 import numpy as np
 
+import era5_predictors
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SITE_LISTS = [
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv",
@@ -277,6 +279,22 @@ def read_fit_mat(path: Path) -> dict:
     return out
 
 
+def predict_from_raw(fit: dict, X_raw: np.ndarray, mu_X_row: np.ndarray,
+                     mu_Y_row: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """predict_with_fit, given raw predictors and the baselines to demean by.
+
+    Returns (absolute values, mask of non-finite predictors). Non-finite
+    predictors are zeroed after standardising, i.e. replaced by the mean, exactly
+    as the MATLAB does -- which quietly pulls a prediction toward its baseline, so
+    the mask is reported rather than discarded.
+    """
+    X = (X_raw - mu_X_row - fit["mu_X"]) / fit["sigma_X"]
+    bad = ~np.isfinite(X)
+    X = np.where(bad, 0.0, X)
+    yfit = fit["beta"][0] + X @ fit["beta"][1:]
+    return yfit * fit["sigma_Y"] + fit["mu_Y"] + mu_Y_row, bad
+
+
 def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[dict, dict]:
     """Re-apply the fitted model to EVERY row of the predictor table.
 
@@ -315,6 +333,7 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[dict,
     years, pixels, rows = [], [], []
     class_years: dict[int, set[int]] = {}
     seen_class: dict[int, set[str]] = {}
+    doy_by_pixel: dict[int, float] = {}
     with open(eco_csv, newline="", encoding="utf-8-sig") as fh:
         reader = csv.DictReader(fh)
         cols = {c.strip(): c for c in (reader.fieldnames or [])}
@@ -325,6 +344,7 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[dict,
         lu_col = cols.get("LU")
         # 'time' is a date string ('15-Jul-1985'); 'Year' is the plain year. Prefer it.
         t_col = cols.get("Year") or cols.get("year") or cols.get("time")
+        doy_col = cols.get("DOY")
         if not (pid_col and lu_col and t_col):
             raise RuntimeError(f"{eco_csv.name}: need Pixel ID, LU and Year/time columns")
         for r in reader:
@@ -337,6 +357,14 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[dict,
             seen_class.setdefault(pid, set()).add(str(r[lu_col]).strip())
             if lu == lu_value:
                 class_years.setdefault(pid, set()).add(yr)
+                # DOY is a per-(pixel, LU) constant -- it comes from a climatology
+                # table, not from the year -- so one value per pixel is enough to
+                # re-sample a year the table never emitted.
+                if doy_col and pid not in doy_by_pixel:
+                    try:
+                        doy_by_pixel[pid] = float(r[doy_col])
+                    except (TypeError, ValueError):
+                        pass
             vals = []
             for p in preds:
                 try:
@@ -352,7 +380,10 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[dict,
             "n_pixels_in_fit": len(pix_row),
             "n_pixels_class_switched": sum(1 for p, v in seen_class.items()
                                            if len(v) > 1 and p in pix_row),
-            "class_years": {p: len(v) for p, v in class_years.items()}}
+            "class_years": {p: len(v) for p, v in class_years.items()},
+            "doy_by_pixel": doy_by_pixel,
+            "eco_doy": (float(np.median(list(doy_by_pixel.values())))
+                        if doy_by_pixel else float("nan"))}
     if not rows:
         return {"years": np.array([]), "pixels": np.array([]),
                 "values": np.array([]), "pixel_mean": np.array([], bool)}, diag
@@ -365,16 +396,9 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[dict,
     mu_X_row = np.where(in_fit[:, None], fit["mu_X_pix_final"][idx, :], fit["mu_X_eco"])
     mu_Y_row = np.where(in_fit, fit["mu_Y_pix_final"][idx], fit["mu_Y_eco"])
 
-    X = (X_raw - mu_X_row - fit["mu_X"]) / fit["sigma_X"]
-    # predict_with_fit zeroes non-finite predictors, i.e. substitutes the mean. That
-    # silently degrades a prediction toward the baseline, so it is counted.
-    bad = ~np.isfinite(X)
-    X[bad] = 0.0
+    vals, bad = predict_from_raw(fit, X_raw, mu_X_row, mu_Y_row)
     diag["n_rows_with_imputed_predictor"] = int(np.any(bad, axis=1).sum())
     diag["n_rows_all_predictors_imputed"] = int(np.all(bad, axis=1).sum())
-
-    yfit = fit["beta"][0] + X @ fit["beta"][1:]
-    vals = yfit * fit["sigma_Y"] + fit["mu_Y"] + mu_Y_row
 
     # A pixel whose predictors are non-finite in EVERY year gets every predictor
     # zeroed, so its "prediction" is a constant equal to its baseline -- a flat series
@@ -529,6 +553,55 @@ def resolve_fit_file(plsr_root: Path, eco: int, forest: str) -> Path | None:
     return None
 
 
+def era5_fill(store, fit: dict, rows: list[dict], lat: float, lon: float, doy: float,
+              pix_index: int | None, tag: str) -> tuple[int, str]:
+    """Fill a station's missing years from the ERA5-Land monthly stacks.
+
+    The preprocessed table only emits a pixel-year whose dominant NLCD class was
+    forest and which had a DOY-climatology key, so a year can be absent even
+    though the ERA5-Land forcing behind it exists. This recomputes the predictors
+    that the fit selected, at the same sampling DOY, and predicts with the same
+    baseline the rest of the station's series uses -- the pixel mean when the fit
+    has one (pix_index), otherwise the ecoregion mean.
+
+    Returns (n filled, note).
+    """
+    missing = [r for r in rows if r["LMA_g_m2"] == ""]
+    if not missing or not math.isfinite(doy):
+        return 0, ""
+    preds = fit["predictors"]
+    sev = [p for p in preds if p.endswith("-sev")]
+    if pix_index is None:
+        mu_X_row, mu_Y_row = fit["mu_X_eco"], fit["mu_Y_eco"]
+        label = "ecoregion_mean"
+    else:
+        mu_X_row, mu_Y_row = fit["mu_X_pix_final"][pix_index], fit["mu_Y_pix_final"][pix_index]
+        label = "pixel_mean"
+
+    series = store.pixel_series(lat, lon)
+    n = 0
+    for r in missing:
+        try:
+            when = era5_predictors.doy_to_date(int(r["year"]), doy)
+            got = store.predictor_row(series, when, preds)
+        except Exception as exc:                                   # noqa: BLE001
+            print(f"      ! {tag} {r['year']}: {type(exc).__name__}: {exc}")
+            continue
+        X_raw = np.array([[got[p] for p in preds]], dtype=float)
+        if not np.any(np.isfinite(X_raw)):
+            continue
+        val, _ = predict_from_raw(fit, X_raw, mu_X_row, mu_Y_row)
+        r.update(LMA_g_m2=round(float(val[0]), 4), source=f"{label}_era5", n_values=1)
+        n += 1
+    note = ""
+    if n:
+        note = f"{n} year(s) filled from ERA5-Land"
+        if sev:
+            note += (f" using inferred SI_to_SIdroughts for {', '.join(sev)} "
+                     f"-- verify against MATLAB")
+    return n, note
+
+
 def write_series(path: Path, rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", newline="", encoding="utf-8") as fh:
@@ -651,6 +724,11 @@ def main() -> int:
                         "PLSR_fitting_coeff_*_TEMPORAL.mat to the full predictor table, "
                         "instead of reading the gapped yfit_plot_abs. Uses only pixels in "
                         "uniq_pix_final, i.e. those that contributed to the fit.")
+    p.add_argument("--era5-root", type=Path, default=era5_predictors.DEFAULT_ERA5_ROOT,
+                   help="ERA5-Land monthly stacks, used to fill years the preprocessed "
+                        "table never emitted (it only keeps forest pixel-years)")
+    p.add_argument("--no-era5-fallback", action="store_true",
+                   help="leave those years blank instead of recomputing the predictors")
     p.add_argument("--dry-run", action="store_true", help="resolve inputs, write nothing")
     p.add_argument("--audit", action="store_true",
                    help="read everything and report year coverage; write only lma_audit.csv. "
@@ -689,8 +767,16 @@ def main() -> int:
     for st in stations:
         groups.setdefault((st["eco_idx"], st["forest_type"]), []).append(st)
 
-    manifest, failures = [], 0
+    manifest, failures, filled_total = [], 0, 0
     year_hits: dict[int, int] = {}
+    store = None
+    if args.reconstruct and not args.no_era5_fallback and not (args.dry_run or args.audit):
+        try:
+            store = era5_predictors.Era5Monthly(args.era5_root)
+            print(f"era5 fill  : {args.era5_root}")
+        except Exception as exc:                                   # noqa: BLE001
+            print(f"era5 fill  : DISABLED -- {type(exc).__name__}: {exc}")
+    pix_lookup: dict[int, int] = {}
     for (eco, forest), members in sorted(groups.items()):
         tag = f"eco{eco} {forest} ({len(members)} station{'s' if len(members) > 1 else ''})"
         mat = resolve_prediction_file(args.plsr_root, eco, forest)
@@ -730,6 +816,8 @@ def main() -> int:
                 if not len(modelled["values"]):
                     raise RuntimeError(f"reconstruction produced no rows ({diag})")
                 class_years = diag.pop("class_years")
+                doy_by_pixel, eco_doy = diag.pop("doy_by_pixel"), diag.pop("eco_doy")
+                pix_lookup = {int(p): i for i, p in enumerate(fit["uniq_pix_final"])}
                 src = (f"reconstructed from {fit_path.name} over {ptab.name}: "
                        f"{diag['n_rows']} pixel-years over {diag['n_pixels_kept']} pixel(s) "
                        f"({diag['n_pixels_in_fit']} with a pixel mean, the rest on the "
@@ -744,6 +832,7 @@ def main() -> int:
                             "pixels": pred["pixel_id"].astype(int),
                             "values": np.asarray(pred["yfit_plot_abs"], dtype=float)}
                 src = f"{mat.name}"
+                fit, doy_by_pixel, eco_doy = None, {}, float("nan")
                 eco_csv = next((t for t in tables if has_coord_columns(t)), None)
                 if eco_csv is None:
                     raise RuntimeError(
@@ -766,6 +855,23 @@ def main() -> int:
             res = build_station(st, series, coords, years_wanted, args.max_distance_km,
                                 args.fill_gaps, class_years)
             obs_rows, mod_rows = res.pop("observed"), res.pop("modelled")
+
+            # Years the preprocessed table never emitted -- the pixel was not forest
+            # that year, so no row exists even though the ERA5-Land forcing does.
+            if store is not None and fit is not None and res.get("pixel_id") != "":
+                pid = int(res["pixel_id"])
+                pix_index = pix_lookup.get(pid) if res["baseline"] == "pixel_mean" else None
+                n_fill, note = era5_fill(
+                    store, fit, mod_rows, coords[pid][0], coords[pid][1],
+                    doy_by_pixel.get(pid, eco_doy), pix_index, f"{st['station_id']}")
+                if n_fill:
+                    res["note"] = ((res["note"] + "; ") if res["note"] else "") + note
+                    present = [r["LMA_g_m2"] for r in mod_rows if r["LMA_g_m2"] != ""]
+                    res.update(modelled_n_years=len(present),
+                               modelled_mean=round(float(np.mean(present)), 3),
+                               modelled_min=round(float(np.min(present)), 3),
+                               modelled_max=round(float(np.max(present)), 3))
+                    filled_total += n_fill
             if args.audit:
                 # Which years does the modelled series actually carry? This is the
                 # question -- the pipeline drops rows with a missing response before
@@ -858,8 +964,13 @@ def main() -> int:
         }, fh, indent=2)
 
     ok = sum(1 for m in manifest if m.get("status") == "ok")
+    if store is not None:
+        store.close()
     fell_back = sum(1 for m in manifest if m.get("baseline") == "ecoregion_mean")
     print(f"\nwrote {ok}/{len(manifest)} stations to {args.out}")
+    if filled_total:
+        print(f"  {filled_total} station-year(s) recomputed from ERA5-Land because the "
+              f"preprocessed table had no row")
     if fell_back:
         print(f"  {fell_back} station(s) sit on a pixel the fit never saw as their forest "
               f"type -- ecoregion mean used as the baseline")

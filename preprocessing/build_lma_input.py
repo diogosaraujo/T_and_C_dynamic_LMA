@@ -356,7 +356,22 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int,
 
     yfit = fit["beta"][0] + X @ fit["beta"][1:]
     vals = yfit * fit["sigma_Y"] + fit["mu_Y"] + fit["mu_Y_pix_final"][idx]
-    return np.asarray(years), np.asarray(pixels), vals, diag
+    years, pixels = np.asarray(years), np.asarray(pixels)
+
+    # A pixel whose predictors are non-finite in every year gets every predictor
+    # zeroed, so its "prediction" is the constant pixel climatology -- a flat series
+    # that would enter the experiment as a dynamic input while carrying no dynamics
+    # at all. eco1 has three (166, 182, 513). Drop them so they can neither be
+    # matched to a station nor flatten the ecoregion median.
+    all_bad = np.all(bad, axis=1)
+    dead = {int(p) for p in np.unique(pixels[all_bad])
+            if np.all(all_bad[pixels == p])}
+    diag["dead_pixels"] = sorted(dead)
+    if dead:
+        keep = ~np.isin(pixels, list(dead))
+        years, pixels, vals = years[keep], pixels[keep], vals[keep]
+        diag["n_rows"] = int(keep.sum())
+    return years, pixels, vals, diag
 
 
 def read_pixel_coords(path: Path) -> dict[int, tuple[float, float]]:
@@ -714,7 +729,9 @@ def main() -> int:
                 class_years = diag.pop("class_years")
                 src = (f"reconstructed from {fit_path.name} over {ptab.name}: "
                        f"{diag['n_rows']} pixel-years, {len(fit['predictors'])} predictor(s), "
-                       f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed predictor")
+                       f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed predictor"
+                       + (f", dropped {len(diag['dead_pixels'])} pixel(s) with no usable "
+                          f"predictor in any year" if diag["dead_pixels"] else ""))
             else:
                 modelled = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),
                             np.asarray(pred["yfit_plot_abs"], dtype=float))

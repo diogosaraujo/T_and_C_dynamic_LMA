@@ -225,14 +225,27 @@ and the stored series is **not** gap-free. Only pixels in `uniq_pix_final` (thos
 contributed to the fit) are used.
 
 A pixel's mapped forest class is not fixed: in eco1, 48 of 453 pixels flip between
-Evergreen and Mixed over 1985–2021, and only 78 of 135 evergreen pixels hold that
-class in all 37 years. So reconstruction selects rows by **pixel membership in the
-fit**, not by each row's `LU` — filtering row-by-row would have given US-Ho1 a
-12-year series instead of 37. `--strict-lu` restores the row-level filter.
-For the same reason `--min-class-fraction` (default 0.5) matches a station only to
-pixels mapped as its forest type in at least half the years; the manifest records
-`pixel_class_years` so the choice is auditable. At US-Ho1 this trades the nearest
-pixel (16.0 km, evergreen 12/37 years) for a stable one (22.1 km, 37/37).
+Evergreen and Mixed over 1985–2021. **Pixels that ever change class are dropped** —
+the stand at the tower did not change type, so such a pixel is either genuinely
+disturbed or misclassified, and either way it is the wrong analogue. Dropping (not
+filtering) also keeps them out of the ecoregion median, so the fallback stays a
+same-class comparison. `--allow-class-switch` keeps them. For eco1 evergreen this
+leaves 86 of 135 pixels, and US-Ho1 matches pixel 267 (22.1 km, evergreen in all 37
+years) instead of pixel 237 (16.0 km, evergreen in 12).
+
+Among the pixels that survive, rows are selected **by pixel**, not by each row's
+`LU`: a stable pixel's occasional unlabelled year is no reason to punch a hole in
+the series. `--strict-lu` restores the row-level filter.
+
+Two more guards, both visible in the manifest (`pixel_class_years`, `note`):
+
+- `--min-year-coverage` (default 0.9) — some pixels are simply absent from the
+  table in most years (one eco1 evergreen pixel appears in 2 of 37), and matching
+  to one would give a near-empty series.
+- Pixels whose predictors are non-finite in **every** year are dropped outright
+  (eco1: 166, 182, 513). `predict_with_fit` zeroes non-finite predictors, so those
+  collapse to a constant equal to the pixel climatology — a flat series that would
+  enter the experiment as a dynamic input while carrying no dynamics.
 
 Each station takes the nearest ecoregion pixel **that appears in the predictions**;
 matching against the ecoregion at large could land on a pixel the model never saw,

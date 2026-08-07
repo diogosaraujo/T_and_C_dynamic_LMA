@@ -262,8 +262,9 @@ def read_fit_mat(path: Path) -> dict:
     return out
 
 
-def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int,
-                         strict_lu: bool = False) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
+def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int, strict_lu: bool = False,
+                         allow_class_switch: bool = False
+                         ) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
     """Re-apply the fitted model to the FULL predictor table.
 
     The pipeline only predicted rows that survived rmmissing on the response, so
@@ -278,26 +279,29 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int,
     Only pixels in uniq_pix_final are used -- those are the pixels that contributed
     to the fit, i.e. the ones that had at least one LMA observation.
 
-    Pixel membership, NOT the per-row LU, is what selects rows. A pixel's mapped
-    forest class changes between years (in eco1, 48 of 453 pixels flip between
-    Evergreen and Mixed, and only 78 of 135 evergreen pixels hold that class in all
-    37 years), so filtering row-by-row on LU would truncate a station's series to
-    the years its pixel happened to be mapped as the right type -- 12 of 37 for the
-    pixel nearest US-Ho1. Membership in uniq_pix_final already means the pixel
-    contributed observations of this forest type to this fit, and the predictors are
-    the same climate series regardless of how the map labelled the pixel that year.
-    Pass strict_lu=True for the old row-level behaviour.
+    A pixel's mapped forest class is not fixed -- in eco1, 48 of 453 pixels flip
+    between Evergreen and Mixed over 1985-2021. Pixels that ever carry a different
+    class are DROPPED entirely (allow_class_switch=True keeps them), because the
+    stand at the AmeriFlux tower did not change type: a pixel that did is either
+    genuinely disturbed or misclassified, and either way it is the wrong analogue.
+    Dropping rather than filtering also keeps such pixels out of the ecoregion
+    median, so the fallback stays a same-class comparison.
+
+    For the pixels that survive, row selection is by pixel, not by each row's LU.
+    Membership in uniq_pix_final already means the pixel contributed observations of
+    this forest type to this fit, and a stable pixel's occasional unlabelled year is
+    not a reason to punch a hole in the series. strict_lu=True filters row-level
+    instead.
 
     Returns (years, pixels, values, diagnostics); diagnostics['class_years'] maps
-    each pixel to the number of years it does carry lu_value, so the caller can
-    prefer stable pixels when matching.
-
+    each surviving pixel to the number of years it carries lu_value.
     """
     preds = fit["predictors"]
     pix_row = {int(p): i for i, p in enumerate(fit["uniq_pix_final"])}
 
     years, pixels, rows = [], [], []
     class_years: dict[int, set[int]] = {}
+    other_class: dict[int, set[str]] = {}
     n_lu_skip = n_pix_skip = 0
     with open(eco_csv, newline="", encoding="utf-8-sig") as fh:
         reader = csv.DictReader(fh)
@@ -321,6 +325,8 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int,
             if is_class:
                 class_years.setdefault(pid, set()).add(yr)
             else:
+                # Record WHICH class, so the log can say what it switched to.
+                other_class.setdefault(pid, set()).add(str(r[lu_col]).strip())
                 n_lu_skip += 1
                 if strict_lu:
                     continue
@@ -337,9 +343,11 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int,
             pixels.append(pid)
             rows.append(vals)
 
+    switched = sorted(p for p in other_class if p in pix_row) if not allow_class_switch else []
     diag = {"n_rows": len(rows),
             "n_rows_off_class": n_lu_skip,          # dropped only when strict_lu
             "n_rows_pixel_not_in_fit": n_pix_skip,
+            "n_pixels_class_switched": len(switched),
             "class_years": {p: len(v) for p, v in class_years.items()}}
     if not rows:
         return np.array([]), np.array([]), np.array([]), diag
@@ -367,10 +375,16 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int,
     dead = {int(p) for p in np.unique(pixels[all_bad])
             if np.all(all_bad[pixels == p])}
     diag["dead_pixels"] = sorted(dead)
-    if dead:
-        keep = ~np.isin(pixels, list(dead))
+
+    drop = dead | set(switched)
+    if drop:
+        keep = ~np.isin(pixels, sorted(drop))
         years, pixels, vals = years[keep], pixels[keep], vals[keep]
         diag["n_rows"] = int(keep.sum())
+        for p in switched:
+            class_years.pop(p, None)
+        diag["class_years"] = {p: len(v) for p, v in class_years.items()}
+    diag["n_pixels_kept"] = int(len(np.unique(pixels)))
     return years, pixels, vals, diag
 
 
@@ -522,7 +536,7 @@ def build_station(st: dict, series: dict[str, tuple[np.ndarray, np.ndarray, np.n
                   coords: dict[int, tuple[float, float]],
                   years_wanted: list[int], max_dist_km: float, fill_gaps: bool,
                   class_years: dict[int, int] | None = None,
-                  min_class_fraction: float = 0.0) -> dict:
+                  min_year_coverage: float = 0.0) -> dict:
     """Return {'observed': rows, 'modelled': rows, **manifest fields} for one station.
 
     `series` maps each kind to (years, pixels, values). The two need not share a row
@@ -538,20 +552,28 @@ def build_station(st: dict, series: dict[str, tuple[np.ndarray, np.ndarray, np.n
     info = {"n_pixels": len(have), "pixel_id": "", "pixel_lat": "", "pixel_lon": "",
             "distance_km": "", "pixel_class_years": "", "note": ""}
 
-    # Prefer a pixel the LMA map calls this forest type in most years. The nearest
-    # pixel can be one that flips class almost every year, which makes it a poor
-    # stand-in for the tower even though the fit does cover it.
-    if class_years and min_class_fraction > 0 and have:
-        need = min_class_fraction * len(years_wanted)
-        stable = [p for p in have if class_years.get(p, 0) >= need]
-        if stable:
-            if len(stable) < len(have):
-                info["note"] = (f"matched among {len(stable)}/{len(have)} pixels holding "
-                                f"{st['forest_type']} in >={min_class_fraction:.0%} of years")
-            have = stable
-        else:
-            info["note"] = (f"no pixel holds {st['forest_type']} in "
-                            f">={min_class_fraction:.0%} of years; matched on distance alone")
+    # Candidates are already restricted to pixels of a single, unchanging class --
+    # reconstruct_modelled drops any pixel that switches. What it cannot see is that
+    # some pixels are simply absent from the table in most years (one eco1 evergreen
+    # pixel appears in 2 of 37), and the nearest pixel being one of those would hand
+    # the station a near-empty series. Require a usable span before matching.
+    if have and min_year_coverage > 0:
+        m_yrs, m_pix, m_vals = series["modelled"]
+        want = set(years_wanted)
+        span: dict[int, set[int]] = {p: set() for p in have}
+        for yr, px, val in zip(np.asarray(m_yrs, int), np.asarray(m_pix, int),
+                               np.asarray(m_vals, float)):
+            if int(px) in span and int(yr) in want and math.isfinite(val):
+                span[int(px)].add(int(yr))
+        need = min_year_coverage * len(years_wanted)
+        long_enough = [p for p in have if len(span[p]) >= need]
+        if long_enough and len(long_enough) < len(have):
+            info["note"] = (f"matched among {len(long_enough)}/{len(have)} pixels covering "
+                            f">={min_year_coverage:.0%} of {len(years_wanted)} years")
+            have = long_enough
+        elif not long_enough:
+            info["note"] = (f"no pixel covers >={min_year_coverage:.0%} of the years; "
+                            f"matched on distance alone")
 
     if not have:
         info["note"] = "no prediction pixel has coordinates in the ecoregion table"
@@ -645,10 +667,15 @@ def main() -> int:
                         "forest type. Pixels change class between years, so this truncates "
                         "series badly (12/37 years for the pixel nearest US-Ho1); off by "
                         "default, where pixel membership in the fit is what counts.")
-    p.add_argument("--min-class-fraction", type=float, default=0.5,
-                   help="match only to pixels mapped as the station's forest type in at "
-                        "least this fraction of years (default 0.5; 0 disables). Falls back "
-                        "to distance alone if no pixel qualifies.")
+    p.add_argument("--min-year-coverage", type=float, default=0.9,
+                   help="match only to pixels present in at least this fraction of the "
+                        "requested years (default 0.9; 0 disables). Some pixels appear in "
+                        "only a handful of years and would give a near-empty series.")
+    p.add_argument("--allow-class-switch", action="store_true",
+                   help="keep pixels whose mapped forest class changes between years. Off "
+                        "by default: the stand at the tower did not change type, so such a "
+                        "pixel is disturbed or misclassified and is a poor analogue. They "
+                        "are dropped from the series, hence from the ecoregion median too.")
     p.add_argument("--dry-run", action="store_true", help="resolve inputs, write nothing")
     p.add_argument("--audit", action="store_true",
                    help="read everything and report year coverage; write only lma_audit.csv. "
@@ -722,14 +749,18 @@ def main() -> int:
                 # coordinates and predictors are guaranteed to be one vintage.
                 eco_csv = ptab
                 ry, rp, rv, diag = reconstruct_modelled(
-                    fit, ptab, LU_BASE + FOREST_LU[forest], strict_lu=args.strict_lu)
+                    fit, ptab, LU_BASE + FOREST_LU[forest], strict_lu=args.strict_lu,
+                    allow_class_switch=args.allow_class_switch)
                 if not len(rv):
                     raise RuntimeError(f"reconstruction produced no rows (LU filter: {diag})")
                 modelled = (ry, rp, rv)
                 class_years = diag.pop("class_years")
                 src = (f"reconstructed from {fit_path.name} over {ptab.name}: "
-                       f"{diag['n_rows']} pixel-years, {len(fit['predictors'])} predictor(s), "
+                       f"{diag['n_rows']} pixel-years over {diag['n_pixels_kept']} pixel(s), "
+                       f"{len(fit['predictors'])} predictor(s), "
                        f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed predictor"
+                       + (f", dropped {diag['n_pixels_class_switched']} pixel(s) whose forest "
+                          f"class changed" if diag["n_pixels_class_switched"] else "")
                        + (f", dropped {len(diag['dead_pixels'])} pixel(s) with no usable "
                           f"predictor in any year" if diag["dead_pixels"] else ""))
             else:
@@ -757,7 +788,7 @@ def main() -> int:
         series = {"observed": obs, "modelled": modelled}
         for st in members:
             res = build_station(st, series, coords, years_wanted, args.max_distance_km,
-                                args.fill_gaps, class_years, args.min_class_fraction)
+                                args.fill_gaps, class_years, args.min_year_coverage)
             obs_rows, mod_rows = res.pop("observed"), res.pop("modelled")
             if args.audit:
                 # Which years does the modelled series actually carry? This is the

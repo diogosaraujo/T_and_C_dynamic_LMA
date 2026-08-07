@@ -1,0 +1,49 @@
+job        : 35405
+node       : soeepyc16
+started    : 2026-08-07T00:49:18Z
+plsr root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+eco root   : /vol_efthymios/NFS07/dd1136/ecoregions
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+
+stations   : 101 (17 excluded)
+years      : 1985-2021
+plsr root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+eco root   : /vol_efthymios/NFS07/dd1136/ecoregions
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+modelled   : yfit_plot_abs as stored
+fallback   : whole-series ecoregion median
+
+  - eco1 evergreen (3 stations): would read PLSR_predictions_eco1_evergreen_oofcv.mat + ecoregion_no1.csv
+  - eco2 evergreen (2 stations): would read PLSR_predictions_eco2_evergreen_oofcv.mat + ecoregion_no2.csv
+  - eco5 deciduous (1 station): would read PLSR_predictions_eco5_deciduos_oofcv.mat + ecoregion_no5.csv
+  - eco7 deciduous (3 stations): would read PLSR_predictions_eco7_deciduos_oofcv.mat + ecoregion_no7.csv
+  - eco10 evergreen (3 stations): would read PLSR_predictions_eco10_evergreen_oofcv.mat + ecoregion_no10.csv
+  - eco17 deciduous (1 station): would read PLSR_predictions_eco17_deciduos_oofcv.mat + ecoregion_no17.csv
+  - eco19 evergreen (1 station): would read PLSR_predictions_eco19_evergreen_oofcv.mat + ecoregion_no19.csv
+  - eco25 evergreen (5 stations): would read PLSR_predictions_eco25_evergreen_oofcv.mat + ecoregion_no25.csv
+  - eco32 deciduous (1 station): would read PLSR_predictions_eco32_deciduos_oofcv.mat + ecoregion_no32.csv
+  - eco34 deciduous (1 station): would read PLSR_predictions_eco34_deciduos_oofcv.mat + ecoregion_no34.csv
+  - eco35 deciduous (1 station): would read PLSR_predictions_eco35_deciduos_oofcv.mat + ecoregion_no35.csv
+  - eco38 evergreen (1 station): would read PLSR_predictions_eco38_evergreen_oofcv.mat + ecoregion_no38.csv
+  - eco39 evergreen (2 stations): would read PLSR_predictions_eco39_evergreen_oofcv.mat + ecoregion_no39.csv
+  - eco40 evergreen (3 stations): would read PLSR_predictions_eco40_evergreen_oofcv.mat + ecoregion_no40.csv
+  - eco47 evergreen (1 station): would read PLSR_predictions_eco47_evergreen_oofcv.mat + ecoregion_no47.csv
+  - eco49 deciduous (6 stations): would read PLSR_predictions_eco49_deciduos_oofcv.mat + ecoregion_no49.csv
+  - eco49 evergreen (1 station): would read PLSR_predictions_eco49_evergreen_oofcv.mat + ecoregion_no49.csv
+  - eco53 deciduous (17 stations): would read PLSR_predictions_eco53_deciduos_oofcv.mat + ecoregion_no53.csv
+  - eco53 evergreen (7 stations): would read PLSR_predictions_eco53_evergreen_oofcv.mat + ecoregion_no53.csv
+  - eco61 deciduous (1 station): would read PLSR_predictions_eco61_deciduos_oofcv.mat + ecoregion_no61.csv
+  - eco61 evergreen (3 stations): would read PLSR_predictions_eco61_evergreen_oofcv.mat + ecoregion_no61.csv
+  - eco63 deciduous (6 stations): would read PLSR_predictions_eco63_deciduos_oofcv.mat + ecoregion_no63.csv
+  - eco64 evergreen (6 stations): would read PLSR_predictions_eco64_evergreen_oofcv.mat + ecoregion_no64.csv
+  - eco67 evergreen (2 stations): would read PLSR_predictions_eco67_evergreen_oofcv.mat + ecoregion_no67.csv
+  - eco68 deciduous (2 stations): would read PLSR_predictions_eco68_deciduos_oofcv.mat + ecoregion_no68.csv
+  - eco68 evergreen (2 stations): would read PLSR_predictions_eco68_evergreen_oofcv.mat + ecoregion_no68.csv
+  - eco72 evergreen (8 stations): would read PLSR_predictions_eco72_evergreen_oofcv.mat + ecoregion_no72.csv
+  - eco75 evergreen (11 stations): would read PLSR_predictions_eco75_evergreen_oofcv.mat + ecoregion_no75.csv
+
+dry run: 28 ecoregion x forest group(s), 101 stations
+
+finished   : 2026-08-07T00:49:21Z
+exit status: 0
+512	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma

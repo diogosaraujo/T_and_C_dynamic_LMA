@@ -1,0 +1,60 @@
+job        : 35406
+node       : soeepyc16
+started    : 2026-08-07T01:01:19Z
+plsr root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+eco root   : /vol_efthymios/NFS07/dd1136/ecoregions
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+
+stations   : 101 (17 excluded)
+years      : 1985-2021
+plsr root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_temporal_cv_pixel_climatology_DOY/LMA
+eco root   : /vol_efthymios/NFS07/dd1136/ecoregions
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma
+modelled   : RECONSTRUCTED from fit coefficients
+fallback   : whole-series ecoregion median
+
+  ! eco1 evergreen (3 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco2 evergreen (2 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco5 deciduous (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco7 deciduous (3 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco10 evergreen (3 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco17 deciduous (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco19 evergreen (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco25 evergreen (5 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco32 deciduous (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco34 deciduous (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco35 deciduous (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco38 evergreen (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco39 evergreen (2 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco40 evergreen (3 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco47 evergreen (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco49 deciduous (6 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco49 evergreen (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco53 deciduous (17 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco53 evergreen (7 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco61 deciduous (1 station): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco61 evergreen (3 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco63 deciduous (6 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco64 evergreen (6 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco67 evergreen (2 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco68 deciduous (2 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco68 evergreen (2 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco72 evergreen (8 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+  ! eco75 evergreen (11 stations): NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py
+
+==============================================================
+AUDIT: modelled series coverage, 1985-2021 (37 years)
+==============================================================
+stations with a COMPLETE modelled series : 0/101
+
+per-station detail: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma/lma_audit.csv
+
+The modelled series is NOT gap-free. The pipeline drops rows whose
+response (iLMA) is missing before predicting, so yfit_plot_abs exists
+only where an observation existed. Regenerating a complete series means
+re-applying PLSR_fitting_coeff_*_TEMPORAL.mat to the full predictor
+table, which is ~98% complete in every year.
+
+finished   : 2026-08-07T01:01:24Z
+exit status: 1
+1.0K	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma

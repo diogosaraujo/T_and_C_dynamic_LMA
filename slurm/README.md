@@ -224,36 +224,49 @@ missing *before* predicting, so `yfit_plot_abs` exists only where an observation
 and the stored series is **not** gap-free. Only pixels in `uniq_pix_final` (those that
 contributed to the fit) are used.
 
-A pixel's mapped forest class is not fixed: in eco1, 48 of 453 pixels flip between
-Evergreen and Mixed over 1985–2021. **Pixels that ever change class are dropped** —
-the stand at the tower did not change type, so such a pixel is either genuinely
-disturbed or misclassified, and either way it is the wrong analogue. Dropping (not
-filtering) also keeps them out of the ecoregion median, so the fallback stays a
-same-class comparison. `--allow-class-switch` keeps them. For eco1 evergreen this
-leaves 86 of 135 pixels, and US-Ho1 matches pixel 267 (22.1 km, evergreen in all 37
-years) instead of pixel 237 (16.0 km, evergreen in 12).
+### Back-conversion to absolute LMA
 
-Among the pixels that survive, rows are selected **by pixel**, not by each row's
-`LU`: a stable pixel's occasional unlabelled year is no reason to punch a hole in
-the series. `--strict-lu` restores the row-level filter.
+Every baseline comes from the fit file; nothing is re-estimated. Predictors are
+demeaned by the **pixel** mean, then normalised by the **ecoregion** mean and
+standard deviation:
 
-Two more guards, both visible in the manifest (`pixel_class_years`, `note`):
+```
+X        = (X_raw - mu_X_pix_final(pix,:) - mu_X) ./ sigma_X      non-finite -> 0
+yfit_abs = ([1 X] * beta) .* sigma_Y + mu_Y + mu_Y_pix_final(pix)
+```
 
-- `--min-year-coverage` (default 0.9) — some pixels are simply absent from the
-  table in most years (one eco1 evergreen pixel appears in 2 of 37), and matching
-  to one would give a near-empty series.
-- Pixels whose predictors are non-finite in **every** year are dropped outright
-  (eco1: 166, 182, 513). `predict_with_fit` zeroes non-finite predictors, so those
-  collapse to a constant equal to the pixel climatology — a flat series that would
-  enter the experiment as a dynamic input while carrying no dynamics.
+Note `mu_X` and `mu_Y` are means of the **anomalies** and come out at 0 (eco1
+evergreen: `mu_Y = 0.000000`), because the fit demeans per pixel before
+standardising. They are *not* the ecoregion mean of the variable — that is the mean
+of the per-pixel means the fit stored, 88.27 g/m² for eco1 evergreen. Reconstruction
+reproduces the pipeline's own `yfit_plot_abs` to 1.4e-14 g/m² on all 1,570 stored
+rows.
 
-Each station takes the nearest ecoregion pixel **that appears in the predictions**;
-matching against the ecoregion at large could land on a pixel the model never saw,
-since `predict_with_fit` drops pixels absent from the training set. Where that pixel
-has no usable data, or sits more than `--max-distance-km` away (default 50), the
-ecoregion median is used instead and every row records which it was. `--fill-gaps`
-extends the fallback to individual missing years — off by default, because the filler
-comes from a different pixel with a different mean and introduces a step change.
+### Which baseline a station gets
+
+The station takes its **nearest pixel outright**. These are ERA5-Land 0.1° cells, so
+the nearest is the cell the tower sits in; a better-classified cell 20 km away is a
+different stand under a different climate.
+
+- **Nearest pixel is in the fit** → its own `mu_X_pix_final` / `mu_Y_pix_final`. The
+  fit stores `LU` and was run on rows of that class only, so a pixel mapped evergreen
+  1985–2002 and mixed after contributes **evergreen-period statistics** — exactly
+  what a pixel that changed class should contribute. Its series still spans every
+  year, since the predictors are the same climate record however the map labelled it.
+- **Nearest pixel was never mapped as the station's forest type** → the fit holds no
+  mean for it, so the **ecoregion mean** stands in. Predictors still come from that
+  pixel, so the station keeps its local climate signal and loses only the local level.
+
+The manifest records `baseline` (`pixel_mean` / `ecoregion_mean`), `pixel_class_years`
+and `distance_km`; every row of every series carries the same label in `source`.
+All three Howland towers land on pixel 209 (2–4 km), which is mapped Mixed
+throughout, so they run on the ecoregion mean: complete 37-year series, mean
+88.0 g/m², range 71.8–105.4.
+
+Pixels whose predictors are non-finite in **every** year are dropped outright (eco1:
+166, 182, 513). `predict_with_fit` zeroes non-finite predictors, so those collapse to
+a constant equal to their baseline — a flat series that would enter the experiment as
+a dynamic input while carrying no dynamics.
 
 Needs `h5py`: the PLSR files are MATLAB `-v7.3`, i.e. HDF5, which `scipy.io.loadmat`
 cannot read. **Re-run `sbatch slurm/submit_setup_env.sh`** before first use; the job

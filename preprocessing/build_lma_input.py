@@ -6,10 +6,16 @@ Two series are produced for every AmeriFlux station, both in g/m2:
     observed  <- Y_plot_abs      the iLMA observations that entered the fit
     modelled  <- yfit_plot_abs   the PLSR reconstruction (pixel climatology + anomaly)
 
-Each station is matched to the nearest pixel of its ecoregion, and the pixel's
-annual series is written out. Where that pixel carries no usable data the
-ecoregion median for the same year/forest type is used instead; every row records
-which of the two it came from, so the fallback is never silent.
+Each station takes its nearest pixel -- ERA5-Land 0.1 deg cells, so the nearest is
+the cell the tower sits in -- and that pixel's annual series is written out.
+
+The absolute values come back from the fit's own baselines, none of which are
+re-estimated here: predictors are demeaned by the PIXEL mean, normalised by the
+ECOREGION mean and standard deviation, run through beta, then rescaled by sigma_Y
+and re-centred on the pixel mean. Where the nearest pixel was never mapped as the
+station's forest type the fit holds no mean for it, so the ecoregion mean stands in
+for the pixel mean; the predictors still come from that pixel, so only the level is
+substituted, and every row records which baseline applied.
 
 Inputs (on the cluster, outside this repo):
 
@@ -259,50 +265,56 @@ def read_fit_mat(path: Path) -> dict:
     if len(out["beta"]) != npred + 1:
         raise RuntimeError(f"{path.name}: beta has {len(out['beta'])} terms, expected "
                            f"{npred + 1} (intercept + {npred} predictors)")
+
+    # Ecoregion means in RAW units, for pixels the fit never saw. mu_X/mu_Y are NOT
+    # these: the fit demeans per pixel before standardising, so mu_X and mu_Y are
+    # means of the anomalies and come out at 0 (eco1 evergreen: mu_X = [0 -0 -0 0 -0],
+    # mu_Y = 0.000000). Substituting those would put a station at 0 g/m2. The
+    # ecoregion mean of the variable itself is the mean of the per-pixel means the
+    # fit stored -- 88.27 g/m2 for eco1 evergreen.
+    out["mu_X_eco"] = out["mu_X_pix_final"].mean(axis=0)
+    out["mu_Y_eco"] = float(np.mean(out["mu_Y_pix_final"]))
     return out
 
 
-def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int, strict_lu: bool = False,
-                         allow_class_switch: bool = False
-                         ) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
-    """Re-apply the fitted model to the FULL predictor table.
+def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[dict, dict]:
+    """Re-apply the fitted model to EVERY row of the predictor table.
 
     The pipeline only predicted rows that survived rmmissing on the response, so
-    yfit_plot_abs inherits the observations' gaps. The predictors are ~98% complete
-    in every year, so evaluating the same coefficients over every row of
-    LMA_ecoregion_no<ii>.csv fills those years. This reproduces predict_with_fit exactly:
+    yfit_plot_abs inherits the observations' gaps -- 26 of 37 years for eco1
+    evergreen. The predictors are ~99% complete in every year, so evaluating the
+    same coefficients over the full table fills the rest. This reproduces
+    predict_with_fit, demeaning by the pixel mean and then standardising by the
+    ecoregion mean and standard deviation:
 
         X_anom   = X_raw - mu_X_pix_final(pix,:)
         X        = (X_anom - mu_X) ./ sigma_X ;  non-finite -> 0
         yfit_abs = ([1 X]*beta) .* sigma_Y + mu_Y + mu_Y_pix_final(pix)
 
-    Only pixels in uniq_pix_final are used -- those are the pixels that contributed
-    to the fit, i.e. the ones that had at least one LMA observation.
+    Every baseline comes from the fit file untouched; nothing is re-estimated here.
 
-    A pixel's mapped forest class is not fixed -- in eco1, 48 of 453 pixels flip
-    between Evergreen and Mixed over 1985-2021. Pixels that ever carry a different
-    class are DROPPED entirely (allow_class_switch=True keeps them), because the
-    stand at the AmeriFlux tower did not change type: a pixel that did is either
-    genuinely disturbed or misclassified, and either way it is the wrong analogue.
-    Dropping rather than filtering also keeps such pixels out of the ecoregion
-    median, so the fallback stays a same-class comparison.
+    TWO BASELINES. A pixel in uniq_pix_final has its own mean, and that mean was
+    computed by the fit over the years the pixel carried lu_value ONLY -- the fit
+    stores LU and was run on those rows -- so a pixel mapped evergreen 1985-2002 and
+    mixed after contributes evergreen-period statistics, which is what a pixel that
+    changed class should contribute. Its series still spans every year, since the
+    predictors are the same climate record however the map labelled the pixel.
 
-    For the pixels that survive, row selection is by pixel, not by each row's LU.
-    Membership in uniq_pix_final already means the pixel contributed observations of
-    this forest type to this fit, and a stable pixel's occasional unlabelled year is
-    not a reason to punch a hole in the series. strict_lu=True filters row-level
-    instead.
+    A pixel the fit never saw (never lu_value) has no mean of its own, so the
+    ECOREGION mean stands in for the pixel mean -- mu_X_eco / mu_Y_eco, the means of
+    the per-pixel means the fit stored. Predictors still come from that pixel: only
+    the baseline is substituted, so the station keeps its local climate signal and
+    loses only the local level.
 
-    Returns (years, pixels, values, diagnostics); diagnostics['class_years'] maps
-    each surviving pixel to the number of years it carries lu_value.
+    Returns (series, diagnostics). series has 'years', 'pixels', 'values' and
+    'pixel_mean' (True where the pixel's own mean was used).
     """
     preds = fit["predictors"]
     pix_row = {int(p): i for i, p in enumerate(fit["uniq_pix_final"])}
 
     years, pixels, rows = [], [], []
     class_years: dict[int, set[int]] = {}
-    other_class: dict[int, set[str]] = {}
-    n_lu_skip = n_pix_skip = 0
+    seen_class: dict[int, set[str]] = {}
     with open(eco_csv, newline="", encoding="utf-8-sig") as fh:
         reader = csv.DictReader(fh)
         cols = {c.strip(): c for c in (reader.fieldnames or [])}
@@ -319,20 +331,12 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int, strict_lu: boo
             try:
                 pid = int(float(r[pid_col]))
                 yr = int(str(r[t_col]).strip()[-4:])
-                is_class = int(float(r[lu_col])) == lu_value
+                lu = int(float(r[lu_col]))
             except (TypeError, ValueError):
                 continue
-            if is_class:
+            seen_class.setdefault(pid, set()).add(str(r[lu_col]).strip())
+            if lu == lu_value:
                 class_years.setdefault(pid, set()).add(yr)
-            else:
-                # Record WHICH class, so the log can say what it switched to.
-                other_class.setdefault(pid, set()).add(str(r[lu_col]).strip())
-                n_lu_skip += 1
-                if strict_lu:
-                    continue
-            if pid not in pix_row:          # pixel contributed nothing to the fit
-                n_pix_skip += 1
-                continue
             vals = []
             for p in preds:
                 try:
@@ -343,49 +347,52 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int, strict_lu: boo
             pixels.append(pid)
             rows.append(vals)
 
-    switched = sorted(p for p in other_class if p in pix_row) if not allow_class_switch else []
     diag = {"n_rows": len(rows),
-            "n_rows_off_class": n_lu_skip,          # dropped only when strict_lu
-            "n_rows_pixel_not_in_fit": n_pix_skip,
-            "n_pixels_class_switched": len(switched),
+            "n_pixels": len(seen_class),
+            "n_pixels_in_fit": len(pix_row),
+            "n_pixels_class_switched": sum(1 for p, v in seen_class.items()
+                                           if len(v) > 1 and p in pix_row),
             "class_years": {p: len(v) for p, v in class_years.items()}}
     if not rows:
-        return np.array([]), np.array([]), np.array([]), diag
+        return {"years": np.array([]), "pixels": np.array([]),
+                "values": np.array([]), "pixel_mean": np.array([], bool)}, diag
 
     X_raw = np.asarray(rows, dtype=float)
-    idx = np.array([pix_row[p] for p in pixels])
-    X = (X_raw - fit["mu_X_pix_final"][idx, :] - fit["mu_X"]) / fit["sigma_X"]
+    years, pixels = np.asarray(years, int), np.asarray(pixels, int)
+    in_fit = np.array([p in pix_row for p in pixels])
+    idx = np.array([pix_row.get(p, 0) for p in pixels])
+
+    mu_X_row = np.where(in_fit[:, None], fit["mu_X_pix_final"][idx, :], fit["mu_X_eco"])
+    mu_Y_row = np.where(in_fit, fit["mu_Y_pix_final"][idx], fit["mu_Y_eco"])
+
+    X = (X_raw - mu_X_row - fit["mu_X"]) / fit["sigma_X"]
     # predict_with_fit zeroes non-finite predictors, i.e. substitutes the mean. That
-    # silently degrades a prediction toward the pixel climatology, so it is counted.
+    # silently degrades a prediction toward the baseline, so it is counted.
     bad = ~np.isfinite(X)
     X[bad] = 0.0
     diag["n_rows_with_imputed_predictor"] = int(np.any(bad, axis=1).sum())
     diag["n_rows_all_predictors_imputed"] = int(np.all(bad, axis=1).sum())
 
     yfit = fit["beta"][0] + X @ fit["beta"][1:]
-    vals = yfit * fit["sigma_Y"] + fit["mu_Y"] + fit["mu_Y_pix_final"][idx]
-    years, pixels = np.asarray(years), np.asarray(pixels)
+    vals = yfit * fit["sigma_Y"] + fit["mu_Y"] + mu_Y_row
 
-    # A pixel whose predictors are non-finite in every year gets every predictor
-    # zeroed, so its "prediction" is the constant pixel climatology -- a flat series
-    # that would enter the experiment as a dynamic input while carrying no dynamics
-    # at all. eco1 has three (166, 182, 513). Drop them so they can neither be
-    # matched to a station nor flatten the ecoregion median.
+    # A pixel whose predictors are non-finite in EVERY year gets every predictor
+    # zeroed, so its "prediction" is a constant equal to its baseline -- a flat series
+    # that would enter the experiment as a dynamic input while carrying no dynamics at
+    # all. eco1 has three (166, 182, 513). Drop them so no station can match one; the
+    # next-nearest pixel is then used, and the run log names them.
     all_bad = np.all(bad, axis=1)
-    dead = {int(p) for p in np.unique(pixels[all_bad])
-            if np.all(all_bad[pixels == p])}
-    diag["dead_pixels"] = sorted(dead)
-
-    drop = dead | set(switched)
-    if drop:
-        keep = ~np.isin(pixels, sorted(drop))
-        years, pixels, vals = years[keep], pixels[keep], vals[keep]
+    dead = sorted({int(p) for p in np.unique(pixels[all_bad])
+                   if np.all(all_bad[pixels == p])})
+    diag["dead_pixels"] = dead
+    if dead:
+        keep = ~np.isin(pixels, dead)
+        years, pixels, vals, in_fit = years[keep], pixels[keep], vals[keep], in_fit[keep]
         diag["n_rows"] = int(keep.sum())
-        for p in switched:
-            class_years.pop(p, None)
-        diag["class_years"] = {p: len(v) for p, v in class_years.items()}
+
     diag["n_pixels_kept"] = int(len(np.unique(pixels)))
-    return years, pixels, vals, diag
+    diag["n_rows_ecoregion_baseline"] = int((~in_fit).sum())
+    return {"years": years, "pixels": pixels, "values": vals, "pixel_mean": in_fit}, diag
 
 
 def read_pixel_coords(path: Path) -> dict[int, tuple[float, float]]:
@@ -532,51 +539,28 @@ def write_series(path: Path, rows: list[dict]) -> None:
 
 # ------------------------------------------------------------------------- core
 
-def build_station(st: dict, series: dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]],
-                  coords: dict[int, tuple[float, float]],
+def build_station(st: dict, series: dict[str, dict], coords: dict[int, tuple[float, float]],
                   years_wanted: list[int], max_dist_km: float, fill_gaps: bool,
-                  class_years: dict[int, int] | None = None,
-                  min_year_coverage: float = 0.0) -> dict:
+                  class_years: dict[int, int] | None = None) -> dict:
     """Return {'observed': rows, 'modelled': rows, **manifest fields} for one station.
 
-    `series` maps each kind to (years, pixels, values). The two need not share a row
-    index: the observed series is sparse, while a reconstructed modelled series covers
-    every pixel-year.
-    """
-    # Match on the modelled series -- that is what gets forced, and its pixel set is
-    # the one that contributed to the fit (pixels with no LMA at all never appear in
-    # uniq_pix_final). Matching against the ecoregion at large could otherwise land
-    # on a pixel the model never saw.
-    pix = series["modelled"][1].astype(int) if len(series["modelled"][1]) else np.array([], int)
-    have = sorted({int(p) for p in np.unique(pix)} & set(coords))
-    info = {"n_pixels": len(have), "pixel_id": "", "pixel_lat": "", "pixel_lon": "",
-            "distance_km": "", "pixel_class_years": "", "note": ""}
+    The station takes its NEAREST pixel outright -- these are ERA5-Land 0.1 deg cells,
+    so the nearest is the one the tower sits in. No search for a better-classified
+    pixel further away: a cell 20 km off is a different stand under a different
+    climate, and pretending otherwise would be worse than losing the local level.
 
-    # Candidates are already restricted to pixels of a single, unchanging class --
-    # reconstruct_modelled drops any pixel that switches. What it cannot see is that
-    # some pixels are simply absent from the table in most years (one eco1 evergreen
-    # pixel appears in 2 of 37), and the nearest pixel being one of those would hand
-    # the station a near-empty series. Require a usable span before matching.
-    if have and min_year_coverage > 0:
-        m_yrs, m_pix, m_vals = series["modelled"]
-        want = set(years_wanted)
-        span: dict[int, set[int]] = {p: set() for p in have}
-        for yr, px, val in zip(np.asarray(m_yrs, int), np.asarray(m_pix, int),
-                               np.asarray(m_vals, float)):
-            if int(px) in span and int(yr) in want and math.isfinite(val):
-                span[int(px)].add(int(yr))
-        need = min_year_coverage * len(years_wanted)
-        long_enough = [p for p in have if len(span[p]) >= need]
-        if long_enough and len(long_enough) < len(have):
-            info["note"] = (f"matched among {len(long_enough)}/{len(have)} pixels covering "
-                            f">={min_year_coverage:.0%} of {len(years_wanted)} years")
-            have = long_enough
-        elif not long_enough:
-            info["note"] = (f"no pixel covers >={min_year_coverage:.0%} of the years; "
-                            f"matched on distance alone")
+    What varies is the baseline. If that pixel is in the fit, its own mean is used.
+    If it was never mapped as the station's forest type, the fit has no mean for it
+    and the ecoregion mean stands in -- reconstruct_modelled has already made that
+    substitution, and 'pixel_mean' records which applied.
+    """
+    m = series["modelled"]
+    have = sorted({int(p) for p in np.unique(m["pixels"])} & set(coords)) if len(m["pixels"]) else []
+    info = {"n_pixels": len(have), "pixel_id": "", "pixel_lat": "", "pixel_lon": "",
+            "distance_km": "", "pixel_class_years": "", "baseline": "", "note": ""}
 
     if not have:
-        info["note"] = "no prediction pixel has coordinates in the ecoregion table"
+        info["note"] = "no pixel in the predictor table has coordinates"
         best = None
     else:
         plat = np.array([coords[p][0] for p in have])
@@ -584,36 +568,41 @@ def build_station(st: dict, series: dict[str, tuple[np.ndarray, np.ndarray, np.n
         d = haversine_km(st["lat"], st["lon"], plat, plon)
         k = int(np.argmin(d))
         best, dist = have[k], float(d[k])
+        n_class = class_years.get(best, 0) if class_years is not None else ""
         info.update(pixel_id=best, pixel_lat=round(plat[k], 5), pixel_lon=round(plon[k], 5),
-                    distance_km=round(dist, 3),
-                    pixel_class_years=class_years.get(best, 0) if class_years else "")
+                    distance_km=round(dist, 3), pixel_class_years=n_class)
         if dist > max_dist_km:
-            info["note"] = f"nearest pixel {dist:.1f} km away (> {max_dist_km} km); using ecoregion median"
-            best = None
+            info["note"] = f"nearest pixel is {dist:.1f} km away (> {max_dist_km} km)"
+
+    # Was the pixel's own mean available, or did the ecoregion mean stand in?
+    if best is not None and len(m["pixels"]):
+        sel = m["pixels"] == best
+        used_pixel_mean = bool(sel.any() and m["pixel_mean"][sel][0])
+        info["baseline"] = "pixel_mean" if used_pixel_mean else "ecoregion_mean"
+        if not used_pixel_mean:
+            info["note"] = ((info["note"] + "; ") if info["note"] else "") + \
+                f"nearest pixel is never mapped {st['forest_type']}; ecoregion mean used"
 
     out = {**info}
     for kind in ("observed", "modelled"):
-        k_yrs, k_pix, k_vals = series[kind]
-        k_yrs = np.asarray(k_yrs, dtype=int)
-        k_pix = np.asarray(k_pix, dtype=int)
-        vals = np.asarray(k_vals, dtype=float)
-        # Fallback median is over the valid pixels only, since those are the only ones
-        # present in either series.
-        eco_series = annual_median(k_yrs, vals)
+        k = series[kind]
+        k_yrs = np.asarray(k["years"], dtype=int)
+        k_pix = np.asarray(k["pixels"], dtype=int)
+        vals = np.asarray(k["values"], dtype=float)
+        base = k.get("pixel_mean")
         sel = k_pix == best if best is not None else np.zeros(len(k_yrs), bool)
         pix_series = annual_median(k_yrs[sel], vals[sel]) if best is not None else {}
 
-        source = "pixel" if pix_series else "ecoregion_median"
+        label = info["baseline"] or "pixel_mean"
+        if base is not None and best is not None and sel.any():
+            label = "pixel_mean" if base[sel][0] else "ecoregion_mean"
+        source = label if pix_series else "none"
         rows = []
         for yr in years_wanted:
             if yr in pix_series:
                 v, n = pix_series[yr]
-                rows.append({"year": yr, "LMA_g_m2": round(v, 4), "source": "pixel",
+                rows.append({"year": yr, "LMA_g_m2": round(v, 4), "source": label,
                              "pixel_id": best, "n_values": n})
-            elif (fill_gaps or not pix_series) and yr in eco_series:
-                v, n = eco_series[yr]
-                rows.append({"year": yr, "LMA_g_m2": round(v, 4), "source": "ecoregion_median",
-                             "pixel_id": "", "n_values": n})
             else:
                 rows.append({"year": yr, "LMA_g_m2": "", "source": "missing",
                              "pixel_id": "", "n_values": 0})
@@ -655,27 +644,13 @@ def main() -> int:
     p.add_argument("--max-distance-km", type=float, default=50.0,
                    help="beyond this, fall back to the ecoregion median (default: 50)")
     p.add_argument("--fill-gaps", action="store_true",
-                   help="fill individual missing years from the ecoregion median "
-                        "(default: fall back only when the pixel has no data at all)")
+                   help="(retained for compatibility; no effect since the fallback is now "
+                        "a baseline substitution, not a separate median series)")
     p.add_argument("--reconstruct", action="store_true",
                    help="rebuild the modelled series by re-applying "
                         "PLSR_fitting_coeff_*_TEMPORAL.mat to the full predictor table, "
                         "instead of reading the gapped yfit_plot_abs. Uses only pixels in "
                         "uniq_pix_final, i.e. those that contributed to the fit.")
-    p.add_argument("--strict-lu", action="store_true",
-                   help="reconstruct only the rows whose mapped LU matches the station's "
-                        "forest type. Pixels change class between years, so this truncates "
-                        "series badly (12/37 years for the pixel nearest US-Ho1); off by "
-                        "default, where pixel membership in the fit is what counts.")
-    p.add_argument("--min-year-coverage", type=float, default=0.9,
-                   help="match only to pixels present in at least this fraction of the "
-                        "requested years (default 0.9; 0 disables). Some pixels appear in "
-                        "only a handful of years and would give a near-empty series.")
-    p.add_argument("--allow-class-switch", action="store_true",
-                   help="keep pixels whose mapped forest class changes between years. Off "
-                        "by default: the stand at the tower did not change type, so such a "
-                        "pixel is disturbed or misclassified and is a poor analogue. They "
-                        "are dropped from the series, hence from the ecoregion median too.")
     p.add_argument("--dry-run", action="store_true", help="resolve inputs, write nothing")
     p.add_argument("--audit", action="store_true",
                    help="read everything and report year coverage; write only lma_audit.csv. "
@@ -706,7 +681,8 @@ def main() -> int:
           f"{'' if args.predictor_root.is_dir() else '   <-- NOT FOUND'}")
     print(f"output     : {args.out}")
     print(f"modelled   : {'RECONSTRUCTED from fit coefficients' if args.reconstruct else 'yfit_plot_abs as stored'}")
-    print(f"fallback   : {'per-year' if args.fill_gaps else 'whole-series'} ecoregion median\n")
+    print("matching   : nearest pixel outright; its own mean if the fit has one, "
+          "else the ecoregion mean\n")
 
     # One (ecoregion, forest) pair serves many stations -- read each file once.
     groups: dict[tuple[int, str], list[dict]] = {}
@@ -737,8 +713,10 @@ def main() -> int:
 
         try:
             pred = load_prediction_mat(mat)
-            obs = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),
-                   np.asarray(pred["Y_plot_abs"], dtype=float))
+            obs = {"years": pred["time_yrs"].astype(int),
+                   "pixels": pred["pixel_id"].astype(int),
+                   "values": np.asarray(pred["Y_plot_abs"], dtype=float)}
+            class_years = None
             if args.reconstruct:
                 fit_path = resolve_fit_file(args.plsr_root, eco, forest)
                 if fit_path is None:
@@ -748,26 +726,24 @@ def main() -> int:
                 # Coordinates come from the predictor table itself, so pixel IDs,
                 # coordinates and predictors are guaranteed to be one vintage.
                 eco_csv = ptab
-                ry, rp, rv, diag = reconstruct_modelled(
-                    fit, ptab, LU_BASE + FOREST_LU[forest], strict_lu=args.strict_lu,
-                    allow_class_switch=args.allow_class_switch)
-                if not len(rv):
-                    raise RuntimeError(f"reconstruction produced no rows (LU filter: {diag})")
-                modelled = (ry, rp, rv)
+                modelled, diag = reconstruct_modelled(fit, ptab, LU_BASE + FOREST_LU[forest])
+                if not len(modelled["values"]):
+                    raise RuntimeError(f"reconstruction produced no rows ({diag})")
                 class_years = diag.pop("class_years")
                 src = (f"reconstructed from {fit_path.name} over {ptab.name}: "
-                       f"{diag['n_rows']} pixel-years over {diag['n_pixels_kept']} pixel(s), "
+                       f"{diag['n_rows']} pixel-years over {diag['n_pixels_kept']} pixel(s) "
+                       f"({diag['n_pixels_in_fit']} with a pixel mean, the rest on the "
+                       f"ecoregion mean {fit['mu_Y_eco']:.1f} g/m2), "
                        f"{len(fit['predictors'])} predictor(s), "
-                       f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed predictor"
-                       + (f", dropped {diag['n_pixels_class_switched']} pixel(s) whose forest "
-                          f"class changed" if diag["n_pixels_class_switched"] else "")
+                       f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed "
+                       f"predictor, {diag['n_pixels_class_switched']} fit pixel(s) changed class"
                        + (f", dropped {len(diag['dead_pixels'])} pixel(s) with no usable "
                           f"predictor in any year" if diag["dead_pixels"] else ""))
             else:
-                modelled = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),
-                            np.asarray(pred["yfit_plot_abs"], dtype=float))
+                modelled = {"years": pred["time_yrs"].astype(int),
+                            "pixels": pred["pixel_id"].astype(int),
+                            "values": np.asarray(pred["yfit_plot_abs"], dtype=float)}
                 src = f"{mat.name}"
-                class_years = None
                 eco_csv = next((t for t in tables if has_coord_columns(t)), None)
                 if eco_csv is None:
                     raise RuntimeError(
@@ -788,7 +764,7 @@ def main() -> int:
         series = {"observed": obs, "modelled": modelled}
         for st in members:
             res = build_station(st, series, coords, years_wanted, args.max_distance_km,
-                                args.fill_gaps, class_years, args.min_year_coverage)
+                                args.fill_gaps, class_years)
             obs_rows, mod_rows = res.pop("observed"), res.pop("modelled")
             if args.audit:
                 # Which years does the modelled series actually carry? This is the
@@ -818,7 +794,8 @@ def main() -> int:
 
     args.out.mkdir(parents=True, exist_ok=True)
     cols = ["station_id", "forest_type", "eco_idx", "eco_name", "plsr_q2", "lat", "lon",
-            "pixel_id", "pixel_lat", "pixel_lon", "distance_km", "n_pixels", "pixel_class_years",
+            "pixel_id", "pixel_lat", "pixel_lon", "distance_km", "n_pixels",
+            "pixel_class_years", "baseline",
             "observed_source", "observed_n_years", "observed_mean", "observed_min", "observed_max",
             "modelled_source", "modelled_n_years", "modelled_mean", "modelled_min", "modelled_max",
             "status", "note"]
@@ -864,24 +841,28 @@ def main() -> int:
             "predictor_table": f"{args.predictor_root}/LMA_ecoregion_no<ii>.csv",
             "years": [args.start_year, args.end_year],
             "observed_field": "Y_plot_abs",
-            "modelled_field": ("reconstructed: beta/mu/sigma from "
-                               "PLSR_fitting_coeff_*_TEMPORAL.mat re-applied to the full "
-                               "LMA_ecoregion_no<ii>.csv predictor table, restricted to "
-                               "uniq_pix_final and LU = 40 + forest id")
+            "modelled_field": ("reconstructed: beta/mu_X/sigma_X/mu_Y/sigma_Y and the "
+                               "per-pixel means from PLSR_fitting_coeff_*_TEMPORAL.mat, "
+                               "re-applied to every row of LMA_ecoregion_no<ii>.csv. "
+                               "Predictors are demeaned by the pixel mean, then normalised "
+                               "by the ecoregion mean and standard deviation.")
                               if args.reconstruct else "yfit_plot_abs",
             "units": "g/m2 (leaf dry mass per unit leaf area)",
-            "fallback": "per-year ecoregion median" if args.fill_gaps
-                        else "whole-series ecoregion median",
+            "baseline_rule": ("pixel mean (mu_X_pix_final/mu_Y_pix_final, computed by the "
+                              "fit over the years that pixel carried the station's forest "
+                              "type) where the fit covers the nearest pixel; otherwise the "
+                              "ecoregion mean, i.e. the mean of those per-pixel means"),
             "max_distance_km": args.max_distance_km,
             "note": "iLMA is the dataset name, not an inverse. SLA conversion is applied "
                     "at .mat build time, not here.",
         }, fh, indent=2)
 
     ok = sum(1 for m in manifest if m.get("status") == "ok")
-    fell_back = sum(1 for m in manifest if m.get("modelled_source") == "ecoregion_median")
+    fell_back = sum(1 for m in manifest if m.get("baseline") == "ecoregion_mean")
     print(f"\nwrote {ok}/{len(manifest)} stations to {args.out}")
     if fell_back:
-        print(f"  {fell_back} used the ecoregion median instead of a pixel series")
+        print(f"  {fell_back} station(s) sit on a pixel the fit never saw as their forest "
+              f"type -- ecoregion mean used as the baseline")
     print(f"  manifest: {args.out / 'lma_manifest.csv'}")
     return 1 if failures else 0
 

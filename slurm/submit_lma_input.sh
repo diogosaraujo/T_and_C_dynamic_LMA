@@ -13,7 +13,12 @@
 ## Reads (already on the cluster, nothing is downloaded):
 ##     $PLSR_ROOT/eco<ii>/time/PLSR_predictions_eco<ii>_<forest>_oofcv.mat
 ##     $PLSR_ROOT/eco<ii>/time/PLSR_fitting_coeff_eco<ii>_<forest>_oofcv_TEMPORAL.mat
-##     $ECOREGION_ROOT/ecoregion_no<ii>.csv
+##     $ECOREGION_ROOT/ecoregion_no<ii>.csv                        (pixel coordinates)
+##     $ECOREGION_ROOT/PLSR_inputs_pixel_climatology_DOY/LMA/...   (predictors, for --reconstruct)
+##
+## The ecoregion_no<ii>.csv at the ecoregions root has no SSRD columns, and every
+## fitted model selected an SSRD champion, so reconstruction reads the richer table
+## the fit itself used. Override with PREDICTOR_ROOT=... if it lives elsewhere.
 ##
 ## Writes one subfolder per station, outside the repo:
 ##     $TC_INPUT_DATA/lma/<station>/<station>_LMA_observed.csv

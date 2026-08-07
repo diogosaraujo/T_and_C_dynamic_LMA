@@ -381,6 +381,53 @@ def resolve_prediction_file(plsr_root: Path, eco: int, forest: str) -> Path | No
     return None
 
 
+def resolve_tables(predictor_root: Path, ecoregion_root: Path, eco: int,
+                   target: str = "LMA") -> list[Path]:
+    """Candidate pixel/predictor tables for one ecoregion, best first.
+
+    Mirrors resolve_input_table in the MATLAB pipeline, which reads from
+    OutRoot/PLSR_inputs_pixel_climatology_DOY/<TARGET>/ and tries
+    '<TARGET>_ecoregion_no<ii>.csv' then 'ecoregion_no<ii>.csv'. The copy sitting
+    at the ecoregions root is a thinner vintage -- it has no SSRD columns at all,
+    and every fitted model selected an SSRD champion -- so it is tried last and
+    only serves as a coordinate source.
+    """
+    cands = [predictor_root / f"{target}_ecoregion_no{eco}.csv",
+             predictor_root / f"ecoregion_no{eco}.csv",
+             ecoregion_root / f"{target}_ecoregion_no{eco}.csv",
+             ecoregion_root / f"ecoregion_no{eco}.csv"]
+    seen, out = set(), []
+    for c in cands:
+        if c not in seen and c.is_file():
+            seen.add(c)
+            out.append(c)
+    return out
+
+
+def missing_columns(path: Path, cols) -> list[str]:
+    with open(path, newline="", encoding="utf-8-sig") as fh:
+        header = next(csv.reader(fh), [])
+    have = {c.strip() for c in header}
+    return [c for c in cols if c not in have]
+
+
+def pick_predictor_table(cands: list[Path], predictors) -> tuple[Path, dict[str, list[str]]]:
+    """First candidate carrying every predictor. Raises with per-file detail if none."""
+    misses: dict[str, list[str]] = {}
+    for c in cands:
+        gap = missing_columns(c, predictors)
+        if not gap:
+            return c, misses
+        misses[str(c)] = gap
+    detail = "; ".join(f"{Path(k).name} lacks {', '.join(v[:3])}"
+                       + (f" (+{len(v) - 3} more)" if len(v) > 3 else "")
+                       for k, v in misses.items())
+    raise RuntimeError(
+        f"no table carries all {len(predictors)} predictor(s): {detail}. "
+        f"Point --predictor-root at the directory the fit actually used "
+        f"(PLSR_inputs_pixel_climatology_DOY/LMA).")
+
+
 def resolve_fit_file(plsr_root: Path, eco: int, forest: str) -> Path | None:
     """The '_TEMPORAL' and '_TEMPORAL_ALLYEARS' files are the same struct saved twice."""
     for label in FOREST_LABELS.get(forest, [forest]):
@@ -486,7 +533,11 @@ def main() -> int:
     p.add_argument("--plsr-root", type=Path, default=DEFAULT_PLSR_ROOT,
                    help="directory holding eco<ii>/time/PLSR_predictions_*.mat")
     p.add_argument("--ecoregion-root", type=Path, default=ECOREGION_ROOT,
-                   help="directory holding ecoregion_no<ii>.csv")
+                   help="directory holding ecoregion_no<ii>.csv (pixel coordinates)")
+    p.add_argument("--predictor-root", type=Path, default=None,
+                   help="directory holding the tables the fit was run on; defaults to "
+                        "<ecoregion-root>/PLSR_inputs_pixel_climatology_DOY/LMA. The copy at "
+                        "the ecoregions root has no SSRD columns, which every fit selected.")
     p.add_argument("--out", type=Path, default=DEFAULT_OUT)
     p.add_argument("--start-year", type=int, default=1985)
     p.add_argument("--end-year", type=int, default=2021)
@@ -506,6 +557,9 @@ def main() -> int:
                         "Use this to check completeness before committing to a series.")
     args = p.parse_args()
 
+    if args.predictor_root is None:
+        args.predictor_root = args.ecoregion_root / "PLSR_inputs_pixel_climatology_DOY" / "LMA"
+
     wanted = {s.strip() for s in args.stations.split(",") if s.strip()} if args.stations else None
     dropped = read_excluded(args.exclude_file)
     excluded = set(dropped)
@@ -523,6 +577,8 @@ def main() -> int:
     print(f"years      : {args.start_year}-{args.end_year}")
     print(f"plsr root  : {args.plsr_root}")
     print(f"eco root   : {args.ecoregion_root}")
+    print(f"pred root  : {args.predictor_root}"
+          f"{'' if args.predictor_root.is_dir() else '   <-- NOT FOUND'}")
     print(f"output     : {args.out}")
     print(f"modelled   : {'RECONSTRUCTED from fit coefficients' if args.reconstruct else 'yfit_plot_abs as stored'}")
     print(f"fallback   : {'per-year' if args.fill_gaps else 'whole-series'} ecoregion median\n")
@@ -537,9 +593,10 @@ def main() -> int:
     for (eco, forest), members in sorted(groups.items()):
         tag = f"eco{eco} {forest} ({len(members)} station{'s' if len(members) > 1 else ''})"
         mat = resolve_prediction_file(args.plsr_root, eco, forest)
-        eco_csv = args.ecoregion_root / f"ecoregion_no{eco}.csv"
-        if mat is None or not eco_csv.is_file():
-            why = "no prediction .mat" if mat is None else f"no {eco_csv.name}"
+        tables = resolve_tables(args.predictor_root, args.ecoregion_root, eco)
+        eco_csv = tables[0] if tables else args.ecoregion_root / f"ecoregion_no{eco}.csv"
+        if mat is None or not tables:
+            why = "no prediction .mat" if mat is None else f"no ecoregion_no{eco}.csv"
             print(f"  ! {tag}: {why} -- skipped")
             failures += 1
             for st in members:
@@ -559,12 +616,13 @@ def main() -> int:
                 if fit_path is None:
                     raise RuntimeError("no PLSR_fitting_coeff_*_TEMPORAL.mat to reconstruct from")
                 fit = read_fit_mat(fit_path)
-                ry, rp, rv, diag = reconstruct_modelled(fit, eco_csv, LU_BASE + FOREST_LU[forest])
+                ptab, _ = pick_predictor_table(tables, fit["predictors"])
+                ry, rp, rv, diag = reconstruct_modelled(fit, ptab, LU_BASE + FOREST_LU[forest])
                 if not len(rv):
                     raise RuntimeError(f"reconstruction produced no rows (LU filter: {diag})")
                 modelled = (ry, rp, rv)
-                src = (f"reconstructed from {fit_path.name}: {diag['n_rows']} pixel-years, "
-                       f"{len(fit['predictors'])} predictor(s), "
+                src = (f"reconstructed from {fit_path.name} over {ptab.name}: "
+                       f"{diag['n_rows']} pixel-years, {len(fit['predictors'])} predictor(s), "
                        f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed predictor")
             else:
                 modelled = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),

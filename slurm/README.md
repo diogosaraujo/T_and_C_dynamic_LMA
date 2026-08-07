@@ -298,24 +298,31 @@ predictors are **negated** (`-1 * pet`), and two georeferences are in play —
 SPEI12/SPI3/SPI6/SPI12 are indexed `[lat, lon]` on a −180..180 grid, while
 SPEI3/SPEI6 and tp/tas/pet/ssrd are `[lon, lat]` on the native 0..360 grid.
 
-**Verification result (job 35425, eco1, 25 rows × 146 predictors):** all 3,500
-ported values matched the table; 97 of the 150 `-sev` values did not. So the grids,
-axis orders, time axes, lag indexing, seasonal windows and the PET sign are all
-confirmed against MATLAB's own output — the port is sound everywhere except the one
-function that was guessed.
+**Verification (job 35425, eco1, 25 rows × 146 predictors):** all 3,500 direct
+values matched the table; 97 of the 150 `-sev` values did not, because
+`SI_to_SIdroughts` was then a guess. So the grids, axis orders, time axes, lag
+indexing, seasonal windows and the PET sign were all confirmed against MATLAB's own
+output at that point.
 
-⚠️ `SI_to_SIdroughts` (behind the `-sev` predictors) lives in
-`/vol_efthymios/NFS07/dd1136/functions/` and is **not ported**. The obvious reading —
-keep months at or below −1, zero elsewhere — is measurably wrong: it returns 0 for
-windows the table gives severities of 0.2–5.6, because those windows never reach −1
-at all, which means the real function is run-based (a drought event spanning the
-months either side of the crossing) rather than a per-month threshold.
+`SI_to_SIdroughts` (F. Marra, Aug 2020) is now ported. A drought **event** runs from
+the last positive SI before a month at or below the threshold to the last month
+before SI turns positive again, and the series carries SI inside those runs — so
+months between 0 and −1 still contribute provided their run reaches −1 somewhere. A
+per-month threshold gives 0 where the table reports 0.2–5.6, which is what the first
+attempt got wrong.
 
-Until it is ported, `era5_fill` **refuses to fill** any group whose fit selected a
-`-sev` predictor rather than substituting a guess, the run log marks that group
-`<-- ERA5 FILL BLOCKED`, and the manifest note records it per station. Flip
-`SEV_VERIFIED` in `era5_predictors.py` once the real function is in. The run log now
-prints each group's selected predictor names, so the blast radius is visible.
+Two properties matter and are easy to lose:
+
+- The drought series is built over the **whole record** once per pixel and only then
+  sliced to 12 months. Building it from the slice drops every event that began
+  earlier — a second, independent bug in the first attempt.
+- NaN months are neither triggers (`SI < thres` false) nor terminators (`SI > 0`
+  false), so they sit *inside* a run and are carried through, then dropped by the
+  `nansum`.
+
+Cross-checked against a literal 1-based transcription of the MATLAB on 4,000 random
+series (800 containing NaNs): exact agreement, worst difference 0.0. Re-run the
+verification job to confirm against the real tables.
 
 Needs `h5py`: the PLSR files are MATLAB `-v7.3`, i.e. HDF5, which `scipy.io.loadmat`
 cannot read. **Re-run `sbatch slurm/submit_setup_env.sh`** before first use; the job

@@ -570,7 +570,13 @@ def era5_fill(store, fit: dict, rows: list[dict], lat: float, lon: float, doy: f
     if not missing or not math.isfinite(doy):
         return 0, ""
     preds = fit["predictors"]
-    sev = [p for p in preds if p.endswith("-sev")]
+    # A predictor the port cannot reproduce would be silently zeroed by
+    # predict_from_raw and pull the year toward its baseline -- a wrong number that
+    # looks like a plausible one. Leave the year blank instead.
+    blocked = era5_predictors.unverifiable(preds)
+    if blocked:
+        return 0, (f"{len(missing)} year(s) not filled: fit uses {', '.join(blocked)}, "
+                   f"which needs the real SI_to_SIdroughts")
     if pix_index is None:
         mu_X_row, mu_Y_row = fit["mu_X_eco"], fit["mu_Y_eco"]
         label = "ecoregion_mean"
@@ -593,13 +599,7 @@ def era5_fill(store, fit: dict, rows: list[dict], lat: float, lon: float, doy: f
         val, _ = predict_from_raw(fit, X_raw, mu_X_row, mu_Y_row)
         r.update(LMA_g_m2=round(float(val[0]), 4), source=f"{label}_era5", n_values=1)
         n += 1
-    note = ""
-    if n:
-        note = f"{n} year(s) filled from ERA5-Land"
-        if sev:
-            note += (f" using inferred SI_to_SIdroughts for {', '.join(sev)} "
-                     f"-- verify against MATLAB")
-    return n, note
+    return n, (f"{n} year(s) filled from ERA5-Land" if n else "")
 
 
 def write_series(path: Path, rows: list[dict]) -> None:
@@ -822,11 +822,14 @@ def main() -> int:
                        f"{diag['n_rows']} pixel-years over {diag['n_pixels_kept']} pixel(s) "
                        f"({diag['n_pixels_in_fit']} with a pixel mean, the rest on the "
                        f"ecoregion mean {fit['mu_Y_eco']:.1f} g/m2), "
-                       f"{len(fit['predictors'])} predictor(s), "
+                       f"predictors [{', '.join(fit['predictors'])}], "
                        f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed "
                        f"predictor, {diag['n_pixels_class_switched']} fit pixel(s) changed class"
                        + (f", dropped {len(diag['dead_pixels'])} pixel(s) with no usable "
-                          f"predictor in any year" if diag["dead_pixels"] else ""))
+                          f"predictor in any year" if diag["dead_pixels"] else "")
+                       + (f"   <-- ERA5 FILL BLOCKED: "
+                          f"{', '.join(era5_predictors.unverifiable(fit['predictors']))}"
+                          if era5_predictors.unverifiable(fit["predictors"]) else ""))
             else:
                 modelled = {"years": pred["time_yrs"].astype(int),
                             "pixels": pred["pixel_id"].astype(int),
@@ -864,8 +867,9 @@ def main() -> int:
                 n_fill, note = era5_fill(
                     store, fit, mod_rows, coords[pid][0], coords[pid][1],
                     doy_by_pixel.get(pid, eco_doy), pix_index, f"{st['station_id']}")
-                if n_fill:
+                if note:
                     res["note"] = ((res["note"] + "; ") if res["note"] else "") + note
+                if n_fill:
                     present = [r["LMA_g_m2"] for r in mod_rows if r["LMA_g_m2"] != ""]
                     res.update(modelled_n_years=len(present),
                                modelled_mean=round(float(np.mean(present)), 3),

@@ -115,23 +115,37 @@ def month_axis(start: tuple[int, int], n: int) -> np.ndarray:
 
 
 def si_to_si_droughts(si: np.ndarray, threshold: float = -1.0) -> np.ndarray:
-    """Drought-severity series behind the '-sev' predictors.
+    """Drought-severity series behind the '-sev' predictors -- NOT VERIFIED.
 
     SI_to_SIdroughts lives in /vol_efthymios/NFS07/dd1136/functions/ and is not
-    reproduced here; this is the standard reading -- keep the index where it sits
-    at or below the threshold, zero elsewhere -- so that
+    reproduced here. The obvious reading -- keep the index where it sits at or
+    below the threshold, zero elsewhere -- was tested against the real eco1 table
+    (job 35425) and is WRONG: it returns 0 for windows the table gives severities
+    of 0.2 to 5.6, because those windows never touch -1 at all. The real function
+    is evidently run-based (a drought event spanning the months either side of the
+    crossing, in the theory-of-runs sense) rather than a per-month threshold.
 
-        row('<SI>-sev') = -1 * nansum(SI_drought(jj-11 : jj))
-
-    comes out positive and larger for a more severe 12-month window. It is used
-    ONLY if a fitted model actually selected a '-sev' predictor; callers are
-    warned when that happens, because this one function is inferred rather than
-    ported. Verify it against the MATLAB before relying on such a group.
+    Kept only so the shape of the calculation is documented. era5_fill refuses to
+    fill a group whose fit selected a '-sev' predictor, so this is not reached in
+    normal use; SEV_VERIFIED flips once the real function is ported.
     """
     out = np.zeros_like(si, dtype=float)
     mask = np.isfinite(si) & (si <= threshold)
     out[mask] = si[mask]
     return out
+
+
+# Job 35425: 97 of 150 '-sev' values disagreed with the table, while all 3,500
+# ported values matched. Until SI_to_SIdroughts is ported, a fit that selected a
+# '-sev' predictor cannot be filled from ERA5-Land.
+SEV_VERIFIED = False
+
+
+def unverifiable(predictors) -> list[str]:
+    """Selected predictors this module cannot yet reproduce."""
+    if SEV_VERIFIED:
+        return []
+    return [p for p in predictors if p.endswith("-sev")]
 
 
 class Era5Monthly:
@@ -433,14 +447,46 @@ def verify(table: Path, root: Path, n_rows: int, tol: float) -> int:
     print(f"compared: {checked} value(s) over {len(sample)} row(s) "
           f"({nan_both} NaN in both)")
     print(f"mismatch: {len(bad)} above rel tol {tol:g}")
-    for rel, n, ref, mine, where in worst[:10]:
+
+    # Split the verdict by predictor, and separate the ported predictors from the
+    # one inferred function. '-sev' failing says nothing about the grids, time axes
+    # or sign conventions -- it is a different, isolated problem -- so reporting a
+    # single pass/fail hides the result that actually matters.
+    sev_bad = [w for w in bad if w[1].endswith("-sev")]
+    other_bad = [w for w in bad if not w[1].endswith("-sev")]
+    n_sev = sum(1 for n in have if n.endswith("-sev")) * len(sample)
+    print(f"  ported predictors : {len(other_bad)} mismatch(es) of "
+          f"{checked - n_sev} compared")
+    print(f"  '-sev' (inferred) : {len(sev_bad)} mismatch(es) of {n_sev} compared")
+
+    per = {}
+    for rel, n, _, _, _ in bad:
+        p = per.setdefault(n, [0, 0.0])
+        p[0] += 1
+        p[1] = max(p[1], rel)
+    if per:
+        print("\n  mismatches by predictor:")
+        for n, (cnt, mx) in sorted(per.items(), key=lambda kv: -kv[1][0]):
+            print(f"    {n:<18} {cnt:>4} row(s)   worst rel {mx:.2e}")
+
+    show = other_bad[:10] or worst[:6]
+    print("\n  worst values:")
+    for rel, n, ref, mine, where in show:
         flag = "  <-- MISMATCH" if rel > tol else ""
-        print(f"    {n:<16} table {ref:>16.6g}  recomputed {mine:>16.6g}  "
+        print(f"    {n:<18} table {ref:>16.6g}  recomputed {mine:>16.6g}  "
               f"rel {rel:.2e}  [{where}]{flag}")
-    if bad:
-        fams = sorted({n.split(" - ")[0].split("-")[0] for _, n, _, _, _ in bad})
-        print(f"\nFAILED. Families affected: {', '.join(fams)}")
+
+    if other_bad:
+        fams = sorted({n.split(" - ")[0].split("-")[0] for _, n, _, _, _ in other_bad})
+        print(f"\nFAILED on ported predictors. Families affected: {', '.join(fams)}")
         return 1
+    if sev_bad:
+        print("\nPORT VERIFIED for every predictor except '-sev'. The grids, time axes,\n"
+              "lag indexing, seasonal windows and the PET sign all reproduce the table.\n"
+              "'-sev' needs the real SI_to_SIdroughts from\n"
+              "/vol_efthymios/NFS07/dd1136/functions/ -- the fallback refuses to fill a\n"
+              "group whose fit selected one rather than substituting a guess.")
+        return 2
     print("\nOK -- the port reproduces the table.")
     return 0
 

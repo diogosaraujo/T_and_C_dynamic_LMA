@@ -298,9 +298,24 @@ predictors are **negated** (`-1 * pet`), and two georeferences are in play —
 SPEI12/SPI3/SPI6/SPI12 are indexed `[lat, lon]` on a −180..180 grid, while
 SPEI3/SPEI6 and tp/tas/pet/ssrd are `[lon, lat]` on the native 0..360 grid.
 
+**Verification result (job 35425, eco1, 25 rows × 146 predictors):** all 3,500
+ported values matched the table; 97 of the 150 `-sev` values did not. So the grids,
+axis orders, time axes, lag indexing, seasonal windows and the PET sign are all
+confirmed against MATLAB's own output — the port is sound everywhere except the one
+function that was guessed.
+
 ⚠️ `SI_to_SIdroughts` (behind the `-sev` predictors) lives in
-`/vol_efthymios/NFS07/dd1136/functions/` and is **inferred**, not ported. It is only
-reached if a fit selected a `-sev` predictor, and the run log says so when it happens.
+`/vol_efthymios/NFS07/dd1136/functions/` and is **not ported**. The obvious reading —
+keep months at or below −1, zero elsewhere — is measurably wrong: it returns 0 for
+windows the table gives severities of 0.2–5.6, because those windows never reach −1
+at all, which means the real function is run-based (a drought event spanning the
+months either side of the crossing) rather than a per-month threshold.
+
+Until it is ported, `era5_fill` **refuses to fill** any group whose fit selected a
+`-sev` predictor rather than substituting a guess, the run log marks that group
+`<-- ERA5 FILL BLOCKED`, and the manifest note records it per station. Flip
+`SEV_VERIFIED` in `era5_predictors.py` once the real function is in. The run log now
+prints each group's selected predictor names, so the blast radius is visible.
 
 Needs `h5py`: the PLSR files are MATLAB `-v7.3`, i.e. HDF5, which `scipy.io.loadmat`
 cannot read. **Re-run `sbatch slurm/submit_setup_env.sh`** before first use; the job

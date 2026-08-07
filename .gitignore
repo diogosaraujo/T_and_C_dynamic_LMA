@@ -19,3 +19,8 @@ venv/
 *.asv
 *.autosave
 slprj/
+
+# PLSR predictor tables copied in for inspection -- 40+ MB each, and they live on
+# the cluster under PLSR_inputs_pixel_climatology_DOY/LMA/. Never commit them.
+preprocessing/LMA_ecoregion_no*.csv
+preprocessing/ecoregion_no*.csv

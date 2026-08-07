@@ -262,7 +262,8 @@ def read_fit_mat(path: Path) -> dict:
     return out
 
 
-def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
+def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int,
+                         strict_lu: bool = False) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
     """Re-apply the fitted model to the FULL predictor table.
 
     The pipeline only predicted rows that survived rmmissing on the response, so
@@ -277,12 +278,26 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[np.nd
     Only pixels in uniq_pix_final are used -- those are the pixels that contributed
     to the fit, i.e. the ones that had at least one LMA observation.
 
-    Returns (years, pixels, values, diagnostics).
+    Pixel membership, NOT the per-row LU, is what selects rows. A pixel's mapped
+    forest class changes between years (in eco1, 48 of 453 pixels flip between
+    Evergreen and Mixed, and only 78 of 135 evergreen pixels hold that class in all
+    37 years), so filtering row-by-row on LU would truncate a station's series to
+    the years its pixel happened to be mapped as the right type -- 12 of 37 for the
+    pixel nearest US-Ho1. Membership in uniq_pix_final already means the pixel
+    contributed observations of this forest type to this fit, and the predictors are
+    the same climate series regardless of how the map labelled the pixel that year.
+    Pass strict_lu=True for the old row-level behaviour.
+
+    Returns (years, pixels, values, diagnostics); diagnostics['class_years'] maps
+    each pixel to the number of years it does carry lu_value, so the caller can
+    prefer stable pixels when matching.
+
     """
     preds = fit["predictors"]
     pix_row = {int(p): i for i, p in enumerate(fit["uniq_pix_final"])}
 
     years, pixels, rows = [], [], []
+    class_years: dict[int, set[int]] = {}
     n_lu_skip = n_pix_skip = 0
     with open(eco_csv, newline="", encoding="utf-8-sig") as fh:
         reader = csv.DictReader(fh)
@@ -291,18 +306,24 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[np.nd
         if missing:
             raise RuntimeError(f"{eco_csv.name}: predictor column(s) absent: {', '.join(missing)}")
         pid_col = cols.get("Pixel ID") or cols.get("Pixel_ID")
-        lu_col, t_col = cols.get("LU"), cols.get("time")
+        lu_col = cols.get("LU")
+        # 'time' is a date string ('15-Jul-1985'); 'Year' is the plain year. Prefer it.
+        t_col = cols.get("Year") or cols.get("year") or cols.get("time")
         if not (pid_col and lu_col and t_col):
-            raise RuntimeError(f"{eco_csv.name}: need Pixel ID, LU and time columns")
+            raise RuntimeError(f"{eco_csv.name}: need Pixel ID, LU and Year/time columns")
         for r in reader:
             try:
-                if int(float(r[lu_col])) != lu_value:
-                    n_lu_skip += 1
-                    continue
                 pid = int(float(r[pid_col]))
-                yr = int(str(r[t_col])[-4:])
+                yr = int(str(r[t_col]).strip()[-4:])
+                is_class = int(float(r[lu_col])) == lu_value
             except (TypeError, ValueError):
                 continue
+            if is_class:
+                class_years.setdefault(pid, set()).add(yr)
+            else:
+                n_lu_skip += 1
+                if strict_lu:
+                    continue
             if pid not in pix_row:          # pixel contributed nothing to the fit
                 n_pix_skip += 1
                 continue
@@ -316,7 +337,10 @@ def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[np.nd
             pixels.append(pid)
             rows.append(vals)
 
-    diag = {"n_rows": len(rows), "n_rows_wrong_lu": n_lu_skip, "n_rows_pixel_not_in_fit": n_pix_skip}
+    diag = {"n_rows": len(rows),
+            "n_rows_off_class": n_lu_skip,          # dropped only when strict_lu
+            "n_rows_pixel_not_in_fit": n_pix_skip,
+            "class_years": {p: len(v) for p, v in class_years.items()}}
     if not rows:
         return np.array([]), np.array([]), np.array([]), diag
 
@@ -481,7 +505,9 @@ def write_series(path: Path, rows: list[dict]) -> None:
 
 def build_station(st: dict, series: dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]],
                   coords: dict[int, tuple[float, float]],
-                  years_wanted: list[int], max_dist_km: float, fill_gaps: bool) -> dict:
+                  years_wanted: list[int], max_dist_km: float, fill_gaps: bool,
+                  class_years: dict[int, int] | None = None,
+                  min_class_fraction: float = 0.0) -> dict:
     """Return {'observed': rows, 'modelled': rows, **manifest fields} for one station.
 
     `series` maps each kind to (years, pixels, values). The two need not share a row
@@ -495,7 +521,23 @@ def build_station(st: dict, series: dict[str, tuple[np.ndarray, np.ndarray, np.n
     pix = series["modelled"][1].astype(int) if len(series["modelled"][1]) else np.array([], int)
     have = sorted({int(p) for p in np.unique(pix)} & set(coords))
     info = {"n_pixels": len(have), "pixel_id": "", "pixel_lat": "", "pixel_lon": "",
-            "distance_km": "", "note": ""}
+            "distance_km": "", "pixel_class_years": "", "note": ""}
+
+    # Prefer a pixel the LMA map calls this forest type in most years. The nearest
+    # pixel can be one that flips class almost every year, which makes it a poor
+    # stand-in for the tower even though the fit does cover it.
+    if class_years and min_class_fraction > 0 and have:
+        need = min_class_fraction * len(years_wanted)
+        stable = [p for p in have if class_years.get(p, 0) >= need]
+        if stable:
+            if len(stable) < len(have):
+                info["note"] = (f"matched among {len(stable)}/{len(have)} pixels holding "
+                                f"{st['forest_type']} in >={min_class_fraction:.0%} of years")
+            have = stable
+        else:
+            info["note"] = (f"no pixel holds {st['forest_type']} in "
+                            f">={min_class_fraction:.0%} of years; matched on distance alone")
+
     if not have:
         info["note"] = "no prediction pixel has coordinates in the ecoregion table"
         best = None
@@ -506,7 +548,8 @@ def build_station(st: dict, series: dict[str, tuple[np.ndarray, np.ndarray, np.n
         k = int(np.argmin(d))
         best, dist = have[k], float(d[k])
         info.update(pixel_id=best, pixel_lat=round(plat[k], 5), pixel_lon=round(plon[k], 5),
-                    distance_km=round(dist, 3))
+                    distance_km=round(dist, 3),
+                    pixel_class_years=class_years.get(best, 0) if class_years else "")
         if dist > max_dist_km:
             info["note"] = f"nearest pixel {dist:.1f} km away (> {max_dist_km} km); using ecoregion median"
             best = None
@@ -582,6 +625,15 @@ def main() -> int:
                         "PLSR_fitting_coeff_*_TEMPORAL.mat to the full predictor table, "
                         "instead of reading the gapped yfit_plot_abs. Uses only pixels in "
                         "uniq_pix_final, i.e. those that contributed to the fit.")
+    p.add_argument("--strict-lu", action="store_true",
+                   help="reconstruct only the rows whose mapped LU matches the station's "
+                        "forest type. Pixels change class between years, so this truncates "
+                        "series badly (12/37 years for the pixel nearest US-Ho1); off by "
+                        "default, where pixel membership in the fit is what counts.")
+    p.add_argument("--min-class-fraction", type=float, default=0.5,
+                   help="match only to pixels mapped as the station's forest type in at "
+                        "least this fraction of years (default 0.5; 0 disables). Falls back "
+                        "to distance alone if no pixel qualifies.")
     p.add_argument("--dry-run", action="store_true", help="resolve inputs, write nothing")
     p.add_argument("--audit", action="store_true",
                    help="read everything and report year coverage; write only lma_audit.csv. "
@@ -654,10 +706,12 @@ def main() -> int:
                 # Coordinates come from the predictor table itself, so pixel IDs,
                 # coordinates and predictors are guaranteed to be one vintage.
                 eco_csv = ptab
-                ry, rp, rv, diag = reconstruct_modelled(fit, ptab, LU_BASE + FOREST_LU[forest])
+                ry, rp, rv, diag = reconstruct_modelled(
+                    fit, ptab, LU_BASE + FOREST_LU[forest], strict_lu=args.strict_lu)
                 if not len(rv):
                     raise RuntimeError(f"reconstruction produced no rows (LU filter: {diag})")
                 modelled = (ry, rp, rv)
+                class_years = diag.pop("class_years")
                 src = (f"reconstructed from {fit_path.name} over {ptab.name}: "
                        f"{diag['n_rows']} pixel-years, {len(fit['predictors'])} predictor(s), "
                        f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed predictor")
@@ -665,6 +719,7 @@ def main() -> int:
                 modelled = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),
                             np.asarray(pred["yfit_plot_abs"], dtype=float))
                 src = f"{mat.name}"
+                class_years = None
                 eco_csv = next((t for t in tables if has_coord_columns(t)), None)
                 if eco_csv is None:
                     raise RuntimeError(
@@ -685,7 +740,7 @@ def main() -> int:
         series = {"observed": obs, "modelled": modelled}
         for st in members:
             res = build_station(st, series, coords, years_wanted, args.max_distance_km,
-                                args.fill_gaps)
+                                args.fill_gaps, class_years, args.min_class_fraction)
             obs_rows, mod_rows = res.pop("observed"), res.pop("modelled")
             if args.audit:
                 # Which years does the modelled series actually carry? This is the
@@ -715,7 +770,7 @@ def main() -> int:
 
     args.out.mkdir(parents=True, exist_ok=True)
     cols = ["station_id", "forest_type", "eco_idx", "eco_name", "plsr_q2", "lat", "lon",
-            "pixel_id", "pixel_lat", "pixel_lon", "distance_km", "n_pixels",
+            "pixel_id", "pixel_lat", "pixel_lon", "distance_km", "n_pixels", "pixel_class_years",
             "observed_source", "observed_n_years", "observed_mean", "observed_min", "observed_max",
             "modelled_source", "modelled_n_years", "modelled_mean", "modelled_min", "modelled_max",
             "status", "note"]

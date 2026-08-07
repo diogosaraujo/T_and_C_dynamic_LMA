@@ -224,6 +224,16 @@ missing *before* predicting, so `yfit_plot_abs` exists only where an observation
 and the stored series is **not** gap-free. Only pixels in `uniq_pix_final` (those that
 contributed to the fit) are used.
 
+A pixel's mapped forest class is not fixed: in eco1, 48 of 453 pixels flip between
+Evergreen and Mixed over 1985–2021, and only 78 of 135 evergreen pixels hold that
+class in all 37 years. So reconstruction selects rows by **pixel membership in the
+fit**, not by each row's `LU` — filtering row-by-row would have given US-Ho1 a
+12-year series instead of 37. `--strict-lu` restores the row-level filter.
+For the same reason `--min-class-fraction` (default 0.5) matches a station only to
+pixels mapped as its forest type in at least half the years; the manifest records
+`pixel_class_years` so the choice is auditable. At US-Ho1 this trades the nearest
+pixel (16.0 km, evergreen 12/37 years) for a stable one (22.1 km, 37/37).
+
 Each station takes the nearest ecoregion pixel **that appears in the predictions**;
 matching against the ecoregion at large could land on a pixel the model never saw,
 since `predict_with_fit` drops pixels absent from the training set. Where that pixel

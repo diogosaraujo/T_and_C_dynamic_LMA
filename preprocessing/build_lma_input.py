@@ -59,6 +59,10 @@ FOREST_LABELS = {
     "evergreen": ["evergreen"],
     "mixed": ["mixed"],
 }
+# lu_value = 40 + lu_id, with lu_id 1/2/3 = deciduous/evergreen/mixed. The ecoregion
+# table holds several land-use classes, so reconstruction must filter to the right one.
+LU_BASE = 40
+FOREST_LU = {"deciduous": 1, "evergreen": 2, "mixed": 3}
 
 # Physically implausible LMA is a sign of a unit or column mix-up, not a real leaf.
 LMA_MIN, LMA_MAX = 10.0, 600.0
@@ -148,6 +152,153 @@ def load_prediction_mat(path: Path) -> dict[str, np.ndarray]:
     return out
 
 
+def _mat_array(fh, key, hdf5: bool) -> np.ndarray:
+    """Read one numeric field, undoing HDF5's dimension reversal.
+
+    MATLAB stores column-major, so an (m, n) matrix comes back from h5py as
+    (n, m). Vectors are unaffected once ravelled; genuine matrices are not.
+    """
+    a = np.asarray(fh[key][()] if hdf5 else fh[key], dtype=float)
+    if hdf5 and a.ndim == 2 and min(a.shape) > 1:
+        a = a.T
+    return a
+
+
+def _mat_strings(fh, key, hdf5: bool) -> list[str]:
+    """Read a MATLAB cellstr. Under HDF5 each cell is a ref to uint16 char codes."""
+    if not hdf5:
+        return [str(s).strip() for s in np.atleast_1d(fh[key]).ravel()]
+    out = []
+    for ref in np.asarray(fh[key][()]).ravel():
+        out.append("".join(chr(int(c)) for c in np.asarray(fh[ref][()]).ravel()))
+    return out
+
+
+def read_fit_mat(path: Path) -> dict:
+    """Read PLSR_fitting_coeff_*_TEMPORAL.mat -- everything predict_with_fit needs."""
+    num = ("beta", "mu_X", "sigma_X", "mu_Y", "sigma_Y",
+           "mu_X_pix_final", "mu_Y_pix_final", "uniq_pix_final", "r2", "ncomp")
+    out: dict = {}
+    if _is_hdf5(path):
+        import h5py
+        with h5py.File(path, "r") as fh:
+            for k in num:
+                if k in fh:
+                    out[k] = _mat_array(fh, k, True)
+            for k in ("predictor_name_VIP", "predictor_name_NS"):
+                if k in fh:
+                    out["predictors"] = _mat_strings(fh, k, True)
+                    break
+    else:
+        from scipy.io import loadmat
+        raw = loadmat(path, squeeze_me=True)
+        for k in num:
+            if k in raw:
+                out[k] = np.atleast_1d(np.asarray(raw[k], dtype=float))
+        for k in ("predictor_name_VIP", "predictor_name_NS"):
+            if k in raw:
+                out["predictors"] = _mat_strings(raw, k, False)
+                break
+    missing = [k for k in ("beta", "mu_X", "sigma_X", "mu_Y", "sigma_Y", "mu_X_pix_final",
+                           "mu_Y_pix_final", "uniq_pix_final") if k not in out]
+    if missing or "predictors" not in out:
+        raise RuntimeError(f"{path.name}: missing {', '.join(missing + ['predictors'] * ('predictors' not in out))}")
+
+    out["beta"] = out["beta"].ravel()
+    out["uniq_pix_final"] = out["uniq_pix_final"].ravel().astype(int)
+    out["mu_Y_pix_final"] = out["mu_Y_pix_final"].ravel()
+    out["mu_X"] = out["mu_X"].ravel()
+    out["sigma_X"] = out["sigma_X"].ravel()
+    out["mu_Y"] = float(np.ravel(out["mu_Y"])[0])
+    out["sigma_Y"] = float(np.ravel(out["sigma_Y"])[0])
+    npred, npix = len(out["predictors"]), len(out["uniq_pix_final"])
+    mx = np.atleast_2d(out["mu_X_pix_final"])
+    if mx.shape != (npix, npred):
+        if mx.shape == (npred, npix):
+            mx = mx.T
+        else:
+            raise RuntimeError(f"{path.name}: mu_X_pix_final is {mx.shape}, expected "
+                               f"({npix}, {npred}) = (pixels, predictors)")
+    out["mu_X_pix_final"] = mx
+    if len(out["beta"]) != npred + 1:
+        raise RuntimeError(f"{path.name}: beta has {len(out['beta'])} terms, expected "
+                           f"{npred + 1} (intercept + {npred} predictors)")
+    return out
+
+
+def reconstruct_modelled(fit: dict, eco_csv: Path, lu_value: int) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
+    """Re-apply the fitted model to the FULL predictor table.
+
+    The pipeline only predicted rows that survived rmmissing on the response, so
+    yfit_plot_abs inherits the observations' gaps. The predictors are ~98% complete
+    in every year, so evaluating the same coefficients over every row of
+    ecoregion_no<ii>.csv fills those years. This reproduces predict_with_fit exactly:
+
+        X_anom   = X_raw - mu_X_pix_final(pix,:)
+        X        = (X_anom - mu_X) ./ sigma_X ;  non-finite -> 0
+        yfit_abs = ([1 X]*beta) .* sigma_Y + mu_Y + mu_Y_pix_final(pix)
+
+    Only pixels in uniq_pix_final are used -- those are the pixels that contributed
+    to the fit, i.e. the ones that had at least one LMA observation.
+
+    Returns (years, pixels, values, diagnostics).
+    """
+    preds = fit["predictors"]
+    pix_row = {int(p): i for i, p in enumerate(fit["uniq_pix_final"])}
+
+    years, pixels, rows = [], [], []
+    n_lu_skip = n_pix_skip = 0
+    with open(eco_csv, newline="", encoding="utf-8-sig") as fh:
+        reader = csv.DictReader(fh)
+        cols = {c.strip(): c for c in (reader.fieldnames or [])}
+        missing = [p for p in preds if p not in cols]
+        if missing:
+            raise RuntimeError(f"{eco_csv.name}: predictor column(s) absent: {', '.join(missing)}")
+        pid_col = cols.get("Pixel ID") or cols.get("Pixel_ID")
+        lu_col, t_col = cols.get("LU"), cols.get("time")
+        if not (pid_col and lu_col and t_col):
+            raise RuntimeError(f"{eco_csv.name}: need Pixel ID, LU and time columns")
+        for r in reader:
+            try:
+                if int(float(r[lu_col])) != lu_value:
+                    n_lu_skip += 1
+                    continue
+                pid = int(float(r[pid_col]))
+                yr = int(str(r[t_col])[-4:])
+            except (TypeError, ValueError):
+                continue
+            if pid not in pix_row:          # pixel contributed nothing to the fit
+                n_pix_skip += 1
+                continue
+            vals = []
+            for p in preds:
+                try:
+                    vals.append(float(r[cols[p]]))
+                except (TypeError, ValueError):
+                    vals.append(np.nan)
+            years.append(yr)
+            pixels.append(pid)
+            rows.append(vals)
+
+    diag = {"n_rows": len(rows), "n_rows_wrong_lu": n_lu_skip, "n_rows_pixel_not_in_fit": n_pix_skip}
+    if not rows:
+        return np.array([]), np.array([]), np.array([]), diag
+
+    X_raw = np.asarray(rows, dtype=float)
+    idx = np.array([pix_row[p] for p in pixels])
+    X = (X_raw - fit["mu_X_pix_final"][idx, :] - fit["mu_X"]) / fit["sigma_X"]
+    # predict_with_fit zeroes non-finite predictors, i.e. substitutes the mean. That
+    # silently degrades a prediction toward the pixel climatology, so it is counted.
+    bad = ~np.isfinite(X)
+    X[bad] = 0.0
+    diag["n_rows_with_imputed_predictor"] = int(np.any(bad, axis=1).sum())
+    diag["n_rows_all_predictors_imputed"] = int(np.all(bad, axis=1).sum())
+
+    yfit = fit["beta"][0] + X @ fit["beta"][1:]
+    vals = yfit * fit["sigma_Y"] + fit["mu_Y"] + fit["mu_Y_pix_final"][idx]
+    return np.asarray(years), np.asarray(pixels), vals, diag
+
+
 def read_pixel_coords(path: Path) -> dict[int, tuple[float, float]]:
     """Pixel ID -> (lat, lon). The table repeats each pixel once per year."""
     coords: dict[int, tuple[float, float]] = {}
@@ -205,6 +356,17 @@ def resolve_prediction_file(plsr_root: Path, eco: int, forest: str) -> Path | No
     return None
 
 
+def resolve_fit_file(plsr_root: Path, eco: int, forest: str) -> Path | None:
+    """The '_TEMPORAL' and '_TEMPORAL_ALLYEARS' files are the same struct saved twice."""
+    for label in FOREST_LABELS.get(forest, [forest]):
+        for suffix in ("TEMPORAL", "TEMPORAL_ALLYEARS"):
+            cand = (plsr_root / f"eco{eco}" / "time" /
+                    f"PLSR_fitting_coeff_eco{eco}_{label}_oofcv_{suffix}.mat")
+            if cand.is_file():
+                return cand
+    return None
+
+
 def write_series(path: Path, rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", newline="", encoding="utf-8") as fh:
@@ -215,15 +377,20 @@ def write_series(path: Path, rows: list[dict]) -> None:
 
 # ------------------------------------------------------------------------- core
 
-def build_station(st: dict, pred: dict[str, np.ndarray], coords: dict[int, tuple[float, float]],
+def build_station(st: dict, series: dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]],
+                  coords: dict[int, tuple[float, float]],
                   years_wanted: list[int], max_dist_km: float, fill_gaps: bool) -> dict:
-    """Return {'observed': rows, 'modelled': rows, **manifest fields} for one station."""
-    yrs = pred["time_yrs"].astype(int)
-    pix = pred["pixel_id"].astype(int)
+    """Return {'observed': rows, 'modelled': rows, **manifest fields} for one station.
 
-    # Only pixels that actually appear in the predictions can be matched -- picking
-    # the nearest pixel of the ecoregion at large could land on one the model never
-    # saw (predict_with_fit drops pixels absent from the training set).
+    `series` maps each kind to (years, pixels, values). The two need not share a row
+    index: the observed series is sparse, while a reconstructed modelled series covers
+    every pixel-year.
+    """
+    # Match on the modelled series -- that is what gets forced, and its pixel set is
+    # the one that contributed to the fit (pixels with no LMA at all never appear in
+    # uniq_pix_final). Matching against the ecoregion at large could otherwise land
+    # on a pixel the model never saw.
+    pix = series["modelled"][1].astype(int) if len(series["modelled"][1]) else np.array([], int)
     have = sorted({int(p) for p in np.unique(pix)} & set(coords))
     info = {"n_pixels": len(have), "pixel_id": "", "pixel_lat": "", "pixel_lon": "",
             "distance_km": "", "note": ""}
@@ -243,10 +410,16 @@ def build_station(st: dict, pred: dict[str, np.ndarray], coords: dict[int, tuple
             best = None
 
     out = {**info}
-    for kind, field in (("observed", "Y_plot_abs"), ("modelled", "yfit_plot_abs")):
-        vals = np.asarray(pred[field], dtype=float)
-        eco_series = annual_median(yrs, vals)                      # fallback, all pixels
-        pix_series = annual_median(yrs[pix == best], vals[pix == best]) if best is not None else {}
+    for kind in ("observed", "modelled"):
+        k_yrs, k_pix, k_vals = series[kind]
+        k_yrs = np.asarray(k_yrs, dtype=int)
+        k_pix = np.asarray(k_pix, dtype=int)
+        vals = np.asarray(k_vals, dtype=float)
+        # Fallback median is over the valid pixels only, since those are the only ones
+        # present in either series.
+        eco_series = annual_median(k_yrs, vals)
+        sel = k_pix == best if best is not None else np.zeros(len(k_yrs), bool)
+        pix_series = annual_median(k_yrs[sel], vals[sel]) if best is not None else {}
 
         source = "pixel" if pix_series else "ecoregion_median"
         rows = []
@@ -297,6 +470,11 @@ def main() -> int:
     p.add_argument("--fill-gaps", action="store_true",
                    help="fill individual missing years from the ecoregion median "
                         "(default: fall back only when the pixel has no data at all)")
+    p.add_argument("--reconstruct", action="store_true",
+                   help="rebuild the modelled series by re-applying "
+                        "PLSR_fitting_coeff_*_TEMPORAL.mat to the full predictor table, "
+                        "instead of reading the gapped yfit_plot_abs. Uses only pixels in "
+                        "uniq_pix_final, i.e. those that contributed to the fit.")
     p.add_argument("--dry-run", action="store_true", help="resolve inputs, write nothing")
     p.add_argument("--audit", action="store_true",
                    help="read everything and report year coverage; write only lma_audit.csv. "
@@ -321,6 +499,7 @@ def main() -> int:
     print(f"plsr root  : {args.plsr_root}")
     print(f"eco root   : {args.ecoregion_root}")
     print(f"output     : {args.out}")
+    print(f"modelled   : {'RECONSTRUCTED from fit coefficients' if args.reconstruct else 'yfit_plot_abs as stored'}")
     print(f"fallback   : {'per-year' if args.fill_gaps else 'whole-series'} ecoregion median\n")
 
     # One (ecoregion, forest) pair serves many stations -- read each file once.
@@ -348,6 +527,24 @@ def main() -> int:
         try:
             pred = load_prediction_mat(mat)
             coords = read_pixel_coords(eco_csv)
+            obs = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),
+                   np.asarray(pred["Y_plot_abs"], dtype=float))
+            if args.reconstruct:
+                fit_path = resolve_fit_file(args.plsr_root, eco, forest)
+                if fit_path is None:
+                    raise RuntimeError("no PLSR_fitting_coeff_*_TEMPORAL.mat to reconstruct from")
+                fit = read_fit_mat(fit_path)
+                ry, rp, rv, diag = reconstruct_modelled(fit, eco_csv, LU_BASE + FOREST_LU[forest])
+                if not len(rv):
+                    raise RuntimeError(f"reconstruction produced no rows (LU filter: {diag})")
+                modelled = (ry, rp, rv)
+                src = (f"reconstructed from {fit_path.name}: {diag['n_rows']} pixel-years, "
+                       f"{len(fit['predictors'])} predictor(s), "
+                       f"{diag['n_rows_with_imputed_predictor']} row(s) with an imputed predictor")
+            else:
+                modelled = (pred["time_yrs"].astype(int), pred["pixel_id"].astype(int),
+                            np.asarray(pred["yfit_plot_abs"], dtype=float))
+                src = f"{mat.name}"
         except Exception as exc:                                   # noqa: BLE001
             print(f"  ! {tag}: {type(exc).__name__}: {exc}")
             failures += 1
@@ -355,9 +552,10 @@ def main() -> int:
                 manifest.append({**st, "status": "read_error", "note": str(exc)[:200]})
             continue
 
-        print(f"  {tag}: {mat.name}, {len(coords)} pixels")
+        print(f"  {tag}: {len(coords)} pixels, {src}")
+        series = {"observed": obs, "modelled": modelled}
         for st in members:
-            res = build_station(st, pred, coords, years_wanted, args.max_distance_km,
+            res = build_station(st, series, coords, years_wanted, args.max_distance_km,
                                 args.fill_gaps)
             obs_rows, mod_rows = res.pop("observed"), res.pop("modelled")
             if args.audit:
@@ -431,7 +629,12 @@ def main() -> int:
             "plsr_root": str(args.plsr_root),
             "ecoregion_root": str(args.ecoregion_root),
             "years": [args.start_year, args.end_year],
-            "observed_field": "Y_plot_abs", "modelled_field": "yfit_plot_abs",
+            "observed_field": "Y_plot_abs",
+            "modelled_field": ("reconstructed: beta/mu/sigma from "
+                               "PLSR_fitting_coeff_*_TEMPORAL.mat re-applied to the full "
+                               "ecoregion_no<ii>.csv predictor table, restricted to "
+                               "uniq_pix_final and LU = 40 + forest id")
+                              if args.reconstruct else "yfit_plot_abs",
             "units": "g/m2 (leaf dry mass per unit leaf area)",
             "fallback": "per-year ecoregion median" if args.fill_gaps
                         else "whole-series ecoregion median",

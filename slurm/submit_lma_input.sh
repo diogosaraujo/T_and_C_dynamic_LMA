@@ -7,9 +7,12 @@
 ##     sbatch slurm/submit_lma_input.sh --stations US-HBK,US-Ha2
 ##     sbatch slurm/submit_lma_input.sh --dry-run
 ##     sbatch slurm/submit_lma_input.sh --fill-gaps
+##     sbatch slurm/submit_lma_input.sh --audit        # coverage check, writes no series
+##     sbatch slurm/submit_lma_input.sh --reconstruct  # complete modelled series
 ##
 ## Reads (already on the cluster, nothing is downloaded):
 ##     $PLSR_ROOT/eco<ii>/time/PLSR_predictions_eco<ii>_<forest>_oofcv.mat
+##     $PLSR_ROOT/eco<ii>/time/PLSR_fitting_coeff_eco<ii>_<forest>_oofcv_TEMPORAL.mat
 ##     $ECOREGION_ROOT/ecoregion_no<ii>.csv
 ##
 ## Writes one subfolder per station, outside the repo:

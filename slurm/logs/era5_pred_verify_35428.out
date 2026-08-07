@@ -1,0 +1,51 @@
+job        : 35428
+node       : soeepyc16
+started    : 2026-08-07T06:03:13Z
+pred root  : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_inputs_pixel_climatology_DOY/LMA
+era5       : /vol_efthymios/NFS07/Data/ERA5_Land/monthly
+ecoregions : 1   (rows=25 tol=1e-6)
+
+total 143681817
+-rw-rw-r-- 1 en279  efthymios          84 Mar 15  2023 $var_ERA5L.err
+-rw-rw-r-- 1 en279  efthymios        1580 Mar 15  2023 $var_ERA5L.out
+drwxrwsr-x 7 en279  efthymios         190 Apr 28 22:24 .
+drwxrwsr-x 3 en279  efthymios           3 Mar 10  2023 ..
+-rw-r--r-- 1 en279  efthymios       12288 Mar 15  2023 .ERA5_to_mat_arrays.sh.swo
+-rw-rw-r-- 1 en279  efthymios  1711695708 Mar 10  2023 1980.nc
+-rw-rw-r-- 1 dd1136 efthymios    56261388 Apr 26 15:58 1980_ssrd.nc
+-rw-rw-r-- 1 en279  efthymios  1711695712 Mar 10  2023 1981.nc
+-rw-rw-r-- 1 dd1136 efthymios    56391873 Apr 26 15:57 1981_ssrd.nc
+-rw-rw-r-- 1 en279  efthymios  1711695712 Mar 10  2023 1982.nc
+-rw-rw-r-- 1 dd1136 efthymios    56325276 Apr 26 15:57 1982_ssrd.nc
+-rw-rw-r-- 1 en279  efthymios  1711695712 Mar 10  2023 1983.nc
+-rw-rw-r-- 1 dd1136 efthymios    56376736 Apr 26 15:56 1983_ssrd.nc
+-rw-rw-r-- 1 en279  efthymios  1711695716 Mar 10  2023 1984.nc
+-rw-rw-r-- 1 dd1136 efthymios    56295639 Apr 26 15:58 1984_ssrd.nc
+-rw-rw-r-- 1 en279  efthymios  1711695712 Mar 10  2023 1985.nc
+-rw-rw-r-- 1 dd1136 efthymios    56216352 Apr 26 15:58 1985_ssrd.nc
+-rw-rw-r-- 1 en279  efthymios  1711695712 Mar 10  2023 1986.nc
+-rw-rw-r-- 1 dd1136 efthymios    56149373 Apr 26 15:58 1986_ssrd.nc
+
+table header first 146 columns match the port: True
+
+=== ecoregion 1 ===
+table   : /vol_efthymios/NFS07/dd1136/ecoregions/PLSR_inputs_pixel_climatology_DOY/LMA/LMA_ecoregion_no1.csv
+rows    : 16284, 146/146 predictor columns present
+compared: 3650 value(s) over 25 row(s) (0 NaN in both)
+mismatch: 0 above rel tol 1e-06
+  direct predictors : 0 mismatch(es) of 3500 compared
+  '-sev' (run-based): 0 mismatch(es) of 150 compared
+
+  worst values:
+    SPI6_ts-6mo        table          -1.0121  recomputed          -1.0121  rel 4.83e-15  [398/1993]
+    SPI6_ts-4mo        table          -1.0121  recomputed          -1.0121  rel 4.83e-15  [157/1988]
+    SPI6_ts-3mo        table          -1.0121  recomputed          -1.0121  rel 4.83e-15  [316/1989]
+    SPI6_ts-2mo        table          -1.0121  recomputed          -1.0121  rel 4.83e-15  [157/1988]
+    SPI3_ts-6mo        table          -1.0121  recomputed          -1.0121  rel 4.83e-15  [197/2002]
+    SPI3_ts-5mo        table          -1.0121  recomputed          -1.0121  rel 4.83e-15  [100/2001]
+
+OK -- the port reproduces the table, '-sev' included.
+
+finished   : 2026-08-07T06:03:14Z
+name check : 0 (0 = ok)
+exit status: 0

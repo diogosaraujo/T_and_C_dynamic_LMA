@@ -115,9 +115,34 @@ def read_stations(paths, wanted: set[str] | None) -> list[dict]:
     return stations
 
 
+HDF5_SIGNATURE = b"\x89HDF\r\n\x1a\n"
+
+
 def _is_hdf5(path: Path) -> bool:
+    """True for a MATLAB -v7.3 file.
+
+    A v7.3 .mat is HDF5 behind a 512-byte userblock holding the ASCII
+    'MATLAB 7.3 MAT-file...' header, so the signature is NOT at offset 0 --
+    checking only there misreports every real file as legacy v7 and hands it to
+    scipy.io.loadmat, which refuses it. h5py.is_hdf5 understands userblocks
+    (HDF5 probes offset 0 then successive powers of two from 512); the manual
+    check is the fallback for when h5py is not installed.
+    """
+    try:
+        import h5py
+        return bool(h5py.is_hdf5(str(path)))
+    except ImportError:
+        pass
     with open(path, "rb") as fh:
-        return fh.read(8) == b"\x89HDF\r\n\x1a\n"
+        if fh.read(len(HDF5_SIGNATURE)) == HDF5_SIGNATURE:
+            return True
+        offset = 512
+        while offset <= 8192:
+            fh.seek(offset)
+            if fh.read(len(HDF5_SIGNATURE)) == HDF5_SIGNATURE:
+                return True
+            offset *= 2
+    return False
 
 
 def load_prediction_mat(path: Path) -> dict[str, np.ndarray]:

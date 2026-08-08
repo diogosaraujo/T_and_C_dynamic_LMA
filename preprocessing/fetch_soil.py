@@ -31,9 +31,17 @@ used as a floor.
 THE FOREST FLOOR is not part of the column. SSURGO names every horizon, so O
 horizons (Oi/Oe/Oa litter and duff, desgnmaster 'O') are identified from the survey
 rather than guessed at from organic content, dropped, and the remaining depths
-re-zeroed on the mineral surface -- including the bedrock contact. T&C has nowhere
-to put a litter layer: Porg reaches only Soil_parameters, and Saxton & Rawls is a
-mineral-soil pedotransfer. The papers do the same thing, using Porg = 0.01 taken
+re-zeroed on the mineral surface -- including the bedrock contact.
+
+This is not merely a Saxton & Rawls workaround. T&C models the forest floor
+ALREADY, and prognostically: litter biomass BLit from the carbon cycle gives
+Llitter = Sllit*BLit, hence a cover fraction CLitter, an interception store
+In_Litter with its own evaporation ELitter in the latent heat flux, and r_litter,
+which is added to the soil-evaporation resistance in Heat_fluxes.m as a mulch
+effect. Feeding SSURGO's O horizon into Porg would double-count the forest floor:
+once as a soil layer with impossible hydraulics, and again as the litter layer the
+model grows itself. Porg describes MINERAL soil, and reaches only Soil_parameters.
+The papers do the same thing, using Porg = 0.01 taken
 from 8 g/kg of organic carbon measured in the 0-6 cm MINERAL horizon at Lucky
 Hills; MOD_PARAM_US_xRM.m's Porg = 0.07 is likewise an A-horizon value.
 

@@ -24,3 +24,7 @@ slprj/
 # the cluster under PLSR_inputs_pixel_climatology_DOY/LMA/. Never commit them.
 preprocessing/LMA_ecoregion_no*.csv
 preprocessing/ecoregion_no*.csv
+
+# Reference papers -- open access, retrievable from the DOIs in
+# preprocessing/PARAMETERS.md, and 13 MB is not worth carrying in git history.
+*.pdf

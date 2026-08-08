@@ -270,3 +270,93 @@ not a tweak.
 - Saxton, K.E., Rawls, W.J. (2006). *SSSAJ* 70, 1569–1578. — `SPAR = 2`
 - Schenk & Jackson (2002); Fan et al. (2017); Choat et al. (2012); Pelletier (2016);
   Shangguan (2017) — fallback sources named in the notes
+
+---
+
+## The T&C source papers (Fatichi, Ivanov & Caporali 2012, JAMES)
+
+Both PDFs sit in the repo root but are **not committed** (13 MB combined; see
+`.gitignore`). Both are open access, so a fresh clone can retrieve them from the DOIs
+below.
+
+- **Part 1** — *Theoretical framework and plot-scale analysis*, M05002, doi:10.1029/2011MS000086
+- **Part 2** — *Spatiotemporal analyses*, M05003, doi:10.1029/2011MS000087
+
+Part 1 **Table 3** is the full parameter list with the values used. It is not
+transcribed here: `pdftotext` interleaves its columns and a mis-copied value would be
+worse than no value. Look parameters up in the PDF directly.
+
+### What the papers adjusted, and how
+
+Part 2 §3.2 ¶[30] is the only description of parameter fitting anywhere in the pair,
+and it is deliberately modest — fewer than a dozen test runs in total:
+
+| Domain | Runs | What was changed |
+|---|---|---|
+| Lucky Hills (AZ) | 2 | soil **sealing** parameterization only |
+| Reynolds Creek Mountain East (ID) | 5 | `Ks`, anisotropy ratio `aR`, **root depth**, `a1` (photosynthesis↔stomatal conductance), `Vmax` |
+| Tollgate (ID) | 0 | not calibrated — reused the RME values |
+
+¶[29]: *"no formal, traditional, or advanced calibration of the model can be carried
+out… The choice of model parameter values has been made subjectively, based only on
+available data or literature information."* ¶[31]: manual adjustment only, expert
+judgement, parameters held inside physically realistic ranges, framed as *"a final
+adjustment to refine the simulation skill, which is mainly dictated by the model
+structure and boundary conditions."*
+
+⚠️ **Root depth is in that list.** We prescribe `ZR95` from a 1° (~110 km) Schenk &
+Jackson grid where 15 CHEESEHEAD towers share a single cell — a parameter the model's
+own authors found needed site-level adjustment. State it in the methods; it is also
+the strongest argument for the Fan et al. (2017) ~1 km upgrade.
+
+### Soil hydraulics are DERIVED, never fetched
+
+Both watersheds take hydraulic properties from the **Saxton & Rawls (2006)**
+pedotransfer functions applied to sand/clay fractions — the same `SPAR = 2` path
+`Soil_parameters.m` uses. `Ks`, `Osat`, `L`, `Pe`, `O33`, `alpVG`, `nVG` are all
+outputs of texture, so the only soil quantities we fetch are `Psan`/`Pcla`/`Porg` and
+the column depth.
+
+- Lucky Hills: *"derived from the pedotransfer functions of Saxton and Rawls [2006]
+  using a 0.75 fraction of sand and 0.10 fraction of clay"*
+- RME: same functions, with *"spatially variable fractions of sand and clay derived
+  from the soil map"*
+
+What ¶[30] calls calibrating `Ks` is therefore adjusting the *pedotransfer output*,
+not substituting a measured value. Useful for us: SSURGO ships `ksat_r` per horizon,
+which `fetch_soil.py` records — an independent check on the derived `Ks`, not a
+replacement for it.
+
+### Site configurations worth comparing against ours
+
+| | Lucky Hills | RME | Part 1 plot scale |
+|---|---|---|---|
+| Column depth | 2 m | 1 m | 1 m |
+| Layers | 18, 10 mm → 400 mm | 10, 10 mm → 200 mm | — |
+| Bottom BC | free drainage | **`Kbot` = 0.01 mm/h** (near-impermeable bedrock, from in-situ geology) | free drainage |
+| Anisotropy `aR` | 1 | **140** (mimics topographic preferential flow) | n/a (flat plot) |
+| `Ks` with depth | `Ks(z) = Ks(0)·e^(−0.0011z)` [Scott et al. 2000] | uniform | — |
+| Texture | uniform 0.75 sand / 0.10 clay | spatially variable from soil map | — |
+
+Three things follow for this project:
+
+1. **`Kbot` is not always `NaN`.** US_xRM inherits free drainage, but RME used a
+   near-impermeable 0.01 mm/h bedrock derived from in-situ geology. For the 18
+   stations where SSURGO reports an actual bedrock contact, a near-impermeable base
+   is arguably the better boundary condition than free drainage — worth deciding when
+   those shallow sites are modelled.
+2. **The 1 m column was flagged as a limitation by the authors themselves.** Part 2
+   ¶[57] attributes a Tollgate discharge timing error partly to *"the uniform soil
+   depth of 1 m assumed for the entire domain,"* noting variable depth *"can produce
+   deep storages of water at the beginning of the melting season."* Direct support for
+   the per-site depths in `fetch_soil.py`.
+3. **`aR` barely matters for us.** Anisotropy drives lateral subsurface flow; our runs
+   are single-point plot scale like Part 1, which is flat with no lateral exchange.
+   The RME value of 140 is a distributed-domain device, not a transferable constant.
+
+### Spin-up precedent
+
+Part 1 ¶[100]: initial soil moisture and vegetation carbon pools *"are obtained after
+spinning up the model with a simulation of the same duration as the analyzed period."*
+One pass over the record, not the repeat-until-convergence protocol — worth knowing
+when we set ours, since evergreen wood pools need far longer.

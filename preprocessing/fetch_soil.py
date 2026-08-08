@@ -498,8 +498,8 @@ def build_zs(depth_mm: float) -> list[float]:
     return zs
 
 
-def layerise(horizons: list[dict], zs: list[float],
-             default_org: float) -> tuple[list[dict], float]:
+def layerise(horizons: list[dict], zs: list[float], default_org: float,
+             max_porg: float = 0.08) -> tuple[list[dict], float]:
     """Map horizons onto the mesh by layer midpoint, carrying the deepest downward."""
     if not horizons:
         return []
@@ -512,25 +512,42 @@ def layerise(horizons: list[dict], zs: list[float],
         hit = next((h for h in horizons if h["top_cm"] <= mid_cm < h["bot_cm"]), None)
         extrapolated = hit is None
         if hit is None:
-            hit = deepest
+            # Above the shallowest horizon takes the shallowest, below the deepest
+            # takes the deepest. Falling through to `deepest` in both directions
+            # would give the 0-5 cm layers a C-horizon texture.
+            hit = horizons[0] if mid_cm < horizons[0]["top_cm"] else deepest
         org = hit.get("org")
         if org is None:
             org = default_org
         sand, clay = hit["sand"], hit["clay"]
+
+        notes = []
+        # Saxton & Rawls (2006) fitted their pedotransfer functions on MINERAL soils
+        # with organic matter up to ~8%. SSURGO describes forest-floor O horizons at
+        # 45-85% (12 of 95 stations, 8 of them at 0.75-0.85), and pushing those
+        # through the regressions produces meaningless porosity and retention -- the
+        # equations are simply outside their domain. Cap at the validity limit and
+        # record the original. US_xRM's own hand-set Porg = 0.07 is effectively this
+        # same decision, made by hand.
+        org_raw = org
+        if org > max_porg:
+            org = max_porg
+            notes.append(f"Porg {org_raw:.3f} capped at {max_porg:g} "
+                         f"(Saxton & Rawls validity limit)")
         # Soil_parameters computes Psil = 1 - Psan - Pcla - Porg and bails out if it
-        # goes negative, which a high-organic horizon can cause. Scale the mineral
-        # fractions rather than let MATLAB print and return mid-run.
-        total = sand + clay + org
-        adjusted = ""
-        if total > 1.0:
+        # goes negative. Scale the mineral fractions rather than let MATLAB print and
+        # return mid-run with undefined outputs.
+        if sand + clay + org > 1.0:
             scale = (1.0 - org) / (sand + clay) if (sand + clay) > 0 else 0.0
             sand, clay = sand * scale, clay * scale
-            adjusted = f"mineral fractions scaled by {scale:.3f} to keep Psil >= 0"
+            notes.append(f"mineral fractions scaled by {scale:.3f} to keep Psil >= 0")
+        adjusted = "; ".join(notes)
         out.append({"layer": k + 1, "z_top_mm": top, "z_bot_mm": bot,
                     "Psan": round(sand, 5), "Pcla": round(clay, 5),
                     "Porg": round(org, 5),
                     "source": hit["source"], "extrapolated": int(extrapolated),
                     "horizon_top_cm": hit["top_cm"], "horizon_bot_cm": hit["bot_cm"],
+                    "Porg_reported": round(org_raw, 5),
                     "ksat_um_s": hit.get("ksat_um_s", ""),
                     "note": adjusted})
     return out, described_mm
@@ -642,7 +659,7 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
     # Rawls, a wildly inflated porosity and water retention at depth. A small floor is
     # the far less wrong assumption, and n_org_filled makes it auditable.
     n_org_missing = sum(1 for h in horizons if h.get("org") is None)
-    layers, described_mm = layerise(horizons, zs, ORG_FLOOR)
+    layers, described_mm = layerise(horizons, zs, ORG_FLOOR, args.max_porg)
 
     rows = [{"station_id": sid, **l} for l in layers]
     raw = [{"station_id": sid, **h} for h in horizons]
@@ -651,6 +668,10 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
                 ms=len(layers), zs_mm=" ".join(f"{z:g}" for z in zs),
                 described_to_cm=described_cm, n_horizons=len(horizons),
                 n_horizons_no_org=n_org_missing,
+                n_layers_porg_capped=sum(1 for l in layers
+                                         if "capped" in (l.get("note") or "")),
+                Porg_reported_max=round(max((h["org"] for h in horizons
+                                             if h.get("org") is not None), default=0.0), 4),
                 n_layers_extrapolated=n_extrap,
                 ZR95_mm=zr if zr else "",
                 Psan_mean=round(depth_weighted(layers, "Psan"), 4),
@@ -815,6 +836,12 @@ def main() -> int:
     p.add_argument("--ignore-bedrock", action="store_true",
                    help="do not let a reported bedrock contact set the column depth; "
                         "fall back to max(described, ZR95, --min-depth-mm) everywhere")
+    p.add_argument("--max-porg", type=float, default=0.08,
+                   help="cap on Porg, the organic-matter fraction (default 0.08). "
+                        "Saxton & Rawls fitted their pedotransfer functions on mineral "
+                        "soils up to ~8%% OM; SSURGO reports forest-floor O horizons at "
+                        "45-85%%, which are outside the equations' domain. The reported "
+                        "value is kept in Porg_reported.")
     p.add_argument("--min-depth-mm", type=float, default=1000.0)
     p.add_argument("--max-depth-mm", type=float, default=5000.0)
     p.add_argument("--probe", action="store_true",

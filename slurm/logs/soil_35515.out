@@ -1,0 +1,121 @@
+job        : 35515
+node       : soeepyc07
+started    : 2026-08-08T02:34:14Z
+sources    : badm,ssurgo,polaris,soilgrids
+badm dir   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+root depth : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth/root_depth.csv
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil
+
+SDA reachable
+
+stations   : 101 (17 excluded)
+sources    : badm,ssurgo,polaris,soilgrids
+ZR95 known : 0 station(s) from /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth/root_depth.csv
+depth      : 1000-5000 mm
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil
+
+  US-Bar   mukey 2780144     0 horizon(s) to    0 cm  restriction - 
+  US-Blk   mukey 2375692     5 horizon(s) to  175 cm  restriction Lithic bedrock 175.0
+  US-CPF   mukey 762998      6 horizon(s) to  165 cm  restriction brockdepmin (muaggatt) 36.0
+  US-CPk   mukey 707863      3 horizon(s) to   56 cm  restriction Paralithic bedrock 56.0
+  US-CRK   mukey 575532      3 horizon(s) to  203 cm  restriction - 
+  US-CS2   mukey 423983      4 horizon(s) to  200 cm  restriction - 
+  US-CZ2   mukey 465111      3 horizon(s) to  168 cm  restriction Paralithic bedrock 168.0
+  US-CZ3   mukey 465109      3 horizon(s) to   97 cm  restriction Paralithic bedrock 97.0
+  US-CZ4   mukey 465139      3 horizon(s) to  168 cm  restriction brockdepmin (muaggatt) 0.0
+  US-ChR   mukey 1475630     3 horizon(s) to  178 cm  restriction - 
+  US-Cst   mukey 565080      4 horizon(s) to  183 cm  restriction Fragipan 94.0
+  US-Cwt   mukey 545837      4 horizon(s) to  203 cm  restriction brockdepmin (muaggatt) 68.0
+  US-DPP   mukey 1483856     4 horizon(s) to  203 cm  restriction - 
+  US-Dk2   mukey 114111      4 horizon(s) to  203 cm  restriction Paralithic bedrock 203.0
+  US-Dk3   mukey 114098      5 horizon(s) to  203 cm  restriction - 
+  US-Fmf   mukey 3431664     4 horizon(s) to  152 cm  restriction brockdepmin (muaggatt) 61.0
+  US-Fuf   mukey 3431664     4 horizon(s) to  152 cm  restriction brockdepmin (muaggatt) 61.0
+  US-GBT   mukey 708434      2 horizon(s) to   74 cm  restriction Lithic bedrock 74.0
+  US-GLE   mukey 708434      2 horizon(s) to   74 cm  restriction Lithic bedrock 74.0
+  US-HB2   mukey 639570      5 horizon(s) to  203 cm  restriction - 
+  US-HB3   mukey 639588      2 horizon(s) to  203 cm  restriction - 
+  US-HBK   mukey 2780144     0 horizon(s) to    0 cm  restriction - 
+  US-Ha1   mukey 278708      7 horizon(s) to  165 cm  restriction Densic material 84.0
+  US-Ha2   mukey 278712      4 horizon(s) to  165 cm  restriction Densic material 61.0
+  US-Ho1   mukey 285250      4 horizon(s) to  165 cm  restriction Densic material 70.0
+  US-Ho2   mukey 285235      3 horizon(s) to  165 cm  restriction Densic material 51.0
+  US-Ho3   mukey 285250      4 horizon(s) to  165 cm  restriction Densic material 70.0
+  US-LPH   mukey 278705      8 horizon(s) to  165 cm  restriction - 
+  US-MEF   mukey 497344      7 horizon(s) to  137 cm  restriction Lithic bedrock 137.0
+  US-MMS   mukey 535517      4 horizon(s) to  203 cm  restriction Fragipan 61.0
+  US-MOz   mukey 2532936     4 horizon(s) to  152 cm  restriction Abrupt textural change 28.0
+  US-MRf   mukey 85436       6 horizon(s) to  135 cm  restriction Paralithic bedrock 135.0
+  US-Me1   mukey 63918       4 horizon(s) to   69 cm  restriction Paralithic bedrock 69.0
+  US-Me2   mukey 63925       4 horizon(s) to   99 cm  restriction Paralithic bedrock 99.0
+  US-Me4   mukey 63433       4 horizon(s) to  163 cm  restriction - 
+  US-Me6   mukey 3423706     5 horizon(s) to  152 cm  restriction - 
+  US-Me7   mukey 63925       4 horizon(s) to   99 cm  restriction Paralithic bedrock 99.0
+  US-MtB   mukey 3431675     3 horizon(s) to   33 cm  restriction Lithic bedrock 33.0
+  US-NC2   mukey 116200      3 horizon(s) to  183 cm  restriction - 
+  US-NC3   mukey 116200      3 horizon(s) to  183 cm  restriction - 
+  US-NC5   mukey 112763      7 horizon(s) to  157 cm  restriction - 
+  US-NMj   mukey 2450716     4 horizon(s) to  203 cm  restriction - 
+  US-NR1   mukey 762986      5 horizon(s) to  152 cm  restriction Densic material 71.0
+  US-Oho   mukey 169861      2 horizon(s) to  188 cm  restriction - 
+  US-PFL   mukey 1395728     6 horizon(s) to  152 cm  restriction - 
+  US-PFb   mukey 627586      6 horizon(s) to  152 cm  restriction - 
+  US-PFc   mukey 627560      7 horizon(s) to  203 cm  restriction Densic material 84.0
+  US-PFg   mukey 1379835     7 horizon(s) to  203 cm  restriction Densic material 84.0
+  US-PFh   mukey 1598810     6 horizon(s) to  203 cm  restriction - 
+  US-PFi   mukey 627560      7 horizon(s) to  203 cm  restriction Densic material 84.0
+  US-PFj   mukey 884268      7 horizon(s) to  203 cm  restriction Densic material 84.0
+  US-PFk   mukey 884268      7 horizon(s) to  203 cm  restriction Densic material 84.0
+  US-PFm   mukey 884268      7 horizon(s) to  203 cm  restriction Densic material 84.0
+  US-PFn   mukey 627561      7 horizon(s) to  203 cm  restriction Densic material 84.0
+  US-PFp   mukey 1395739     4 horizon(s) to  152 cm  restriction - 
+  US-PFq   mukey 1395721     8 horizon(s) to  203 cm  restriction - 
+  US-PFs   mukey 1395729     6 horizon(s) to  152 cm  restriction - 
+  US-PFt   mukey 1395729     6 horizon(s) to  152 cm  restriction - 
+  US-SB1   mukey 136686      3 horizon(s) to  183 cm  restriction - 
+  US-SHC   mukey 3233036     0 horizon(s) to    0 cm  restriction - 
+  US-SP1   mukey 320671      6 horizon(s) to  213 cm  restriction - 
+  US-SP2   mukey 320669      4 horizon(s) to  203 cm  restriction - 
+  US-SP3   mukey 320744      4 horizon(s) to  213 cm  restriction - 
+  US-SP4   mukey 320685      6 horizon(s) to  208 cm  restriction - 
+  US-SSH   mukey 541954      5 horizon(s) to   91 cm  restriction Lithic bedrock 91.0
+  US-Slt   mukey 697701      4 horizon(s) to  203 cm  restriction - 
+  US-TEF   mukey 2604431     3 horizon(s) to  150 cm  restriction brockdepmin (muaggatt) 76.0
+  US-UMB   mukey 190525      4 horizon(s) to  203 cm  restriction - 
+  US-UMd   mukey 190525      4 horizon(s) to  203 cm  restriction - 
+  US-Vcm   mukey 56472       8 horizon(s) to  152 cm  restriction - 
+  US-Vcp   mukey 56388       5 horizon(s) to  152 cm  restriction - 
+  US-Vcs   mukey 56460       3 horizon(s) to  152 cm  restriction - 
+  US-WBW   mukey 1887393     3 horizon(s) to  178 cm  restriction - 
+  US-WCr   mukey 1379840     9 horizon(s) to  152 cm  restriction Densic material 117.0
+  US-Wi1   mukey 433756      7 horizon(s) to  200 cm  restriction - 
+  US-Wi2   mukey 433757      7 horizon(s) to  200 cm  restriction - 
+  US-Wi3   mukey 433320      8 horizon(s) to  203 cm  restriction - 
+  US-Wi4   mukey 433756      7 horizon(s) to  200 cm  restriction - 
+  US-Wrc   mukey 2511987     0 horizon(s) to    0 cm  restriction - 
+  US-xAB   mukey 71974       3 horizon(s) to  152 cm  restriction - 
+  US-xBL   mukey 516539      4 horizon(s) to  147 cm  restriction Fragipan 58.0
+  US-xBR   mukey 2780144     0 horizon(s) to    0 cm  restriction - 
+  US-xGR   mukey 553583      3 horizon(s) to  122 cm  restriction - 
+  US-xHA   mukey 278708      7 horizon(s) to  165 cm  restriction Densic material 84.0
+  US-xJE   mukey 325176      3 horizon(s) to  203 cm  restriction - 
+  US-xLE   mukey 328570      4 horizon(s) to  203 cm  restriction - 
+  US-xML   mukey 516648      3 horizon(s) to  165 cm  restriction - 
+  US-xNW   mukey 763013      4 horizon(s) to  107 cm  restriction Paralithic bedrock 107.0
+  US-xRM   mukey 2420087     6 horizon(s) to  158 cm  restriction brockdepmin (muaggatt) 39.0
+  US-xRN   mukey 1887391     5 horizon(s) to  229 cm  restriction - 
+  US-xSB   mukey 323372      3 horizon(s) to  203 cm  restriction - 
+  US-xSC   mukey 518823      2 horizon(s) to  152 cm  restriction - 
+  US-xSE   mukey 137738      3 horizon(s) to  183 cm  restriction - 
+  US-xSP   mukey 465112      3 horizon(s) to  168 cm  restriction Paralithic bedrock 168.0
+  US-xST   mukey 431633      6 horizon(s) to  241 cm  restriction - 
+  US-xTA   mukey 2232549     3 horizon(s) to  203 cm  restriction - 
+  US-xTE   mukey 465136      3 horizon(s) to  152 cm  restriction Lithic bedrock 152.0
+  US-xTR   mukey 431650      6 horizon(s) to  229 cm  restriction - 
+  US-xUK   mukey 2420283     4 horizon(s) to   87 cm  restriction Lithic bedrock 87.0
+  US-xWR   mukey 2511987     0 horizon(s) to    0 cm  restriction - 
+  US-xYE   mukey 3056522     4 horizon(s) to  150 cm  restriction - 
+
+finished   : 2026-08-08T02:34:47Z
+exit status: 0
+512	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil

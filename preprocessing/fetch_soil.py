@@ -219,8 +219,16 @@ def badm_profile(badm_dir: Path, station: str) -> tuple[list[dict], str]:
 
 # ------------------------------------------------------------------ 2. SSURGO
 
-def sda_query(sql: str, retries: int = 3, timeout: int = 60) -> list[dict]:
-    """POST one SQL statement to Soil Data Access. No authentication needed."""
+def sda_query(sql: str, retries: int = 3, timeout: int = 60,
+              optional: bool = False) -> list[dict]:
+    """POST one SQL statement to Soil Data Access. No authentication needed.
+
+    A 4xx means SDA rejected the SQL -- an unknown column, usually -- and retrying
+    cannot help, so it fails immediately and says so rather than reporting 'failed
+    after 3 attempts', which reads like a network fault. optional=True downgrades
+    any failure to an empty result, for fields that are nice to have: job 35578 lost
+    all 101 stations because one cross-check column did not exist.
+    """
     body = json.dumps({"query": sql, "format": "JSON+COLUMNNAME"}).encode("utf-8")
     req = urllib.request.Request(SDA_URL, data=body,
                                  headers={"Content-Type": "application/json"})
@@ -234,9 +242,20 @@ def sda_query(sql: str, retries: int = 3, timeout: int = 60) -> list[dict]:
                 return []
             head, *rows = table
             return [dict(zip(head, r)) for r in rows]
+        except urllib.error.HTTPError as exc:
+            if 400 <= exc.code < 500:
+                if optional:
+                    return []
+                raise RuntimeError(
+                    f"SDA rejected the query (HTTP {exc.code}) -- check the column "
+                    f"names against the SSURGO schema: {sql[:160]}") from exc
+            last = exc
+            time.sleep(2 * (attempt + 1))
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
             last = exc
             time.sleep(2 * (attempt + 1))
+    if optional:
+        return []
     raise RuntimeError(f"SDA query failed after {retries} attempts: {last}")
 
 
@@ -344,17 +363,20 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
     # the dominant component having no corestrictions entry correctly means no
     # restriction within its described profile.
     brock = aws = None
-    agg = sda_query("SELECT brockdepmin, rootznaws FROM muaggatt "
-                    f"WHERE mukey = '{mukey}'")
+    agg = sda_query(f"SELECT brockdepmin FROM muaggatt WHERE mukey = '{mukey}'")
     if agg:
         d = _f(agg[0].get("brockdepmin"))
         if d is not None and 0 < d < 201:      # 201 is muaggatt's 'deeper than described'
             brock = d
-        # Root zone available water storage, mm. Recorded as an independent check on
-        # whether the column we build holds a plausible amount of water -- NOT used
-        # to set anything, and note rootznemc is deliberately not pulled: it is a
-        # commodity-crop rooting depth, capped, so it under-reports forests.
-        aws = _f(agg[0].get("rootznaws"))
+    # Root zone available water storage, mm -- an independent check on whether the
+    # column we build holds a plausible amount of water. Queried SEPARATELY and
+    # optionally: folding it into the brockdepmin query cost every station in job
+    # 35578 when SDA rejected the column name. Nothing depends on it.
+    # (rootznemc is deliberately not pulled: a capped commodity-crop rooting depth.)
+    extra = sda_query(f"SELECT rootznaws FROM muaggatt WHERE mukey = '{mukey}'",
+                      retries=1, optional=True)
+    if extra:
+        aws = _f(extra[0].get("rootznaws"))
 
     return {"mukey": mukey, "cokey": cokey,
             "compname": (best.get("compname") or "").strip(),

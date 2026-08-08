@@ -1,0 +1,142 @@
+job        : 35597
+node       : soeepyc05
+started    : 2026-08-08T20:30:47Z
+sources    : badm,ssurgo,polaris,soilgrids
+badm dir   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+root depth : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth/root_depth_schenk_jackson.csv
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil
+
+SDA reachable
+
+stations   : 101 (17 excluded)
+sources    : badm,ssurgo,polaris,soilgrids
+ZR95 known : 117 station(s) from /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth/root_depth_schenk_jackson.csv
+depth      : 1000-5000 mm
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil
+
+  US-Bar   mukey 2780144     0 horizons   <-- no horizons: component 'NOTCOM'
+  US-Blk   mukey 2375692     5 hz to  173 cm  top san/cla/org 0.35/0.18/0.0600  deep 0.25/0.22/0.0050  no-org 0/5  Lithic bedrock
+  US-CPF   mukey 762998      5 hz to  157 cm  top san/cla/org 0.67/0.10/0.0100  deep 0.85/0.05/0.0000  no-org 0/5  -
+  US-CPk   mukey 707863      3 hz to   53 cm  top san/cla/org 0.68/0.12/0.0125  deep 0.68/0.12/0.0025  no-org 0/3  Paralithic bedrock
+  US-CRK   mukey 575532      3 hz to  203 cm  top san/cla/org 0.46/0.10/0.0125  deep 0.26/0.45/0.0055  no-org 0/3  -
+  US-CS2   mukey 423983      4 hz to  200 cm  top san/cla/org 0.83/0.05/0.0125  deep 0.95/0.02/0.0015  no-org 0/4  -
+  US-CZ2   mukey 465111      3 hz to  168 cm  top san/cla/org 0.66/0.15/0.0350  deep 0.66/0.15/0.0050  no-org 0/3  Paralithic bedrock
+  US-CZ3   mukey 465109      3 hz to   97 cm  top san/cla/org 0.67/0.11/0.0200  deep 0.79/0.03/0.0075  no-org 0/3  Paralithic bedrock
+  US-CZ4   mukey 465139      3 hz to  168 cm  top san/cla/org 0.70/0.07/0.0300  deep 0.91/0.03/0.0050  no-org 0/3  -
+  US-ChR   mukey 1475630     3 hz to  178 cm  top san/cla/org 0.26/0.21/0.0125  deep 0.17/0.55/0.0025  no-org 0/3  -
+  US-Cst   mukey 565080      4 hz to  183 cm  top san/cla/org 0.12/0.18/0.0125  deep 0.07/0.26/0.0025  no-org 0/4  Fragipan
+  US-Cwt   mukey 545837      4 hz to  203 cm  top san/cla/org 0.46/0.13/0.0400  deep 0.68/0.13/0.0020  no-org 0/4  -
+  US-DPP   mukey 1483856     4 hz to  203 cm  top san/cla/org 0.98/0.01/0.0150  deep 0.96/0.03/0.0025  no-org 0/4  -
+  US-Dk2   mukey 114111      4 hz to  203 cm  top san/cla/org 0.39/0.17/0.0125  deep 0.39/0.25/0.0025  no-org 0/4  Paralithic bedrock
+  US-Dk3   mukey 114098      5 hz to  203 cm  top san/cla/org 0.71/0.12/0.0125  deep 0.41/0.21/0.0025  no-org 0/5  -
+  US-Fmf   mukey 3431664     4 hz to  152 cm  top san/cla/org 0.43/0.17/0.0150  deep 0.33/0.35/0.0025  no-org 0/4  -
+  US-Fuf   mukey 3431664     4 hz to  152 cm  top san/cla/org 0.43/0.17/0.0150  deep 0.33/0.35/0.0025  no-org 0/4  -
+  US-GBT   mukey 708434      2 hz to   74 cm  top san/cla/org 0.42/0.16/0.0150  deep 0.60/0.14/0.0075  no-org 0/2  Lithic bedrock
+  US-GLE   mukey 708434      2 hz to   74 cm  top san/cla/org 0.42/0.16/0.0150  deep 0.60/0.14/0.0075  no-org 0/2  Lithic bedrock
+  US-HB2   mukey 639570      5 hz to  203 cm  top san/cla/org 0.95/0.03/0.0200  deep 0.93/0.03/0.0150  no-org 0/5  -
+  US-HB3   mukey 639588      2 hz to  203 cm  top san/cla/org 0.94/0.05/0.0075  deep 0.96/0.04/0.0025  no-org 0/2  -
+  US-HBK   mukey 2780144     0 horizons   <-- no horizons: component 'NOTCOM'
+  US-Ha1   mukey 278708      7 hz to  160 cm  top san/cla/org 0.58/0.03/0.0400  deep 0.80/0.02/0.0050  no-org 0/7  Densic material
+  US-Ha2   mukey 278712      4 hz to  165 cm  top san/cla/org 0.64/0.07/0.0550  deep 0.64/0.07/0.0200  no-org 0/4  Densic material
+  US-Ho1   mukey 285250      4 hz to  157 cm  top san/cla/org 0.43/0.08/0.0280  deep 0.41/0.07/0.0025  no-org 0/4  Densic material
+  US-Ho2   mukey 285235      3 hz to  157 cm  top san/cla/org 0.30/0.15/0.0500  deep 0.33/0.17/0.0030  no-org 0/3  Densic material
+  US-Ho3   mukey 285250      4 hz to  157 cm  top san/cla/org 0.43/0.08/0.0280  deep 0.41/0.07/0.0025  no-org 0/4  Densic material
+  US-LPH   mukey 278705      8 hz to  160 cm  top san/cla/org 0.62/0.02/0.1080  deep 0.62/0.02/0.0020  no-org 0/8  -
+  US-MEF   mukey 497344      6 hz to  134 cm  top san/cla/org 0.68/0.07/0.0150  deep 0.68/0.12/0.0150  no-org 0/6  Lithic bedrock
+  US-MMS   mukey 535517      4 hz to  203 cm  top san/cla/org 0.06/0.17/0.0200  deep 0.08/0.60/0.0025  no-org 0/4  Fragipan
+  US-MOz   mukey 2532936     4 hz to  152 cm  top san/cla/org 0.05/0.16/0.0250  deep 0.04/0.32/0.0030  no-org 0/4  Abrupt textural change
+  US-MRf   mukey 85436       5 hz to  130 cm  top san/cla/org 0.40/0.20/0.1000  deep 0.40/0.25/0.0050  no-org 0/5  Paralithic bedrock
+  US-Me1   mukey 63918       3 hz to   61 cm  top san/cla/org 0.67/0.10/0.0300  deep 0.34/0.30/0.0025  no-org 0/3  Paralithic bedrock
+  US-Me2   mukey 63925       3 hz to   91 cm  top san/cla/org 0.66/0.15/0.0400  deep 0.32/0.25/0.0025  no-org 0/3  Paralithic bedrock
+  US-Me4   mukey 63433       3 hz to  160 cm  top san/cla/org 0.67/0.10/0.0250  deep 0.26/0.30/0.0075  no-org 0/3  -
+  US-Me6   mukey 3423706     5 hz to  152 cm  top san/cla/org 0.75/0.06/0.0125  deep 0.64/0.08/0.0050  no-org 0/5  -
+  US-Me7   mukey 63925       3 hz to   91 cm  top san/cla/org 0.66/0.15/0.0400  deep 0.32/0.25/0.0025  no-org 0/3  Paralithic bedrock
+  US-MtB   mukey 3431675     3 hz to   33 cm  top san/cla/org 0.40/0.23/0.0300  deep 0.34/0.30/0.0150  no-org 0/3  Lithic bedrock
+  US-NC2   mukey 116200      3 hz to  117 cm  top san/cla/org 0.57/0.10/0.1050  deep 0.88/0.05/0.0050  no-org 0/3  -
+  US-NC3   mukey 116200      3 hz to  117 cm  top san/cla/org 0.57/0.10/0.1050  deep 0.88/0.05/0.0050  no-org 0/3  -
+  US-NC5   mukey 112763      7 hz to  157 cm  top san/cla/org 0.25/0.15/0.0100  deep 0.25/0.17/0.0025  no-org 0/7  -
+  US-NMj   mukey 2450716     4 hz to  203 cm  top san/cla/org 0.96/0.01/0.0500  deep 0.99/0.00/0.0010  no-org 0/4  -
+  US-NR1   mukey 762986      5 hz to  152 cm  top san/cla/org 0.15/0.18/0.0100  deep 0.78/0.02/0.0000  no-org 0/5  Densic material
+  US-Oho   mukey 169861      2 hz to  188 cm  top san/cla/org 0.93/0.06/0.0125  deep 0.92/0.07/0.0065  no-org 0/2  -
+  US-PFL   mukey 1395728     6 hz to  152 cm  top san/cla/org 0.85/0.06/0.0200  deep 0.90/0.02/0.0025  no-org 0/6  -
+  US-PFb   mukey 627586      6 hz to  152 cm  top san/cla/org 0.69/0.10/0.0200  deep 0.68/0.10/0.0025  no-org 0/6  -
+  US-PFc   mukey 627560      7 hz to  203 cm  top san/cla/org 0.57/0.09/0.0315  deep 0.77/0.02/0.0005  no-org 0/7  Densic material
+  US-PFg   mukey 1379835     7 hz to  203 cm  top san/cla/org 0.57/0.08/0.0300  deep 0.75/0.04/0.0025  no-org 0/7  Densic material
+  US-PFh   mukey 1598810     6 hz to  203 cm  top san/cla/org 0.85/0.06/0.0200  deep 0.96/0.02/0.0025  no-org 0/6  -
+  US-PFi   mukey 627560      7 hz to  203 cm  top san/cla/org 0.57/0.09/0.0315  deep 0.77/0.02/0.0005  no-org 0/7  Densic material
+  US-PFj   mukey 884268      7 hz to  203 cm  top san/cla/org 0.57/0.09/0.0315  deep 0.77/0.02/0.0005  no-org 0/7  Densic material
+  US-PFk   mukey 884268      7 hz to  203 cm  top san/cla/org 0.57/0.09/0.0315  deep 0.77/0.02/0.0005  no-org 0/7  Densic material
+  US-PFm   mukey 884268      7 hz to  203 cm  top san/cla/org 0.57/0.09/0.0315  deep 0.77/0.02/0.0005  no-org 0/7  Densic material
+  US-PFn   mukey 627561      7 hz to  203 cm  top san/cla/org 0.57/0.09/0.0315  deep 0.77/0.02/0.0005  no-org 0/7  Densic material
+  US-PFp   mukey 1395739     3 hz to  142 cm  top san/cla/org 0.30/0.14/0.0100  deep 0.90/0.02/0.0025  no-org 0/3  -
+  US-PFq   mukey 1395721     8 hz to  203 cm  top san/cla/org 0.68/0.12/0.0150  deep 0.85/0.06/0.0025  no-org 0/8  -
+  US-PFs   mukey 1395729     6 hz to  152 cm  top san/cla/org 0.85/0.06/0.0200  deep 0.90/0.02/0.0025  no-org 0/6  -
+  US-PFt   mukey 1395729     6 hz to  152 cm  top san/cla/org 0.85/0.06/0.0200  deep 0.90/0.02/0.0025  no-org 0/6  -
+  US-SB1   mukey 136686      3 hz to  183 cm  top san/cla/org 0.45/0.12/0.0075  deep 0.28/0.43/0.0025  no-org 0/3  -
+  US-SHC   mukey 3233036     0 horizons   <-- no horizons: component 'Aquolls'
+  US-SP1   mukey 320671      6 hz to  213 cm  top san/cla/org 0.95/0.04/0.0250  deep 0.58/0.24/0.0025  no-org 0/6  -
+  US-SP2   mukey 320669      4 hz to  203 cm  top san/cla/org 0.94/0.04/0.0150  deep 0.59/0.20/0.0010  no-org 0/4  -
+  US-SP3   mukey 320744      4 hz to  213 cm  top san/cla/org 0.96/0.03/0.0100  deep 0.63/0.20/0.0010  no-org 0/4  -
+  US-SP4   mukey 320685      6 hz to  208 cm  top san/cla/org 0.96/0.03/0.0110  deep 0.65/0.20/0.0010  no-org 0/6  -
+  US-SSH   mukey 541954      5 hz to   87 cm  top san/cla/org 0.29/0.14/0.0220  deep 0.37/0.12/0.0023  no-org 0/5  Lithic bedrock
+  US-Slt   mukey 697701      4 hz to  203 cm  top san/cla/org 0.92/0.04/0.0075  deep 0.84/0.07/0.0000  no-org 0/4  -
+  US-TEF   mukey 2604431     3 hz to  143 cm  top san/cla/org 0.39/0.24/0.0100  deep 0.38/0.26/0.0050  no-org 0/3  -
+  US-UMB   mukey 190525      4 hz to  198 cm  top san/cla/org 0.91/0.02/0.0467  deep 0.97/0.01/0.0050  no-org 0/4  -
+  US-UMd   mukey 190525      4 hz to  198 cm  top san/cla/org 0.91/0.02/0.0467  deep 0.97/0.01/0.0050  no-org 0/4  -
+  US-Vcm   mukey 56472       8 hz to  152 cm  top san/cla/org 0.70/0.07/0.0350  deep 0.70/0.07/0.0010  no-org 0/8  -
+  US-Vcp   mukey 56388       5 hz to  152 cm  top san/cla/org 0.27/0.20/0.0200  deep 0.35/0.31/0.0010  no-org 0/5  -
+  US-Vcs   mukey 56460       3 hz to  152 cm  top san/cla/org 0.67/0.10/0.0200  deep 0.67/0.10/0.0020  no-org 0/3  -
+  US-WBW   mukey 1887393     3 hz to  178 cm  top san/cla/org 0.26/0.21/0.0125  deep 0.17/0.55/0.0025  no-org 0/3  -
+  US-WCr   mukey 1379840     9 hz to  152 cm  top san/cla/org 0.54/0.08/0.0200  deep 0.65/0.11/0.0025  no-org 0/9  Densic material
+  US-Wi1   mukey 433756      7 hz to  200 cm  top san/cla/org 0.86/0.04/0.0500  deep 0.98/0.01/0.0010  no-org 0/7  -
+  US-Wi2   mukey 433757      7 hz to  200 cm  top san/cla/org 0.86/0.04/0.0500  deep 0.98/0.01/0.0010  no-org 0/7  -
+  US-Wi3   mukey 433320      8 hz to  203 cm  top san/cla/org 0.83/0.05/0.0150  deep 0.85/0.06/0.0025  no-org 0/8  -
+  US-Wi4   mukey 433756      7 hz to  200 cm  top san/cla/org 0.86/0.04/0.0500  deep 0.98/0.01/0.0010  no-org 0/7  -
+  US-Wrc   mukey 2511987     0 horizons   <-- no horizons: component 'NOTCOM'
+  US-xAB   mukey 71974       3 hz to  152 cm  top san/cla/org 0.11/0.22/0.0600  deep 0.36/0.22/0.0075  no-org 0/3  -
+  US-xBL   mukey 516539      4 hz to  147 cm  top san/cla/org 0.11/0.21/0.0150  deep 0.06/0.47/0.0025  no-org 0/4  Fragipan
+  US-xBR   mukey 2780144     0 horizons   <-- no horizons: component 'NOTCOM'
+  US-xGR   mukey 553583      3 hz to  122 cm  top san/cla/org 0.60/0.12/0.0730  deep 0.64/0.09/0.0100  no-org 0/3  -
+  US-xHA   mukey 278708      7 hz to  160 cm  top san/cla/org 0.58/0.03/0.0400  deep 0.80/0.02/0.0050  no-org 0/7  Densic material
+  US-xJE   mukey 325176      3 hz to  203 cm  top san/cla/org 0.90/0.03/0.0075  deep 0.62/0.30/0.0025  no-org 0/3  -
+  US-xLE   mukey 328570      4 hz to  203 cm  top san/cla/org 0.17/0.34/0.0200  deep 0.19/0.45/0.0025  no-org 0/4  -
+  US-xML   mukey 516648      3 hz to  165 cm  top san/cla/org 0.45/0.14/0.0300  deep 0.68/0.12/0.0050  no-org 0/3  -
+  US-xNW   mukey 763013      4 hz to  107 cm  top san/cla/org 0.60/0.10/0.0200  deep 0.65/0.10/0.0000  no-org 0/4  Paralithic bedrock
+  US-xRM   mukey 2420087     4 hz to  150 cm  top san/cla/org 0.60/0.10/0.0200  deep 0.75/0.14/0.0000  no-org 0/4  -
+  US-xRN   mukey 1887391     5 hz to  229 cm  top san/cla/org 0.21/0.17/0.0125  deep 0.09/0.69/0.0025  no-org 0/5  -
+  US-xSB   mukey 323372      3 hz to  203 cm  top san/cla/org 0.97/0.01/0.0100  deep 0.98/0.01/0.0010  no-org 0/3  -
+  US-xSC   mukey 518823      2 hz to  152 cm  top san/cla/org 0.43/0.17/0.0150  deep 0.35/0.32/0.0025  no-org 0/2  -
+  US-xSE   mukey 137738      3 hz to  183 cm  top san/cla/org 0.76/0.16/0.0090  deep 0.73/0.18/0.0017  no-org 0/3  -
+  US-xSP   mukey 465112      3 hz to  168 cm  top san/cla/org 0.66/0.15/0.0350  deep 0.66/0.15/0.0050  no-org 0/3  Paralithic bedrock
+  US-xST   mukey 431633      6 hz to  241 cm  top san/cla/org 0.67/0.10/0.0300  deep 0.69/0.08/0.0025  no-org 0/6  -
+  US-xTA   mukey 2232549     3 hz to  203 cm  top san/cla/org 0.47/0.16/0.0150  deep 0.25/0.45/0.0025  no-org 0/3  -
+  US-xTE   mukey 465136      3 hz to  152 cm  top san/cla/org 0.70/0.07/0.0150  deep 0.79/0.03/0.0050  no-org 0/3  Lithic bedrock
+  US-xTR   mukey 431650      6 hz to  229 cm  top san/cla/org 0.67/0.10/0.0250  deep 0.67/0.10/0.0025  no-org 0/6  -
+  US-xUK   mukey 2420283     4 hz to   87 cm  top san/cla/org 0.04/0.34/0.0300  deep 0.05/0.50/0.0040  no-org 0/4  Lithic bedrock
+  US-xWR   mukey 2511987     0 horizons   <-- no horizons: component 'NOTCOM'
+  US-xYE   mukey 3056522     4 hz to  150 cm  top san/cla/org 0.38/0.24/0.0400  deep 0.52/0.26/0.0010  no-org 0/4  -
+
+==============================================================
+TEXTURE PROBE: 95/101 stations with horizons
+==============================================================
+
+surface horizon:
+   sand fraction          min 0.040  median 0.600  max 0.980
+   clay fraction          min 0.010  median 0.100  max 0.340
+   Porg                   min 0.0075  median 0.0200  max 0.1080
+
+deepest horizon:
+   Porg                   min 0.0000  median 0.0025  max 0.0200
+
+change from surface to deepest horizon:
+   sand                   min -0.402  median 0.010  max 0.630
+   clay                   min -0.160  median 0.000  max 0.520
+
+stations where sand or clay shifts by >0.05 with depth: 69/95
+
+horizons with no organic matter reported: 0/432 (0%) -- filled with Porg = 0.001
+stations where NO horizon reports organic matter: 0
+
+finished   : 2026-08-08T20:31:34Z
+exit status: 0
+512	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil

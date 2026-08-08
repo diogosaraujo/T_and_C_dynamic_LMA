@@ -15,6 +15,10 @@ SOURCE ORDER, first hit wins, recorded per field:
                         DEPTH TO BEDROCK rather than a modelled estimate, from the
                         same profile the texture comes from.
 
+    3. POLARIS          30 m CONUS, itself disaggregated from SSURGO. Gap filler.
+    4. SoilGrids        250 m global. Last resort, and only properties -- SoilGrids
+                        2.0 dropped the bedrock layers, so it cannot supply depth.
+
 COLUMN DEPTH is depth to bedrock; rooting depth is a separate input (Schenk &
 Jackson), and the two meet only in the constraint ZR95 <= column depth, applied
 when the .mat files are built. corestrictions catalogues layers restricting roots
@@ -23,9 +27,6 @@ and abrupt textural changes lie within the soil: the survey keeps describing
 horizons 80-140 cm below them (US-Ho1 70 vs 165 cm, US-MOz 28 vs 152), whereas at a
 bedrock contact it stops dead (US-MtB 33/33, US-CPk 56/56). They are recorded, never
 used as a floor.
-    3. POLARIS          30 m CONUS, itself disaggregated from SSURGO. Gap filler.
-    4. SoilGrids        250 m global. Last resort, and only properties -- SoilGrids
-                        2.0 dropped the bedrock layers, so it cannot supply depth.
 
 ORGANIC MATTER is the field most easily got wrong, because every source states it
 differently: SSURGO om_r is organic matter as a percent, POLARIS om is log10 of
@@ -91,6 +92,10 @@ MISSING = {"", "-9999", "-9999.0", "NA", "N/A", "NaN", "nan", None}
 # 101 stations (job 35576): Lithic 8, Paralithic 10 | Densic 15, Fragipan 3,
 # Abrupt textural change 1 | no restriction 64.
 BEDROCK_KINDS = {"lithic bedrock", "paralithic bedrock", "densic bedrock"}
+
+# Porg used where a source reports no organic matter for a horizon: 0.1%. See the
+# note in process() -- filling from the topsoil value instead would be badly wrong.
+ORG_FLOOR = 0.001
 
 
 # --------------------------------------------------------------------------- io
@@ -631,8 +636,13 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
             f"ZR95 {zr:g} mm exceeds column {depth:g} mm -- T&C would abort; ZR95 must be capped"
 
     zs = build_zs(depth)
-    default_org = next((h["org"] for h in horizons if h.get("org") is not None), 0.01)
-    layers, described_mm = layerise(horizons, zs, default_org)
+    # SSURGO leaves om_r null mostly in deep mineral C horizons, where organic matter
+    # really is negligible. Filling those from the shallowest value -- which is the
+    # organic-rich topsoil -- would hand a C horizon ~14% OM and, through Saxton &
+    # Rawls, a wildly inflated porosity and water retention at depth. A small floor is
+    # the far less wrong assumption, and n_org_filled makes it auditable.
+    n_org_missing = sum(1 for h in horizons if h.get("org") is None)
+    layers, described_mm = layerise(horizons, zs, ORG_FLOOR)
 
     rows = [{"station_id": sid, **l} for l in layers]
     raw = [{"station_id": sid, **h} for h in horizons]
@@ -640,6 +650,7 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
     info.update(status="ok", column_depth_mm=depth, depth_rule=rule,
                 ms=len(layers), zs_mm=" ".join(f"{z:g}" for z in zs),
                 described_to_cm=described_cm, n_horizons=len(horizons),
+                n_horizons_no_org=n_org_missing,
                 n_layers_extrapolated=n_extrap,
                 ZR95_mm=zr if zr else "",
                 Psan_mean=round(depth_weighted(layers, "Psan"), 4),
@@ -648,6 +659,57 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
                 Porg_top30=round(depth_weighted(layers, "Porg", 300.0), 4),
                 Psan_top30=round(depth_weighted(layers, "Psan", 300.0), 4))
     return info, rows, raw
+
+
+def probe_summary(rows: list[dict]) -> int:
+    """Texture across the station set, from a --probe run.
+
+    The point is to see the values before committing to a build: whether organic
+    matter is actually reported, and whether texture varies enough with depth to
+    justify layering rather than one triple per site.
+    """
+    have = [r for r in rows if r.get("n")]
+    print(f"\n{'=' * 62}\nTEXTURE PROBE: {len(have)}/{len(rows)} stations with horizons"
+          f"\n{'=' * 62}")
+    if not have:
+        return 1
+
+    def stats(vals, name, fmt="%.3f"):
+        v = sorted(x for x in vals if x is not None and math.isfinite(x))
+        if not v:
+            print(f"   {name:<22} no values")
+            return
+        print(f"   {name:<22} min {fmt % v[0]}  median {fmt % v[len(v) // 2]}  "
+              f"max {fmt % v[-1]}")
+
+    print("\nsurface horizon:")
+    stats([r.get("top_sand") for r in have], "sand fraction")
+    stats([r.get("top_clay") for r in have], "clay fraction")
+    stats([r.get("top_org") for r in have], "Porg", "%.4f")
+    print("\ndeepest horizon:")
+    stats([r.get("deep_org") for r in have], "Porg", "%.4f")
+
+    print("\nchange from surface to deepest horizon:")
+    stats([r.get("sand_range") for r in have], "sand")
+    stats([r.get("clay_range") for r in have], "clay")
+
+    # If texture barely moves with depth, the layered profile buys little and the
+    # simpler uniform column would have been defensible after all.
+    moved = [r for r in have
+             if abs(r.get("sand_range") or 0) > 0.05 or abs(r.get("clay_range") or 0) > 0.05]
+    print(f"\nstations where sand or clay shifts by >0.05 with depth: "
+          f"{len(moved)}/{len(have)}")
+
+    noorg = sum(r.get("no_org", 0) for r in have)
+    tot = sum(r["n"] for r in have)
+    allmissing = sum(1 for r in have if r.get("no_org", 0) == r["n"])
+    print(f"\nhorizons with no organic matter reported: {noorg}/{tot} "
+          f"({100 * noorg / tot:.0f}%) -- filled with Porg = {ORG_FLOOR}")
+    print(f"stations where NO horizon reports organic matter: {allmissing}")
+    if allmissing:
+        print("   " + " ".join(r["station_id"] for r in have
+                               if r.get("no_org", 0) == r["n"])[:200])
+    return 0
 
 
 def report(out_dir: Path) -> int:
@@ -784,7 +846,7 @@ def main() -> int:
             print(f"  - {s['station_id']:<8} {s['lat']:9.4f} {s['lon']:10.4f}")
         return 0
 
-    sites, profiles, raws = [], [], []
+    sites, profiles, raws, probe_rows = [], [], [], []
     for i, st in enumerate(stations, 1):
         if args.probe:
             try:
@@ -794,15 +856,28 @@ def main() -> int:
                 # miscellaneous area (Water, Rock outcrop, Urban land) or an
                 # unpopulated NOTCOM survey, which is a real SSURGO gap and a correct
                 # fall-through to POLARIS -- not the same thing as a query bug.
-                why = ""
                 if not hz:
-                    why = f"  <-- no horizons: component '{ss.get('compname') or '?'}'"
+                    print(f"  {st['station_id']:<8} mukey {str(ss.get('mukey', '-')):<10} "
+                          f" 0 horizons   <-- no horizons: component "
+                          f"'{ss.get('compname') or '?'}'")
+                    probe_rows.append({"station_id": st["station_id"], "n": 0})
+                    continue
+                top, bot = hz[0], hz[-1]
+                n_noorg = sum(1 for h in hz if h.get("org") is None)
                 print(f"  {st['station_id']:<8} mukey {str(ss.get('mukey', '-')):<10} "
-                      f"{len(hz):>2} horizon(s) to "
-                      f"{(hz[-1]['bot_cm'] if hz else 0):>4.0f} cm  "
-                      f"restriction {ss.get('restriction') or '-'} "
-                      f"{ss.get('restriction_cm') if ss.get('restriction_cm') is not None else ''}"
-                      f"{why}")
+                      f"{len(hz):>2} hz to {bot['bot_cm']:>4.0f} cm  "
+                      f"top san/cla/org {top['sand']:.2f}/{top['clay']:.2f}/"
+                      f"{(top['org'] if top['org'] is not None else float('nan')):.4f}  "
+                      f"deep {bot['sand']:.2f}/{bot['clay']:.2f}/"
+                      f"{(bot['org'] if bot['org'] is not None else float('nan')):.4f}  "
+                      f"no-org {n_noorg}/{len(hz)}  "
+                      f"{ss.get('bedrock') or ss.get('restriction') or '-'}")
+                probe_rows.append({
+                    "station_id": st["station_id"], "n": len(hz), "no_org": n_noorg,
+                    "top_sand": top["sand"], "top_clay": top["clay"],
+                    "top_org": top["org"], "deep_org": bot["org"],
+                    "sand_range": bot["sand"] - top["sand"],
+                    "clay_range": bot["clay"] - top["clay"]})
             except Exception as exc:                               # noqa: BLE001
                 print(f"  {st['station_id']:<8} ! {type(exc).__name__}: {exc}")
             continue
@@ -817,7 +892,7 @@ def main() -> int:
               f"extrap {info.get('n_layers_extrapolated', '-'):>2}  "
               f"{info.get('restriction', '') or ''}")
     if args.probe:
-        return 0
+        return probe_summary(probe_rows)
 
     args.out.mkdir(parents=True, exist_ok=True)
     for name, rows in (("soil_sites.csv", sites), ("soil_profiles.csv", profiles),

@@ -78,10 +78,12 @@ STD_INTERVALS = [(0, 5), (5, 15), (15, 30), (30, 60), (60, 100), (100, 200)]
 BASE_ZS = [0, 10, 20, 50, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1000]
 
 MISSING = {"", "-9999", "-9999.0", "NA", "N/A", "NaN", "nan", None}
-# Restrictions that genuinely stop the column. A fragipan or densic layer impedes
-# roots and drainage but is not bedrock, so it is recorded and not enforced.
-HARD_RESTRICTIONS = {"lithic bedrock", "paralithic bedrock", "petrocalcic",
-                     "petrogypsic", "duripan", "orstein", "permafrost"}
+# Kinds seen across the 101 stations (job 35515), for reference only -- the code
+# does not classify them. corestrictions records a layer BECAUSE the survey judged
+# it root- or water-restricting, so re-deciding here would only second-guess the
+# field observation this source was chosen for.
+#   Lithic bedrock 8, Paralithic bedrock 10, Densic material 15, Fragipan 3,
+#   Abrupt textural change 1, none 57
 
 
 # --------------------------------------------------------------------------- io
@@ -535,7 +537,6 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
                 n_components=ss.get("n_components", ""),
                 restriction=ss.get("restriction", ""),
                 restriction_cm=ss.get("restriction_cm", ""),
-                restriction_hard=int(ss.get("restriction", "").lower() in HARD_RESTRICTIONS),
                 brockdepmin_cm=ss.get("brockdepmin_cm", ""))
     if ss.get("note"):
         info["note"] = ((info["note"] + "; ") if info["note"] else "") + ss["note"]
@@ -545,32 +546,29 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
 
     described_cm = horizons[-1]["bot_cm"]
     res_cm = ss.get("restriction_cm")
-    hard = (ss.get("restriction", "").lower() in HARD_RESTRICTIONS)
     zr = zr95.get(sid)
 
-    # Column depth. A hard restriction (bedrock, duripan, permafrost) is a physical
-    # floor and wins outright, min-depth included -- a 45 cm lithic contact means the
-    # column is 45 cm, and forcing it to 1 m would invent water storage that is not
-    # there. A soft one (densic, fragipan, abrupt textural change: 19 of the 44
-    # restrictions found) impedes without stopping, so it caps the column but does
-    # not override min-depth, and --soft-restrictions ignore disables even that.
-    if res_cm is not None and hard:
+    # Column depth. corestrictions exists to record layers that restrict roots and
+    # water -- NRCS already made that judgement in the field, which is the whole
+    # reason for preferring SSURGO over a modelled bedrock raster. So ANY restriction
+    # it reports sets the column, whatever its kind: there is no second opinion here
+    # about whether paralithic bedrock or a fragipan "really" counts. The kind is
+    # recorded so the choice stays visible, and --ignore-restrictions falls back to
+    # the rooting-depth rule if a site ever needs it.
+    #
+    # min-depth is deliberately NOT applied to a restriction. Padding a 45 cm lithic
+    # contact out to 1 m would invent water storage that is not there, and
+    # plant-available water is the main soil control on the flux response this
+    # project attributes to LMA.
+    if res_cm is not None and res_cm > 0 and not args.ignore_restrictions:
         depth = res_cm * 10.0
-        rule = f"hard restriction ({ss['restriction']}) at {res_cm:g} cm"
+        rule = f"{ss['restriction'] or 'restriction'} at {res_cm:g} cm (SSURGO corestrictions)"
     else:
         depth = max(args.min_depth_mm, zr or 0.0)
-        rule = f"max(min-depth {args.min_depth_mm:g} mm, ZR95 {zr or 0:g} mm)"
-        if res_cm is not None:
-            if args.soft_restrictions == "cap":
-                capped = max(res_cm * 10.0, args.min_depth_mm)
-                if capped < depth:
-                    depth = capped
-                    rule += f"; capped at soft restriction {ss['restriction']} {res_cm:g} cm"
-                else:
-                    rule += f"; soft restriction {ss['restriction']} {res_cm:g} cm noted"
-            else:
-                rule += f"; soft restriction {ss['restriction']} {res_cm:g} cm ignored"
-        depth = min(max(depth, args.min_depth_mm), args.max_depth_mm)
+        rule = f"no restriction; max(min-depth {args.min_depth_mm:g} mm, ZR95 {zr or 0:g} mm)"
+        if res_cm is not None and args.ignore_restrictions:
+            rule += f"; {ss['restriction']} at {res_cm:g} cm ignored on request"
+        depth = max(depth, args.min_depth_mm)
     depth = min(depth, args.max_depth_mm)
 
     if zr and zr > depth:
@@ -688,10 +686,11 @@ def main() -> int:
                    help="source order, first hit wins (default: %(default)s)")
     p.add_argument("--badm-dir", type=Path, default=DEFAULT_BADM_DIR)
     p.add_argument("--root-depth", type=Path, default=DEFAULT_ROOT_DEPTH)
-    p.add_argument("--soft-restrictions", choices=("cap", "ignore"), default="cap",
-                   help="densic material, fragipans and abrupt textural changes impede "
-                        "without stopping the profile: 'cap' limits the column to them "
-                        "(never below --min-depth-mm), 'ignore' records them only")
+    p.add_argument("--ignore-restrictions", action="store_true",
+                   help="do not let a reported restriction set the column depth; fall "
+                        "back to max(--min-depth-mm, ZR95). Off by default: SSURGO "
+                        "records a restriction because the survey found the layer "
+                        "root- or water-restricting in the field.")
     p.add_argument("--min-depth-mm", type=float, default=1000.0)
     p.add_argument("--max-depth-mm", type=float, default=5000.0)
     p.add_argument("--probe", action="store_true",
@@ -780,10 +779,15 @@ def main() -> int:
                         "three layers share a value.",
             "extrapolation": "below the described depth the deepest observed layer is "
                              "carried down; those layers are flagged `extrapolated`.",
-            "depth_rule": "hard restriction (lithic/paralithic bedrock, duripan, "
-                          "petrocalcic, permafrost) wins outright; otherwise "
+            "depth_rule": "any restriction reported by SSURGO corestrictions for the "
+                          "dominant component sets the column, whatever its kind -- the "
+                          "survey records a layer there because it found it root- or "
+                          "water-restricting in the field. Otherwise "
                           f"max({args.min_depth_mm:g} mm, ZR95), capped at "
-                          f"{args.max_depth_mm:g} mm.",
+                          f"{args.max_depth_mm:g} mm. muaggatt.brockdepmin is recorded "
+                          "but never used: it is the minimum over all components of the "
+                          "map unit and contradicted the dominant component at every "
+                          "station where it fired.",
             "sand_clay_convention": "sandtotal_r/claytotal_r are percentages of the "
                                     "<2 mm mineral fraction; converted to fractions and "
                                     "scaled down only if Psan+Pcla+Porg would exceed 1, "

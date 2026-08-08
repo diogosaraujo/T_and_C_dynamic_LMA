@@ -62,7 +62,7 @@ DEFAULT_EXCLUDED = PREPROC / "excluded_stations.csv"
 INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
                                  "/vol_efthymios/NFS07/dd1136/T_and_C/input_data"))
 DEFAULT_OUT = INPUT_ROOT / "soil"
-DEFAULT_ROOT_DEPTH = INPUT_ROOT / "root_depth" / "root_depth.csv"
+DEFAULT_ROOT_DEPTH = INPUT_ROOT / "root_depth" / "root_depth_schenk_jackson.csv"
 DEFAULT_BADM_DIR = INPUT_ROOT / "ameriflux"
 
 SDA_URL = "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest"
@@ -130,7 +130,7 @@ def read_root_depth(path: Path) -> dict[str, float]:
     with open(path, newline="", encoding="utf-8-sig") as fh:
         for row in csv.DictReader(fh):
             sid = (row.get("station_id") or row.get("StationID") or "").strip()
-            for key in ("ZR95_mm", "zr95_mm", "ZR95", "root_depth_mm", "value_mm"):
+            for key in ("ZR95_H_mm", "ZR95_mm", "zr95_mm", "ZR95", "root_depth_mm"):
                 if sid and row.get(key) not in MISSING:
                     try:
                         out[sid] = float(row[key])
@@ -260,7 +260,25 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
             return float(r.get("comppct_r") or 0)
         except (TypeError, ValueError):
             return 0.0
-    best = max(rows, key=pct)
+
+    def has_horizons(r):
+        return r.get("hzdept_r") not in MISSING and r.get("hzdepb_r") not in MISSING
+
+    # The largest component is often a miscellaneous area -- rock outcrop, water,
+    # urban land -- carrying no horizons at all; the probe found six such stations,
+    # Hubbard Brook among them. Prefer the largest component that IS described,
+    # rather than discarding the map unit and dropping to POLARIS.
+    described = [r for r in rows if has_horizons(r)]
+    demoted = ""
+    if described:
+        best = max(described, key=pct)
+        top = max(rows, key=pct)
+        if str(top["cokey"]).strip() != str(best["cokey"]).strip():
+            demoted = (f"largest component '{(top.get('compname') or '?').strip()}' "
+                       f"({pct(top):g}%) has no horizons; used "
+                       f"'{(best.get('compname') or '?').strip()}' ({pct(best):g}%)")
+    else:
+        best = max(rows, key=pct)
     cokey = str(best["cokey"]).strip()
     comp = [r for r in rows if str(r["cokey"]).strip() == cokey]
 
@@ -296,20 +314,27 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
         if d is not None:
             restriction, res_depth = kind, d
             break
-    if res_depth is None:
-        agg = sda_query(f"SELECT brockdepmin FROM muaggatt WHERE mukey = '{mukey}'")
-        if agg:
-            d = _f(agg[0].get("brockdepmin"))
-            # muaggatt reports 201 cm to mean 'deeper than described'.
-            if d is not None and d < 201:
-                restriction, res_depth = "brockdepmin (muaggatt)", d
+    # muaggatt.brockdepmin is the MINIMUM bedrock depth across every component of the
+    # map unit, while the horizons above come from the dominant one -- so it can
+    # describe a different, shallower soil entirely. The probe (job 35515) found it
+    # contradicted the dominant component in all 7 cases it fired: US-xRM would have
+    # been given a 39 cm column against a profile described to 158 cm, US-CZ4 a 0 cm
+    # one. It is therefore recorded for information and never used to set the depth;
+    # the dominant component having no corestrictions entry correctly means no
+    # restriction within its described profile.
+    brock = None
+    agg = sda_query(f"SELECT brockdepmin FROM muaggatt WHERE mukey = '{mukey}'")
+    if agg:
+        d = _f(agg[0].get("brockdepmin"))
+        if d is not None and 0 < d < 201:      # 201 is muaggatt's 'deeper than described'
+            brock = d
 
     return {"mukey": mukey, "cokey": cokey,
             "compname": (best.get("compname") or "").strip(),
             "comppct": pct(best), "majcomp": (best.get("majcompflag") or "").strip(),
             "n_components": len({str(r["cokey"]).strip() for r in rows}),
             "restriction": restriction, "restriction_cm": res_depth,
-            "horizons": horizons, "note": ""}
+            "brockdepmin_cm": brock, "horizons": horizons, "note": demoted}
 
 
 def _f(v):
@@ -509,7 +534,11 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
                 compname=ss.get("compname", ""), comppct=ss.get("comppct", ""),
                 n_components=ss.get("n_components", ""),
                 restriction=ss.get("restriction", ""),
-                restriction_cm=ss.get("restriction_cm", ""))
+                restriction_cm=ss.get("restriction_cm", ""),
+                restriction_hard=int(ss.get("restriction", "").lower() in HARD_RESTRICTIONS),
+                brockdepmin_cm=ss.get("brockdepmin_cm", ""))
+    if ss.get("note"):
+        info["note"] = ((info["note"] + "; ") if info["note"] else "") + ss["note"]
     if not horizons:
         info["status"] = "no_soil_data"
         return info, [], []
@@ -519,18 +548,30 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
     hard = (ss.get("restriction", "").lower() in HARD_RESTRICTIONS)
     zr = zr95.get(sid)
 
-    # Column depth: a hard restriction is a physical floor and wins outright.
-    # Otherwise take the deepest of what the roots need and the floor, capped.
+    # Column depth. A hard restriction (bedrock, duripan, permafrost) is a physical
+    # floor and wins outright, min-depth included -- a 45 cm lithic contact means the
+    # column is 45 cm, and forcing it to 1 m would invent water storage that is not
+    # there. A soft one (densic, fragipan, abrupt textural change: 19 of the 44
+    # restrictions found) impedes without stopping, so it caps the column but does
+    # not override min-depth, and --soft-restrictions ignore disables even that.
     if res_cm is not None and hard:
         depth = res_cm * 10.0
         rule = f"hard restriction ({ss['restriction']}) at {res_cm:g} cm"
     else:
         depth = max(args.min_depth_mm, zr or 0.0)
-        rule = "max(min-depth, ZR95)"
+        rule = f"max(min-depth {args.min_depth_mm:g} mm, ZR95 {zr or 0:g} mm)"
         if res_cm is not None:
-            depth = min(depth, res_cm * 10.0) if res_cm * 10.0 > args.min_depth_mm else depth
-            rule += f"; soft restriction {ss['restriction']} at {res_cm:g} cm noted"
-    depth = min(max(depth, args.min_depth_mm), args.max_depth_mm)
+            if args.soft_restrictions == "cap":
+                capped = max(res_cm * 10.0, args.min_depth_mm)
+                if capped < depth:
+                    depth = capped
+                    rule += f"; capped at soft restriction {ss['restriction']} {res_cm:g} cm"
+                else:
+                    rule += f"; soft restriction {ss['restriction']} {res_cm:g} cm noted"
+            else:
+                rule += f"; soft restriction {ss['restriction']} {res_cm:g} cm ignored"
+        depth = min(max(depth, args.min_depth_mm), args.max_depth_mm)
+    depth = min(depth, args.max_depth_mm)
 
     if zr and zr > depth:
         info["note"] = ((info["note"] + "; ") if info["note"] else "") + \
@@ -647,6 +688,10 @@ def main() -> int:
                    help="source order, first hit wins (default: %(default)s)")
     p.add_argument("--badm-dir", type=Path, default=DEFAULT_BADM_DIR)
     p.add_argument("--root-depth", type=Path, default=DEFAULT_ROOT_DEPTH)
+    p.add_argument("--soft-restrictions", choices=("cap", "ignore"), default="cap",
+                   help="densic material, fragipans and abrupt textural changes impede "
+                        "without stopping the profile: 'cap' limits the column to them "
+                        "(never below --min-depth-mm), 'ignore' records them only")
     p.add_argument("--min-depth-mm", type=float, default=1000.0)
     p.add_argument("--max-depth-mm", type=float, default=5000.0)
     p.add_argument("--probe", action="store_true",

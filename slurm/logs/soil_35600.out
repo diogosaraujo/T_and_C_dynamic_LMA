@@ -1,0 +1,183 @@
+job        : 35600
+node       : soeepyc05
+started    : 2026-08-08T20:51:03Z
+sources    : badm,ssurgo,polaris,soilgrids
+badm dir   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+root depth : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth/root_depth_schenk_jackson.csv
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil
+
+SDA reachable
+
+stations   : 101 (17 excluded)
+sources    : badm,ssurgo,polaris,soilgrids
+ZR95 known : 117 station(s) from /vol_efthymios/NFS07/dd1136/T_and_C/input_data/root_depth/root_depth_schenk_jackson.csv
+depth      : 1000-5000 mm
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil
+
+  [  1/101] US-Bar   polaris        depth 2000.0 mm  ms 17  extrap  0  
+  [  2/101] US-Blk   ssurgo_sda     depth 1730.0 mm  ms 16  extrap  0  Lithic bedrock
+  [  3/101] US-CPF   ssurgo_sda     depth 1570.0 mm  ms 16  extrap  0  
+  [  4/101] US-CPk   ssurgo_sda     depth  530.0 mm  ms 10  extrap  0  Paralithic bedrock
+  [  5/101] US-CRK   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [  6/101] US-CS2   ssurgo_sda     depth 2000.0 mm  ms 17  extrap  0  
+  [  7/101] US-CZ2   ssurgo_sda     depth 1680.0 mm  ms 16  extrap  0  Paralithic bedrock
+  [  8/101] US-CZ3   ssurgo_sda     depth  970.0 mm  ms 13  extrap  0  Paralithic bedrock
+  [  9/101] US-CZ4   ssurgo_sda     depth 1700.0 mm  ms 16  extrap  0  
+  [ 10/101] US-ChR   ssurgo_sda     depth 1780.0 mm  ms 17  extrap  0  
+  [ 11/101] US-Cst   ssurgo_sda     depth 1830.0 mm  ms 17  extrap  0  Fragipan
+  [ 12/101] US-Cwt   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 13/101] US-DPP   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 14/101] US-Dk2   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Paralithic bedrock
+  [ 15/101] US-Dk3   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 16/101] US-Fmf   ssurgo_sda     depth 1700.0 mm  ms 16  extrap  1  
+  [ 17/101] US-Fuf   ssurgo_sda     depth 1700.0 mm  ms 16  extrap  1  
+  [ 18/101] US-GBT   ssurgo_sda     depth  740.0 mm  ms 12  extrap  0  Lithic bedrock
+  [ 19/101] US-GLE   ssurgo_sda     depth  740.0 mm  ms 12  extrap  0  Lithic bedrock
+  [ 20/101] US-HB2   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 21/101] US-HB3   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 22/101] US-HBK   polaris        depth 2000.0 mm  ms 17  extrap  0  
+  [ 23/101] US-Ha1   ssurgo_sda     depth 1600.0 mm  ms 16  extrap  0  Densic material
+  [ 24/101] US-Ha2   ssurgo_sda     depth 1650.0 mm  ms 16  extrap  0  Densic material
+  [ 25/101] US-Ho1   ssurgo_sda     depth 1570.0 mm  ms 16  extrap  0  Densic material
+  [ 26/101] US-Ho2   ssurgo_sda     depth 1570.0 mm  ms 16  extrap  0  Densic material
+  [ 27/101] US-Ho3   ssurgo_sda     depth 1570.0 mm  ms 16  extrap  0  Densic material
+  [ 28/101] US-LPH   ssurgo_sda     depth 1600.0 mm  ms 16  extrap  0  
+  [ 29/101] US-MEF   ssurgo_sda     depth 1340.0 mm  ms 15  extrap  0  Lithic bedrock
+  [ 30/101] US-MMS   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Fragipan
+  [ 31/101] US-MOz   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  Abrupt textural change
+  [ 32/101] US-MRf   ssurgo_sda     depth 1300.0 mm  ms 15  extrap  0  Paralithic bedrock
+  [ 33/101] US-Me1   ssurgo_sda     depth  610.0 mm  ms 11  extrap  0  Paralithic bedrock
+  [ 34/101] US-Me2   ssurgo_sda     depth  910.0 mm  ms 13  extrap  0  Paralithic bedrock
+  [ 35/101] US-Me4   ssurgo_sda     depth 1600.0 mm  ms 16  extrap  0  
+  [ 36/101] US-Me6   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  
+  [ 37/101] US-Me7   ssurgo_sda     depth  910.0 mm  ms 13  extrap  0  Paralithic bedrock
+  [ 38/101] US-MtB   ssurgo_sda     depth  330.0 mm  ms  8  extrap  0  Lithic bedrock
+  [ 39/101] US-NC2   ssurgo_sda     depth 1170.0 mm  ms 14  extrap  0  
+  [ 40/101] US-NC3   ssurgo_sda     depth 1170.0 mm  ms 14  extrap  0  
+  [ 41/101] US-NC5   ssurgo_sda     depth 1570.0 mm  ms 16  extrap  0  
+  [ 42/101] US-NMj   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 43/101] US-NR1   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  Densic material
+  [ 44/101] US-Oho   ssurgo_sda     depth 1880.0 mm  ms 17  extrap  0  
+  [ 45/101] US-PFL   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  
+  [ 46/101] US-PFb   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  
+  [ 47/101] US-PFc   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Densic material
+  [ 48/101] US-PFg   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Densic material
+  [ 49/101] US-PFh   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 50/101] US-PFi   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Densic material
+  [ 51/101] US-PFj   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Densic material
+  [ 52/101] US-PFk   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Densic material
+  [ 53/101] US-PFm   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Densic material
+  [ 54/101] US-PFn   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  Densic material
+  [ 55/101] US-PFp   ssurgo_sda     depth 1420.0 mm  ms 15  extrap  0  
+  [ 56/101] US-PFq   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 57/101] US-PFs   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  
+  [ 58/101] US-PFt   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  
+  [ 59/101] US-SB1   ssurgo_sda     depth 1830.0 mm  ms 17  extrap  0  
+  [ 60/101] US-SHC   polaris        depth 2300.0 mm  ms 18  extrap  1  
+  [ 61/101] US-SP1   ssurgo_sda     depth 2130.0 mm  ms 18  extrap  0  
+  [ 62/101] US-SP2   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 63/101] US-SP3   ssurgo_sda     depth 2130.0 mm  ms 18  extrap  0  
+  [ 64/101] US-SP4   ssurgo_sda     depth 2080.0 mm  ms 18  extrap  0  
+  [ 65/101] US-SSH   ssurgo_sda     depth  870.0 mm  ms 13  extrap  0  Lithic bedrock
+  [ 66/101] US-Slt   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 67/101] US-TEF   ssurgo_sda     depth 1430.0 mm  ms 15  extrap  0  
+  [ 68/101] US-UMB   ssurgo_sda     depth 1980.0 mm  ms 17  extrap  0  
+  [ 69/101] US-UMd   ssurgo_sda     depth 1980.0 mm  ms 17  extrap  0  
+  [ 70/101] US-Vcm   ssurgo_sda     depth 1700.0 mm  ms 16  extrap  1  
+  [ 71/101] US-Vcp   ssurgo_sda     depth 1700.0 mm  ms 16  extrap  1  
+  [ 72/101] US-Vcs   ssurgo_sda     depth 1700.0 mm  ms 16  extrap  1  
+  [ 73/101] US-WBW   ssurgo_sda     depth 1780.0 mm  ms 17  extrap  0  
+  [ 74/101] US-WCr   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  Densic material
+  [ 75/101] US-Wi1   ssurgo_sda     depth 2000.0 mm  ms 17  extrap  0  
+  [ 76/101] US-Wi2   ssurgo_sda     depth 2000.0 mm  ms 17  extrap  0  
+  [ 77/101] US-Wi3   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 78/101] US-Wi4   ssurgo_sda     depth 2000.0 mm  ms 17  extrap  0  
+  [ 79/101] US-Wrc   polaris        depth 2000.0 mm  ms 17  extrap  0  
+  [ 80/101] US-xAB   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  
+  [ 81/101] US-xBL   ssurgo_sda     depth 1470.0 mm  ms 15  extrap  0  Fragipan
+  [ 82/101] US-xBR   polaris        depth 2000.0 mm  ms 17  extrap  0  
+  [ 83/101] US-xGR   ssurgo_sda     depth 1220.0 mm  ms 14  extrap  0  
+  [ 84/101] US-xHA   ssurgo_sda     depth 1600.0 mm  ms 16  extrap  0  Densic material
+  [ 85/101] US-xJE   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 86/101] US-xLE   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 87/101] US-xML   ssurgo_sda     depth 1650.0 mm  ms 16  extrap  0  
+  [ 88/101] US-xNW   ssurgo_sda     depth 1070.0 mm  ms 14  extrap  0  Paralithic bedrock
+  [ 89/101] US-xRM   ssurgo_sda     depth 1500.0 mm  ms 15  extrap  0  
+  [ 90/101] US-xRN   ssurgo_sda     depth 2290.0 mm  ms 18  extrap  0  
+  [ 91/101] US-xSB   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 92/101] US-xSC   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  
+  [ 93/101] US-xSE   ssurgo_sda     depth 1830.0 mm  ms 17  extrap  0  
+  [ 94/101] US-xSP   ssurgo_sda     depth 1680.0 mm  ms 16  extrap  0  Paralithic bedrock
+  [ 95/101] US-xST   ssurgo_sda     depth 2410.0 mm  ms 18  extrap  0  
+  [ 96/101] US-xTA   ssurgo_sda     depth 2030.0 mm  ms 18  extrap  0  
+  [ 97/101] US-xTE   ssurgo_sda     depth 1520.0 mm  ms 16  extrap  0  Lithic bedrock
+  [ 98/101] US-xTR   ssurgo_sda     depth 2290.0 mm  ms 18  extrap  0  
+  [ 99/101] US-xUK   ssurgo_sda     depth  870.0 mm  ms 13  extrap  0  Lithic bedrock
+  [100/101] US-xWR   polaris        depth 2000.0 mm  ms 17  extrap  0  
+  [101/101] US-xYE   ssurgo_sda     depth 1500.0 mm  ms 15  extrap  0  
+wrote /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil/soil_sites.csv  (101 rows)
+wrote /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil/soil_profiles.csv  (1640 rows)
+wrote /vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil/soil_horizons_raw.csv  (468 rows)
+
+==================================================================
+SOIL COVERAGE: 101/101 stations with a profile
+==================================================================
+
+texture source (first hit in the chain):
+   ssurgo_sda           95  (94%)
+   polaris               6  (6%)
+
+DEPTH TO BEDROCK (sets the column) : 18/101
+   Paralithic bedrock             10
+   Lithic bedrock                  8
+   depth cm: min 33  median 97  max 203
+   shallower than 100 cm: 10
+
+in-soil restrictions (recorded, NOT a floor) : 19
+   Densic material                15
+   Fragipan                        3
+   Abrupt textural change          1
+
+no bedrock reported : 83  (column = max(described, ZR95, min-depth))
+
+column_depth_mm          min 330 mm   median 1700   max 2410
+
+described_to_cm          min 33 cm   median 168   max 241
+
+ms                       min 8 layers   median 16   max 18
+
+n_layers_extrapolated    min 0 layers   median 0   max 1
+
+columns deeper than 2 m (beyond any source's description): 32
+columns at or under 1 m                                  : 10
+   US-CPk US-CZ3 US-GBT US-GLE US-Me1 US-Me2 US-Me7 US-MtB US-SSH US-xUK
+
+texture across stations:
+   Psan             min 0.033  median 0.671  max 0.980
+   Pcla             min 0.003  median 0.103  max 0.571
+   Porg(top 30cm)   min 0.003  median 0.015  max 0.073
+   Porg(column)     min 0.000  median 0.006  max 0.030
+
+layers written: 1640   extrapolated below the described depth: 6 (0%)
+layer source mix: ssurgo_sda 1537, polaris 103
+
+15 station(s) with a note:
+   US-CPk   ZR95 1000 mm exceeds column 530 mm -- T&C would abort; ZR95 must be capped
+   US-CZ2   ZR95 2500 mm exceeds column 1680 mm -- T&C would abort; ZR95 must be capped
+   US-CZ3   ZR95 2500 mm exceeds column 970 mm -- T&C would abort; ZR95 must be capped
+   US-GBT   ZR95 1000 mm exceeds column 740 mm -- T&C would abort; ZR95 must be capped
+   US-GLE   ZR95 1000 mm exceeds column 740 mm -- T&C would abort; ZR95 must be capped
+   US-MRf   ZR95 1600 mm exceeds column 1300 mm -- T&C would abort; ZR95 must be capped
+   US-Me1   ZR95 1500 mm exceeds column 610 mm -- T&C would abort; ZR95 must be capped
+   US-Me2   ZR95 1500 mm exceeds column 910 mm -- T&C would abort; ZR95 must be capped
+   US-Me7   ZR95 1500 mm exceeds column 910 mm -- T&C would abort; ZR95 must be capped
+   US-MtB   ZR95 1600 mm exceeds column 330 mm -- T&C would abort; ZR95 must be capped
+   US-SSH   ZR95 1000 mm exceeds column 870 mm -- T&C would abort; ZR95 must be capped
+   US-xNW   ZR95 1100 mm exceeds column 1070 mm -- T&C would abort; ZR95 must be capped
+   US-xSP   ZR95 2500 mm exceeds column 1680 mm -- T&C would abort; ZR95 must be capped
+   US-xTE   ZR95 2500 mm exceeds column 1520 mm -- T&C would abort; ZR95 must be capped
+   US-xUK   ZR95 1100 mm exceeds column 870 mm -- T&C would abort; ZR95 must be capped
+
+finished   : 2026-08-08T20:52:22Z
+exit status: 0
+2.5K	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/soil

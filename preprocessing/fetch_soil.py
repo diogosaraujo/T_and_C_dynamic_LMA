@@ -28,6 +28,15 @@ horizons 80-140 cm below them (US-Ho1 70 vs 165 cm, US-MOz 28 vs 152), whereas a
 bedrock contact it stops dead (US-MtB 33/33, US-CPk 56/56). They are recorded, never
 used as a floor.
 
+THE FOREST FLOOR is not part of the column. SSURGO names every horizon, so O
+horizons (Oi/Oe/Oa litter and duff, desgnmaster 'O') are identified from the survey
+rather than guessed at from organic content, dropped, and the remaining depths
+re-zeroed on the mineral surface -- including the bedrock contact. T&C has nowhere
+to put a litter layer: Porg reaches only Soil_parameters, and Saxton & Rawls is a
+mineral-soil pedotransfer. The papers do the same thing, using Porg = 0.01 taken
+from 8 g/kg of organic carbon measured in the 0-6 cm MINERAL horizon at Lucky
+Hills; MOD_PARAM_US_xRM.m's Porg = 0.07 is likewise an A-horizon value.
+
 ORGANIC MATTER is the field most easily got wrong, because every source states it
 differently: SSURGO om_r is organic matter as a percent, POLARIS om is log10 of
 percent, SoilGrids soc is SOC in dg/kg and needs the x1.72 conversion to organic
@@ -275,6 +284,7 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
 
     rows = sda_query(f"""
         SELECT c.cokey, c.compname, c.comppct_r, c.majcompflag,
+               ch.hzname, ch.desgnmaster,
                ch.hzdept_r, ch.hzdepb_r, ch.sandtotal_r, ch.silttotal_r,
                ch.claytotal_r, ch.om_r, ch.ksat_r, ch.dbthirdbar_r,
                ch.wthirdbar_r, ch.wfifteenbar_r
@@ -315,27 +325,59 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
     cokey = str(best["cokey"]).strip()
     comp = [r for r in rows if str(r["cokey"]).strip() == cokey]
 
-    horizons = []
+    # The survey names every horizon, so the forest floor never has to be guessed at
+    # from its organic content: desgnmaster is the master horizon letter, and O is
+    # organic (Oi slightly decomposed litter, Oe moderately, Oa well). L is limnic
+    # organic material, R is bedrock -- neither is soil either. Everything reported
+    # above 45% organic matter at our stations is an O horizon, so no threshold is
+    # needed to identify them; --max-porg remains only as a Saxton & Rawls validity
+    # guard on genuine mineral horizons (US-LPH's A horizon really is 10.8%).
+    horizons, organic = [], []
     for r in comp:
         try:
             top, bot = float(r["hzdept_r"]), float(r["hzdepb_r"])
-            sand, clay = float(r["sandtotal_r"]), float(r["claytotal_r"])
         except (TypeError, ValueError, KeyError):
             continue
         if bot <= top:
+            continue
+        master = (r.get("desgnmaster") or "").strip().upper()
+        hzname = (r.get("hzname") or "").strip()
+        if master in ("O", "L") or (not master and hzname[:1].upper() == "O"):
+            organic.append({"top_cm": top, "bot_cm": bot, "hzname": hzname})
+            continue
+        if master == "R":                      # bedrock, not soil
+            continue
+        try:
+            sand, clay = float(r["sandtotal_r"]), float(r["claytotal_r"])
+        except (TypeError, ValueError, KeyError):
             continue
         om = r.get("om_r")
         try:
             org = float(om) / 100.0            # om_r is organic matter PERCENT
         except (TypeError, ValueError):
             org = None
-        horizons.append({"top_cm": top, "bot_cm": bot,
+        horizons.append({"top_cm": top, "bot_cm": bot, "hzname": hzname,
                          "sand": sand / 100.0, "clay": clay / 100.0, "org": org,
                          "ksat_um_s": _f(r.get("ksat_r")),
                          "wthirdbar": _f(r.get("wthirdbar_r")),
                          "wfifteenbar": _f(r.get("wfifteenbar_r")),
                          "source": "ssurgo_sda"})
     horizons.sort(key=lambda h: h["top_cm"])
+    organic.sort(key=lambda h: h["top_cm"])
+
+    # Re-zero on the MINERAL surface. SSURGO measures depth from the top of the O
+    # horizon; T&C's column is mineral soil, and the papers parameterise it from the
+    # mineral surface horizon (Fatichi et al. use Porg = 0.01 from 8 g/kg organic
+    # carbon measured at 0-6 cm). Leaving the depths as they are would model the
+    # litter thickness as extra mineral soil, so the offset is subtracted from the
+    # horizons and, below, from the bedrock contact as well.
+    o_thick = 0.0
+    if organic and horizons and organic[0]["top_cm"] <= 0.01:
+        o_thick = max(o["bot_cm"] for o in organic if o["top_cm"] < horizons[0]["top_cm"] + 0.01)
+        o_thick = min(o_thick, horizons[0]["top_cm"])
+        for h in horizons:
+            h["top_cm"] = max(0.0, h["top_cm"] - o_thick)
+            h["bot_cm"] -= o_thick
 
     # corestrictions is an inventory of layers that restrict roots and/or water. Only
     # the BEDROCK kinds mark the bottom of the soil column, which is the quantity
@@ -358,7 +400,7 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
         if not restriction:
             restriction, res_depth = kind, d
         if kind.lower() in BEDROCK_KINDS and bedrock_depth is None:
-            bedrock, bedrock_depth = kind, d
+            bedrock, bedrock_depth = kind, max(0.0, d - o_thick)
     # muaggatt.brockdepmin is the MINIMUM bedrock depth across every component of the
     # map unit, while the horizons above come from the dominant one -- so it can
     # describe a different, shallower soil entirely. The probe (job 35515) found it
@@ -389,6 +431,9 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
             "n_components": len({str(r["cokey"]).strip() for r in rows}),
             "restriction": restriction, "restriction_cm": res_depth,
             "bedrock": bedrock, "bedrock_cm": bedrock_depth,
+            "o_horizon_cm": o_thick,
+            "o_horizons": " ".join(f"{o['hzname']}({o['top_cm']:g}-{o['bot_cm']:g})"
+                                   for o in organic),
             "brockdepmin_cm": brock, "rootznaws_mm": aws,
             "horizons": horizons, "note": demoted}
 
@@ -610,6 +655,8 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
                 restriction_cm=ss.get("restriction_cm", ""),
                 bedrock=ss.get("bedrock", ""),
                 bedrock_cm=ss.get("bedrock_cm", ""),
+                o_horizon_cm=ss.get("o_horizon_cm", ""),
+                o_horizons=ss.get("o_horizons", ""),
                 rootznaws_mm=ss.get("rootznaws_mm", ""),
                 brockdepmin_cm=ss.get("brockdepmin_cm", ""))
     if ss.get("note"):
@@ -837,11 +884,11 @@ def main() -> int:
                    help="do not let a reported bedrock contact set the column depth; "
                         "fall back to max(described, ZR95, --min-depth-mm) everywhere")
     p.add_argument("--max-porg", type=float, default=0.08,
-                   help="cap on Porg, the organic-matter fraction (default 0.08). "
-                        "Saxton & Rawls fitted their pedotransfer functions on mineral "
-                        "soils up to ~8%% OM; SSURGO reports forest-floor O horizons at "
-                        "45-85%%, which are outside the equations' domain. The reported "
-                        "value is kept in Porg_reported.")
+                   help="Saxton & Rawls validity guard on Porg (default 0.08). O "
+                        "horizons are removed by NAME, not by this threshold; the cap "
+                        "only catches genuine mineral horizons above the ~8%% OM the "
+                        "pedotransfer functions were fitted on, such as US-LPH's A "
+                        "horizon at 10.8%%. Reported value kept in Porg_reported.")
     p.add_argument("--min-depth-mm", type=float, default=1000.0)
     p.add_argument("--max-depth-mm", type=float, default=5000.0)
     p.add_argument("--probe", action="store_true",

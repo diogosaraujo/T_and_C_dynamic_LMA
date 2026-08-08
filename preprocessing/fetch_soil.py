@@ -11,11 +11,18 @@ is measuring.
 SOURCE ORDER, first hit wins, recorded per field:
 
     1. AmeriFlux BADM   in-situ, where the site reported SOIL_TEX / SOIL_CHEM
-    2. SSURGO via SDA   USDA field survey. The only source that gives depth to a
-                        named restriction (lithic/paralithic bedrock, densic,
-                        fragipan) rather than a modelled estimate, and its horizons
-                        terminate AT that restriction -- so texture and depth come
-                        from one internally consistent profile.
+    2. SSURGO via SDA   USDA field survey. The only source giving a field-observed
+                        DEPTH TO BEDROCK rather than a modelled estimate, from the
+                        same profile the texture comes from.
+
+COLUMN DEPTH is depth to bedrock; rooting depth is a separate input (Schenk &
+Jackson), and the two meet only in the constraint ZR95 <= column depth, applied
+when the .mat files are built. corestrictions catalogues layers restricting roots
+AND/OR water, so only its BEDROCK kinds end the column. Densic material, fragipans
+and abrupt textural changes lie within the soil: the survey keeps describing
+horizons 80-140 cm below them (US-Ho1 70 vs 165 cm, US-MOz 28 vs 152), whereas at a
+bedrock contact it stops dead (US-MtB 33/33, US-CPk 56/56). They are recorded, never
+used as a floor.
     3. POLARIS          30 m CONUS, itself disaggregated from SSURGO. Gap filler.
     4. SoilGrids        250 m global. Last resort, and only properties -- SoilGrids
                         2.0 dropped the bedrock layers, so it cannot supply depth.
@@ -78,12 +85,12 @@ STD_INTERVALS = [(0, 5), (5, 15), (15, 30), (30, 60), (60, 100), (100, 200)]
 BASE_ZS = [0, 10, 20, 50, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1000]
 
 MISSING = {"", "-9999", "-9999.0", "NA", "N/A", "NaN", "nan", None}
-# Kinds seen across the 101 stations (job 35515), for reference only -- the code
-# does not classify them. corestrictions records a layer BECAUSE the survey judged
-# it root- or water-restricting, so re-deciding here would only second-guess the
-# field observation this source was chosen for.
-#   Lithic bedrock 8, Paralithic bedrock 10, Densic material 15, Fragipan 3,
-#   Abrupt textural change 1, none 57
+# The reskind values that ARE bedrock, and so mark the bottom of the soil column.
+# Everything else corestrictions reports -- densic material, fragipans, abrupt
+# textural changes -- lies within the soil and does not end it. Counts across the
+# 101 stations (job 35576): Lithic 8, Paralithic 10 | Densic 15, Fragipan 3,
+# Abrupt textural change 1 | no restriction 64.
+BEDROCK_KINDS = {"lithic bedrock", "paralithic bedrock", "densic bedrock"}
 
 
 # --------------------------------------------------------------------------- io
@@ -306,16 +313,28 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
                          "source": "ssurgo_sda"})
     horizons.sort(key=lambda h: h["top_cm"])
 
+    # corestrictions is an inventory of layers that restrict roots and/or water. Only
+    # the BEDROCK kinds mark the bottom of the soil column, which is the quantity
+    # being fetched here -- rooting depth comes from Schenk & Jackson separately. A
+    # densic layer, fragipan or abrupt textural change sits WITHIN the soil: the
+    # survey keeps describing horizons for another 80-140 cm below them (US-Ho1 70 vs
+    # 165 cm, US-PF* 84 vs 203, US-MOz 28 vs 152), whereas at a bedrock contact the
+    # description stops dead (US-MtB 33/33, US-CPk 56/56, US-GBT 74/74). Both are
+    # returned; only bedrock_cm sets the depth.
     res = sda_query(f"""
         SELECT reskind, resdept_r FROM corestrictions
         WHERE cokey = '{cokey}' ORDER BY resdept_r ASC""")
     restriction, res_depth = "", None
+    bedrock, bedrock_depth = "", None
     for r in res:
         kind = (r.get("reskind") or "").strip()
         d = _f(r.get("resdept_r"))
-        if d is not None:
+        if d is None or d <= 0:
+            continue
+        if not restriction:
             restriction, res_depth = kind, d
-            break
+        if kind.lower() in BEDROCK_KINDS and bedrock_depth is None:
+            bedrock, bedrock_depth = kind, d
     # muaggatt.brockdepmin is the MINIMUM bedrock depth across every component of the
     # map unit, while the horizons above come from the dominant one -- so it can
     # describe a different, shallower soil entirely. The probe (job 35515) found it
@@ -324,19 +343,27 @@ def ssurgo_profile(lat: float, lon: float) -> dict:
     # one. It is therefore recorded for information and never used to set the depth;
     # the dominant component having no corestrictions entry correctly means no
     # restriction within its described profile.
-    brock = None
-    agg = sda_query(f"SELECT brockdepmin FROM muaggatt WHERE mukey = '{mukey}'")
+    brock = aws = None
+    agg = sda_query("SELECT brockdepmin, rootznaws FROM muaggatt "
+                    f"WHERE mukey = '{mukey}'")
     if agg:
         d = _f(agg[0].get("brockdepmin"))
         if d is not None and 0 < d < 201:      # 201 is muaggatt's 'deeper than described'
             brock = d
+        # Root zone available water storage, mm. Recorded as an independent check on
+        # whether the column we build holds a plausible amount of water -- NOT used
+        # to set anything, and note rootznemc is deliberately not pulled: it is a
+        # commodity-crop rooting depth, capped, so it under-reports forests.
+        aws = _f(agg[0].get("rootznaws"))
 
     return {"mukey": mukey, "cokey": cokey,
             "compname": (best.get("compname") or "").strip(),
             "comppct": pct(best), "majcomp": (best.get("majcompflag") or "").strip(),
             "n_components": len({str(r["cokey"]).strip() for r in rows}),
             "restriction": restriction, "restriction_cm": res_depth,
-            "brockdepmin_cm": brock, "horizons": horizons, "note": demoted}
+            "bedrock": bedrock, "bedrock_cm": bedrock_depth,
+            "brockdepmin_cm": brock, "rootznaws_mm": aws,
+            "horizons": horizons, "note": demoted}
 
 
 def _f(v):
@@ -537,6 +564,9 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
                 n_components=ss.get("n_components", ""),
                 restriction=ss.get("restriction", ""),
                 restriction_cm=ss.get("restriction_cm", ""),
+                bedrock=ss.get("bedrock", ""),
+                bedrock_cm=ss.get("bedrock_cm", ""),
+                rootznaws_mm=ss.get("rootznaws_mm", ""),
                 brockdepmin_cm=ss.get("brockdepmin_cm", ""))
     if ss.get("note"):
         info["note"] = ((info["note"] + "; ") if info["note"] else "") + ss["note"]
@@ -546,6 +576,7 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
 
     described_cm = horizons[-1]["bot_cm"]
     res_cm = ss.get("restriction_cm")
+    bed_cm = ss.get("bedrock_cm")
     zr = zr95.get(sid)
 
     # Column depth. corestrictions exists to record layers that restrict roots and
@@ -560,15 +591,17 @@ def process(st: dict, args, zr95: dict[str, float]) -> tuple[dict, list[dict], l
     # contact out to 1 m would invent water storage that is not there, and
     # plant-available water is the main soil control on the flux response this
     # project attributes to LMA.
-    if res_cm is not None and res_cm > 0 and not args.ignore_restrictions:
-        depth = res_cm * 10.0
-        rule = f"{ss['restriction'] or 'restriction'} at {res_cm:g} cm (SSURGO corestrictions)"
+    if bed_cm is not None and not args.ignore_bedrock:
+        depth = bed_cm * 10.0
+        rule = f"{ss['bedrock']} at {bed_cm:g} cm (SSURGO corestrictions)"
     else:
-        depth = max(args.min_depth_mm, zr or 0.0)
-        rule = f"no restriction; max(min-depth {args.min_depth_mm:g} mm, ZR95 {zr or 0:g} mm)"
-        if res_cm is not None and args.ignore_restrictions:
-            rule += f"; {ss['restriction']} at {res_cm:g} cm ignored on request"
-        depth = max(depth, args.min_depth_mm)
+        depth = max(args.min_depth_mm, zr or 0.0, described_cm * 10.0)
+        rule = (f"no bedrock reported; max(described {described_cm:g} cm, "
+                f"ZR95 {zr or 0:g} mm, min-depth {args.min_depth_mm:g} mm)")
+        if bed_cm is not None:
+            rule += f"; {ss['bedrock']} at {bed_cm:g} cm ignored on request"
+        if res_cm is not None:
+            rule += f"; in-soil {ss['restriction']} at {res_cm:g} cm noted, not a floor"
     depth = min(depth, args.max_depth_mm)
 
     if zr and zr > depth:
@@ -616,15 +649,24 @@ def report(out_dir: Path) -> int:
     for k, v in Counter(s.get("texture_source", "none") for s in sites).most_common():
         print(f"   {k:<18} {v:>4}  ({100 * v / n:.0f}%)")
 
-    have_res = [s for s in ok if s.get("restriction_cm") not in MISSING]
-    print(f"\ndepth to a named restriction : {len(have_res)}/{len(ok)}")
-    for k, v in Counter(s.get("restriction", "") for s in have_res).most_common(6):
+    # Bedrock ends the soil column; everything else corestrictions reports sits
+    # inside it. Reporting them together is what made this confusing to begin with.
+    have_bed = [s for s in ok if s.get("bedrock_cm") not in MISSING]
+    print(f"\nDEPTH TO BEDROCK (sets the column) : {len(have_bed)}/{len(ok)}")
+    for k, v in Counter(s.get("bedrock", "") for s in have_bed).most_common():
         print(f"   {k or '(unnamed)':<28} {v:>4}")
-    if have_res:
-        d = sorted(float(s["restriction_cm"]) for s in have_res)
+    if have_bed:
+        d = sorted(float(s["bedrock_cm"]) for s in have_bed)
         print(f"   depth cm: min {d[0]:.0f}  median {d[len(d) // 2]:.0f}  max {d[-1]:.0f}")
-    print(f"no restriction reported      : {len(ok) - len(have_res)}"
-          f"  (column set by max(min-depth, ZR95))")
+        print(f"   shallower than 100 cm: {sum(1 for x in d if x < 100)}")
+
+    in_soil = [s for s in ok if s.get("restriction_cm") not in MISSING
+               and s.get("bedrock_cm") in MISSING]
+    print(f"\nin-soil restrictions (recorded, NOT a floor) : {len(in_soil)}")
+    for k, v in Counter(s.get("restriction", "") for s in in_soil).most_common():
+        print(f"   {k or '(unnamed)':<28} {v:>4}")
+    print(f"\nno bedrock reported : {len(ok) - len(have_bed)}"
+          f"  (column = max(described, ZR95, min-depth))")
 
     def nums(key, rows=ok):
         v = []
@@ -686,11 +728,9 @@ def main() -> int:
                    help="source order, first hit wins (default: %(default)s)")
     p.add_argument("--badm-dir", type=Path, default=DEFAULT_BADM_DIR)
     p.add_argument("--root-depth", type=Path, default=DEFAULT_ROOT_DEPTH)
-    p.add_argument("--ignore-restrictions", action="store_true",
-                   help="do not let a reported restriction set the column depth; fall "
-                        "back to max(--min-depth-mm, ZR95). Off by default: SSURGO "
-                        "records a restriction because the survey found the layer "
-                        "root- or water-restricting in the field.")
+    p.add_argument("--ignore-bedrock", action="store_true",
+                   help="do not let a reported bedrock contact set the column depth; "
+                        "fall back to max(described, ZR95, --min-depth-mm) everywhere")
     p.add_argument("--min-depth-mm", type=float, default=1000.0)
     p.add_argument("--max-depth-mm", type=float, default=5000.0)
     p.add_argument("--probe", action="store_true",
@@ -788,15 +828,21 @@ def main() -> int:
                         "three layers share a value.",
             "extrapolation": "below the described depth the deepest observed layer is "
                              "carried down; those layers are flagged `extrapolated`.",
-            "depth_rule": "any restriction reported by SSURGO corestrictions for the "
-                          "dominant component sets the column, whatever its kind -- the "
-                          "survey records a layer there because it found it root- or "
-                          "water-restricting in the field. Otherwise "
-                          f"max({args.min_depth_mm:g} mm, ZR95), capped at "
-                          f"{args.max_depth_mm:g} mm. muaggatt.brockdepmin is recorded "
-                          "but never used: it is the minimum over all components of the "
-                          "map unit and contradicted the dominant component at every "
-                          "station where it fired.",
+            "depth_rule":
+                "Depth to BEDROCK from SSURGO corestrictions (lithic/paralithic/densic "
+                "bedrock) for the dominant component sets the column. Other restriction "
+                "kinds -- densic material, fragipans, abrupt textural changes -- lie "
+                "WITHIN the soil and are recorded but never used as a floor: the survey "
+                "keeps describing horizons 80-140 cm below them, whereas at a bedrock "
+                "contact the description stops dead. Where no bedrock is reported, "
+                f"max(described depth, ZR95, {args.min_depth_mm:g} mm), capped at "
+                f"{args.max_depth_mm:g} mm. Rooting depth comes from Schenk & Jackson, "
+                "not from here; this step supplies the soil column only. "
+                "muaggatt.brockdepmin is recorded but never used -- it is the minimum "
+                "over all components of the map unit and contradicted the dominant "
+                "component at every station where it fired. rootznaws is recorded as a "
+                "water-storage cross-check; rootznemc is deliberately not used, being a "
+                "capped commodity-crop rooting depth that under-reports forests.",
             "sand_clay_convention": "sandtotal_r/claytotal_r are percentages of the "
                                     "<2 mm mineral fraction; converted to fractions and "
                                     "scaled down only if Psan+Pcla+Porg would exceed 1, "

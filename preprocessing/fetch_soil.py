@@ -727,11 +727,20 @@ def main() -> int:
         if args.probe:
             try:
                 ss = ssurgo_profile(st["lat"], st["lon"])
+                hz = ss.get("horizons") or []
+                # Name the component when there are no horizons: a map unit can be a
+                # miscellaneous area (Water, Rock outcrop, Urban land) or an
+                # unpopulated NOTCOM survey, which is a real SSURGO gap and a correct
+                # fall-through to POLARIS -- not the same thing as a query bug.
+                why = ""
+                if not hz:
+                    why = f"  <-- no horizons: component '{ss.get('compname') or '?'}'"
                 print(f"  {st['station_id']:<8} mukey {str(ss.get('mukey', '-')):<10} "
-                      f"{len(ss.get('horizons') or []):>2} horizon(s) to "
-                      f"{(ss['horizons'][-1]['bot_cm'] if ss.get('horizons') else 0):>4.0f} cm  "
+                      f"{len(hz):>2} horizon(s) to "
+                      f"{(hz[-1]['bot_cm'] if hz else 0):>4.0f} cm  "
                       f"restriction {ss.get('restriction') or '-'} "
-                      f"{ss.get('restriction_cm') if ss.get('restriction_cm') is not None else ''}")
+                      f"{ss.get('restriction_cm') if ss.get('restriction_cm') is not None else ''}"
+                      f"{why}")
             except Exception as exc:                               # noqa: BLE001
                 print(f"  {st['station_id']:<8} ! {type(exc).__name__}: {exc}")
             continue

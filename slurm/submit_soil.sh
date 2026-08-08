@@ -50,7 +50,16 @@ source "$REPO_ROOT/slurm/config.sh"
 
 OUT_DIR="${OUT_DIR:-$TC_INPUT_DATA/soil}"
 BADM_DIR="${BADM_DIR:-$TC_INPUT_DATA/ameriflux}"
-ROOT_DEPTH="${ROOT_DEPTH:-$TC_INPUT_DATA/root_depth/root_depth.csv}"
+# fetch_root_depth.py writes root_depth_schenk_jackson.csv. This wrapper passes
+# --root-depth explicitly, so a wrong name here silently overrides the Python
+# default -- which is how jobs 35515-35517 all reported 'ZR95 known: 0'.
+if [ -z "${ROOT_DEPTH:-}" ]; then
+    for cand in "$TC_INPUT_DATA/root_depth/root_depth_schenk_jackson.csv" \
+                "$TC_INPUT_DATA/root_depth/root_depth.csv"; do
+        [ -f "$cand" ] && ROOT_DEPTH="$cand" && break
+    done
+    ROOT_DEPTH="${ROOT_DEPTH:-$TC_INPUT_DATA/root_depth/root_depth_schenk_jackson.csv}"
+fi
 SOURCES="${SOURCES:-badm,ssurgo,polaris,soilgrids}"
 
 mkdir -p "$REPO_ROOT/slurm/logs" "$OUT_DIR"
@@ -60,7 +69,7 @@ echo "node       : $(hostname)"
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "sources    : $SOURCES"
 echo "badm dir   : $BADM_DIR"
-echo "root depth : $ROOT_DEPTH"
+echo "root depth : $ROOT_DEPTH$([ -f "$ROOT_DEPTH" ] || echo '   <-- NOT FOUND')"
 echo "output     : $OUT_DIR"
 echo
 

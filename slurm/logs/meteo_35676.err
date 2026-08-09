@@ -1,0 +1,2 @@
+/var/spool/slurmd/job35676/slurm_script: line 88: 3904797 Killed                  matlab -nodisplay -nosplash -batch "finish_meteo('$METEO_DIR','$METEO_DIR','$PARTITION_DIR','$YEAR_TAG')"
+[2026-08-08T23:04:28.004] error: Detected 1 oom_kill event in StepId=35676.batch. Some of the step tasks have been OOM Killed.

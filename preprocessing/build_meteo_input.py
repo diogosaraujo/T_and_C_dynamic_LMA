@@ -61,7 +61,10 @@ INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
                                  "/vol_efthymios/NFS07/dd1136/T_and_C/input_data"))
 DEFAULT_ERA5 = INPUT_ROOT / "era5_land"
 DEFAULT_OUT = INPUT_ROOT / "meteo"
-DEFAULT_CA = REPO_ROOT / "T&C" / "Diogo" / "Ca_Data.mat"
+# Ca_Data.mat lives with the T&C source inputs, not in T&C/Diogo. It is hourly
+# 1975-2022 at 327-420 ppm; Ca_Data_Ann.mat sits beside it but stops in 2013 and
+# is the wrong one for a 1985-2020 run.
+DEFAULT_CA = REPO_ROOT / "T&C" / "TeC_Source_Code-master" / "Inputs" / "Ca_Data.mat"
 DEFAULT_SITE_LISTS = [
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv",
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "evergreen_ameriflux.csv",
@@ -141,9 +144,12 @@ def read_ca(path: Path):
             return None, None
     ca = next((np.asarray(d[k], dtype=float).ravel()
                for k in ("Ca", "Ca_all", "ca") if k in d), None)
+    # The axis is called Date_CO2 in the shipped file, not Date.
     dt = next((np.asarray(d[k], dtype=float).ravel()
-               for k in ("Date", "Date_Ca", "t") if k in d), None)
-    return (dt, ca) if ca is not None else (None, None)
+               for k in ("Date_CO2", "Date", "Date_Ca", "t") if k in d), None)
+    if ca is None or dt is None or dt.size != ca.size:
+        return None, None
+    return dt, ca
 
 
 def read_elevation(ameriflux_dir: Path, override: Path | None = None):
@@ -312,19 +318,17 @@ def main() -> int:
                                  "elev": float(r.get("Elevation") or r.get("elev_m") or "nan")})
             except (KeyError, TypeError, ValueError):
                 print(f"  ! {sid}: unusable Lat/Lon", file=sys.stderr)
-    elev = {}
-    if a.elevation.is_file():
-        for r in csv.DictReader(open(a.elevation, newline="", encoding="utf-8-sig")):
-            try:
-                elev[(r.get("station_id") or r.get("StationID") or "").strip()] = \
-                    float(r.get("elevation_m") or r.get("elev_m") or r.get("Elevation"))
-            except (TypeError, ValueError):
-                pass
+    elev, elev_src = read_elevation(a.ameriflux, a.elevation)
 
     ca = read_ca(a.ca)
     print(f"era5     : {a.era5}{'' if a.era5.is_dir() else '   <-- NOT FOUND'}")
     print(f"out      : {a.out}")
     print(f"CO2      : {a.ca}{'' if ca[0] is not None else '   <-- NOT READ, Ca will be NaN'}")
+    print(f"ameriflux: {a.ameriflux}{'' if a.ameriflux.is_dir() else '   <-- NOT FOUND'}")
+    from collections import Counter as _C
+    print(f"Zbas     : {len(elev)} station(s)"
+          + (f" ({', '.join(f'{k} {v}' for k, v in _C(elev_src.values()).most_common())})"
+             if elev else "   <-- NONE FOUND, no station can build"))
     print(f"stations : {len(stations)}   years {a.start_year}-{a.end_year}\n")
 
     ok, bad = 0, []

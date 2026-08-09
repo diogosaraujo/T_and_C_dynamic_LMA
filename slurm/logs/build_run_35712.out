@@ -1,0 +1,127 @@
+job        : 35712
+node       : soeepyc08
+started    : 2026-08-09T06:51:29Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+template   : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Thanos_US_xRM
+meteo      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+
+root      : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+template  : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Thanos_US_xRM
+stations  : 101 (17 excluded)
+soil      : 101 sites, 101 profiles
+canopy    : 117 (GEDI window median 73, AmeriFlux BADM HEIGHTC 44)
+ZR95      : 117   EC heights: 511
+meteo dir : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+
+==================================================================
+READY: 98/101 stations have every input
+==================================================================
+  ! US-HB2   missing: meteo .mat
+  ! US-HB3   missing: meteo .mat
+  ! US-Vcm   missing: canopy height
+
+  US-Bar   written  ms=17 Kbot=NaN ZR95=1100 zatm=24.5
+  US-Blk   written  ms=16 Kbot=0.01 ZR95=900 zatm=24
+  US-CPF   written  ms=16 Kbot=NaN ZR95=1100 zatm=4.3
+  US-CPk   written  ms=10 Kbot=0.01 ZR95=530 zatm=22
+  US-CRK   written  ms=18 Kbot=NaN ZR95=1500 zatm=44
+  US-CS2   written  ms=17 Kbot=NaN ZR95=1000 zatm=31
+  US-CZ2   written  ms=16 Kbot=0.01 ZR95=1680 zatm=22
+  US-CZ3   written  ms=13 Kbot=0.01 ZR95=970 zatm=30
+  US-CZ4   written  ms=16 Kbot=NaN ZR95=1700 zatm=27
+  US-ChR   written  ms=17 Kbot=NaN ZR95=1200 zatm=43
+  US-Cst   written  ms=17 Kbot=NaN ZR95=1300 zatm=37
+  US-Cwt   written  ms=18 Kbot=NaN ZR95=1100 zatm=43.5
+  US-DPP   written  ms=18 Kbot=NaN ZR95=1500 zatm=15
+  US-Dk2   written  ms=18 Kbot=0.01 ZR95=1200 zatm=39.8
+  US-Dk3   written  ms=18 Kbot=NaN ZR95=1200 zatm=20.2
+  US-Fmf   written  ms=16 Kbot=NaN ZR95=1700 zatm=23
+  US-Fuf   written  ms=16 Kbot=NaN ZR95=1700 zatm=23
+  US-GBT   written  ms=12 Kbot=0.01 ZR95=740 zatm=30.2
+  US-GLE   written  ms=12 Kbot=0.01 ZR95=740 zatm=30.2
+  US-HBK   written  ms=17 Kbot=NaN ZR95=1000 zatm=30
+  US-Ha1   written  ms=16 Kbot=NaN ZR95=1100 zatm=29
+  US-Ha2   written  ms=16 Kbot=NaN ZR95=1100 zatm=35
+  US-Ho1   written  ms=16 Kbot=NaN ZR95=900 zatm=31
+  US-Ho2   written  ms=16 Kbot=NaN ZR95=900 zatm=28.3
+  US-Ho3   written  ms=16 Kbot=NaN ZR95=900 zatm=29.6
+  US-LPH   written  ms=16 Kbot=NaN ZR95=1100 zatm=28.5
+  US-MEF   written  ms=15 Kbot=0.01 ZR95=1100 zatm=28.75
+  US-MMS   written  ms=18 Kbot=NaN ZR95=1100 zatm=46
+  US-MOz   written  ms=16 Kbot=NaN ZR95=1200 zatm=30.48
+  US-MRf   written  ms=15 Kbot=0.01 ZR95=1300 zatm=38.3
+  US-Me1   written  ms=11 Kbot=0.01 ZR95=610 zatm=10
+  US-Me2   written  ms=13 Kbot=0.01 ZR95=910 zatm=33
+  US-Me4   written  ms=16 Kbot=NaN ZR95=1500 zatm=56
+  US-Me6   written  ms=16 Kbot=NaN ZR95=1500 zatm=14.2
+  US-Me7   written  ms=13 Kbot=0.01 ZR95=910 zatm=2.56
+  US-MtB   written  ms=8 Kbot=0.01 ZR95=330 zatm=31
+  US-NC2   written  ms=14 Kbot=NaN ZR95=1100 zatm=27
+  US-NC3   written  ms=14 Kbot=NaN ZR95=1100 zatm=9
+  US-NC5   written  ms=16 Kbot=NaN ZR95=1100 zatm=33
+  US-NMj   written  ms=18 Kbot=NaN ZR95=1000 zatm=1
+  US-NR1   written  ms=16 Kbot=NaN ZR95=1100 zatm=21.5
+  US-Oho   written  ms=17 Kbot=NaN ZR95=900 zatm=34
+  US-PFL   written  ms=16 Kbot=NaN ZR95=1100 zatm=29
+  US-PFb   written  ms=16 Kbot=NaN ZR95=1100 zatm=33
+  US-PFc   written  ms=18 Kbot=NaN ZR95=1100 zatm=11
+  US-PFg   written  ms=18 Kbot=NaN ZR95=1100 zatm=33
+  US-PFh   written  ms=18 Kbot=NaN ZR95=1100 zatm=33
+  US-PFi   written  ms=18 Kbot=NaN ZR95=1100 zatm=33
+  US-PFj   written  ms=18 Kbot=NaN ZR95=1100 zatm=33
+  US-PFk   written  ms=18 Kbot=NaN ZR95=1100 zatm=33
+  US-PFm   written  ms=18 Kbot=NaN ZR95=1100 zatm=32
+  US-PFn   written  ms=18 Kbot=NaN ZR95=1100 zatm=32
+  US-PFp   written  ms=15 Kbot=NaN ZR95=1100 zatm=33
+  US-PFq   written  ms=18 Kbot=NaN ZR95=1100 zatm=33
+  US-PFs   written  ms=16 Kbot=NaN ZR95=1100 zatm=11
+  US-PFt   written  ms=16 Kbot=NaN ZR95=1100 zatm=30
+  US-SB1   written  ms=17 Kbot=NaN ZR95=1100 zatm=33
+  US-SHC   written  ms=18 Kbot=NaN ZR95=2300 zatm=30
+  US-SP1   written  ms=18 Kbot=NaN ZR95=1600 zatm=32
+  US-SP2   written  ms=18 Kbot=NaN ZR95=1600 zatm=30
+  US-SP3   written  ms=18 Kbot=NaN ZR95=1600 zatm=30
+  US-SP4   written  ms=18 Kbot=NaN ZR95=1600 zatm=30
+  US-SSH   written  ms=13 Kbot=0.01 ZR95=870 zatm=30
+  US-Slt   written  ms=18 Kbot=NaN ZR95=1000 zatm=19
+  US-TEF   written  ms=15 Kbot=NaN ZR95=900 zatm=27
+  US-UMB   written  ms=17 Kbot=NaN ZR95=800 zatm=48
+  US-UMd   written  ms=17 Kbot=NaN ZR95=800 zatm=32
+  US-Vcp   written  ms=16 Kbot=NaN ZR95=1700 zatm=28.2
+  US-Vcs   written  ms=16 Kbot=NaN ZR95=1700 zatm=33.8
+  US-WBW   written  ms=17 Kbot=NaN ZR95=1200 zatm=38.2
+  US-WCr   written  ms=16 Kbot=NaN ZR95=1100 zatm=29.6
+  US-Wi1   written  ms=17 Kbot=NaN ZR95=1000 zatm=9
+  US-Wi2   written  ms=17 Kbot=NaN ZR95=1000 zatm=9
+  US-Wi3   written  ms=18 Kbot=NaN ZR95=1000 zatm=26
+  US-Wi4   written  ms=17 Kbot=NaN ZR95=1000 zatm=23
+  US-Wrc   written  ms=17 Kbot=NaN ZR95=1800 zatm=67
+  US-xAB   written  ms=16 Kbot=NaN ZR95=1200 zatm=18.9
+  US-xBL   written  ms=15 Kbot=NaN ZR95=1100 zatm=8.55
+  US-xBR   written  ms=17 Kbot=NaN ZR95=1100 zatm=35.68
+  US-xGR   written  ms=14 Kbot=NaN ZR95=1100 zatm=45.89
+  US-xHA   written  ms=16 Kbot=NaN ZR95=1100 zatm=39.16
+  US-xJE   written  ms=18 Kbot=NaN ZR95=1600 zatm=42.46
+  US-xLE   written  ms=18 Kbot=NaN ZR95=1400 zatm=47.13
+  US-xML   written  ms=16 Kbot=NaN ZR95=1100 zatm=29.06
+  US-xNW   written  ms=14 Kbot=0.01 ZR95=1070 zatm=8.46
+  US-xRM   written  ms=15 Kbot=NaN ZR95=1100 zatm=25.35
+  US-xRN   written  ms=18 Kbot=NaN ZR95=1200 zatm=39.19
+  US-xSB   written  ms=18 Kbot=NaN ZR95=1400 zatm=35.81
+  US-xSC   written  ms=16 Kbot=NaN ZR95=1100 zatm=51.88
+  US-xSE   written  ms=17 Kbot=NaN ZR95=1100 zatm=61.61
+  US-xSP   written  ms=16 Kbot=0.01 ZR95=1680 zatm=52.49
+  US-xST   written  ms=18 Kbot=NaN ZR95=1100 zatm=22.36
+  US-xTA   written  ms=18 Kbot=NaN ZR95=1200 zatm=35.7
+  US-xTE   written  ms=16 Kbot=0.01 ZR95=1520 zatm=59.22
+  US-xTR   written  ms=18 Kbot=NaN ZR95=1100 zatm=35.97
+  US-xUK   written  ms=13 Kbot=0.01 ZR95=870 zatm=35.77
+  US-xWR   written  ms=17 Kbot=NaN ZR95=1800 zatm=74.18
+  US-xYE   written  ms=15 Kbot=NaN ZR95=1200 zatm=18.43
+
+manifest : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/build_manifest.json
+run list : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/run_list.txt  ->  sbatch --array=1-196 slurm/submit_tc_run.sh
+
+finished   : 2026-08-09T06:52:20Z
+exit status: 1  (1 = some station blocked or a substitution failed)
+303M	/vol_efthymios/NFS07/dd1136/T_and_C/model_run

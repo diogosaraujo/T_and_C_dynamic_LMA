@@ -13,7 +13,9 @@
 ## Stage 2 reuses the existing MATLAB partition rather than porting several hundred
 ## lines of solar geometry and cloud physics to Python.
 ##
-## Reads : $TC_INPUT_DATA/era5_land/<ST>/*.nc, T&C/Diogo/Ca_Data.mat
+## Reads : $TC_INPUT_DATA/era5_land/<ST>/*.nc          the forcing
+##         $TC_INPUT_DATA/ameriflux/badm_values.csv     Zbas (site elevation)
+##         T&C/Diogo/Ca_Data.mat                        hourly CO2
 ## Writes: $TC_INPUT_DATA/meteo/Meteo_<ST>_raw.mat and Meteo_<ST>_1985_2020.mat
 ##
 ## Units are taken from the working Meteo_US_xRM_1985_2020.mat, not assumed. The
@@ -36,6 +38,7 @@ REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}
 source "$REPO_ROOT/slurm/config.sh"
 
 ERA5_DIR="${ERA5_DIR:-$TC_INPUT_DATA/era5_land}"
+AMERIFLUX_DIR="${AMERIFLUX_DIR:-$TC_INPUT_DATA/ameriflux}"
 METEO_DIR="${METEO_DIR:-$TC_INPUT_DATA/meteo}"
 PARTITION_DIR="${PARTITION_DIR:-$REPO_ROOT/T&C/Diogo}"
 YEAR_TAG="${YEAR_TAG:-1985_2020}"
@@ -46,6 +49,7 @@ echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "era5       : $ERA5_DIR$([ -d "$ERA5_DIR" ] || echo '   <-- NOT FOUND')"
+echo "ameriflux  : $AMERIFLUX_DIR$([ -d "$AMERIFLUX_DIR" ] || echo '   <-- NOT FOUND (Zbas)')"
 echo "meteo out  : $METEO_DIR"
 echo "partition  : $PARTITION_DIR"
 echo
@@ -60,6 +64,7 @@ source "$TC_VENV/bin/activate"
 echo "=== stage 1: netCDF -> raw .mat ==="
 cd "$REPO_ROOT/preprocessing"
 python build_meteo_input.py --era5 "$ERA5_DIR" --out "$METEO_DIR" \
+    --ameriflux "$AMERIFLUX_DIR" \
     --start-year "${YEAR_TAG%%_*}" --end-year "${YEAR_TAG##*_}" "$@"
 s1=$?
 echo "stage 1 exit: $s1"

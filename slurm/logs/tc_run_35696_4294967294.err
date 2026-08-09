@@ -1,0 +1,15 @@
+{Unrecognized function or variable 'Kbot_gen'.
+
+Error in MOD_PARAM_US_Ha2 (line 23)
+Kbot = Kbot_gen; %% set from the bedrock contact (build_model_run.py)
+       ^^^^^^^^
+Error in run (line 112)
+evalin('caller', strcat(scriptStem, ';'));
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in MAIN_FRAME (line 222)
+run(PARAM_IC);
+^^^^^^^^^^^^^
+Error in GO_US_Ha2 (line 38)
+MAIN_FRAME;
+^^^^^^^^^^
+} 

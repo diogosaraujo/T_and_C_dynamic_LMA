@@ -374,6 +374,14 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
     out.update(Lat=float(lat), Lon=float(lon), Zbas=float(zbas), DeltaGMT=0.0,
                id_location=mat_name(station))
 
+    # An all-NaN field means the ERA5 retrieval for this station is unusable --
+    # writing it would hand T&C a forcing file full of NaN and the failure would
+    # surface much later, inside the model. Refuse it here instead.
+    dead = [k for k in ("Ta", "Rsw", "Pr", "Pre", "Ws", "Tdew")
+            if not np.isfinite(out[k]).any()]
+    if dead:
+        return None, f"all-NaN in {', '.join(dead)} -- ERA5 retrieval unusable"
+
     diag = {
         "hours": int(out["Date"].size),
         "years": f"{yrs[keep].min()}-{yrs[keep].max()}",
@@ -391,14 +399,6 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
         "nan_fields": [k for k, v in out.items()
                        if isinstance(v, np.ndarray) and not np.isfinite(v).all()],
     }
-    # An all-NaN field means the ERA5 retrieval for this station is unusable --
-    # writing it would hand T&C a forcing file full of NaN and the failure would
-    # surface much later, inside the model. Refuse it here instead.
-    dead = [k for k in ("Ta", "Rsw", "Pr", "Pre", "Ws", "Tdew")
-            if not np.isfinite(out[k]).any()]
-    if dead:
-        return None, f"all-NaN in {', '.join(dead)} -- ERA5 retrieval unusable"
-
     if dry:
         return diag, ""
 

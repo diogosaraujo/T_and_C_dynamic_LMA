@@ -99,6 +99,25 @@ for k = 1:numel(files)
         end
     end
 
+    % Validate BEFORE calling, rather than wrapping the call in try/catch. A
+    % station whose ERA5 retrieval came back empty is a known-bad input and there
+    % is nothing to learn from watching the partition fail on it -- job 35685 lost
+    % 83 stations that way, dying inside Estimate_CloudCover where interp1 got an
+    % empty X because every Nsim was NaN. Genuine errors, dimension mismatches
+    % included, still abort the run and are still read.
+    if ~any(isfinite(S.Rsw)) || ~any(S.Rsw > 0)
+        fprintf('  ! %-10s Rsw has no usable values -- ERA5 retrieval empty; skipped\n', site);
+        continue
+    end
+    unusable = {};
+    for fn = {'Tdew','Pr','Date'}
+        if ~any(isfinite(S.(fn{1}))), unusable{end+1} = fn{1}; end %#ok<AGROW>
+    end
+    if ~isempty(unusable)
+        fprintf('  ! %-10s all-NaN in %s -- skipped\n', site, strjoin(unusable, ', '));
+        continue
+    end
+
     % One call on the whole series, exactly as the shipped Meteo_US_xRM.mat was
     % produced. No chunking and no per-chunk fallback: a dimension error here
     % should stop the run and be read, not be papered over by a shorter window

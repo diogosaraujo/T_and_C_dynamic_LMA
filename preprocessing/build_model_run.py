@@ -240,8 +240,6 @@ end
 K_usle = mean(K_usle);
 Ks_Zs = Ks; %%% [mm/h] already per layer
 %%%%%%%%%%%%%%%
-Zs_gen = [{zss}]; %%% ms+1 = {len(zs)}
-Kbot_gen = {('NaN' if kbot is None else f'{kbot:g}')}; %%% [mm/h] {'free drainage' if kbot is None else 'near-impermeable bedrock (Fatichi et al. RME)'}
 """
 
 
@@ -270,9 +268,16 @@ def render_mod_param(template: str, st: dict) -> tuple[str, list[str]]:
         r"^(rsd|lan_dry|lan_s|cv_s|Osat|L|Pe|O33|alpVG|nVG|Ks_Zs)\s*=\s*\1?\s*\*?\s*"
         r"[A-Za-z_0-9]*\*ones\(1,ms\);.*$",
         r"%% \1: filled per layer by the Soil_parameters loop above", count=0)
-    sub("zs", r"^Zs=\s*\[[^\]]*\];.*$", f"Zs = Zs_gen; %% ms+1 = {len(zs)}")
+    zss = " ".join(f"{z:g}" for z in zs)
+    sub("zs", r"^Zs=\s*\[[^\]]*\];.*$",
+        f"Zs = [{zss}]; %% ms+1 = {len(zs)}, from the SSURGO/POLARIS profile")
+    # Literal, not a reference to something the soil block defines: Kbot is
+    # assigned at template line 23 and the soil block lands at line 33, so an
+    # indirection here is read before it exists (job 35696).
+    kb = st["_kbot"]
     sub("kbot", r"^Kbot\s*=\s*[^;]*;.*$",
-        "Kbot = Kbot_gen; %% set from the bedrock contact (build_model_run.py)")
+        f"Kbot = {'NaN' if kb is None else f'{kb:g}'}; %% [mm/h] "
+        f"{'free drainage, no bedrock reported' if kb is None else 'near-impermeable bedrock (Fatichi et al., RME)'}")
     sub("zatm", r"^zatm\s*=\s*[^;]*;.*$",
         f"zatm = {st['zatm']:g}; %% [m] {st['zatm_src']}")
     sub("zr95", r"^ZR95_H\s*=\s*\[[^\]]*\];.*$",

@@ -354,6 +354,14 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
 
     from scipy.io import savemat
     out_dir.mkdir(parents=True, exist_ok=True)
+    # COLUMN vectors, not rows. savemat writes a 1-D array as 1xN, and
+    # C_Automatic_Radiation_Partition does LWP0 = zeros(size(Tdew)); a row Tdew
+    # makes LWP0 1xN, which then meets the Nx1 solar-geometry arrays and implicitly
+    # expands to NxN -- 742 GB at 36 years hourly. The shipped Meteo_US_xRM.mat was
+    # written by MATLAB with columns, which is why the routine has always worked
+    # on that file.
+    out = {k: (v.reshape(-1, 1) if isinstance(v, np.ndarray) and v.ndim == 1 else v)
+           for k, v in out.items()}
     savemat(out_dir / f"Meteo_{mat_name(station)}_raw.mat", out, do_compression=True)
     return diag, ""
 

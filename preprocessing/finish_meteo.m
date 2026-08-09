@@ -87,6 +87,18 @@ for k = 1:numel(files)
             site, S.DeltaGMT);
     end
 
+    % Force COLUMN vectors before the partition sees them. This is the root cause
+    % of the 742 GB request in job 35673: scipy.io.savemat writes a 1-D array as a
+    % 1xN row, and the partition does LWP0 = zeros(size(Tdew)), so a row Tdew makes
+    % LWP0 1xN, which then meets the Nx1 solar arrays and implicitly expands to
+    % NxN. Cheap to enforce here as well as on the Python side, and it costs
+    % nothing when the file already has columns.
+    for fn = {'Date','Pr','Tdew','Rsw','Ta','Ws','ea','esat','Pre','Ca','Ds','U'}
+        if isfield(S, fn{1})
+            S.(fn{1}) = S.(fn{1})(:);
+        end
+    end
+
     % Run one CALENDAR YEAR at a time, and no shorter.
     %
     % Something in the partition scales as N^2. At N = 315576 (36 years hourly)
@@ -117,6 +129,25 @@ for k = 1:numel(files)
     PARB = zeros(n,1); PARD = zeros(n,1); N = zeros(n,1);
     failed = false;
     nchunk = 0;
+
+    % Whole series first: that is how the shipped Meteo_US_xRM.mat was produced,
+    % and with column vectors it is the proven path. Chunking is the fallback, not
+    % the default -- a year is short enough to change what the t_bef/t_aft
+    % calibration block sees, so it is only worth risking if the full call fails.
+    try
+        [~,~,SAD1,SAD2,SAB1,SAB2,PARB,PARD,N,~,t_bef,t_aft] = ...
+            C_Automatic_Radiation_Partition(S.Date, S.Lat, S.Lon, S.Zbas, ...
+                S.DeltaGMT, S.Pr, S.Tdew, S.Rsw, 0, T_BEF, T_AFT);
+        SAD1=SAD1(:); SAD2=SAD2(:); SAB1=SAB1(:); SAB2=SAB2(:);
+        PARB=PARB(:); PARD=PARD(:); N=N(:);
+        uy = [];   % nothing left to chunk
+        fprintf('      %s: whole series in one call\n', site);
+    catch ME
+        fprintf('      %s: whole-series call failed (%s); retrying year by year\n', ...
+            site, ME.message);
+        SAD1 = zeros(n,1); SAD2 = zeros(n,1); SAB1 = zeros(n,1); SAB2 = zeros(n,1);
+        PARB = zeros(n,1); PARD = zeros(n,1); N = zeros(n,1);
+    end
     for y = uy
         ix = find(yr == y);
         try

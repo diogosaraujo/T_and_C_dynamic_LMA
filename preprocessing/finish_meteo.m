@@ -87,42 +87,55 @@ for k = 1:numel(files)
             site, S.DeltaGMT);
     end
 
-    % Run one CALENDAR MONTH at a time. Something inside the partition scales as
-    % N^2: at N = 315576 (36 years hourly) MATLAB refused a 315576 x 315576 array
-    % outright (742 GB, job 35673), and at N = 8784 (one year) each such matrix is
-    % still 617 MB, which OOM-killed a 24 GB job once MATLAB was willing to try
-    % (35676, exit 137). A month is at most 744 hours, so the same term is ~4 MB.
+    % Run one CALENDAR YEAR at a time, and no shorter.
     %
-    % Chunking is safe because the calculation is per-timestep throughout: solar
+    % Something in the partition scales as N^2. At N = 315576 (36 years hourly)
+    % MATLAB refused a 315576 x 315576 array outright (742 GB, job 35673); at
+    % N = 8784 each such matrix is 617 MB, which OOM-killed a 24 GB job (35676).
+    % Hence chunking, and hence the 64 GB request in submit_meteo.sh.
+    %
+    % Monthly chunks are NOT an option, though they would be smaller still. The
+    % t_bef/t_aft calibration block runs even when the values are forced -- the
+    % for IS loop executes once with a single-element T_BF -- and it reshapes the
+    % series into (24, ndays):
+    %
+    %     n=length(Rsw_I); fr=24/dt; m=floor(n/fr);
+    %     Rswp =reshape(Rsw_I(1:m*fr),fr,m);
+    %     Rswsp=reshape(Rsws(1:m*fr),fr,m);
+    %
+    % which fails on a 744-hour series ("Number of elements must not change",
+    % job 35677). A year clears it.
+    %
+    % Chunking at all is safe because the calculation is per-timestep: solar
     % geometry, Gueymard clear sky, the clearness index and the N = 1 when Pr > 0
-    % rule all act on one hour at a time. There is no cumsum, filter or smoothing
-    % across the series, and t_bef/t_aft are forced, so the calibration loop that
-    % would need a long record (NI = min(8760,NT)) never runs.
-    dts = datetime(S.Date, 'ConvertFrom', 'datenum');
-    ym  = year(dts)*100 + month(dts);
-    uy  = unique(ym(:)).';
-    n   = numel(S.Date);
+    % rule each act on a single hour, and there is no cumsum, filter or smoothing
+    % across the series.
+    yr = year(datetime(S.Date, 'ConvertFrom', 'datenum'));
+    uy = unique(yr(:)).';
+    n  = numel(S.Date);
     SAD1 = zeros(n,1); SAD2 = zeros(n,1); SAB1 = zeros(n,1); SAB2 = zeros(n,1);
     PARB = zeros(n,1); PARD = zeros(n,1); N = zeros(n,1);
     failed = false;
     nchunk = 0;
     for y = uy
-        ix = find(ym == y);
+        ix = find(yr == y);
         try
             [~,~,d1,d2,b1,b2,pb,pd,nn,~,t_bef,t_aft] = ...
                 C_Automatic_Radiation_Partition(S.Date(ix), S.Lat, S.Lon, S.Zbas, ...
                     S.DeltaGMT, S.Pr(ix), S.Tdew(ix), S.Rsw(ix), 0, T_BEF, T_AFT);
         catch ME
-            fprintf('  ! %-10s %06d: partition failed: %s\n', site, y, ME.message);
+            fprintf('  ! %-10s %d: partition failed: %s\n', site, y, ME.message);
             failed = true;
             break
         end
         SAD1(ix)=d1(:); SAD2(ix)=d2(:); SAB1(ix)=b1(:); SAB2(ix)=b2(:);
         PARB(ix)=pb(:); PARD(ix)=pd(:); N(ix)=nn(:);
         nchunk = nchunk + 1;
-        if mod(nchunk, 60) == 0
-            fprintf('      %s: %d/%d months\n', site, nchunk, numel(uy));
+        if mod(nchunk, 10) == 0
+            fprintf('      %s: %d/%d years\n', site, nchunk, numel(uy));
         end
+        % Release the year's intermediates before the next call rather than
+        % relying on MATLAB to reclaim them; 617 MB matrices are what killed 35676.
         clear d1 d2 b1 b2 pb pd nn
     end
     if failed

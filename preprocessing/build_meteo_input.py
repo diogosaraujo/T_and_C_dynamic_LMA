@@ -146,6 +146,72 @@ def read_ca(path: Path):
     return (dt, ca) if ca is not None else (None, None)
 
 
+def read_elevation(ameriflux_dir: Path, override: Path | None = None):
+    """Zbas [m] per station, from the AmeriFlux data already downloaded.
+
+    inspect_ameriflux_badm.py tracks 'elevation' as a parameter and fills it from
+    the site registry (GRP_LOCATION/LOCATION_ELEV) where BADM itself omits it, so
+    three places can hold it. Tried in order of directness:
+
+        1. badm_values.csv     long format, parameter == 'elevation'
+        2. site_metadata.json  GRP_LOCATION.LOCATION_ELEV, the registry value
+        3. badm_coverage.csv   which stores strings like '2753 (site registry)'
+
+    Zbas should be ORTHOMETRIC (above the geoid). AmeriFlux reports site elevation
+    that way; the sensitivity is small in any case, since the barometric scale
+    height is 8434.5 m, but the ERA5 grid-cell elevation would be the wrong thing
+    entirely in complex terrain.
+    """
+    out, src = {}, {}
+
+    def take(sid, raw, where):
+        if not sid or sid in out:
+            return
+        m = re.search(r"-?\d+(?:\.\d+)?", str(raw))
+        if not m:
+            return
+        v = float(m.group(0))
+        if -500 < v < 9000:            # a plausible land elevation
+            out[sid], src[sid] = v, where
+
+    vals = ameriflux_dir / "badm_values.csv"
+    if vals.is_file():
+        for r in csv.DictReader(open(vals, newline="", encoding="utf-8-sig")):
+            if (r.get("parameter") or "").strip().lower() == "elevation" or                     "ELEV" in (r.get("variable") or "").upper():
+                take((r.get("station_id") or "").strip(), r.get("value"), "badm_values")
+
+    meta = ameriflux_dir / "site_metadata.json"
+    if meta.is_file():
+        try:
+            j = json.loads(meta.read_text(encoding="utf-8"))
+            recs = j.values() if isinstance(j, dict) else j
+            for rec in recs:
+                if not isinstance(rec, dict):
+                    continue
+                sid = (rec.get("SITE_ID") or rec.get("site_id") or "").strip()
+                loc = rec.get("GRP_LOCATION") or {}
+                if isinstance(loc, list):
+                    loc = loc[0] if loc else {}
+                take(sid, (loc or {}).get("LOCATION_ELEV"), "site_registry")
+        except (json.JSONDecodeError, OSError, AttributeError):
+            pass
+
+    cov = ameriflux_dir / "badm_coverage.csv"
+    if cov.is_file():
+        for r in csv.DictReader(open(cov, newline="", encoding="utf-8-sig")):
+            take((r.get("station_id") or "").strip(), r.get("elevation"), "badm_coverage")
+
+    if override and Path(override).is_file():
+        for r in csv.DictReader(open(override, newline="", encoding="utf-8-sig")):
+            sid = (r.get("station_id") or r.get("StationID") or "").strip()
+            for c in ("elevation_m", "elev_m", "Elevation", "Zbas"):
+                if r.get(c) not in (None, ""):
+                    out.pop(sid, None)
+                    take(sid, r[c], "override")
+                    break
+    return out, src
+
+
 def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
     sd = era5_dir / station
     if not sd.is_dir():
@@ -218,9 +284,11 @@ def main() -> int:
     p.add_argument("--site-list", type=Path, action="append", default=None)
     p.add_argument("--stations", default="US-HBK,US-Ha2",
                    help="comma-separated, or 'all'")
-    p.add_argument("--elevation", type=Path,
-                   default=INPUT_ROOT / "ameriflux" / "site_elevation.csv",
-                   help="station_id,elevation_m; falls back to the site list")
+    p.add_argument("--ameriflux", type=Path, default=INPUT_ROOT / "ameriflux",
+                   help="downloaded AmeriFlux dir; Zbas is read from badm_values.csv / "
+                        "site_metadata.json / badm_coverage.csv found there")
+    p.add_argument("--elevation", type=Path, default=None,
+                   help="optional override CSV: station_id,elevation_m")
     p.add_argument("--start-year", type=int, default=1985)
     p.add_argument("--end-year", type=int, default=2020)
     p.add_argument("--dry-run", action="store_true")
@@ -264,7 +332,8 @@ def main() -> int:
         sid = st["station_id"]
         z = elev.get(sid, st.get("elev"))
         if z is None or not math.isfinite(z):
-            bad.append((sid, "no elevation (Zbas) -- needed for the radiation partition"))
+            bad.append((sid, "no elevation (Zbas) in badm_values.csv, site_metadata.json "
+                             "or badm_coverage.csv -- needed for the radiation partition"))
             continue
         diag, err = build(sid, st["lat"], st["lon"], z, a.era5, ca,
                           (a.start_year, a.end_year), a.out, a.dry_run)
@@ -272,7 +341,8 @@ def main() -> int:
             bad.append((sid, err))
             continue
         ok += 1
-        print(f"  {sid:<8} {diag['hours']:>7} h  {diag['years']}  "
+        print(f"  {sid:<8} Zbas {z:>6.0f} m ({elev_src.get(sid, 'site list')})  "
+              f"{diag['hours']:>7} h  {diag['years']}  "
               f"Ta {diag['Ta_C'][0]:>6.1f}..{diag['Ta_C'][1]:<5.1f} "
               f"Pre {diag['Pre_mbar'][0]:>6.1f}..{diag['Pre_mbar'][1]:<6.1f} mbar  "
               f"Rswmax {diag['Rsw_W_m2_max']:>6.1f}"

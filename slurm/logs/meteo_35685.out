@@ -324,3 +324,38 @@ Next: MATLAB finish_meteo.m fills SAB/SAD/PAR/N via C_Automatic_Radiation_Partit
 stage 1 exit: 0
 
 === stage 2: radiation partition (MATLAB) ===
+101 raw file(s) in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+
+  US_Bar      315576 h  N 0.00-1.00  PARBmax  332.2  Rswmax 1009.6  band resid max  39.6 W/m2 (2.64% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Blk      315576 h  N 0.00-1.00  PARBmax  340.4  Rswmax 1020.0  band resid max  38.0 W/m2 (3.26% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPF      315576 h  N 0.00-1.00  PARBmax  366.0  Rswmax 1074.3  band resid max  42.7 W/m2 (3.25% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPk      315576 h  N 0.00-1.00  PARBmax  364.3  Rswmax 1063.6  band resid max  42.0 W/m2 (3.24% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CRK      315576 h  N 0.00-1.00  PARBmax  360.0  Rswmax 1041.0  band resid max  34.2 W/m2 (3.13% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CS2      315576 h  N 0.00-1.00  PARBmax  333.0  Rswmax  988.6  band resid max  38.8 W/m2 (3.16% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ2      315576 h  N 0.00-1.00  PARBmax  364.6  Rswmax 1055.7  band resid max  46.1 W/m2 (2.93% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ3      315576 h  N 0.00-1.00  PARBmax  366.9  Rswmax 1064.8  band resid max  45.0 W/m2 (2.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ4      315576 h  N 0.00-1.00  PARBmax  371.3  Rswmax 1076.0  band resid max  47.9 W/m2 (2.99% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_ChR      315576 h  N 0.00-1.00  PARBmax  354.4  Rswmax 1035.8  band resid max  44.9 W/m2 (2.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cst      315576 h  N 0.00-1.00  PARBmax  354.9  Rswmax 1029.0  band resid max  41.9 W/m2 (2.43% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cwt      315576 h  N 0.00-1.00  PARBmax  358.3  Rswmax 1051.3  band resid max  43.0 W/m2 (3.16% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_DPP      315576 h  N 0.00-1.00  PARBmax  364.8  Rswmax 1050.4  band resid max  28.5 W/m2 (3.04% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk2      315576 h  N 0.00-1.00  PARBmax  349.8  Rswmax 1027.0  band resid max  38.6 W/m2 (2.71% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk3      315576 h  N 0.00-1.00  PARBmax  349.8  Rswmax 1027.0  band resid max  42.2 W/m2 (2.71% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fmf      315576 h  N 0.00-1.00  PARBmax  368.0  Rswmax 1095.7  band resid max  37.6 W/m2 (3.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fuf      315576 h  N 0.00-1.00  PARBmax  368.8  Rswmax 1095.7  band resid max  36.8 W/m2 (3.53% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GBT      315576 h  N 0.00-1.00  PARBmax  359.7  Rswmax 1060.6  band resid max  41.6 W/m2 (3.25% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GLE      315576 h  N 0.00-1.00  PARBmax  359.7  Rswmax 1060.6  band resid max  41.6 W/m2 (3.25% of hours > 1; reference US_xRM: 77.2, 3.27%)
+
+finished   : 2026-08-09T04:44:11Z
+exit status: stage1=0 stage2=1
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:42 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_Bar_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:42 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_Blk_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:43 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_CPF_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:43 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_CPk_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:43 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_CRK_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:43 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_CS2_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:43 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_CZ2_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:43 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_CZ3_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:43 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_CZ4_1985_2020.mat
+-rw-r--r-- 1 dd1136 dd1136 25M Aug  9 00:43 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo/Meteo_US_ChR_1985_2020.mat
+2.1G	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo

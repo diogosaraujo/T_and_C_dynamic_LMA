@@ -10,3 +10,18 @@
   "Pre_mbar": [round(float(np.nanmin(out['Pre'])), 1), round(float(np.nanmax(out['Pre'])), 1)],
 /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_meteo_input.py:388: RuntimeWarning: All-NaN slice encountered
   "ssrd_raw_max": round(float(np.nanmax(raw["ssrd"])), 1),
+{Index exceeds array bounds.
+
+Error in interp1 (line 153)
+        extrapMask = Xq < X(1) | Xq > X(end);
+                          ^^^^
+Error in C_Automatic_Radiation_Partition>Estimate_CloudCover (line 203)
+Nn=interp1(xnt,Nsim(not(isnan(Nsim))),xn,'linear');
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in C_Automatic_Radiation_Partition (line 127)
+[Nsim]=Estimate_CloudCover(Rsw,Rsws,Pr,D);
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in finish_meteo (line 114)
+        C_Automatic_Radiation_Partition(S.Date, S.Lat, S.Lon, S.Zbas, ...
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 

@@ -3,10 +3,19 @@
 ##
 ##     sbatch slurm/submit_tc_run.sh US-Ha2 dyn_lma
 ##     sbatch slurm/submit_tc_run.sh US-HBK fixed_lma
-##     sbatch --array=1-4 slurm/submit_tc_run.sh          # every arm in run_list.txt
+##     sbatch --array=1-202%10 slurm/submit_tc_run.sh     # every arm in run_list.txt
 ##
 ## The array form reads $MODEL_RUN/run_list.txt, one "<station> <arm>" per line,
 ## which submit_build_model_run.sh writes. Build it by hand for a subset.
+##
+## ALWAYS throttle with %N. The per-user limit on this cluster is about 15
+## concurrent jobs, so %10 leaves room for a build or check job alongside; without
+## it SLURM starts as many as the partition allows and the rest of your work
+## queues behind your own array. A range wider than run_list.txt is fine -- the
+## extra tasks exit 0 without doing anything.
+##
+## At the measured 23 min per run (job 35708), 198 runs at 10 concurrent is about
+## 8 hours wall.
 ##
 ## Each job cds into $MODEL_RUN/<station>/era5_land/<arm> and runs GO_<ST>.m, so
 ## every relative path in the generated launcher (Code/, the .mat inputs, RES_*)
@@ -18,7 +27,7 @@
 #SBATCH --mem=32G
 #SBATCH -p SOE_main
 #SBATCH -J tc_run
-#SBATCH -t 3-00:00:00
+#SBATCH -t 08:00:00
 #SBATCH -o slurm/logs/tc_run_%A_%a.out
 #SBATCH -e slurm/logs/tc_run_%A_%a.err
 

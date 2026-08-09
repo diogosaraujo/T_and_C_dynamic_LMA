@@ -7,3 +7,320 @@ meteo out  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
 partition  : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Diogo
 
 === stage 1: netCDF -> raw .mat ===
+era5     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+out      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+CO2      : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/TeC_Source_Code-master/Inputs/Ca_Data.mat
+ameriflux: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+Zbas     : 118 station(s) (badm_values 110, site_registry 8)
+stations : 101 (17 excluded)   years 1985-2020
+
+  US-Bar   Zbas    272 m (badm_values)   315576 h  1985-2020  Ta  -34.3..33.2  Pre  908.7..983.0  mbar  Rswmax 1009.6  P 1376.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.63459e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 17Z, solar noon 16.75Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Blk   Zbas   1718 m (badm_values)   315576 h  1985-2020  Ta  -35.5..36.2  Pre  811.1..861.9  mbar  Rswmax 1020.0  P  880.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.67194e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 19Z, solar noon 18.91Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-CPF   Zbas   3100 m (badm_values)   315576 h  1985-2020  Ta  -36.8..24.9  Pre  674.4..718.9  mbar  Rswmax 1074.3  P  663.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.87586e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.06Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-CPk   Zbas   2750 m (badm_values)   315576 h  1985-2020  Ta  -38.6..29.0  Pre  713.3..754.4  mbar  Rswmax 1063.6  P  569.5 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.82881e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.07Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-CRK   Zbas    151 m (badm_values)   315576 h  1985-2020  Ta  -12.9..42.1  Pre  964.6..1031.9 mbar  Rswmax 1041.0  P 1194.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.74776e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 19Z, solar noon 18.36Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-CS2   Zbas    328 m (badm_values)   315576 h  1985-2020  Ta  -36.3..39.1  Pre  939.1..1008.8 mbar  Rswmax  988.6  P  897.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.55888e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 17.97Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-CZ2   Zbas   1160 m (badm_values)   315576 h  1985-2020  Ta  -22.0..39.0  Pre  870.8..920.3  mbar  Rswmax 1055.7  P  928.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.8004e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 20Z, solar noon 19.95Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-CZ3   Zbas   2015 m (badm_values)   315576 h  1985-2020  Ta  -27.1..31.7  Pre  771.8..818.1  mbar  Rswmax 1064.8  P 1000.9 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.83323e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 20Z, solar noon 19.95Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-CZ4   Zbas   2710 m (badm_values)   315576 h  1985-2020  Ta  -30.7..28.0  Pre  712.7..759.5  mbar  Rswmax 1076.0  P  990.4 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.87345e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 20Z, solar noon 19.93Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-ChR   Zbas    286 m (badm_values)   315576 h  1985-2020  Ta  -23.9..40.6  Pre  954.1..1010.2 mbar  Rswmax 1035.8  P 1286.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.7287e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 18Z, solar noon 17.62Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Cst   Zbas     50 m (badm_values)   315576 h  1985-2020  Ta  -13.8..41.9  Pre  985.5..1039.7 mbar  Rswmax 1029.0  P 1375.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.70435e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 18.13Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Cwt   Zbas    690 m (badm_values)   315576 h  1985-2020  Ta  -28.8..34.6  Pre  877.4..935.1  mbar  Rswmax 1051.3  P 1494.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.78482e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 18Z, solar noon 17.56Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-DPP   Zbas     23 m (badm_values)   315576 h  1985-2020  Ta   -4.2..37.8  Pre  974.2..1033.9 mbar  Rswmax 1050.4  P 1075.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.78144e+06; tp already hourly (within-day decrease on 55/60 days)
+           peak at 18Z, solar noon 17.43Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Dk2   Zbas    168 m (badm_values)   315576 h  1985-2020  Ta  -19.4..40.5  Pre  946.3..1023.7 mbar  Rswmax 1027.0  P 1163.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.69723e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.27Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Dk3   Zbas    163 m (badm_values)   315576 h  1985-2020  Ta  -19.4..40.5  Pre  946.3..1023.7 mbar  Rswmax 1027.0  P 1163.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.69723e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.27Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Fmf   Zbas   2160 m (badm_values)   315576 h  1985-2020  Ta  -28.2..35.7  Pre  772.0..811.5  mbar  Rswmax 1095.7  P  588.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.94449e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 20Z, solar noon 19.45Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Fuf   Zbas   2180 m (badm_values)   315576 h  1985-2020  Ta  -28.0..36.1  Pre  776.0..815.4  mbar  Rswmax 1095.7  P  576.9 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.94461e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 20Z, solar noon 19.45Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-GBT   Zbas   3191 m (badm_values)   315576 h  1985-2020  Ta  -37.0..26.6  Pre  685.8..730.7  mbar  Rswmax 1060.6  P  768.4 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.81819e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.08Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-GLE   Zbas   3197 m (badm_values)   315576 h  1985-2020  Ta  -37.0..26.6  Pre  685.8..730.7  mbar  Rswmax 1060.6  P  768.4 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.81819e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.08Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-HB2   Zbas      5 m (badm_values)   315576 h  1985-2020  Ta    nan..nan   Pre    nan..nan    mbar  Rswmax    0.0  P    0.0 mm/yr   NaN in: Ta, Tdew, Pre, Ws, esat, ea, Ds, U
+           ssrd undetermined, assumed accumulated, raw max nan; tp undetermined, assumed accumulated
+           peak at 00Z, solar noon 17.28Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-HB3   Zbas      7 m (badm_values)   315576 h  1985-2020  Ta    nan..nan   Pre    nan..nan    mbar  Rswmax    0.0  P    0.0 mm/yr   NaN in: Ta, Tdew, Pre, Ws, esat, ea, Ds, U
+           ssrd undetermined, assumed accumulated, raw max nan; tp undetermined, assumed accumulated
+           peak at 00Z, solar noon 17.28Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-HBK   Zbas    367 m (badm_values)   315576 h  1985-2020  Ta  -34.3..34.2  Pre  920.0..994.8  mbar  Rswmax  996.1  P 1245.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.58592e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 17Z, solar noon 16.78Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Ha1   Zbas    340 m (badm_values)   315576 h  1985-2020  Ta  -28.2..38.0  Pre  933.0..1011.3 mbar  Rswmax 1003.3  P 1120.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.61177e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 17Z, solar noon 16.81Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Ha2   Zbas    360 m (badm_values)   315576 h  1985-2020  Ta  -28.2..38.0  Pre  933.0..1011.3 mbar  Rswmax 1003.3  P 1120.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.61177e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 17Z, solar noon 16.81Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Ho1   Zbas     60 m (badm_values)   315576 h  1985-2020  Ta  -30.7..36.1  Pre  953.7..1036.9 mbar  Rswmax  987.7  P 1134.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.55564e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 17Z, solar noon 16.58Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Ho2   Zbas     61 m (badm_values)   315576 h  1985-2020  Ta  -30.7..36.1  Pre  953.7..1036.9 mbar  Rswmax  987.7  P 1134.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.55564e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 17Z, solar noon 16.58Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Ho3   Zbas     61 m (badm_values)   315576 h  1985-2020  Ta  -30.7..36.1  Pre  953.7..1036.9 mbar  Rswmax  987.7  P 1134.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.55564e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 17Z, solar noon 16.58Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-LPH   Zbas    378 m (badm_values)   315576 h  1985-2020  Ta  -28.2..38.0  Pre  933.0..1011.3 mbar  Rswmax 1003.3  P 1120.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.61177e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 17Z, solar noon 16.81Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-MEF   Zbas   2367 m (badm_values)   315576 h  1985-2020  Ta  -35.3..31.3  Pre  713.4..759.0  mbar  Rswmax 1082.7  P  733.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.89782e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.01Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-MMS   Zbas    275 m (badm_values)   315576 h  1985-2020  Ta  -31.6..39.6  Pre  961.3..1017.6 mbar  Rswmax 1016.4  P 1165.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.65917e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 17.76Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-MOz   Zbas    219 m (badm_values)   315576 h  1985-2020  Ta  -31.5..41.2  Pre  958.6..1019.7 mbar  Rswmax 1016.5  P 1082.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.65943e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.15Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-MRf   Zbas    263 m (badm_values)   315576 h  1985-2020  Ta  -19.0..39.8  Pre  942.4..1008.1 mbar  Rswmax  995.8  P 1479.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.58493e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 21Z, solar noon 20.24Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Me1   Zbas    896 m (badm_values)   315576 h  1985-2020  Ta  -31.6..38.3  Pre  871.2..925.5  mbar  Rswmax 1019.0  P  740.4 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.66852e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 21Z, solar noon 20.10Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Me2   Zbas   1253 m (badm_values)   315576 h  1985-2020  Ta  -30.5..37.6  Pre  862.6..916.5  mbar  Rswmax 1036.0  P  876.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.72962e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 21Z, solar noon 20.10Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Me4   Zbas    922 m (badm_values)   315576 h  1985-2020  Ta  -30.5..37.6  Pre  862.6..916.5  mbar  Rswmax 1036.0  P  876.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.72962e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 21Z, solar noon 20.11Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Me6   Zbas    998 m (badm_values)   315576 h  1985-2020  Ta  -31.6..37.7  Pre  857.1..910.3  mbar  Rswmax 1047.2  P  888.5 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.76983e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 21Z, solar noon 20.11Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Me7   Zbas   1253 m (badm_values)   315576 h  1985-2020  Ta  -30.5..37.6  Pre  862.6..916.5  mbar  Rswmax 1036.0  P  876.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.72962e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 21Z, solar noon 20.10Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-MtB   Zbas   2573 m (badm_values)   315576 h  1985-2020  Ta  -23.8..39.4  Pre  824.2..855.6  mbar  Rswmax 1102.1  P  461.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.96748e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 20Z, solar noon 19.38Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-NC2   Zbas      5 m (badm_values)   315576 h  1985-2020  Ta  -17.6..37.7  Pre  962.6..1043.8 mbar  Rswmax 1026.5  P 1226.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.69528e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 17Z, solar noon 17.11Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-NC3   Zbas      5 m (badm_values)   315576 h  1985-2020  Ta  -17.6..37.7  Pre  962.6..1043.8 mbar  Rswmax 1026.5  P 1226.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.69528e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 17Z, solar noon 17.11Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-NC5   Zbas    122 m (badm_values)   315576 h  1985-2020  Ta  -20.9..40.8  Pre  951.1..1028.9 mbar  Rswmax 1026.0  P 1162.9 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.69373e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 18Z, solar noon 17.25Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-NMj   Zbas    394 m (badm_values)   315576 h  1985-2020  Ta  -35.8..35.5  Pre  918.7..993.4  mbar  Rswmax  976.4  P  903.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.51512e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 17.90Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-NR1   Zbas   3050 m (badm_values)   315576 h  1985-2020  Ta  -37.8..28.0  Pre  696.7..739.7  mbar  Rswmax 1073.5  P  819.9 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.86473e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.04Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Oho   Zbas    230 m (badm_values)   315576 h  1985-2020  Ta  -31.9..38.8  Pre  958.7..1020.2 mbar  Rswmax 1008.0  P  966.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.62897e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 18Z, solar noon 17.59Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-PFL   Zbas    464 m (badm_values)   315576 h  1985-2020  Ta  -36.5..35.1  Pre  913.6..989.1  mbar  Rswmax  981.0  P  878.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.53149e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFb   Zbas    474 m (badm_values)   315576 h  1985-2020  Ta  -36.6..35.0  Pre  913.7..989.3  mbar  Rswmax  979.9  P  889.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.52759e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFc   Zbas    473 m (badm_values)   315576 h  1985-2020  Ta  -36.6..35.0  Pre  913.7..989.3  mbar  Rswmax  979.9  P  889.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.52759e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFg   Zbas    475 m (badm_values)   315576 h  1985-2020  Ta  -36.6..35.0  Pre  913.7..989.3  mbar  Rswmax  979.9  P  889.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.52759e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFh   Zbas    463 m (badm_values)   315576 h  1985-2020  Ta  -36.5..35.0  Pre  913.2..988.5  mbar  Rswmax  981.7  P  880.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.53413e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFi   Zbas    488 m (badm_values)   315576 h  1985-2020  Ta  -36.5..35.0  Pre  913.2..988.5  mbar  Rswmax  981.7  P  880.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.53413e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFj   Zbas    484 m (badm_values)   315576 h  1985-2020  Ta  -36.5..35.0  Pre  913.2..988.5  mbar  Rswmax  981.7  P  880.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.53413e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFk   Zbas    476 m (badm_values)   315576 h  1985-2020  Ta  -36.5..35.1  Pre  913.6..989.1  mbar  Rswmax  981.0  P  878.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.53149e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFm   Zbas    484 m (badm_values)   315576 h  1985-2020  Ta  -36.5..35.1  Pre  913.6..989.1  mbar  Rswmax  981.0  P  878.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.53149e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFn   Zbas    478 m (badm_values)   315576 h  1985-2020  Ta  -36.5..35.1  Pre  913.6..989.1  mbar  Rswmax  981.0  P  878.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.53149e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFp   Zbas    497 m (badm_values)   315576 h  1985-2020  Ta  -36.5..35.1  Pre  913.6..989.1  mbar  Rswmax  981.0  P  878.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.53149e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFq   Zbas    473 m (badm_values)   315576 h  1985-2020  Ta  -36.4..35.1  Pre  912.8..988.0  mbar  Rswmax  983.5  P  869.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.54063e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFs   Zbas    489 m (badm_values)   315576 h  1985-2020  Ta  -36.4..35.1  Pre  912.8..988.0  mbar  Rswmax  983.5  P  869.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.54063e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-PFt   Zbas    466 m (badm_values)   315576 h  1985-2020  Ta  -36.4..35.1  Pre  912.8..988.0  mbar  Rswmax  983.5  P  869.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.54063e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-SB1   Zbas    242 m (badm_values)   315576 h  1985-2020  Ta  -27.0..38.7  Pre  938.3..1013.4 mbar  Rswmax 1024.4  P 1116.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.68776e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.27Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-SHC   Zbas   1934 m (badm_values)   315576 h  1985-2020  Ta  -24.9..35.8  Pre  774.5..826.1  mbar  Rswmax 1074.7  P  866.9 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.86879e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 20Z, solar noon 20.02Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-SP1   Zbas     50 m (badm_values)   315576 h  1985-2020  Ta   -8.8..38.8  Pre  973.2..1034.8 mbar  Rswmax 1044.7  P 1079.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.76098e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.48Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-SP2   Zbas     50 m (badm_values)   315576 h  1985-2020  Ta   -9.2..38.6  Pre  973.5..1034.6 mbar  Rswmax 1044.6  P 1083.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.76058e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.48Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-SP3   Zbas     50 m (badm_values)   315576 h  1985-2020  Ta   -9.2..38.6  Pre  973.5..1034.6 mbar  Rswmax 1044.6  P 1083.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.76058e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.48Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-SP4   Zbas     47 m (badm_values)   315576 h  1985-2020  Ta   -9.2..38.6  Pre  973.5..1034.6 mbar  Rswmax 1044.6  P 1083.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.76058e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.48Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-SSH   Zbas    310 m (badm_values)   315576 h  1985-2020  Ta  -29.9..37.3  Pre  924.5..995.4  mbar  Rswmax 1011.8  P 1086.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.64262e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 18Z, solar noon 17.19Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Slt   Zbas     30 m (badm_values)   315576 h  1985-2020  Ta  -23.4..39.9  Pre  947.5..1042.2 mbar  Rswmax 1008.0  P 1159.5 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.6288e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 17Z, solar noon 16.97Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-TEF   Zbas   2241 m (badm_values)   315576 h  1985-2020  Ta  -40.2..33.5  Pre  778.1..823.6  mbar  Rswmax 1000.3  P  715.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.60102e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 20Z, solar noon 19.39Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-UMB   Zbas    234 m (badm_values)   315576 h  1985-2020  Ta  -33.0..33.8  Pre  947.1..1020.9 mbar  Rswmax  989.6  P  891.2 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.56248e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 17.65Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-UMd   Zbas    239 m (badm_values)   315576 h  1985-2020  Ta  -33.0..33.8  Pre  947.1..1020.9 mbar  Rswmax  989.6  P  891.2 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.56248e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 17.65Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-Vcm   Zbas   3003 m (badm_values)   315576 h  1985-2020  Ta  -34.9..31.0  Pre  714.6..755.5  mbar  Rswmax 1098.1  P  715.5 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.95331e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.10Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Vcp   Zbas   2542 m (badm_values)   315576 h  1985-2020  Ta  -33.3..31.6  Pre  723.9..766.0  mbar  Rswmax 1097.7  P  731.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.95166e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.11Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Vcs   Zbas   2752 m (badm_values)   315576 h  1985-2020  Ta  -33.3..31.6  Pre  723.9..766.0  mbar  Rswmax 1097.7  P  731.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.95166e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.11Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-WBW   Zbas    283 m (badm_values)   315576 h  1985-2020  Ta  -28.8..40.5  Pre  949.6..1004.8 mbar  Rswmax 1034.7  P 1374.4 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.72474e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 18Z, solar noon 17.62Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-WCr   Zbas    520 m (badm_values)   315576 h  1985-2020  Ta  -36.4..35.6  Pre  910.7..985.3  mbar  Rswmax  986.5  P  878.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.55158e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.01Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Wi1   Zbas    352 m (badm_values)   315576 h  1985-2020  Ta  -35.4..35.7  Pre  923.2..1005.3 mbar  Rswmax  971.9  P  874.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.50548e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.08Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Wi2   Zbas    395 m (badm_values)   315576 h  1985-2020  Ta  -35.4..35.7  Pre  923.2..1005.3 mbar  Rswmax  971.9  P  874.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.50548e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.08Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Wi3   Zbas    411 m (badm_values)   315576 h  1985-2020  Ta  -35.9..36.8  Pre  927.2..1009.5 mbar  Rswmax  976.2  P  891.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.51418e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 18Z, solar noon 18.07Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Wi4   Zbas    352 m (badm_values)   315576 h  1985-2020  Ta  -35.4..35.7  Pre  923.2..1005.3 mbar  Rswmax  971.9  P  874.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.50548e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 18.08Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-Wrc   Zbas    371 m (badm_values)   315576 h  1985-2020  Ta  -25.0..37.7  Pre  908.3..966.8  mbar  Rswmax  992.8  P 2080.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.57405e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 21Z, solar noon 20.13Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xAB   Zbas    363 m (badm_values)   315576 h  1985-2020  Ta  -26.2..37.0  Pre  898.9..957.8  mbar  Rswmax  992.6  P 2410.5 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.57345e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 21Z, solar noon 20.16Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xBL   Zbas    183 m (badm_values)   315576 h  1985-2020  Ta  -29.7..39.6  Pre  943.6..1017.7 mbar  Rswmax 1019.8  P 1021.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.67119e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.20Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xBR   Zbas    232 m (badm_values)   315576 h  1985-2020  Ta  -34.3..33.2  Pre  908.7..983.0  mbar  Rswmax 1009.6  P 1376.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.63459e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 17Z, solar noon 16.75Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xGR   Zbas    579 m (badm_values)   315576 h  1985-2020  Ta  -33.6..35.0  Pre  891.0..940.4  mbar  Rswmax 1049.6  P 1437.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.77848e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 18Z, solar noon 17.57Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xHA   Zbas    351 m (badm_values)   315576 h  1985-2020  Ta  -28.2..38.0  Pre  933.0..1011.3 mbar  Rswmax 1003.3  P 1120.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.61177e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 17Z, solar noon 16.81Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xJE   Zbas     44 m (badm_values)   315576 h  1985-2020  Ta  -12.9..39.8  Pre  972.1..1034.4 mbar  Rswmax 1048.5  P 1105.8 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.77474e+06; tp already hourly (within-day decrease on 55/60 days)
+           peak at 18Z, solar noon 17.63Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xLE   Zbas     20 m (badm_values)   315576 h  1985-2020  Ta  -14.6..40.1  Pre  970.9..1036.1 mbar  Rswmax 1055.3  P 1260.4 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.79918e+06; tp already hourly (within-day decrease on 57/60 days)
+           peak at 18Z, solar noon 17.88Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xML   Zbas   1126 m (badm_values)   315576 h  1985-2020  Ta  -29.1..34.4  Pre  876.1..940.3  mbar  Rswmax 1039.1  P 1041.2 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.74072e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 18Z, solar noon 17.37Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xNW   Zbas   3513 m (badm_values)   315576 h  1985-2020  Ta  -37.7..24.4  Pre  668.0..711.6  mbar  Rswmax 1072.8  P  739.2 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.86218e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.04Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-xRM   Zbas   2743 m (badm_values)   315576 h  1985-2020  Ta  -36.9..29.5  Pre  713.8..756.0  mbar  Rswmax 1068.0  P  960.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.84478e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 19Z, solar noon 19.04Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-xRN   Zbas    334 m (badm_values)   315576 h  1985-2020  Ta  -28.8..40.5  Pre  949.6..1004.8 mbar  Rswmax 1034.7  P 1374.4 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.72474e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 18Z, solar noon 17.62Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xSB   Zbas     45 m (badm_values)   315576 h  1985-2020  Ta   -8.6..38.6  Pre  974.3..1034.4 mbar  Rswmax 1045.2  P 1087.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.7627e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 18Z, solar noon 17.47Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xSC   Zbas    361 m (badm_values)   315576 h  1985-2020  Ta  -31.1..38.5  Pre  931.9..1005.9 mbar  Rswmax 1019.9  P 1020.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.67165e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 18Z, solar noon 17.21Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xSE   Zbas     15 m (badm_values)   315576 h  1985-2020  Ta  -21.8..39.3  Pre  958.6..1042.9 mbar  Rswmax 1005.1  P 1165.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.61841e+06; tp already hourly (within-day decrease on 58/60 days)
+           peak at 17Z, solar noon 17.10Z -> hour H covers [H,H+1), t_bef/t_aft = 0/1
+  US-xSP   Zbas   1160 m (badm_values)   315576 h  1985-2020  Ta  -22.0..39.0  Pre  870.8..920.3  mbar  Rswmax 1055.7  P  928.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.8004e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 20Z, solar noon 19.95Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xST   Zbas    481 m (badm_values)   315576 h  1985-2020  Ta  -35.9..36.3  Pre  915.1..988.5  mbar  Rswmax  987.7  P  865.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.5558e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 17.97Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xTA   Zbas    135 m (badm_values)   315576 h  1985-2020  Ta  -16.9..40.6  Pre  955.1..1029.0 mbar  Rswmax 1032.0  P 1305.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.71508e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 18Z, solar noon 17.83Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xTE   Zbas   2147 m (badm_values)   315576 h  1985-2020  Ta  -26.3..30.9  Pre  757.6..803.8  mbar  Rswmax 1070.2  P  944.3 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.85288e+06; tp already hourly (within-day decrease on 56/60 days)
+           peak at 20Z, solar noon 19.93Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xTR   Zbas    472 m (badm_values)   315576 h  1985-2020  Ta  -35.9..36.3  Pre  915.1..988.5  mbar  Rswmax  987.7  P  865.7 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.5558e+06; tp already hourly (within-day decrease on 60/60 days)
+           peak at 18Z, solar noon 17.97Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xUK   Zbas    335 m (badm_values)   315576 h  1985-2020  Ta  -34.5..41.5  Pre  952.5..1017.9 mbar  Rswmax 1012.2  P 1055.2 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.64387e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 19Z, solar noon 18.35Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xWR   Zbas    407 m (badm_values)   315576 h  1985-2020  Ta  -25.0..37.7  Pre  908.3..966.8  mbar  Rswmax  992.8  P 2080.0 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.57405e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 21Z, solar noon 20.13Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+  US-xYE   Zbas   2116 m (badm_values)   315576 h  1985-2020  Ta  -37.7..30.7  Pre  743.1..788.1  mbar  Rswmax 1051.8  P  744.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.7866e+06; tp already hourly (within-day decrease on 59/60 days)
+           peak at 20Z, solar noon 19.37Z -> hour H covers (H-1,H], t_bef/t_aft = 1/0
+
+101/101 stations written to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+
+Next: MATLAB finish_meteo.m fills SAB/SAD/PAR/N via C_Automatic_Radiation_Partition and writes the final Meteo_*.mat
+stage 1 exit: 0
+
+=== stage 2: radiation partition (MATLAB) ===

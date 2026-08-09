@@ -462,8 +462,21 @@ def main() -> int:
         return 1
 
     soil_sites, soil_layers = read_soil(a.soil)
-    hc = read_lookup(a.canopy, ("station_id", "StationID"),
-                     ("height_m", "canopy_height_m", "hc_m", "value_m"))
+    # AmeriFlux first, gridded fallback -- the rule agreed for every site
+    # parameter. fetch_canopy_height.py writes the BADM value and the GEDI window
+    # statistics side by side; the median is preferred over the mean because a
+    # window containing a gap or a road drags the mean down.
+    hc, hc_src = {}, {}
+    if a.canopy.is_file():
+        for r in csv.DictReader(open(a.canopy, newline="", encoding="utf-8-sig")):
+            sid = (r.get("station_id") or "").strip()
+            for col, lab in (("badm_heightc_m", "AmeriFlux BADM HEIGHTC"),
+                             ("hc_gedi_median_m", "GEDI window median"),
+                             ("hc_gedi_mean_m", "GEDI window mean")):
+                v = fnum(r.get(col))
+                if sid and v is not None and 0 < v < 120:
+                    hc[sid], hc_src[sid] = v, lab
+                    break
     zr = read_lookup(a.root_depth, ("station_id", "StationID"),
                      ("ZR95_H_mm", "ZR95_mm", "ZR95"))
     ec = read_ec_heights(a.heights)
@@ -472,7 +485,11 @@ def main() -> int:
     print(f"template  : {a.template}")
     print(f"stations  : {len(stations)} ({len(excluded)} excluded)")
     print(f"soil      : {len(soil_sites)} sites, {len(soil_layers)} profiles")
-    print(f"canopy    : {len(hc)}   ZR95: {len(zr)}   EC heights: {len(ec)}")
+    from collections import Counter as _C
+    print(f"canopy    : {len(hc)} "
+          f"({', '.join(f'{k} {v}' for k, v in _C(hc_src.values()).most_common())})"
+          if hc else "canopy    : 0   <-- NONE FOUND")
+    print(f"ZR95      : {len(zr)}   EC heights: {len(ec)}")
     print(f"meteo dir : {a.meteo}{'' if a.meteo.is_dir() else '   <-- NOT FOUND'}\n")
 
     ready, blocked, all_probs = [], [], {}
@@ -485,7 +502,7 @@ def main() -> int:
         if not layers:
             miss.append("soil profile")
         st["hc"] = hc.get(sid)
-        st["hc_src"] = "GEDI/BADM canopy height"
+        st["hc_src"] = hc_src.get(sid, "")
         if st["hc"] is None:
             miss.append("canopy height")
         st["ase"] = 0 if st["forest_type"].startswith("ever") else 1

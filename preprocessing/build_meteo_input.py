@@ -18,29 +18,34 @@ UNITS -- read from the working Meteo_US_xRM_1985_2020.mat, not assumed:
     Ta, Tdew   degrees C          ERA5 t2m, d2m are K          -> -273.15
     Pre        MILLIBAR (hPa)     ERA5 sp is Pa                -> /100
     ea, esat   Pa                 Tetens, one formula for both
-    Pr         mm/h               ERA5 tp is m accumulated     -> deaccumulate, *1000
+    Pr         mm/h               ERA5 tp is m per interval    -> *1000
     Ws         m/s                sqrt(u10^2 + v10^2)
-    Rsw        W/m2               ERA5 ssrd is J/m2 accumulated-> deaccumulate, /3600
+    Rsw        W/m2               ERA5 ssrd is J/m2 per hour   -> /3600
     Ca         ppm                Ca_Data.mat, hourly
     Date       MATLAB datenum
 
 Pre in mbar is the one that would have been silently catastrophic: ERA5 delivers
 ~72000 Pa where T&C wants ~720, and nothing downstream would complain.
 
-ACCUMULATION IS NOT UNIFORM ACROSS THE VARIABLES, which is what fixes t_bef/t_aft
-downstream:
+ACCUMULATION IS NOT UNIFORM, and the time-series collection does not behave like
+the gridded one, so both properties are DETECTED per station rather than assumed:
 
-    ACCUMULATED from 00 UTC, reset daily   ssrd, tp
-        the value at hour H is the total since midnight, not the hourly flux.
-        De-accumulated here by within-day differencing (the 01 UTC value is
-        already the hourly total), after which hour H means the mean over (H-1, H].
-    INSTANTANEOUS at the timestamp         t2m, d2m, sp, u10, v10
-        the value AT hour H. Nothing to de-accumulate.
+    ssrd, tp    fluxes over an interval. The gridded product accumulates from
+                00 UTC and resets daily; the time-series collection we downloaded
+                ships one hour at a time (job 35671: within-day decrease on 60/60
+                days, raw ssrd max 3.59e6 J/m2 = 996 W/m2). looks_accumulated()
+                decides which, because differencing an already-hourly field is a
+                quiet failure -- it halves the peak and nothing objects.
+    t2m, d2m, sp, u10, v10   instantaneous at the timestamp. Nothing to convert.
 
-finish_meteo.m therefore takes t_bef/t_aft from ssrd alone (1 and 0), since that
-window exists to align solar geometry with the RADIATION timestamp. The residual
-half-hour offset between instantaneous state variables and interval-mean fluxes is
-left uncorrected and documented there.
+timestamp_convention() then settles whether hour H labels (H-1, H] or [H, H+1),
+by finding the peak of the mean diurnal cycle and comparing the two candidate
+interval midpoints against solar noon (12 - lon/15 in UTC). That fixes t_bef/t_aft
+for finish_meteo.m, and it is checked rather than assumed because this product has
+already turned out to differ from its documentation once.
+
+The residual half-hour offset between instantaneous state variables and
+interval-mean fluxes is left uncorrected and documented in finish_meteo.m.
 """
 
 from __future__ import annotations
@@ -127,6 +132,33 @@ def deaccumulate(values, hours_utc):
     out[first] = values[first]
     out[0] = values[0]
     return np.clip(np.nan_to_num(out, nan=0.0), 0.0, None)
+
+
+def timestamp_convention(rsw, hours_utc, lon):
+    """Does hour H label the interval (H-1, H] or [H, H+1)?
+
+    This fixes t_bef/t_aft downstream, and the product has already proved not to
+    match the documented gridded behaviour once (it ships hourly rather than
+    daily accumulations), so it is checked rather than assumed.
+
+    Solar noon in UTC is 12 - lon/15. The hour carrying the peak of the mean
+    diurnal cycle should be the one whose INTERVAL straddles it, so the interval
+    midpoint nearest solar noon identifies the convention.
+    """
+    v = np.asarray(rsw, dtype=float)
+    mean_by_hour = np.array([np.nanmean(v[hours_utc == h]) if np.any(hours_utc == h)
+                             else np.nan for h in range(24)])
+    if not np.isfinite(mean_by_hour).any():
+        return None, "no radiation to test"
+    peak = int(np.nanargmax(mean_by_hour))
+    noon = (12.0 - lon / 15.0) % 24.0
+    d_prev = min(abs((peak - 0.5) - noon), 24 - abs((peak - 0.5) - noon))
+    d_next = min(abs((peak + 0.5) - noon), 24 - abs((peak + 0.5) - noon))
+    if d_prev <= d_next:
+        return (1.0, 0.0), (f"peak at {peak:02d}Z, solar noon {noon:.2f}Z -> "
+                            f"hour H covers (H-1,H], t_bef/t_aft = 1/0")
+    return (0.0, 1.0), (f"peak at {peak:02d}Z, solar noon {noon:.2f}Z -> "
+                        f"hour H covers [H,H+1), t_bef/t_aft = 0/1")
 
 
 def read_station_era5(station_dir: Path):
@@ -294,6 +326,9 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
     else:
         out["Ca"] = np.full(out["Date"].size, np.nan)
 
+    conv, conv_why = timestamp_convention(out["Rsw"], hours[keep], lon)
+    if conv:
+        out["t_bef_detected"], out["t_aft_detected"] = conv
     out.update(Lat=float(lat), Lon=float(lon), Zbas=float(zbas), DeltaGMT=0.0,
                id_location=mat_name(station))
 
@@ -306,7 +341,8 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
         "Rsw_W_m2_max": round(float(np.nanmax(out["Rsw"])), 1),
         "Ca_ppm": [round(float(np.nanmin(out['Ca'])), 1), round(float(np.nanmax(out['Ca'])), 1)]
         if np.isfinite(out["Ca"]).any() else None,
-        "tp_why": tp_why, "ssrd_why": sw_why,
+        "tp_why": tp_why, "ssrd_why": sw_why, "convention": conv_why,
+        "t_bef_t_aft": list(conv) if conv else None,
         "ssrd_raw_max": round(float(np.nanmax(raw["ssrd"])), 1),
         "Pr_total_mm_yr": round(float(np.nansum(out["Pr"])) /
                                 max(1, (yrs[keep].max() - yrs[keep].min() + 1)), 1),
@@ -394,6 +430,7 @@ def main() -> int:
               + (f"   NaN in: {', '.join(diag['nan_fields'])}" if diag["nan_fields"] else ""))
         print(f"           ssrd {diag['ssrd_why']}, raw max {diag['ssrd_raw_max']:g}"
               f"; tp {diag['tp_why']}")
+        print(f"           {diag['convention']}")
 
     print(f"\n{ok}/{len(stations)} stations written to {a.out}")
     for sid, why in bad:

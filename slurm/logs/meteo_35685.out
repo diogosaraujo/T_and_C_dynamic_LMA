@@ -1,0 +1,9 @@
+job        : 35685
+node       : soeepyc10
+started    : 2026-08-09T04:31:04Z
+era5       : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+ameriflux  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+meteo out  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+partition  : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Diogo
+
+=== stage 1: netCDF -> raw .mat ===

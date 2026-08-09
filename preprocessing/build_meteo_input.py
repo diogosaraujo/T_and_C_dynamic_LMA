@@ -27,10 +27,20 @@ UNITS -- read from the working Meteo_US_xRM_1985_2020.mat, not assumed:
 Pre in mbar is the one that would have been silently catastrophic: ERA5 delivers
 ~72000 Pa where T&C wants ~720, and nothing downstream would complain.
 
-ACCUMULATED FIELDS. ERA5-Land tp and ssrd accumulate from 00 UTC and reset each
-day, so the value at hour H is the total since midnight, not the flux over the
-preceding hour. They are de-accumulated by within-day differencing, with the 01
-UTC value used as-is.
+ACCUMULATION IS NOT UNIFORM ACROSS THE VARIABLES, which is what fixes t_bef/t_aft
+downstream:
+
+    ACCUMULATED from 00 UTC, reset daily   ssrd, tp
+        the value at hour H is the total since midnight, not the hourly flux.
+        De-accumulated here by within-day differencing (the 01 UTC value is
+        already the hourly total), after which hour H means the mean over (H-1, H].
+    INSTANTANEOUS at the timestamp         t2m, d2m, sp, u10, v10
+        the value AT hour H. Nothing to de-accumulate.
+
+finish_meteo.m therefore takes t_bef/t_aft from ssrd alone (1 and 0), since that
+window exists to align solar geometry with the RADIATION timestamp. The residual
+half-hour offset between instantaneous state variables and interval-mean fluxes is
+left uncorrected and documented there.
 """
 
 from __future__ import annotations

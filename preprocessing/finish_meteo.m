@@ -11,19 +11,37 @@ function finish_meteo(raw_dir, out_dir, partition_dir, year_tag)
 % ported, because a Python port of comparable code shipped two bugs that only a
 % verification harness caught.
 %
-% t_bef and t_aft are DERIVED from the product definition, not optimised. ERA5-Land
-% accumulates from 00 UTC and resets daily; after de-accumulation the value stored
-% at hour H is the mean flux over the interval (H-1, H]. The sun-averaging window
-% must therefore be exactly that interval:
+% t_bef/t_aft are DERIVED from the product definition, not optimised -- but ONLY
+% from the radiation variable, because ERA5-Land does not treat its variables
+% alike:
+%
+%   ACCUMULATED from 00 UTC, reset daily   ssrd, tp
+%       de-accumulated here, so the value at hour H is the mean over (H-1, H]
+%   INSTANTANEOUS at the timestamp         t2m, d2m, sp, u10, v10
+%       the value AT hour H, not an interval mean
+%
+% t_bef/t_aft is the window over which solar altitude is averaged to match the
+% RADIATION timestamp, so it follows ssrd and nothing else:
 %
 %       t_bef = 1,  t_aft = 0
 %
+% Of the partition's own inputs, Pr comes from tp and shares that convention
+% (it only enters through the N = 1 when Pr > 0 rule), while Tdew comes from d2m
+% and is instantaneous. Tdew feeds the clear-sky water-vapour attenuation, where a
+% half-hour offset is second order -- worth stating, not worth correcting.
+%
+% The same half-hour offset applies to Ta, ea and Ws in the forcing at large:
+% instantaneous values at H are paired with interval-mean Rsw and Pr for (H-1, H].
+% Averaging consecutive instantaneous values onto the interval would remove it; it
+% is left uncorrected and stated, because it is small and because introducing a
+% smoothing step would change the forcing in ways that are harder to audit.
+%
 % The optimiser inside C_Automatic_Radiation_Partition exists for datasets whose
 % timestamp convention is undocumented. ERA5-Land's is documented, so fitting it
-% would be estimating a quantity we already know -- and it would return a slightly
+% would estimate a quantity we already know -- and it would return a slightly
 % different answer per station, making the network inconsistent for no physical
 % reason. (The shipped Meteo_US_xRM file carries 0.75/0.25, the optimiser's
-% answer; that is the value being replaced here, deliberately.)
+% answer; that is what is being replaced here, deliberately.)
 %
 % This is a per-PRODUCT constant. The GCM path, whose radiation is disaggregated
 % from daily to hourly with an imposed convention, takes 0/1 instead.
@@ -84,8 +102,7 @@ for k = 1:numel(files)
     S.N    = N(:);
     S.t_bef = t_bef;  S.t_aft = t_aft;
     if abs(t_bef - T_BEF) > 1e-9 || abs(t_aft - T_AFT) > 1e-9
-        fprintf('  ! %-10s partition returned t_bef/t_aft = %g/%g, not the forced %g/%g
-', ...
+        fprintf('  ! %-10s partition returned t_bef/t_aft = %g/%g, not the forced %g/%g\n', ...
             site, t_bef, t_aft, T_BEF, T_AFT);
     end
 

@@ -1,0 +1,26 @@
+job        : 35671
+node       : soeepyc10
+started    : 2026-08-09T02:32:14Z
+era5       : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+ameriflux  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+meteo out  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+partition  : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Diogo
+
+=== stage 1: netCDF -> raw .mat ===
+era5     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+out      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+CO2      : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/TeC_Source_Code-master/Inputs/Ca_Data.mat
+ameriflux: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+Zbas     : 118 station(s) (badm_values 110, site_registry 8)
+stations : 2   years 1985-2020
+
+  US-HBK   Zbas    367 m (badm_values)   315576 h  1985-2020  Ta  -34.3..34.2  Pre  920.0..994.8  mbar  Rswmax  996.1  P 1245.6 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.58592e+06; tp already hourly (within-day decrease on 60/60 days)
+  US-Ha2   Zbas    360 m (badm_values)   315576 h  1985-2020  Ta  -28.2..38.0  Pre  933.0..1011.3 mbar  Rswmax 1003.3  P 1120.1 mm/yr
+           ssrd already hourly (within-day decrease on 60/60 days), raw max 3.61177e+06; tp already hourly (within-day decrease on 59/60 days)
+
+2/2 stations written to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+
+Next: MATLAB finish_meteo.m fills SAB/SAD/PAR/N via C_Automatic_Radiation_Partition and writes the final Meteo_*.mat
+stage 1 exit: 0
+dry run -- stage 2 skipped

@@ -38,6 +38,14 @@ if [ -z "$STATION" ]; then
         echo "ERROR: no station given and no $LIST for the array form" >&2
         exit 1
     fi
+    NLINES=$(wc -l < "$LIST")
+    # An array wider than the run list is normal: the range has to be chosen when
+    # the array is submitted, which may be before the build knows how many
+    # stations are ready. Extra tasks exit 0 rather than reporting failure.
+    if [ "$IDX" -gt "$NLINES" ]; then
+        echo "task $IDX is beyond the $NLINES entries in $LIST -- nothing to do"
+        exit 0
+    fi
     read -r STATION ARM < <(sed -n "${IDX}p" "$LIST")
 fi
 if [ -z "${STATION:-}" ] || [ -z "${ARM:-}" ]; then

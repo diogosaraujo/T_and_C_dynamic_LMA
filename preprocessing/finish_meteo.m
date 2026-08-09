@@ -87,36 +87,43 @@ for k = 1:numel(files)
             site, S.DeltaGMT);
     end
 
-    % Run one calendar year at a time. The partition is vectorised over the whole
-    % series, and its sun-averaging step forms an N x 61 array per intermediate;
-    % at N = 315576 (36 years hourly) MATLAB was asked for a 315576 x 315576 array
-    % and refused (742 GB, job 35673). A year is 8784 hours at most, which is also
-    % the window the routine's own t_bef/t_aft calibration uses (NI = min(8760,NT)).
+    % Run one CALENDAR MONTH at a time. Something inside the partition scales as
+    % N^2: at N = 315576 (36 years hourly) MATLAB refused a 315576 x 315576 array
+    % outright (742 GB, job 35673), and at N = 8784 (one year) each such matrix is
+    % still 617 MB, which OOM-killed a 24 GB job once MATLAB was willing to try
+    % (35676, exit 137). A month is at most 744 hours, so the same term is ~4 MB.
     %
     % Chunking is safe because the calculation is per-timestep throughout: solar
     % geometry, Gueymard clear sky, the clearness index and the N = 1 when Pr > 0
     % rule all act on one hour at a time. There is no cumsum, filter or smoothing
     % across the series, and t_bef/t_aft are forced, so the calibration loop that
-    % would need a long record never runs.
-    yr = year(datetime(S.Date, 'ConvertFrom', 'datenum'));
-    uy = unique(yr(:)).';
-    n  = numel(S.Date);
+    % would need a long record (NI = min(8760,NT)) never runs.
+    dts = datetime(S.Date, 'ConvertFrom', 'datenum');
+    ym  = year(dts)*100 + month(dts);
+    uy  = unique(ym(:)).';
+    n   = numel(S.Date);
     SAD1 = zeros(n,1); SAD2 = zeros(n,1); SAB1 = zeros(n,1); SAB2 = zeros(n,1);
     PARB = zeros(n,1); PARD = zeros(n,1); N = zeros(n,1);
     failed = false;
+    nchunk = 0;
     for y = uy
-        ix = find(yr == y);
+        ix = find(ym == y);
         try
             [~,~,d1,d2,b1,b2,pb,pd,nn,~,t_bef,t_aft] = ...
                 C_Automatic_Radiation_Partition(S.Date(ix), S.Lat, S.Lon, S.Zbas, ...
                     S.DeltaGMT, S.Pr(ix), S.Tdew(ix), S.Rsw(ix), 0, T_BEF, T_AFT);
         catch ME
-            fprintf('  ! %-10s %d: partition failed: %s\n', site, y, ME.message);
+            fprintf('  ! %-10s %06d: partition failed: %s\n', site, y, ME.message);
             failed = true;
             break
         end
         SAD1(ix)=d1(:); SAD2(ix)=d2(:); SAB1(ix)=b1(:); SAB2(ix)=b2(:);
         PARB(ix)=pb(:); PARD(ix)=pd(:); N(ix)=nn(:);
+        nchunk = nchunk + 1;
+        if mod(nchunk, 60) == 0
+            fprintf('      %s: %d/%d months\n', site, nchunk, numel(uy));
+        end
+        clear d1 d2 b1 b2 pb pd nn
     end
     if failed
         continue

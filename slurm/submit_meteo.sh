@@ -24,10 +24,10 @@
 #SBATCH -N 1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=24G
+#SBATCH --mem=64G
 #SBATCH -p SOE_main
 #SBATCH -J meteo
-#SBATCH -t 08:00:00
+#SBATCH -t 12:00:00
 #SBATCH -o slurm/logs/meteo_%j.out
 #SBATCH -e slurm/logs/meteo_%j.err
 

@@ -87,6 +87,37 @@ def tetens(t_c):
     return 611.0 * np.exp(17.27 * t_c / (t_c + 237.3))
 
 
+def looks_accumulated(values, hours_utc, sample_days=60):
+    """Is this field accumulated within the UTC day, or already an hourly flux?
+
+    The gridded ERA5-Land product accumulates from 00 UTC; the newer time-series
+    collection may deliver hourly fluxes directly. Getting it wrong is not loud:
+    differencing an already-hourly field yields a plausible-looking series with
+    roughly half the correct peak, which is what the first dry run produced
+    (Rsw max ~550 W/m2 at 43 degrees N, where ~950 is expected).
+
+    An accumulated field is non-decreasing between the 01 and 23 UTC steps of a
+    day. An hourly flux is not: it falls every afternoon.
+    """
+    v = np.asarray(values, dtype=float)
+    day = np.cumsum(hours_utc == 0)
+    ok = drops = 0
+    for d in np.unique(day)[1:sample_days + 1]:
+        sel = (day == d) & (hours_utc >= 1)
+        x = v[sel]
+        if x.size < 6 or not np.isfinite(x).all():
+            continue
+        ok += 1
+        if np.any(np.diff(x) < -1e-9 * max(1.0, np.nanmax(np.abs(x)))):
+            drops += 1
+    if ok == 0:
+        return True, "undetermined, assumed accumulated"
+    frac = drops / ok
+    if frac < 0.1:
+        return True, f"accumulated (within-day decrease on {drops}/{ok} days)"
+    return False, f"already hourly (within-day decrease on {drops}/{ok} days)"
+
+
 def deaccumulate(values, hours_utc):
     """ERA5-Land accumulations reset at 00 UTC: value(H) is the total since
     midnight. Difference within the day; the 01 UTC value already is the hourly
@@ -242,8 +273,14 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
     Tdew = raw["d2m"] - 273.15
     Pre = raw["sp"] / 100.0                       # Pa -> mbar
     Ws = np.hypot(raw["u10"], raw["v10"])
-    Pr = deaccumulate(raw["tp"], hours) * 1000.0  # m -> mm per hour
-    Rsw = deaccumulate(raw["ssrd"], hours) / 3600.0   # J/m2 -> W/m2
+    # Detect rather than assume: the time-series collection may already deliver
+    # hourly fluxes, and differencing those halves the peak without complaining.
+    tp_acc, tp_why = looks_accumulated(raw["tp"], hours)
+    sw_acc, sw_why = looks_accumulated(raw["ssrd"], hours)
+    tp_h = deaccumulate(raw["tp"], hours) if tp_acc else np.clip(raw["tp"], 0.0, None)
+    sw_h = deaccumulate(raw["ssrd"], hours) if sw_acc else np.clip(raw["ssrd"], 0.0, None)
+    Pr = tp_h * 1000.0        # m -> mm over the hour
+    Rsw = sw_h / 3600.0       # J/m2 over the hour -> W/m2
     esat, ea = tetens(Ta), tetens(Tdew)
 
     out = {k: v[keep] for k, v in
@@ -269,6 +306,10 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
         "Rsw_W_m2_max": round(float(np.nanmax(out["Rsw"])), 1),
         "Ca_ppm": [round(float(np.nanmin(out['Ca'])), 1), round(float(np.nanmax(out['Ca'])), 1)]
         if np.isfinite(out["Ca"]).any() else None,
+        "tp_why": tp_why, "ssrd_why": sw_why,
+        "ssrd_raw_max": round(float(np.nanmax(raw["ssrd"])), 1),
+        "Pr_total_mm_yr": round(float(np.nansum(out["Pr"])) /
+                                max(1, (yrs[keep].max() - yrs[keep].min() + 1)), 1),
         "nan_fields": [k for k, v in out.items()
                        if isinstance(v, np.ndarray) and not np.isfinite(v).all()],
     }
@@ -349,8 +390,10 @@ def main() -> int:
               f"{diag['hours']:>7} h  {diag['years']}  "
               f"Ta {diag['Ta_C'][0]:>6.1f}..{diag['Ta_C'][1]:<5.1f} "
               f"Pre {diag['Pre_mbar'][0]:>6.1f}..{diag['Pre_mbar'][1]:<6.1f} mbar  "
-              f"Rswmax {diag['Rsw_W_m2_max']:>6.1f}"
+              f"Rswmax {diag['Rsw_W_m2_max']:>6.1f}  P {diag['Pr_total_mm_yr']:>6.1f} mm/yr"
               + (f"   NaN in: {', '.join(diag['nan_fields'])}" if diag["nan_fields"] else ""))
+        print(f"           ssrd {diag['ssrd_why']}, raw max {diag['ssrd_raw_max']:g}"
+              f"; tp {diag['tp_why']}")
 
     print(f"\n{ok}/{len(stations)} stations written to {a.out}")
     for sid, why in bad:

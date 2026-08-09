@@ -24,7 +24,7 @@
 #SBATCH -N 1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=64G
+#SBATCH --mem=32G
 #SBATCH -p SOE_main
 #SBATCH -J meteo
 #SBATCH -t 12:00:00

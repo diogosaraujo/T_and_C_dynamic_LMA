@@ -99,79 +99,20 @@ for k = 1:numel(files)
         end
     end
 
-    % Run one CALENDAR YEAR at a time, and no shorter.
+    % One call on the whole series, exactly as the shipped Meteo_US_xRM.mat was
+    % produced. No chunking and no per-chunk fallback: a dimension error here
+    % should stop the run and be read, not be papered over by a shorter window
+    % that quietly changes what the t_bef/t_aft calibration block sees.
     %
-    % Something in the partition scales as N^2. At N = 315576 (36 years hourly)
-    % MATLAB refused a 315576 x 315576 array outright (742 GB, job 35673); at
-    % N = 8784 each such matrix is 617 MB, which OOM-killed a 24 GB job (35676).
-    % Hence chunking, and hence the 64 GB request in submit_meteo.sh.
-    %
-    % Monthly chunks are NOT an option, though they would be smaller still. The
-    % t_bef/t_aft calibration block runs even when the values are forced -- the
-    % for IS loop executes once with a single-element T_BF -- and it reshapes the
-    % series into (24, ndays):
-    %
-    %     n=length(Rsw_I); fr=24/dt; m=floor(n/fr);
-    %     Rswp =reshape(Rsw_I(1:m*fr),fr,m);
-    %     Rswsp=reshape(Rsws(1:m*fr),fr,m);
-    %
-    % which fails on a 744-hour series ("Number of elements must not change",
-    % job 35677). A year clears it.
-    %
-    % Chunking at all is safe because the calculation is per-timestep: solar
-    % geometry, Gueymard clear sky, the clearness index and the N = 1 when Pr > 0
-    % rule each act on a single hour, and there is no cumsum, filter or smoothing
-    % across the series.
-    yr = year(datetime(S.Date, 'ConvertFrom', 'datenum'));
-    uy = unique(yr(:)).';
-    n  = numel(S.Date);
-    SAD1 = zeros(n,1); SAD2 = zeros(n,1); SAB1 = zeros(n,1); SAB2 = zeros(n,1);
-    PARB = zeros(n,1); PARD = zeros(n,1); N = zeros(n,1);
-    failed = false;
-    nchunk = 0;
-
-    % Whole series first: that is how the shipped Meteo_US_xRM.mat was produced,
-    % and with column vectors it is the proven path. Chunking is the fallback, not
-    % the default -- a year is short enough to change what the t_bef/t_aft
-    % calibration block sees, so it is only worth risking if the full call fails.
-    try
-        [~,~,SAD1,SAD2,SAB1,SAB2,PARB,PARD,N,~,t_bef,t_aft] = ...
-            C_Automatic_Radiation_Partition(S.Date, S.Lat, S.Lon, S.Zbas, ...
-                S.DeltaGMT, S.Pr, S.Tdew, S.Rsw, 0, T_BEF, T_AFT);
-        SAD1=SAD1(:); SAD2=SAD2(:); SAB1=SAB1(:); SAB2=SAB2(:);
-        PARB=PARB(:); PARD=PARD(:); N=N(:);
-        uy = [];   % nothing left to chunk
-        fprintf('      %s: whole series in one call\n', site);
-    catch ME
-        fprintf('      %s: whole-series call failed (%s); retrying year by year\n', ...
-            site, ME.message);
-        SAD1 = zeros(n,1); SAD2 = zeros(n,1); SAB1 = zeros(n,1); SAB2 = zeros(n,1);
-        PARB = zeros(n,1); PARD = zeros(n,1); N = zeros(n,1);
-    end
-    for y = uy
-        ix = find(yr == y);
-        try
-            [~,~,d1,d2,b1,b2,pb,pd,nn,~,t_bef,t_aft] = ...
-                C_Automatic_Radiation_Partition(S.Date(ix), S.Lat, S.Lon, S.Zbas, ...
-                    S.DeltaGMT, S.Pr(ix), S.Tdew(ix), S.Rsw(ix), 0, T_BEF, T_AFT);
-        catch ME
-            fprintf('  ! %-10s %d: partition failed: %s\n', site, y, ME.message);
-            failed = true;
-            break
-        end
-        SAD1(ix)=d1(:); SAD2(ix)=d2(:); SAB1(ix)=b1(:); SAB2(ix)=b2(:);
-        PARB(ix)=pb(:); PARD(ix)=pd(:); N(ix)=nn(:);
-        nchunk = nchunk + 1;
-        if mod(nchunk, 10) == 0
-            fprintf('      %s: %d/%d years\n', site, nchunk, numel(uy));
-        end
-        % Release the year's intermediates before the next call rather than
-        % relying on MATLAB to reclaim them; 617 MB matrices are what killed 35676.
-        clear d1 d2 b1 b2 pb pd nn
-    end
-    if failed
-        continue
-    end
+    % The earlier 742 GB request (job 35673) was not a size problem at all. It
+    % came from passing ROW vectors: the partition does LWP0 = zeros(size(Tdew)),
+    % so a 1xN Tdew makes LWP0 1xN, which then meets the Nx1 solar-geometry arrays
+    % and implicitly expands to NxN. Hence the column coercion above -- and note
+    % the routine column-ifies Date itself (line 21) and Rsw/Pr (line 171), but
+    % only AFTER the calibration block at line 94, which is the gap we fell into.
+    [~,~,SAD1,SAD2,SAB1,SAB2,PARB,PARD,N,~,t_bef,t_aft] = ...
+        C_Automatic_Radiation_Partition(S.Date, S.Lat, S.Lon, S.Zbas, ...
+            S.DeltaGMT, S.Pr, S.Tdew, S.Rsw, 0, T_BEF, T_AFT);
 
     S.SAD1 = SAD1(:); S.SAD2 = SAD2(:);
     S.SAB1 = SAB1(:); S.SAB2 = SAB2(:);
@@ -190,6 +131,16 @@ for k = 1:numel(files)
     if resid > 1e-6 * max(1, max(S.Rsw))
         fprintf('  ! %-10s bands do not close: max |SAB+SAD - Rsw| = %.3g W/m2\n', ...
             site, resid);
+    end
+
+    % Restore the orientation the shipped Meteo_US_xRM.mat uses: the
+    % meteorological inputs as 1xN rows, Date, Ca and the partition outputs as Nx1
+    % columns. The partition needed columns; T&C should see what it always has.
+    for fn = {'Pr','Tdew','Rsw','Ta','Ws','ea','esat','Pre','Ds'}
+        if isfield(S, fn{1}), S.(fn{1}) = reshape(S.(fn{1}), 1, []); end
+    end
+    for fn = {'Date','Ca','N','PARB','PARD','SAB1','SAB2','SAD1','SAD2','U'}
+        if isfield(S, fn{1}), S.(fn{1}) = reshape(S.(fn{1}), [], 1); end
     end
 
     outfile = fullfile(out_dir, sprintf('Meteo_%s_%s.mat', site, year_tag));

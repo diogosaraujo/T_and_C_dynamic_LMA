@@ -80,6 +80,17 @@ WANT = {"t2m": "Ta", "sp": "Pre", "d2m": "Tdew", "tp": "Pr",
         "u10": "u", "v10": "v", "ssrd": "Rsw"}
 MATLAB_EPOCH_OFFSET = 719529.0    # datenum(1970,1,1)
 
+# Orientation, copied from the working Meteo_US_xRM_1985_2020.mat rather than
+# chosen. The shipped file is deliberately mixed: the meteorological inputs are
+# 1xN rows, while Date, Ca and everything the radiation partition produces are
+# Nx1 columns. Matching it exactly means T&C sees the same shapes it always has.
+# (The partition itself must be CALLED with columns -- it column-ifies Date at
+# line 21 and Rsw/Pr at line 171, but only after the t_bef/t_aft calibration
+# block at line 94, which is the gap that produced the 742 GB request.)
+ROW_FIELDS = ("Ds", "Pr", "Pre", "Rsw", "Ta", "Tdew", "Ws", "ea", "esat")
+COL_FIELDS = ("Ca", "Date", "N", "PARB", "PARD",
+              "SAB1", "SAB2", "SAD1", "SAD2", "U")
+
 
 def mat_name(s: str) -> str:
     return re.sub(r"[^0-9A-Za-z_]", "_", s)
@@ -281,6 +292,17 @@ def read_elevation(ameriflux_dir: Path, override: Path | None = None):
     return out, src
 
 
+def orient(name, v):
+    """Give a field the orientation the shipped Meteo_US_xRM.mat uses."""
+    if not isinstance(v, np.ndarray) or v.ndim != 1:
+        return v
+    if name in COL_FIELDS:
+        return v.reshape(-1, 1)
+    if name in ROW_FIELDS:
+        return v.reshape(1, -1)
+    return v.reshape(-1, 1)
+
+
 def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
     sd = era5_dir / station
     if not sd.is_dir():
@@ -354,14 +376,7 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
 
     from scipy.io import savemat
     out_dir.mkdir(parents=True, exist_ok=True)
-    # COLUMN vectors, not rows. savemat writes a 1-D array as 1xN, and
-    # C_Automatic_Radiation_Partition does LWP0 = zeros(size(Tdew)); a row Tdew
-    # makes LWP0 1xN, which then meets the Nx1 solar-geometry arrays and implicitly
-    # expands to NxN -- 742 GB at 36 years hourly. The shipped Meteo_US_xRM.mat was
-    # written by MATLAB with columns, which is why the routine has always worked
-    # on that file.
-    out = {k: (v.reshape(-1, 1) if isinstance(v, np.ndarray) and v.ndim == 1 else v)
-           for k, v in out.items()}
+    out = {k: orient(k, v) for k, v in out.items()}
     savemat(out_dir / f"Meteo_{mat_name(station)}_raw.mat", out, do_compression=True)
     return diag, ""
 

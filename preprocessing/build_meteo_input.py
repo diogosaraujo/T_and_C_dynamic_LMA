@@ -70,6 +70,7 @@ DEFAULT_OUT = INPUT_ROOT / "meteo"
 # 1975-2022 at 327-420 ppm; Ca_Data_Ann.mat sits beside it but stops in 2013 and
 # is the wrong one for a 1985-2020 run.
 DEFAULT_CA = REPO_ROOT / "T&C" / "TeC_Source_Code-master" / "Inputs" / "Ca_Data.mat"
+DEFAULT_EXCLUDED = Path(__file__).resolve().parent / "excluded_stations.csv"
 DEFAULT_SITE_LISTS = [
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv",
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "evergreen_ameriflux.csv",
@@ -224,6 +225,25 @@ def read_ca(path: Path):
     if ca is None or dt is None or dt.size != ca.size:
         return None, None
     return dt, ca
+
+
+def read_excluded(path):
+    """Stations dropped from the study, from excluded_stations.csv.
+
+    17 of the 118 are excluded -- 8 with no BADM archive, 8 young or disturbed
+    stands that are not at equilibrium for spin-up, and US-KS1 with no rooting
+    depth. Building forcing or run directories for them wastes work and, worse,
+    puts them in run_list.txt where they would be simulated by accident.
+    """
+    out = {}
+    p = Path(path) if path else None
+    if not p or not p.is_file():
+        return out
+    for r in csv.DictReader(open(p, newline="", encoding="utf-8-sig")):
+        sid = (r.get("station_id") or "").strip()
+        if sid:
+            out[sid] = (r.get("reason") or "excluded").strip()
+    return out
 
 
 def read_elevation(ameriflux_dir: Path, override: Path | None = None):
@@ -388,6 +408,8 @@ def main() -> int:
     p.add_argument("--out", type=Path, default=DEFAULT_OUT)
     p.add_argument("--ca", type=Path, default=DEFAULT_CA)
     p.add_argument("--site-list", type=Path, action="append", default=None)
+    p.add_argument("--exclude-file", type=Path, default=DEFAULT_EXCLUDED,
+                   help="CSV of stations to drop (default: excluded_stations.csv)")
     p.add_argument("--stations", default="US-HBK,US-Ha2",
                    help="comma-separated, or 'all'")
     p.add_argument("--ameriflux", type=Path, default=INPUT_ROOT / "ameriflux",
@@ -402,13 +424,14 @@ def main() -> int:
 
     wanted = None if a.stations.strip().lower() == "all" else {
         s.strip() for s in a.stations.split(",") if s.strip()}
+    excluded = read_excluded(a.exclude_file)
     stations = []
     for path in (a.site_list or DEFAULT_SITE_LISTS):
         if not Path(path).is_file():
             continue
         for r in csv.DictReader(open(path, newline="", encoding="utf-8-sig")):
             sid = (r.get("StationID") or "").strip()
-            if not sid or (wanted and sid not in wanted):
+            if not sid or (wanted and sid not in wanted) or sid in excluded:
                 continue
             if any(s["station_id"] == sid for s in stations):
                 continue
@@ -429,7 +452,7 @@ def main() -> int:
     print(f"Zbas     : {len(elev)} station(s)"
           + (f" ({', '.join(f'{k} {v}' for k, v in _C(elev_src.values()).most_common())})"
              if elev else "   <-- NONE FOUND, no station can build"))
-    print(f"stations : {len(stations)}   years {a.start_year}-{a.end_year}\n")
+    print(f"stations : {len(stations)} ({len(excluded)} excluded)   years {a.start_year}-{a.end_year}\n")
 
     ok, bad = 0, []
     for st in sorted(stations, key=lambda s: s["station_id"]):

@@ -63,6 +63,7 @@ INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
                                  "/vol_efthymios/NFS07/dd1136/T_and_C/input_data"))
 DEFAULT_ROOT = INPUT_ROOT.parent / "model_run"
 DEFAULT_TEMPLATE = REPO_ROOT / "T&C" / "Thanos_US_xRM"
+DEFAULT_EXCLUDED = Path(__file__).resolve().parent / "excluded_stations.csv"
 DEFAULT_SITE_LISTS = [
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv",
     REPO_ROOT / "T&C" / "dynamic_lma_test" / "evergreen_ameriflux.csv",
@@ -108,6 +109,25 @@ def read_stations(paths, wanted):
                         "forest_type": (r.get("ForestType") or "").strip().lower(),
                         "lat": fnum(r.get("Lat")), "lon": fnum(r.get("Lon"))})
     return sorted(out, key=lambda s: s["station_id"])
+
+
+def read_excluded(path):
+    """Stations dropped from the study, from excluded_stations.csv.
+
+    17 of the 118 are excluded -- 8 with no BADM archive, 8 young or disturbed
+    stands that are not at equilibrium for spin-up, and US-KS1 with no rooting
+    depth. Building forcing or run directories for them wastes work and, worse,
+    puts them in run_list.txt where they would be simulated by accident.
+    """
+    out = {}
+    p = Path(path) if path else None
+    if not p or not p.is_file():
+        return out
+    for r in csv.DictReader(open(p, newline="", encoding="utf-8-sig")):
+        sid = (r.get("station_id") or "").strip()
+        if sid:
+            out[sid] = (r.get("reason") or "excluded").strip()
+    return out
 
 
 def read_soil(soil_dir: Path):
@@ -412,6 +432,8 @@ def main() -> int:
     p.add_argument("--stations", default="US-HBK,US-Ha2",
                    help="comma-separated; 'all' for every station in the site lists")
     p.add_argument("--site-list", type=Path, action="append", default=None)
+    p.add_argument("--exclude-file", type=Path, default=DEFAULT_EXCLUDED,
+                   help="CSV of stations to drop (default: excluded_stations.csv)")
     p.add_argument("--soil", type=Path, default=INPUT_ROOT / "soil")
     p.add_argument("--lma", type=Path, default=INPUT_ROOT / "lma")
     p.add_argument("--meteo", type=Path, default=INPUT_ROOT / "meteo")
@@ -432,7 +454,9 @@ def main() -> int:
 
     wanted = None if a.stations.strip().lower() == "all" else {
         s.strip() for s in a.stations.split(",") if s.strip()}
-    stations = read_stations(a.site_list or DEFAULT_SITE_LISTS, wanted)
+    excluded = read_excluded(a.exclude_file)
+    stations = [x for x in read_stations(a.site_list or DEFAULT_SITE_LISTS, wanted)
+                if x["station_id"] not in excluded]
     if not stations:
         print("no stations selected", file=sys.stderr)
         return 1
@@ -446,7 +470,7 @@ def main() -> int:
 
     print(f"root      : {a.root}")
     print(f"template  : {a.template}")
-    print(f"stations  : {len(stations)}")
+    print(f"stations  : {len(stations)} ({len(excluded)} excluded)")
     print(f"soil      : {len(soil_sites)} sites, {len(soil_layers)} profiles")
     print(f"canopy    : {len(hc)}   ZR95: {len(zr)}   EC heights: {len(ec)}")
     print(f"meteo dir : {a.meteo}{'' if a.meteo.is_dir() else '   <-- NOT FOUND'}\n")
@@ -561,7 +585,14 @@ def main() -> int:
                 "dyn_lma uses MAIN_FRAME_SLA with the yearly series in LMA_<ST>.mat. "
                 "SLA = 1/(LMA*f_C).",
     }, indent=2), encoding="utf-8")
-    print(f"\nmanifest: {a.root / 'build_manifest.json'}")
+    # The job array reads this: one "<station> <arm>" per line, in the order
+    # submit_tc_run.sh indexes with SLURM_ARRAY_TASK_ID.
+    (a.root / "run_list.txt").write_text(
+        "".join(f"{s['station_id']} {arm}\n" for s in ready for arm in ARMS),
+        encoding="utf-8")
+    print(f"\nmanifest : {a.root / 'build_manifest.json'}")
+    print(f"run list : {a.root / 'run_list.txt'}  ->  "
+          f"sbatch --array=1-{len(ready) * len(ARMS)} slurm/submit_tc_run.sh")
     return 1 if (all_probs or blocked) else 0
 
 

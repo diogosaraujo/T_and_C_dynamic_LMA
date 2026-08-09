@@ -259,15 +259,18 @@ def render_mod_param(template: str, st: dict) -> tuple[str, list[str]]:
 
     ms, zs, block = st["_soil_block"]
 
-    # The single-triple soil block through to the *ones(1,ms) replication.
+    # Replace the ENTIRE soil block in one go: from the SOIL INPUT banner down to
+    # and including Ks_Zs = Ks*ones(1,ms).
+    #
+    # Stopping at the Soil_parameters call, as this used to, leaves the van
+    # Genuchten derivation behind -- SPAR, p = 3+2/L, nVG, alpVG. Those are scalar
+    # expressions, and once the loop above makes L an array, p = 3+2/L becomes a
+    # matrix right division and MATLAB refuses it (job 35704, "Matrix dimensions
+    # must agree"). The generated block computes nVG and alpVG per layer itself,
+    # so the original must go entirely, not partially.
     sub("soil",
-        r"^%%%%%%%%%% SOIL INPUT.*?\n(?:.*?\n)*?\[Osat,L,Pe,Ks,O33,rsd,lan_dry,lan_s,cv_s,K_usle\]=Soil_parameters\(Psan,Pcla,Porg\);\s*\n",
+        r"^%%%%%%%%%% SOIL INPUT.*\n(?:.*\n)*?^Ks_Zs\s*=\s*Ks\*ones\(1,ms\);.*\n",
         block)
-    # The per-property replications are now redundant: the loop fills the arrays.
-    sub("ones",
-        r"^(rsd|lan_dry|lan_s|cv_s|Osat|L|Pe|O33|alpVG|nVG|Ks_Zs)\s*=\s*\1?\s*\*?\s*"
-        r"[A-Za-z_0-9]*\*ones\(1,ms\);.*$",
-        r"%% \1: filled per layer by the Soil_parameters loop above", count=0)
     zss = " ".join(f"{z:g}" for z in zs)
     sub("zs", r"^Zs=\s*\[[^\]]*\];.*$",
         f"Zs = [{zss}]; %% ms+1 = {len(zs)}, from the SSURGO/POLARIS profile")
@@ -298,6 +301,16 @@ def render_mod_param(template: str, st: dict) -> tuple[str, list[str]]:
     if leftover:
         problems.append(f"{len(leftover)} un-layered *ones(1,ms) line(s) remain: "
                         + "; ".join(x.strip()[:40] for x in leftover[:3]))
+
+    # Scalar expressions from the template that CANNOT survive once the soil loop
+    # makes L, Pe and the rest per-layer arrays. p = 3+2/L is a matrix right
+    # division on an array and MATLAB refuses it -- job 35704 -- but it parses
+    # cleanly, so checkcode says nothing and the failure only appears at runtime.
+    scalar_only = ("p=3+2/L", "m=2/(p-1)", "alpVG=(((", "nVG=L+1")
+    survived = [s for s in scalar_only if s in txt]
+    if survived:
+        problems.append("scalar van Genuchten line(s) survived the soil block, "
+                        "which the per-layer arrays break: " + ", ".join(survived))
     return txt, problems
 
 

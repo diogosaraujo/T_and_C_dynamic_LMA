@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_meteo_input.py", line 361, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_meteo_input.py", line 316, in main
+    if a.elevation.is_file():
+       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'is_file'

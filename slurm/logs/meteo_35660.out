@@ -1,0 +1,19 @@
+job        : 35660
+node       : soeepyc07
+started    : 2026-08-09T02:09:55Z
+era5       : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+meteo out  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+partition  : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Diogo
+
+=== stage 1: netCDF -> raw .mat ===
+era5     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/era5_land
+out      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+CO2      : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Diogo/Ca_Data.mat   <-- NOT READ, Ca will be NaN
+stations : 2   years 1985-2020
+
+
+0/2 stations written to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+  ! US-HBK   no elevation (Zbas) -- needed for the radiation partition
+  ! US-Ha2   no elevation (Zbas) -- needed for the radiation partition
+stage 1 exit: 1
+dry run -- stage 2 skipped

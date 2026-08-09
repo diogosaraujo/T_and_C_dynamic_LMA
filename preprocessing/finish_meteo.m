@@ -11,12 +11,22 @@ function finish_meteo(raw_dir, out_dir, partition_dir, year_tag)
 % ported, because a Python port of comparable code shipped two bugs that only a
 % verification harness caught.
 %
-% t_bef and t_aft are FORCED to the ERA5-Land convention rather than optimised per
-% site. ERA5-Land accumulations run from 00 UTC and are de-accumulated to the
-% preceding hour, so the documented offsets are t_bef = 1, t_aft = 0; the
-% optimiser lands near 0.75/0.25, which is what the shipped US_xRM file carries.
-% One value per PRODUCT, reused across sites -- an optimiser run per station would
-% make the network inconsistent for no physical reason.
+% t_bef and t_aft are DERIVED from the product definition, not optimised. ERA5-Land
+% accumulates from 00 UTC and resets daily; after de-accumulation the value stored
+% at hour H is the mean flux over the interval (H-1, H]. The sun-averaging window
+% must therefore be exactly that interval:
+%
+%       t_bef = 1,  t_aft = 0
+%
+% The optimiser inside C_Automatic_Radiation_Partition exists for datasets whose
+% timestamp convention is undocumented. ERA5-Land's is documented, so fitting it
+% would be estimating a quantity we already know -- and it would return a slightly
+% different answer per station, making the network inconsistent for no physical
+% reason. (The shipped Meteo_US_xRM file carries 0.75/0.25, the optimiser's
+% answer; that is the value being replaced here, deliberately.)
+%
+% This is a per-PRODUCT constant. The GCM path, whose radiation is disaggregated
+% from daily to hourly with an imposed convention, takes 0/1 instead.
 %
 % ERA5-Land is UTC, so DeltaGMT must be 0 and Lon must be the true site longitude,
 % or the solar geometry is wrong by hours.
@@ -25,8 +35,8 @@ if nargin < 4 || isempty(year_tag),      year_tag = '1985_2020';                
 if nargin < 3 || isempty(partition_dir), partition_dir = fullfile('..','T&C','Diogo'); end
 if nargin < 2 || isempty(out_dir),       out_dir = raw_dir;                       end
 
-T_BEF = 0.75;   % see the note above
-T_AFT = 0.25;
+T_BEF = 1.0;    % de-accumulated ERA5-Land hour H covers (H-1, H]
+T_AFT = 0.0;
 
 addpath(partition_dir);
 if ~exist('C_Automatic_Radiation_Partition', 'file')
@@ -73,6 +83,11 @@ for k = 1:numel(files)
     S.PARB = PARB(:); S.PARD = PARD(:);
     S.N    = N(:);
     S.t_bef = t_bef;  S.t_aft = t_aft;
+    if abs(t_bef - T_BEF) > 1e-9 || abs(t_aft - T_AFT) > 1e-9
+        fprintf('  ! %-10s partition returned t_bef/t_aft = %g/%g, not the forced %g/%g
+', ...
+            site, t_bef, t_aft, T_BEF, T_AFT);
+    end
 
     % The bands must sum to the total shortwave, or light is being invented or
     % lost before it reaches the canopy.

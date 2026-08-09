@@ -15,8 +15,8 @@ function[dB]= VEGETATION_DYNAMIC(t,B,Tam,Tsm,An,Rdark,Bfac,Bfac_alloc,FNC,Se_bio
 %Preserve  = Actually this is Phosporus Available [gN/m^2]
 %Kreserve  = Actually this is Potassium Available [gN/m^2]
 %%%%%%%%%%%%%%%%%%%%%%%%%
-% Tam [°C]  Mean Daily Temperature
-% Tsm [°C]  Soil Daily Temperature
+% Tam [ï¿½C]  Mean Daily Temperature
+% Tsm [ï¿½C]  Soil Daily Temperature
 % An  [umolCO2/ s m^2]  Net Assimilation Rate
 % Rdark  % [umolCO2/ s m^2]  Leaf Maintenace Respiration / Dark Respiration
 % Om [] Daily Water Content in the Root Zone
@@ -68,7 +68,15 @@ B(B<0)=0;
 if mSl==0
     LAI = Sl*B(1); %% Leaf area index for green biomass
 
-    if aSE==5  %% for crops 
+    %%% Sl_min is the ASYMPTOTIC (mature-leaf) SLA that the age terms below decay
+    %%% towards, which is exactly the prescribed Sl -- hence the name. It was
+    %%% assigned only inside the aSE==0 branch, so the mutually exclusive aSE==1
+    %%% branch used it undefined and every deciduous station failed inside ode45
+    %%% (array job 35717, 80 of 196 runs). Defined here so both branches see it;
+    %%% the evergreen branch reassigns the same value below and is unchanged.
+    Sl_min = Sl;
+
+    if aSE==5  %% for crops
         Sl=Sl+(1-AgeL./dmg)*(Sl_emecrop)*(AgeL<dmg); 
         LAI = Sl*B(1); %% Leaf area index for green biomass
     end 
@@ -90,7 +98,7 @@ end
 %%%%%%%%%%%%%% Maintenance and Growth Respiration
 GPP = 1.0368*(An + Rdark); %% [gC / m^2 d]  Gross Primary Productivty  --> A
 % gR growth respiration  [] -- [Rg/(GPP-Rm)]
-% r respiration rate at 10° [gC/gN d ]
+% r respiration rate at 10ï¿½ [gC/gN d ]
 % Ns [gC/gN] Sapwood
 % Nr  [gC/gN] Fine root
 %%%%Ref--  Sitch 2003 Ivanov 2008 Ruimy 1996 Ryan 1991

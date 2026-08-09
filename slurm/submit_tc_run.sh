@@ -41,7 +41,10 @@ MODEL_RUN="${MODEL_RUN:-$(dirname "$TC_INPUT_DATA")/model_run}"
 STATION="${1:-}"
 ARM="${2:-}"
 if [ -z "$STATION" ]; then
-    LIST="$MODEL_RUN/run_list.txt"
+    # RUN_LIST names a different list in $MODEL_RUN -- submit_rerun_failed.sh
+    # writes rerun_list.txt so a fix can be retried without re-running the arms
+    # that already produced a RES file.
+    LIST="$MODEL_RUN/${RUN_LIST:-run_list.txt}"
     IDX="${SLURM_ARRAY_TASK_ID:-1}"
     if [ ! -f "$LIST" ]; then
         echo "ERROR: no station given and no $LIST for the array form" >&2

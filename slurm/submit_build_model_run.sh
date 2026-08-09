@@ -62,6 +62,7 @@ status=$?
 
 echo
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-echo "exit status: $status  (1 = some station blocked or a substitution failed)"
+echo "exit status: $status  (1 = a generated file is untrustworthy, or nothing built;"
+echo "                        stations blocked for missing inputs are reported, not fatal)"
 du -sh "$MODEL_RUN" 2>/dev/null || true
 exit $status

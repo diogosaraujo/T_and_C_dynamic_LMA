@@ -626,7 +626,17 @@ def main() -> int:
     print(f"\nmanifest : {a.root / 'build_manifest.json'}")
     print(f"run list : {a.root / 'run_list.txt'}  ->  "
           f"sbatch --array=1-{len(ready) * len(ARMS)} slurm/submit_tc_run.sh")
-    return 1 if (all_probs or blocked) else 0
+    # Exit code, in dependency-chain terms: did this produce something a run can
+    # trust? A station blocked for a missing input is the NORMAL outcome across a
+    # whole network -- 3 of 101 in job 35712, two with no ERA5 and one with no
+    # canopy height -- and it must not stop the chain. Only an untrustworthy
+    # generated file, or nothing built at all, is a failure.
+    if all_probs:
+        return 1
+    if not ready:
+        print("nothing was built", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

@@ -355,11 +355,9 @@ try
         saveas(h(kf), fullfile(fig_dir, sprintf('%s_%s.png', id_location, nm)));
     end
     close all
-    fprintf('wrote %d figure(s) to %s
-', numel(h), fig_dir);
+    fprintf('wrote %d figure(s) to %s\\n', numel(h), fig_dir);
 catch ME
-    fprintf(2, 'GRAPH_MOD failed (results are still saved): %s
-', ME.message);
+    fprintf(2, 'GRAPH_MOD failed (results are still saved): %s\\n', ME.message);
 end
 """
 

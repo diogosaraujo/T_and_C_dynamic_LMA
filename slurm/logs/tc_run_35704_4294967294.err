@@ -1,0 +1,16 @@
+{Error using /
+Matrix dimensions must agree.
+
+Error in MOD_PARAM_US_Ha2 (line 70)
+p=3+2/L;
+     ^
+Error in run (line 112)
+evalin('caller', strcat(scriptStem, ';'));
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in MAIN_FRAME (line 222)
+run(PARAM_IC);
+^^^^^^^^^^^^^
+Error in GO_US_Ha2 (line 38)
+MAIN_FRAME;
+^^^^^^^^^^
+} 

@@ -1,0 +1,12 @@
+job        : 35704  task none
+node       : soeepyc08
+started    : 2026-08-09T06:00:59Z
+station    : US-Ha2   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/era5_land/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+
+finished   : 2026-08-09T06:02:33Z
+exit status: 1
+  (no RES_*.mat produced)

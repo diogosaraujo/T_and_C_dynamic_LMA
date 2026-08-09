@@ -1,0 +1,13 @@
+job        : 35853  task 120
+node       : soeepyc06
+started    : 2026-08-09T10:49:47Z
+station    : US-SP2   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-SP2/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+SOIL PERCENTAGE INPUTS INCONSISTENT
+
+finished   : 2026-08-09T10:50:24Z
+exit status: 1
+  (no RES_*.mat produced)

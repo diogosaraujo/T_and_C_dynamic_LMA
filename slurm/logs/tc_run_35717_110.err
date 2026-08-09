@@ -1,0 +1,21 @@
+{Unrecognized function or variable 'Sl_min'.
+
+Error in VEGETATION_DYNAMIC (line 83)
+        Sl=Sl+(1-AgeL./dmg)*(1.5*Sl_min)*(AgeL<dmg);
+                                 ^^^^^^
+Error in odearguments (line 93)
+f0 = ode(t0,y0,args{:});
+     ^^^^^^^^^^^^^^^^^^
+Error in ode45 (line 104)
+    odearguments(odeIsFuncHandle,odeTreatAsMFile, solver_name, ode, tspan, y0, options, varargin);
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in VEGGIE_UNIT (line 165)
+sol=ode45(@VEGETATION_DYNAMIC,T_SPAN,Btm1,OPT_VD,...
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in MAIN_FRAME_SLA (line 366)
+                    rNc_H(j,cc),rPc_H(j,cc),rKc_H(j,cc),ManIH(cc)]= VEGGIE_UNIT(B_H(j-1,cc,:),PHE_S_H(j-1,cc),dflo_H(j-1,cc),AgeL_H(j-1,cc),AgeDL_H(j-1,cc),...
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in GO_US_PFs (line 38)
+MAIN_FRAME_SLA;
+^^^^^^^^^^^^^^
+} 

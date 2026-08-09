@@ -1,0 +1,13 @@
+job        : 35856  task 123
+node       : soeepyc09
+started    : 2026-08-09T10:50:52Z
+station    : US-SP4   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-SP4/era5_land/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+SOIL PERCENTAGE INPUTS INCONSISTENT
+
+finished   : 2026-08-09T10:51:20Z
+exit status: 1
+  (no RES_*.mat produced)

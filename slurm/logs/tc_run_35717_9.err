@@ -1,0 +1,1 @@
+GRAPH_MOD failed (results are still saved): Creating dialog boxes that block execution is not supported when MATLAB is in a configuration that is non-interactive or disables window display.

@@ -1,0 +1,16 @@
+{Output argument "Osat" (and possibly others) not assigned a value in the
+execution with "Soil_parameters" function.
+
+Error in MOD_PARAM_US_SP4 (line 51)
+        Soil_parameters(Psan_Zs(jk),Pcla_Zs(jk),Porg_Zs(jk));
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in run (line 112)
+evalin('caller', strcat(scriptStem, ';'));
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in MAIN_FRAME (line 222)
+run(PARAM_IC);
+^^^^^^^^^^^^^
+Error in GO_US_SP4 (line 38)
+MAIN_FRAME;
+^^^^^^^^^^
+} 

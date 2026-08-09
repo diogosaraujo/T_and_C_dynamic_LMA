@@ -1,0 +1,15 @@
+job        : 35787  task 58
+node       : soeepyc10
+started    : 2026-08-09T08:48:21Z
+station    : US-MOz   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-MOz/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+
+finished   : 2026-08-09T08:53:46Z
+exit status: 1
+  (no RES_*.mat produced)

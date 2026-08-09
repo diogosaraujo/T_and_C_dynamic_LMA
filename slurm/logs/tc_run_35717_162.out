@@ -1,0 +1,15 @@
+job        : 35898  task 162
+node       : soeepyc09
+started    : 2026-08-09T11:24:45Z
+station    : US-xHA   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-xHA/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+
+finished   : 2026-08-09T11:25:12Z
+exit status: 1
+  (no RES_*.mat produced)

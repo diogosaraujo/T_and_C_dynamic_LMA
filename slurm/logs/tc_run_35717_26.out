@@ -1,0 +1,11 @@
+job        : 35747  task 26
+node       : soeepyc09
+started    : 2026-08-09T07:40:27Z
+station    : US-DPP   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-DPP/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+

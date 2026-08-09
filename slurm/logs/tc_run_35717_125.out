@@ -1,0 +1,15 @@
+job        : 35858  task 125
+node       : soeepyc06
+started    : 2026-08-09T10:51:40Z
+station    : US-SSH   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-SSH/era5_land/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+
+finished   : 2026-08-09T10:52:16Z
+exit status: 1
+  (no RES_*.mat produced)

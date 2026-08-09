@@ -1,0 +1,15 @@
+job        : 35866  task 132
+node       : soeepyc09
+started    : 2026-08-09T10:58:01Z
+station    : US-UMB   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-UMB/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+
+finished   : 2026-08-09T10:58:29Z
+exit status: 1
+  (no RES_*.mat produced)

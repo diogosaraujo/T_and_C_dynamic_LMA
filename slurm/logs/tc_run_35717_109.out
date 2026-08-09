@@ -1,0 +1,15 @@
+job        : 35842  task 109
+node       : soeepyc09
+started    : 2026-08-09T10:29:11Z
+station    : US-PFs   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-PFs/era5_land/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+
+finished   : 2026-08-09T10:29:38Z
+exit status: 1
+  (no RES_*.mat produced)

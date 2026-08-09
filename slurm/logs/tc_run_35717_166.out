@@ -1,0 +1,15 @@
+job        : 35902  task 166
+node       : soeepyc09
+started    : 2026-08-09T11:25:48Z
+station    : US-xLE   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-xLE/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+
+finished   : 2026-08-09T11:26:14Z
+exit status: 1
+  (no RES_*.mat produced)

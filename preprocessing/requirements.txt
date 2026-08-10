@@ -23,3 +23,9 @@ rasterio>=1.3
 # the loader falls back to it automatically.
 h5py>=3.8
 scipy>=1.10
+
+# Ecoregion pairing check (verify_ecoregion_pairing.py). pyshp is pure Python and
+# reads the EPA Level III shapefile without GDAL; geopandas would drag in fiona,
+# shapely and pyproj for one point-in-polygon test. The Albers projection is
+# implemented from the shapefile's own .prj and validated against control stations.
+pyshp>=2.3

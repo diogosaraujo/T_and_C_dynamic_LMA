@@ -279,6 +279,16 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - **`Rd` spikes / `Rh` NaN** in results are **cosmetic** numerical-solver artifacts (mass
   still conserves; CK1 ≈ machine precision) — do not affect the valid carbon/energy/ET
   results. Optional fix: tighten the soil ODE solver.
+- **6 stations ON HOLD (deferred 2026-08-10), 12 arms.** Everything else runs.
+  - `fzero` in `Surface_Temperature_Snow` (`SVAT_UNIT` line 333), *"Initial function
+    value must be finite and real"*: **US-NMj, US-Wi1, US-Wi2, US-Wi4, US-xSB**.
+    Something reaching the snow surface-temperature solve is non-finite; check the
+    forcing for NaNs at these sites before theorising.
+  - **US-DPP** does not crash, it *stalls*: 8 h wall clock to reach `Iter: 2`,
+    against 0.28–0.92 h for a whole run elsewhere. More wall time will not help.
+    It also has 7 soil layers sitting at the no-silt boundary, which would push
+    Saxton & Rawls to extreme conductivity and could be starving the soil ODE
+    solver's step size — a hypothesis, not a diagnosis.
 - **Soil depth for forests** (§6): don't inherit 1 m blindly.
 - **Reanalysis vs in-situ forcing** (§1): state it; validate against towers.
 - **f_C = 0.5** (§2): confirm LMA basis with data provider.
@@ -296,3 +306,18 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - [ ] Confirm the unit T&C expects for `Pre` (Pa vs mbar) against the US_xRM forcing.
 - [ ] `run_site.m` + SLURM job-array wrapper.
 - [ ] Spin-up protocol (common baseline, then fixed/dynamic branch).
+- [ ] **On hold:** the 5 `fzero` snow stations + US-DPP's stall (§9). 91/98 stations
+      (182 arms) are complete without them, and both affected ecoregions survive the
+      loss: *Northern Lakes and Forests* (US-Wi1, US-Wi2, US-Wi4, US-NMj) still has
+      ~15 complete stations, and *Southern Coastal Plain* (US-DPP, US-xSB) keeps
+      US-SP1/SP2/SP3/SP4. So this costs no ecoregion coverage.
+- [x] **Ecoregion pairing VERIFIED (2026-08-10): 118/118 stations fall inside the EPA
+      Level III polygon they are paired to.** `preprocessing/verify_ecoregion_pairing.py`
+      (+ `slurm/submit_verify_pairing.sh`) does point-in-polygon against `us_eco_l3`,
+      projecting with Albers parameters read from the shapefile's own `.prj` (matches
+      pyproj to <1 mm) and aborting if control stations fail. Re-run it whenever the
+      pairing file changes. Three apparent anomalies were checked and are all correct:
+      US-NMj is *Northern* **Michigan** Jack Pine (not New Mexico); Southeastern Plains
+      (65) genuinely reaches Maryland, so SERC/US-xSE belongs there; and US-HB5 (75) vs
+      US-Sx2 (63) really are split by the boundary despite being 25 km apart.
+      ⚠️ The old `gaftp.epa.gov` download path now 404s — EPA serves from S3.

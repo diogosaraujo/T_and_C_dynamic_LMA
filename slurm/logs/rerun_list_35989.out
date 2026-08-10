@@ -1,0 +1,33 @@
+job        : 35989
+started    : 2026-08-10T00:35:40Z
+full list  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/run_list.txt
+
+102 of 196 arm(s) already have a RES_*.mat
+94 arm(s) written to /vol_efthymios/NFS07/dd1136/T_and_C/model_run/rerun_list.txt
+
+  by station:
+      2 US-xUK
+      2 US-xTR
+      2 US-xST
+      2 US-xSE
+      2 US-xSC
+      2 US-xSB
+      2 US-xRN
+      2 US-xML
+      2 US-xLE
+      2 US-xHA
+      2 US-xGR
+      2 US-xBR
+      2 US-xBL
+      2 US-Wi4
+      2 US-Wi3
+      2 US-Wi2
+      2 US-Wi1
+      2 US-WCr
+      2 US-WBW
+      2 US-UMd
+
+next:
+  sbatch --array=1-94%10 --export=ALL,RUN_LIST=rerun_list.txt slurm/submit_tc_run.sh
+
+finished   : 2026-08-10T00:35:41Z

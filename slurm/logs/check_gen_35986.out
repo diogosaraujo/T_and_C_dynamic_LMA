@@ -1,0 +1,14 @@
+job        : 35986
+node       : soeepyc05
+started    : 2026-08-10T00:29:15Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+checking 392 generated file(s) under /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+
+0 file(s) with a parse error or undefined variable
+22344 non-fatal analyser message(s) (style, unused values)
+OK -- every generated file parses and defines what it uses
+
+finished   : 2026-08-10T00:30:13Z
+exit status: 0  (1 = a generated file will not run)

@@ -222,26 +222,36 @@ def texture_triple(layer):
     kept, since it comes from measured organic carbon and drives the Saxton &
     Rawls density adjustment. Values are rounded to the emitted precision FIRST
     and clamped after, because clamping at full precision and rounding afterwards
-    can round the sum straight back over 1. The rounding uses the SAME .5g the
-    emitter has always used, so any layer that already leaves silt is written
-    byte-identically to before -- MOD_PARAM for the stations that have already run
-    still reproduces their stored results exactly.
+    can round the sum straight back over 1.
+
+    The trigger is the EMITTED Psil actually being negative, not a safety margin
+    around it. That distinction matters: Soil_parameters only rejects Psil<0, so
+    every station that has already run is proof its own Psil >= 0, and a rule
+    keyed on Psil<0 therefore cannot alter a profile behind a stored result. An
+    earlier version clamped anything within 1e-4 of the limit and silently
+    rewrote US-PFt, US-SP1 and US-SP3, which had run perfectly well on a genuine
+    trace of silt.
     """
-    SILT_FLOOR = 1e-4                          # 0.01% silt; 5 sig figs resolve 1e-5
     r = lambda x: float(f"{float(x):.5g}")     # exactly what gets written out
     psan, pcla, porg = r(layer["Psan"]), r(layer["Pcla"]), r(layer["Porg"])
 
-    budget = 1.0 - porg - SILT_FLOOR           # what sand+clay may occupy
-    if budget <= 0.0:
-        # Porg alone fills the profile: not a rounding artefact but a bad record,
-        # so leave it untouched and let Soil_parameters reject it loudly rather
-        # than invent a texture here.
-        return psan, pcla, porg
-    if psan + pcla > budget:
+    if 1.0 - psan - pcla - porg >= 0.0:
+        return psan, pcla, porg                # valid as-is; emitted unchanged
+
+    # Shrink sand and clay proportionally until the ROUNDED values leave silt.
+    # Re-rounding after scaling can drift by ~1e-5, so the result is checked
+    # rather than assumed, widening the target if the first attempt misses.
+    for target in (2e-5, 1e-4, 1e-3):
+        budget = 1.0 - porg - target
+        if budget <= 0.0:
+            break                              # Porg alone fills the profile
         scale = budget / (psan + pcla)
-        adj = (r(psan * scale), r(pcla * scale))
-        CLAMPED.append((psan, pcla, porg, 1.0 - psan - pcla - porg))
-        psan, pcla = adj
+        s, c = r(psan * scale), r(pcla * scale)
+        if 1.0 - s - c - porg >= 0.0:
+            CLAMPED.append((psan, pcla, porg, 1.0 - psan - pcla - porg))
+            return s, c, porg
+    # Unfixable by rescaling: leave it alone so Soil_parameters says so out loud
+    # instead of running on a texture invented here.
     return psan, pcla, porg
 
 

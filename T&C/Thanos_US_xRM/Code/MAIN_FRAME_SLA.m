@@ -297,6 +297,16 @@ for i=2:NN
 
         Sl_H_t(i,:) = Sl_H;
         Sl_L_t(i,:) = Sl_L;
+
+        %%% VEGETATION_DYNAMIC reads Sl from VegH_Param_Dyn, NOT from Sl_H.
+        %%% Restating_parameters (line 330) copies Sl_H into that struct ONCE,
+        %%% before this loop starts, so without these two lines the yearly LMA
+        %%% never reaches LAI = Sl*B(1) and the dynamic arm is a bit-for-bit
+        %%% duplicate of the fixed arm -- verified on the first US-Ha2/US-HBK
+        %%% runs, where LAI_H, An_H, B_H, QE, H and every other state variable
+        %%% were identical between arms while Sl_H differed.
+        VegH_Param_Dyn.Sl = Sl_H;
+        VegL_Param_Dyn.Sl = Sl_L;
     end
     %%
 

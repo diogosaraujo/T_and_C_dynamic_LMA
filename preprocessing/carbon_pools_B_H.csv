@@ -1,0 +1,9 @@
+index,pool,symbol,description,units,gain_terms,loss_terms,IC_deciduous_gC_m2,IC_evergreen_gC_m2,notes
+1,Leaf,Bl,Green aboveground biomass (leaves / grass),gC/m2,fl*NPP; Tr_l (translocation from reserve),Sll = dl*B(1) senescence; 1.0368*Rdark,0,215,"The only pool LMA acts on: LAI = Sl*B(1). Deciduous starts leafless on 1 Jan."
+2,Sapwood,Bs,Living stem / conducting wood,gC/m2,fs*NPP,Ss = ds*B(2) conversion to heartwood; Rms maintenance respiration,327,327,"From US_xRM; no deciduous source exists in the repo. Sets the Friend reserve floor 0.67*B(2)."
+3,Fine root,Br,Living fine roots,gC/m2,fr*NPP; Tr_r,Sr = dr*B(3) turnover; Rmr maintenance respiration,262,262,"From US_xRM. Caps leaf carbon via B(1) < LtR*B(3) = 393 gC (LAI ~9.8); never binds."
+4,Reserve,Bc,Non-structural carbohydrate (starch / sugar),gC/m2,fc*NPP; Add_AR,Tr translocation; Rexmy exudation and root export; Rmc,459,244,"Deciduous sized from model constraints: 0.67*B(2)=219 floor + Trr*dmg=90 flush draw = 309 minimum; 459 leaves margin."
+5,Fruit and flower,-,Reproductive tissue,gC/m2,ff*NPP,Mf*B(5) maturation turnover,1,1,From US_xRM.
+6,Heartwood,-,Dead structural core of the stem,gC/m2,Ss from sapwood,Wm*B(6) — and Wm = 0 for all 8 PFTs,0,0,"One-way sink: nothing ever leaves. Reached 13575 gC/m2 in the US-Ha2 run. Feeds nothing else because OPT_SoilBiogeochemistry = 0, so ignore it for flux analysis."
+7,Standing dead,-,Senesced leaves still attached to the plant,gC/m2,Sll from leaf senescence,Slf = dld*B(7) litterfall,5,5,Short transit pool between senescence and litterfall.
+8,Idling,-,Accumulator of the WResp (AddRA) bookkeeping respiration term,gC/m2,WResp,none,0,0,Pure bookkeeping; never drawn down.

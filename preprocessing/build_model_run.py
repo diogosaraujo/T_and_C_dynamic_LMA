@@ -301,6 +301,123 @@ Ks_Zs = Ks; %%% [mm/h] already per layer
 
 SUBS_REQUIRED = ("kbot", "zatm", "soil", "zs", "zr95", "sl", "ase", "hc")
 
+# --------------------------------------------------------- deciduous PFT block
+#
+# The template is MOD_PARAM_US_xRM.m, an EVERGREEN subalpine conifer. Flipping
+# aSE_H to 1 selects the deciduous code path in PHENOLOGY_STATE/VEGETATION_DYNAMIC
+# but leaves every threshold that path reads at its conifer value, which killed
+# all 38 deciduous stations: with Tcold_H = -50 C against a climatological minimum
+# of -10 C, cold leaf shed can never fire, so leaf age accumulates past age_cr
+# until the leaf pool is exhausted (US-HBK: 83.9% of days in senescence, LAI 4.5
+# -> 0.01, reserves still full at ~340 gC).
+#
+# SOURCE: Code/PARAMETERS_ALL_CY_Cb.m, T&C's own 8-PFT table, column 8 -- the one
+# column with aSE_H == 1. Preferred over MOD_PARAM_ZURICH_SMA.m (the only other
+# deciduous parameterisation shipped) because the table is the model's own
+# multi-PFT driver: internally consistent across all 8 PFTs and mutually
+# consistent in its units and conventions, where ZURICH is one tuned Swiss site.
+# Where they disagree the table is the more conservative choice, and ZURICH is
+# noted per line below.
+#
+# NOT taken from the table: Sl_H (the PLSR LMA supplies it) and Wm_H (0 in the
+# table for all 8 PFTs; heartwood B(6) is a pure accumulator here since
+# OPT_SoilBiogeochemistry = 0, so it changes no flux).
+DECIDUOUS_PFT = [
+    # (name, LHS as written in the template, value, comment)
+    ("Tcold_H",      "Tcold_H",      "5",       "[C] cold leaf shed (was -50: never fired). ZURICH 7"),
+    ("age_cr_H",     "age_cr_H",     "110",     "[day] critical leaf age (was 1220). ZURICH 150"),
+    ("Tlo_H",        "Tlo_H",        "13.0",    "[C] mean T for leaf onset (was 1.5). ZURICH 12.9"),
+    ("dmg_H",        "dmg_H",        "30",      "[day] day of max growth"),
+    ("Trr_H",        "Trr_H",        "3.0",     "[gC/m2 d] translocation rate (was 0.5). ZURICH 3.5"),
+    ("LDay_min_H",   "LDay_min_H",   "11.5",    "[h] min day length for leaf onset (was 14.1). ZURICH 11.0"),
+    ("LDay_cr_H",    "LDay_cr_H",    "12.0",    "[h] day length for senescence. ZURICH 12.30"),
+    ("Klf_H",        "Klf_H",        "0.025",   "[1/d] dead leaf fall turnover. ZURICH 1/15"),
+    ("eps_ac_H",     "eps_ac_H",     "0.3",     "[-] allocation to reserve. ZURICH 1"),
+    ("dd_max_H",     "dd_max_H",     "0.0",     "[1/d] max drought leaf mortality"),
+    ("drn_H",        "drn_H",        "0.0020",  "[1/d] root turnover"),
+    ("dsn_H",        "dsn_H",        "0.0027",  "[1/d] sapwood transfer"),
+    ("LtR_H",        "LtR_H",        "1.5",     "[-] max leaf-to-root ratio"),
+    ("Mf_H",         "Mf_H",         "0.0125",  "[1/d] fruit maturation turnover"),
+    # Photosynthesis. Vmax stays PRESCRIBED -- Maximum_Rubisco_Capacity is left
+    # commented out so LMA propagates only through leaf area (CLAUDE.md 1) -- but
+    # at the deciduous value, not the conifer 32. ZURICH sets Vmax_H = 0, which
+    # would re-enable the N-based route and change what the experiment isolates.
+    ("Vmax_H",       "Vmax_H",       "50",      "[umol/m2 s] deciduous (evergreen keeps 32)"),
+    ("Nl_H",         "Nl_H",         "35",      "[gC/gN] leaf C:N (was 62, a conifer value). ZURICH 30"),
+    ("a1_H",         "a1_H",         "6",       "[-] stomatal slope (was 5). ZURICH 7"),
+    ("Do_H",         "Do_H",         "600",     "[Pa] VPD sensitivity (was 700). ZURICH 1000"),
+    ("rjv_H",        "rjv_H",        "2.1",     "[-] Jmax:Vmax scaling (was 1.8). ZURICH 2.8"),
+    # Water stress. PsiL50 drives Bfac in BetaFactor.m (phenology triggers, drought
+    # leaf mortality, growth limitation) -- it is NOT the xylem vulnerability, and
+    # PsiX50 is unused here because OPT_PlantHydr = 0.
+    ("Psi_sto_00_H", "Psi_sto_00_H", "-0.7",    "[MPa] stomatal, 2% loss (was -0.8)"),
+    ("Psi_sto_50_H", "Psi_sto_50_H", "-2.5",    "[MPa] stomatal, 50% loss"),
+    ("PsiL50_H",     "PsiL50_H",     "-6.5",    "[MPa] leaf, 50% loss -> Bfac (was -3.2). ZURICH -5.6"),
+    ("KnitH",        "KnitH",        "0.4",     "[-] canopy nitrogen decay (was 0.35)"),
+    # A deciduous canopy starts leafless, not with 1172-day-old needles that are
+    # already at 96% of age_cr.
+    ("AgeL_H",       r"AgeL_H\(1,:\)", "0",     "[day] initial leaf age (was 1172)"),
+    # --- the rest of PFT 8, added after auditing the table column by column ---
+    # A broadleaf is not a needle: d_leaf sets the leaf boundary-layer
+    # conductance, so leaving it at the conifer 0.25 would give a 3 cm broadleaf
+    # canopy the aerodynamic behaviour of spruce needles.
+    ("d_leaf_H",     "d_leaf_H",     "7",       "[cm] leaf dimension (was 0.25, a needle)"),
+    ("Bfac_lo_H",    "Bfac_lo_H",    "0.9",     "[-] leaf-onset water-stress threshold (was 0.99)"),
+    ("mjDay_H",      "mjDay_H",      "230",     "[day] last day leaf onset may trigger (was 220)"),
+    ("r_H",          "r_H",          "0.02",    "[-] respiration coefficient (was 0.055)"),
+    ("gR_H",         "gR_H",         "0.22",    "[-] growth respiration (was 0.25)"),
+    ("go_H",         "go_H",         "0.001",   "[mol/s m2] cuticular conductance (was 0.01)"),
+    ("Ha_H",         "Ha_H",         "72",      "[kJ/mol] entropy factor (was 89)"),
+    # PsiG50/PsiG99 set the growth-limitation curve in BetaFactor (Bfac_all);
+    # PsiX50 belongs to the plant-hydraulics module, which is off here
+    # (OPT_PlantHydr = 0), and is carried only to keep PFT 8 internally whole.
+    ("PsiG50_H",     "PsiG50_H",     "-0.7",    "[MPa] growth limitation, 50% (was -0.8)"),
+    ("PsiG99_H",     "PsiG99_H",     "-6.5",    "[MPa] growth limitation, 99% (was -2.5)"),
+    ("PsiX50_H",     "PsiX50_H",     "-9",      "[MPa] xylem 50% (unused: OPT_PlantHydr=0)"),
+    # PsiL00 pairs with PsiL50 in BetaFactor. The table writes it as
+    # `PsiL00_H = -1-[-1.4 ...]`, so PFT 8 evaluates to +0.4 MPa. A POSITIVE water
+    # potential at the 2%-loss anchor is unusual; the curve is still well formed
+    # (p = log(49)/6.9 = 0.56, PLC = 0.025 at Psi_l = 0). Taken from the table on
+    # instruction, flagged here because it is the one adopted value I cannot
+    # independently justify.
+    ("PsiL00_H",     "PsiL00_H",     "0.4",     "[MPa] leaf 2% loss = -1-(-1.4); POSITIVE, see note"),
+    # --- INITIAL CONDITIONS: not in the table, so chosen here -----------------
+    # The table carries no state, and neither shipped IC set fits: US_xRM starts a
+    # mature EVERGREEN canopy in full leaf on 1 January (LAI 4.03, 215 gC of
+    # leaves, PHE_S=4 senescence), while ZURICH starts from BARE GROUND (all pools
+    # zero), which needs a century of spin-up to become a forest. A deciduous
+    # stand on 1 Jan 1985 is mature but LEAFLESS, so:
+    #   - B(1) leaf = 0. That carbon is NOT carried into the reserve: at autumn
+    #     senescence leaf carbon goes to litter, only nutrients are resorbed.
+    #   - B(4) reserve = 459, sized from the model's own two constraints rather
+    #     than from the evergreen number. VEGETATION_DYNAMIC holds the reserve at
+    #     or above 0.67*B(2) = 219 [Friend et al. 1997, line 144], and the spring
+    #     flush draws Tr = min(B(4),Trr) = 3 gC/m2/d only while PHE_S == 2, i.e.
+    #     ~90 gC over dmg = 30 d. The reserve must therefore exceed 219 + 90 = 309
+    #     to fund a flush without breaching the floor and triggering the model's
+    #     reserve-refill diversion. US_xRM's 244 would breach it (244-90 = 154).
+    #     459 leaves margin for a poor year.
+    #   - sapwood, fine root, fruit, heartwood, standing dead kept from US_xRM: no
+    #     deciduous source for them exists anywhere in the repo, and the one model
+    #     constraint that touches them -- B(1) < LtR*B(3) = 1.5*262 = 393 gC --
+    #     caps leaf carbon at LAI ~9.8, far above a hardwood canopy, so it never
+    #     binds.
+    #   - PHE_S = 1 (dormant, case 1 -> 2 on leaf onset), not 4 (senescence).
+    # All of this is provisional until spin-up replaces it (CLAUDE.md 5).
+    ("LAI_H",        r"LAI_H\(1,:\)", "0.0",    "leafless on 1 Jan (was 4.03, evergreen)"),
+    ("B_H",          r"B_H\(1,:,:\)", "0 327 262 459 1 0 5 0",
+     "leafless; reserve 459 > 0.67*B(2)+Trr*dmg = 309; rest from US_xRM"),
+    ("PHE_S_H",      r"PHE_S_H\(1,:\)", "1",    "dormant (was 4 = senescence)"),
+]
+# ONE table entry deliberately NOT adopted:
+#
+# Cx_H -- the table has -10 in all 8 columns, but Plant_PV_Curve.m documents the
+#   reference value in its own header as `%Cx = 150; %%% [kg/m^3 sapwood MPa]`,
+#   which is exactly what US_xRM uses. A NEGATIVE capacitance would flip the sign
+#   of a = -1000/(Cx*(1+(1-n_sap)/fwat)), so -10 reads as a placeholder rather
+#   than a trait. It is unused here anyway (OPT_PlantHydr = 0), but where the code
+#   and the table disagree the code wins.
+
 
 def render_mod_param(template: str, st: dict) -> tuple[str, list[str]]:
     """Substitute the site blocks. Every pattern must fire exactly once."""
@@ -348,8 +465,27 @@ def render_mod_param(template: str, st: dict) -> tuple[str, list[str]]:
     sub("hc", r"^hc_H\(1,:\)\s*=\s*\[[^\]]*\];.*$",
         f"hc_H(1,:) = [{st['hc']:g}]; %% [m] {st['hc_src']}")
 
+    # Evergreen stations keep the template block: the template IS an evergreen
+    # conifer, so it is already self-consistent. Deciduous stations need the whole
+    # PFT swapped, not just the aSE_H switch.
+    if st["ase"] == 1:
+        # Initial conditions carry no PFT-table provenance -- the table has no
+        # state at all -- so they must not be stamped as if they did.
+        IC_KEYS = {"LAI_H", "B_H", "PHE_S_H", "AgeL_H"}
+        for key, lhs, val, note in DECIDUOUS_PFT:
+            src = ("initial condition, chosen here: no state in the PFT table"
+                   if key in IC_KEYS else "PARAMETERS_ALL_CY_Cb.m PFT 8")
+            sub(f"pft_{key}", rf"^\s*{lhs}\s*=\s*[^;]*;.*$",
+                f"{lhs.replace(chr(92), '')} = [{val}]; %% {note} [{src}]")
+
+    required = list(SUBS_REQUIRED)
+    if st["ase"] == 1:
+        # Every deciduous parameter must land. A silently-missed one leaves a
+        # conifer value in a deciduous run, which is exactly the failure that
+        # produced 38 dying forests and passed every check we had.
+        required += [f"pft_{k}" for k, _, _, _ in DECIDUOUS_PFT]
     problems = [f"{k}: matched {fired.get(k, 0)}x (expected 1)"
-                for k in SUBS_REQUIRED if fired.get(k, 0) != 1]
+                for k in required if fired.get(k, 0) != 1]
     # Tdp(1,:) = Ta(1)*ones(1,ms) is the initial soil temperature and MUST survive.
     leftover = [ln for ln in txt.splitlines()
                 if "*ones(1,ms)" in ln and not ln.strip().startswith("%")

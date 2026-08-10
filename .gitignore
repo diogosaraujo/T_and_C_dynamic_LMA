@@ -6,6 +6,13 @@ preprocessing/data/
 # Large model output / inputs that must not go to GitHub (100 MB hard limit).
 T&C/Thanos_US_xRM/RES_US_xRM.mat
 
+# Result folders pulled back from $MODEL_RUN on the cluster for local inspection,
+# laid out as <STATION>/era5_land/{fixed_lma,dyn_lma}/. Each RES_*.mat is 300+ MB
+# -- three times GitHub's hard limit -- and every one of them is reproducible by
+# re-running the model, so none of this belongs in history.
+/US-*/
+RES_*.mat
+
 # Python
 __pycache__/
 *.py[cod]

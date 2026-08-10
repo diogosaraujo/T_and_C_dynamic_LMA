@@ -389,14 +389,21 @@ DECIDUOUS_PFT = [
     # stand on 1 Jan 1985 is mature but LEAFLESS, so:
     #   - B(1) leaf = 0. That carbon is NOT carried into the reserve: at autumn
     #     senescence leaf carbon goes to litter, only nutrients are resorbed.
-    #   - B(4) reserve = 459, sized from the model's own two constraints rather
+    #   - B(4) reserve = 350, sized from the model's own two constraints rather
     #     than from the evergreen number. VEGETATION_DYNAMIC holds the reserve at
     #     or above 0.67*B(2) = 219 [Friend et al. 1997, line 144], and the spring
     #     flush draws Tr = min(B(4),Trr) = 3 gC/m2/d only while PHE_S == 2, i.e.
     #     ~90 gC over dmg = 30 d. The reserve must therefore exceed 219 + 90 = 309
     #     to fund a flush without breaching the floor and triggering the model's
     #     reserve-refill diversion. US_xRM's 244 would breach it (244-90 = 154).
-    #     459 leaves margin for a poor year.
+    #   - B(5) fruit, B(7) standing dead = 0: no reproductive allocation in
+    #     January, and a deciduous canopy's leaves are on the ground by then.
+    #   - B(6) heartwood = 0, as in Dr. Paschalis's US_xRM vector. That leaves
+    #     TBio = 0.02*sum(B) = ~19 t DM/ha, so Allocation_Coefficients sees a
+    #     young stand rather than a mature one -- a known bias, kept deliberately
+    #     so both PFTs start in the same structural state. It applies equally to
+    #     both arms of every station, so it largely cancels in the fixed-vs-dynamic
+    #     difference, which is the reported quantity. Spin-up is the real fix.
     #   - sapwood, fine root, fruit, heartwood, standing dead kept from US_xRM: no
     #     deciduous source for them exists anywhere in the repo, and the one model
     #     constraint that touches them -- B(1) < LtR*B(3) = 1.5*262 = 393 gC --
@@ -405,8 +412,8 @@ DECIDUOUS_PFT = [
     #   - PHE_S = 1 (dormant, case 1 -> 2 on leaf onset), not 4 (senescence).
     # All of this is provisional until spin-up replaces it (CLAUDE.md 5).
     ("LAI_H",        r"LAI_H\(1,:\)", "0.0",    "leafless on 1 Jan (was 4.03, evergreen)"),
-    ("B_H",          r"B_H\(1,:,:\)", "0 327 262 459 1 0 5 0",
-     "leafless; reserve 459 > 0.67*B(2)+Trr*dmg = 309; rest from US_xRM"),
+    ("B_H",          r"B_H\(1,:,:\)", "0 327 262 350 0 0 0 0",
+     "leafless Jan; reserve 350 > 0.67*B(2)+Trr*dmg = 309; B(6)=0 as US_xRM"),
     ("PHE_S_H",      r"PHE_S_H\(1,:\)", "1",    "dormant (was 4 = senescence)"),
 ]
 # ONE table entry deliberately NOT adopted:

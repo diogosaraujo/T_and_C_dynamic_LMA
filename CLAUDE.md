@@ -289,6 +289,21 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
     It also has 7 soil layers sitting at the no-silt boundary, which would push
     Saxton & Rawls to extreme conductivity and could be starving the soil ODE
     solver's step size — a hypothesis, not a diagnosis.
+- **`B(6)` heartwood is INERT in this configuration — do not spend effort on it.**
+  It is 0 in both IC vectors (Dr. Paschalis's US_xRM choice). That makes initial
+  `TBio = 0.02*(B1+B2+B3+B4+B6)` ≈ **19–21 t DM/ha** against AmeriFlux BADM observed
+  means of **203 (deciduous, n=8)** and **173 (evergreen, n=12)** t DM/ha
+  (`badm_biomass.csv`, job 36168) — an 8–11x gap that looks alarming and is not.
+  `TBio` has exactly one consumer, `Allocation_Coefficients`, which uses it only
+  inside `if aSE ~= 2 && OPT_VCA >= 1`. **`OPT_VCA = 0` here**, so `so = 0.3` is
+  constant and `TBio` changes nothing. `B(6)` feeds nothing else either
+  (`OPT_SoilBiogeochemistry = 0` disables `BIOGEOCHEMISTRY_DYNAMIC3`). So the pool
+  is a diagnostic accumulator only: it has no effect on any flux, pool or
+  allocation coefficient. ⚠️ If `OPT_VCA` is ever switched on, this reverses and
+  `B(6) = max(0, 50*TBio_target − (B1+B2+B3+B4))` becomes necessary.
+  Related: heartwood never leaves (`Wm = 0` for all 8 PFTs), so `TBio` grows without
+  bound — US-Ha2 passes the observed mean at year 19.6 and ends at 176% of it. Do
+  not read modelled biomass as a validation target.
 - **Soil depth for forests** (§6): don't inherit 1 m blindly.
 - **Reanalysis vs in-situ forcing** (§1): state it; validate against towers.
 - **f_C = 0.5** (§2): confirm LMA basis with data provider.
@@ -306,6 +321,12 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - [ ] Confirm the unit T&C expects for `Pre` (Pa vs mbar) against the US_xRM forcing.
 - [ ] `run_site.m` + SLURM job-array wrapper.
 - [ ] Spin-up protocol (common baseline, then fixed/dynamic branch).
+- [x] AmeriFlux BADM biomass coverage (`preprocessing/check_badm_biomass.py`,
+      `slurm/submit_check_badm_biomass.sh`): 20/110 stations report usable standing
+      tree AGB. Not wired into any input — biomass is a **validation** dataset here,
+      not a parameter source. Richest unused field is **`BASAL_AREA` (315 values)`**,
+      which pairs with T&C's `BA_H` output; also `AG_LIT_BIOMASS`, `WD_BIOMASS_*`,
+      `SOIL_STOCK_C_ORG`, and `LAI` at 39 stations (the direct check on `LAI=Sl*B(1)`).
 - [ ] **On hold:** the 5 `fzero` snow stations + US-DPP's stall (§9). 91/98 stations
       (182 arms) are complete without them, and both affected ecoregions survive the
       loss: *Northern Lakes and Forests* (US-Wi1, US-Wi2, US-Wi4, US-NMj) still has

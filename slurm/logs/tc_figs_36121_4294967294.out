@@ -1,0 +1,106 @@
+job        : 36121  task none
+node       : soeepyc05
+started    : 2026-08-10T15:38:54Z
+station    : US-Ha2   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/era5_land/fixed_lma
+
+  loading RES_US_Ha2.mat (308 MB)
+
+== MAIN VARIABLES HydrologicalBalanceModel ==
+  Precipitation [mm]                                         40324.6629
+  Ground Evaporation [mm]                                    2018.2913
+  Transpiration High Vegetation [mm]                         15557.0456
+  Transpiration Low Vegetation [mm]                          0
+  Sublimation/Evaporation Snow [mm]                          1554.5041
+  Saturation Excess (Dunne) [mm]                             1.9333e-11
+  Infiltration Excess (Horton) [mm]                          23.8657
+  Evaporation from Interception [mm]                         4038.3541
+  Evaporation from Urban Soil [mm]                           0
+  Evaporation from Rocks [mm]                                0
+  Evaporation from Litter [mm]                               0
+  Recharge [mm]                                              16999.0078
+  Net Lateral Subsurface [mm]                                0
+  Soil Water Content Variation [mm]                          -133.2509
+  Snowpack Water Content Variation [mm]                      0.32995
+  TOTAL BALANCE [mm]                                         1.9681e-09
+
+== CARBON BALANCE HIGH-VEGETATION - CROWN1 ==
+  GPP Gross Primary Productivity [gC/m^2]                    48041.1198
+  NPP Net Primary Productivity [gC/m^2]                      26076.9463
+  ANPP Net Primary Productivity [gC/m^2]                     15411.0857
+  RA Autrophic Respiration [gC/m^2]                          21964.1735
+  Rg Growth Respiration [gC/m^2]                             8706.5678
+  Rml Leaf Maintenance Respiration [gC/m^2]                  7441.0443
+  Rexmy Exudation and Root Export [gC/m^2]                   1044.7733
+  Rms Sapwood Maintenance Respiration [gC/m^2]               1212.8601
+  Rms Carbohydrate Maintenance Respiration [gC/m^2]          844.7423
+  Rmr Root Maintenance Respiration  [gC/m^2]                 3758.959
+
+== CARBON BALANCE LOW-VEGETATION CROWN1 ==
+  GPP Gross Primary Productivity [gC/m^2]                    0
+  NPP Net Primary Productivity [gC/m^2]                      0
+  ANPP Net Primary Productivity [gC/m^2]                     0
+  RA Autrophic Respiration [gC/m^2]                          0
+  Rg Growth Respiration [gC/m^2]                             0
+  Rml Leaf Maintenance Respiration [gC/m^2]                  0
+  Rexmy Exudation and Root Export [gC/m^2]                   0
+  Rms Sapwood Maintenance Respiration [gC/m^2]               0
+  Rms Carbohydrate Maintenance Respiration [gC/m^2]          0
+  Rmr Root Maintenance Respiration  [gC/m^2]                 0
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In print (line 31)
+In saveas (line 181)
+In make_figures (line 72)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In print (line 31)
+In saveas (line 181)
+In make_figures (line 72)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In matlab.graphics.internal.export.setPaintDisabled
+In matlab.graphics.internal/mlprintjob/setPaintDisabled
+In alternatePrintPath
+In alternatePrintPath
+In onCleanup/delete (line 29)
+In alternatePrintPath
+In print (line 86)
+In saveas (line 181)
+In make_figures (line 72)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In matlab.graphics.internal.export.setPaintDisabled
+In matlab.graphics.internal/mlprintjob/setPaintDisabled
+In alternatePrintPath
+In alternatePrintPath
+In onCleanup/delete (line 29)
+In alternatePrintPath
+In print (line 86)
+In saveas (line 181)
+In make_figures (line 72)] 
+  wrote 14 figure(s) to /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/era5_land/fixed_lma/figures
+
+finished   : 2026-08-10T15:40:31Z
+exit status: 0  (0 figures written, 2 nothing to do, 1 GRAPH_MOD failed)
+png files   : 14

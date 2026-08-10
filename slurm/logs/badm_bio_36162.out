@@ -1,0 +1,126 @@
+job        : 36162
+node       : soeepyc05
+started    : 2026-08-10T22:17:46Z
+badm dir   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/badm_biomass.csv
+
+BADM root  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+site list  : 118 stations we model
+
+======================================================================
+COVERAGE over 110 station directories
+======================================================================
+  aboveground    31 / 110 stations   (deciduous 12, evergreen 19)
+  root           19 / 110 stations   (deciduous 8, evergreen 11)
+  lai            39 / 110 stations   (deciduous 14, evergreen 25)
+
+======================================================================
+ABOVEGROUND BIOMASS -- the one that sets B(6)
+======================================================================
+  station   type       variable                          value  unit
+  US-Bar    deciduous  AG_BIOMASS_OTHER                  10.73  kgDM m-2
+  US-Bar    deciduous  AG_BIOMASS_TREE                   10600  gC m-2
+  US-Bar    deciduous  AG_BIOMASS_TREE                     150  gC m-2
+  US-Dk2    deciduous  AG_BIOMASS_CROP                       0  gC m-2
+  US-Dk2    deciduous  AG_BIOMASS_CROP                       0  gC m-2
+  US-Dk2    deciduous  AG_BIOMASS_CROP                       0  gC m-2
+  US-Dk2    deciduous  AG_BIOMASS_SHRUB                      0  gC m-2
+  US-Dk3    evergreen  AG_BIOMASS_TREE                     350  gC m-2
+  US-Dk3    evergreen  AG_BIOMASS_TREE                     375  gC m-2
+  US-Dk3    evergreen  AG_BIOMASS_TREE                     378  gC m-2
+  US-Dk3    evergreen  AG_BIOMASS_TREE                     398  gC m-2
+  US-Fmf    evergreen  AG_BIOMASS_OTHER                     12  gC m-2
+  US-Fmf    evergreen  AG_BIOMASS_OTHER                      6  gC m-2
+  US-Fmf    evergreen  AG_BIOMASS_TREE                    2660  gC m-2
+  US-Fmf    evergreen  AG_BIOMASS_TREE                    3910  gC m-2
+  US-Fuf    evergreen  AG_BIOMASS_OTHER                      7  gC m-2
+  US-Fuf    evergreen  AG_BIOMASS_OTHER                      7  gC m-2
+  US-Fuf    evergreen  AG_BIOMASS_TREE                    5533  gC m-2
+  US-Fuf    evergreen  AG_BIOMASS_TREE                    5601  gC m-2
+  US-Ha1    deciduous  AG_BIOMASS_SHRUB                    229  gC m-2
+  US-Ha1    deciduous  AG_BIOMASS_SHRUB_SPATIAL_V          141  gC m-2
+  US-Ha1    deciduous  AG_BIOMASS_SHRUB_SPATIAL_R           33  gC m-2
+  US-Ha1    deciduous  AG_BIOMASS_SHRUB                    238  gC m-2
+  US-Ha2    evergreen  AG_BIOMASS_OTHER                     26  kgDM m-2
+  US-Ho1    evergreen  AG_BIOMASS_OTHER                   23.5  kgDM m-2
+  US-Ho1    evergreen  AG_BIOMASS_TREE                   10200  gC m-2
+  US-Ho1    evergreen  AG_BIOMASS_TREE                   11200  gC m-2
+  US-Ho1    evergreen  AG_BIOMASS_TREE                     970  gC m-2
+  US-Ho2    evergreen  AG_BIOMASS_TREE                    1150  gC m-2
+  US-Ho2    evergreen  AG_BIOMASS_TREE                   13050  gC m-2
+  US-Ho2    evergreen  AG_BIOMASS_TREE                   15100  gC m-2
+  US-Ho3    evergreen  AG_BIOMASS_TREE                    6100  gC m-2
+  US-LPH    deciduous  AG_BIOMASS_OTHER                     17  kgDM m-2
+  US-MMS    deciduous  AG_BIOMASS_TREE                   10552  gC m-2
+  US-MMS    deciduous  AG_BIOMASS_TREE                   10588  gC m-2
+  US-MMS    deciduous  AG_BIOMASS_TREE                   10618  gC m-2
+  US-MMS    deciduous  AG_BIOMASS_TREE                   10733  gC m-2
+  US-MOz    deciduous  AG_BIOMASS_OTHER                14.9831  kgDM m-2
+  US-Me1    evergreen  AG_BIOMASS_OTHER                   44.2  gC m-2
+  US-Me1    evergreen  AG_BIOMASS_SHRUB                      0  gC m-2
+  US-Me1    evergreen  AG_BIOMASS_SHRUB                      0  gC m-2
+  US-Me1    evergreen  AG_BIOMASS_TREE                       0  gC m-2
+  US-Me2    evergreen  AG_BIOMASS_OTHER           0.98536804142  gC m-2
+  US-Me2    evergreen  AG_BIOMASS_SHRUB           1.4029941583  gC m-2
+  US-Me2    evergreen  AG_BIOMASS_SHRUB           93.207592606  gC m-2
+  US-Me2    evergreen  AG_BIOMASS_TREE                    2496  gC m-2
+  US-Me3    evergreen  AG_BIOMASS_OTHER                   17.4  gC m-2
+  US-Me3    evergreen  AG_BIOMASS_SHRUB                   0.14  gC m-2
+  US-Me3    evergreen  AG_BIOMASS_SHRUB                   1.46  gC m-2
+  US-Me3    evergreen  AG_BIOMASS_TREE                     205  gC m-2
+  US-Me4    evergreen  AG_BIOMASS_OTHER                      0  gC m-2
+  US-Me4    evergreen  AG_BIOMASS_OTHER                      1  gC m-2
+  US-Me4    evergreen  AG_BIOMASS_SHRUB                      1  gC m-2
+  US-Me4    evergreen  AG_BIOMASS_SHRUB                     13  gC m-2
+  US-Me5    evergreen  AG_BIOMASS_OTHER                     25  gC m-2
+  US-Me5    evergreen  AG_BIOMASS_SHRUB                     15  gC m-2
+  US-Me5    evergreen  AG_BIOMASS_SHRUB                    402  gC m-2
+  US-Me5    evergreen  AG_BIOMASS_TREE                     104  gC m-2
+  US-Me6    evergreen  AG_BIOMASS_TREE                   116.9  gC m-2
+  US-Me6    evergreen  AG_BIOMASS_TREE_SPATIAL_VA           25  gC m-2
+  US-Me6    evergreen  AG_BIOMASS_TREE                   214.8  gC m-2
+  US-Me6    evergreen  AG_BIOMASS_TREE                  265.43  gC m-2
+  US-NR1    evergreen  AG_BIOMASS_OTHER                     23  kgDM m-2
+  US-NR1    evergreen  AG_BIOMASS_TREE                   14500  gC m-2
+  US-NR1    evergreen  AG_BIOMASS_TREE                   14500  gC m-2
+  US-NR1    evergreen  AG_BIOMASS_TREE                   14500  gC m-2
+  US-Oho    deciduous  AG_BIOMASS_OTHER                    9.6  kgDM m-2
+  US-SP1    evergreen  AG_BIOMASS_OTHER                   23.9  gC m-2
+  US-SP1    evergreen  AG_BIOMASS_SHRUB                  230.3  gC m-2
+  US-SP1    evergreen  AG_BIOMASS_SHRUB                  268.8  gC m-2
+  US-SP1    evergreen  AG_BIOMASS_SHRUB                   38.5  gC m-2
+  US-SP2    evergreen  AG_BIOMASS_OTHER                    1.1  gC m-2
+  US-SP2    evergreen  AG_BIOMASS_SHRUB                     70  gC m-2
+  US-SP2    evergreen  AG_BIOMASS_SHRUB                   79.5  gC m-2
+  US-SP2    evergreen  AG_BIOMASS_SHRUB                    9.5  gC m-2
+  US-SP3    evergreen  AG_BIOMASS_OTHER                      7  kgDM m-2
+  US-SP3    evergreen  AG_BIOMASS_SHRUB                 114.75  gC m-2
+  US-SP3    evergreen  AG_BIOMASS_SHRUB                  133.5  gC m-2
+  US-SP3    evergreen  AG_BIOMASS_SHRUB                  18.75  gC m-2
+  US-Slt    deciduous  AG_BIOMASS_OTHER                    0.0  gC m-2
+  US-Slt    deciduous  AG_BIOMASS_OTHER_SPATIAL_V          0.1  gC m-2
+  US-Slt    deciduous  AG_BIOMASS_OTHER                    0.0  gC m-2
+  US-Slt    deciduous  AG_BIOMASS_OTHER_SPATIAL_V          0.0  gC m-2
+  US-UMB    deciduous  AG_BIOMASS_OTHER                  113.6  gC m-2
+  US-UMB    deciduous  AG_BIOMASS_OTHER_SPATIAL_V         23.9  gC m-2
+  US-UMB    deciduous  AG_BIOMASS_OTHER_SPATIAL_R           13  gC m-2
+  US-UMB    deciduous  AG_BIOMASS_DATE_UNC                  28  gC m-2
+  US-UMd    deciduous  AG_BIOMASS_OTHER                 106.54  gC m-2
+  US-UMd    deciduous  AG_BIOMASS_OTHER_SPATIAL_V         17.1  gC m-2
+  US-UMd    deciduous  AG_BIOMASS_OTHER_SPATIAL_R           12  gC m-2
+  US-UMd    deciduous  AG_BIOMASS_DATE_UNC                  20  gC m-2
+  US-WCr    deciduous  AG_BIOMASS_OTHER                  10.29  kgDM m-2
+  US-WCr    deciduous  AG_BIOMASS_TREE                     0.8  gC m-2
+  US-WCr    deciduous  AG_BIOMASS_TREE                     1.2  gC m-2
+  US-WCr    deciduous  AG_BIOMASS_TREE                  142.77  gC m-2
+  US-Wi3    deciduous  AG_BIOMASS_OTHER                     22  kgDM m-2
+  US-Wi4    evergreen  AG_BIOMASS_OTHER                     12  kgDM m-2
+  US-Wrc    evergreen  AG_BIOMASS_OTHER                   39.8  kgDM m-2
+
+  distinct units reported: ['gC m-2', 'kgDM m-2']
+  -> convert per station, not globally: BADM mixes gC/m2, kgDM/m2 and tDM/ha.
+
+full dump -> /vol_efthymios/NFS07/dd1136/T_and_C/input_data/badm_biomass.csv
+
+finished   : 2026-08-10T22:17:54Z
+exit status: 0

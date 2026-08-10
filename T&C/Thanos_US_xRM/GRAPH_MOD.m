@@ -52,7 +52,16 @@ defo={num2str(sum((sum((Pr_liq+Pr_sno)*dth).*Area))/sum(Area)),...
     num2str(sum((sum(dV).*Area))/sum(Area)),...
     num2str(sum((SWE(end,:).*Area))/sum(Area) - sum((SWE(1,:).*Area))/sum(Area)),...
     num2str(sum((sum(Ck).*Area))/sum(Area))};
-datiii1=inputdlg(prompt,'MAIN VARIABLES HydrologicalBalanceModel',1,defo,'on');
+%%% inputdlg needs a display: under 'matlab -batch' it throws, and it did so
+%%% before a single figure was drawn -- all 182 batch runs so far produced zero
+%%% figures for the sake of these boxes. The return value is never read; the
+%%% dialogs only DISPLAY the balance totals, which are more useful in the log.
+if usejava('desktop')
+    datiii1=inputdlg(prompt,'MAIN VARIABLES HydrologicalBalanceModel',1,defo,'on');
+else
+    fprintf(1,'\n== MAIN VARIABLES HydrologicalBalanceModel ==\n');
+    for kd=1:numel(prompt), fprintf(1,'  %-58s %s\n',prompt{kd},defo{kd}); end
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i=1:length(Ccrown)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% VISUAL RESULT II
@@ -77,7 +86,12 @@ for i=1:length(Ccrown)
         num2str(sum((sum(Rmc_H(:,i)*dtd).*Area))/sum(Area)),...
         num2str(sum((sum(Rmr_H(:,i)*dtd).*Area))/sum(Area))};
     tit=strcat('CARBON BALANCE HIGH-VEGETATION - CROWN ',num2str(i));
-    datiii2=inputdlg(prompt,tit,1,defo,'on');
+    if usejava('desktop')
+        datiii2=inputdlg(prompt,tit,1,defo,'on');
+    else
+        fprintf(1,'\n== %s ==\n',tit);
+        for kd=1:numel(prompt), fprintf(1,'  %-58s %s\n',prompt{kd},defo{kd}); end
+    end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% VISUAL RESULT III
     prompt={'GPP Gross Primary Productivity [gC/m^2] ',...
@@ -101,7 +115,12 @@ for i=1:length(Ccrown)
         num2str(sum((sum(Rmc_L(:,i)*dtd).*Area))/sum(Area)),...
         num2str(sum((sum(Rmr_L(:,i)*dtd).*Area))/sum(Area))};
     tit=strcat('CARBON BALANCE LOW-VEGETATION CROWN',num2str(i));
-    datiii3=inputdlg(prompt,tit,1,defo,'on');
+    if usejava('desktop')
+        datiii3=inputdlg(prompt,tit,1,defo,'on');
+    else
+        fprintf(1,'\n== %s ==\n',tit);
+        for kd=1:numel(prompt), fprintf(1,'  %-58s %s\n',prompt{kd},defo{kd}); end
+    end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,7 +143,7 @@ if switch_met == 1
     plot(NN,Ta(1:length(NN)),'r','LineWidth', 1.5);
     hold on; grid on;
     title('Air  Temperature ')
-    ylabel('[°C]')
+    ylabel('[ï¿½C]')
     subplot(3,1,2);
     plot(NN,ea(1:length(NN)),'m','LineWidth', 1.5);
     hold on; grid on;
@@ -176,7 +195,7 @@ if switch_basic == 1
     plot(NN,Tdp,'b','LineWidth', 1.5);
     plot(NN,Ta(1:length(NN)),':g','LineWidth', 1.5);
     title('Temperature')
-    ylabel('[°C]')
+    ylabel('[ï¿½C]')
     legend('Surface Radiative','Soil at Damp. depth','Air Temperature')
     subplot(2,1,2);
     hold on; grid on;
@@ -568,7 +587,7 @@ if switch_veg == 1
         plot(NNd,TdpI_H(:,cc),'b','LineWidth', 1.5);
         hold on; grid on;
         plot(NNd,TdpI_L(:,cc),'r','LineWidth', 1.5);
-        ylabel('°C')
+        ylabel('ï¿½C')
         title('Soil Temperature 30 days Average')
         subplot(2,1,2)
         hold on; grid on;

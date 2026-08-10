@@ -26,8 +26,14 @@ if ~exist(root, 'dir')
     error('check_generated:noRoot', 'not a directory: %s', root);
 end
 
+% The shared files are linted too, not just the generated ones. GRAPH_MOD.m and
+% Code/VEGETATION_DYNAMIC.m are hand-edited during the project and are the only
+% MATLAB outside the generator that changes; a syntax error in either is silent
+% until a whole array has run, since GO wraps GRAPH_MOD in a try/catch.
 files = [dir(fullfile(root, '*', 'era5_land', '*', 'GO_*.m'));
-         dir(fullfile(root, '*', 'era5_land', '*', 'MOD_PARAM_*.m'))];
+         dir(fullfile(root, '*', 'era5_land', '*', 'MOD_PARAM_*.m'));
+         dir(fullfile(root, 'GRAPH_MOD.m'));
+         dir(fullfile(root, 'Code', 'VEGETATION_DYNAMIC.m'))];
 if isempty(files)
     fprintf('no generated .m files under %s\n', root);
     status = 1;

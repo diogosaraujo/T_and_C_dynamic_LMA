@@ -1,0 +1,11 @@
+job        : 36008  task 7
+node       : soeepyc05
+started    : 2026-08-10T04:09:56Z
+station    : US-DPP   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-DPP/era5_land/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+

@@ -1,0 +1,19 @@
+job        : 36069  task 63
+node       : soeepyc06
+started    : 2026-08-10T06:46:27Z
+station    : US-Wi2   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Wi2/era5_land/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+Exiting fzero: aborting search for an interval containing a sign change
+    because complex function value encountered during search.
+(Function value at -11.3587 is -77.637-2.97112e-08i.)
+Check function or try again with a different starting value.
+
+finished   : 2026-08-10T06:46:57Z
+exit status: 1
+  (no RES_*.mat produced)

@@ -1,0 +1,260 @@
+job        : 36168
+node       : soeepyc05
+started    : 2026-08-10T22:57:05Z
+badm dir   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/badm_biomass.csv
+
+BADM root  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+site list  : 118 stations we model
+
+======================================================================
+COVERAGE over 110 station directories
+======================================================================
+  ag_tree      24 / 110 stations   (deciduous 8, evergreen 16)
+  ag_other     26 / 110 stations   (deciduous 11, evergreen 15)
+  root         19 / 110 stations   (deciduous 8, evergreen 11)
+  lai          39 / 110 stations   (deciduous 14, evergreen 25)
+  unclaimed    28 / 110 stations   (deciduous 9, evergreen 19)
+
+  UNCLAIMED biomass-like variables (10 distinct) -- add to CATEGORIES if any of these are usable:
+    AG_LIT_BIOMASS                             61 value(s)
+    BASAL_AREA                                315 value(s)
+    BIOMASS_C                                  52 value(s)
+    BIOMASS_N                                 108 value(s)
+    SOIL_STOCK_C_ORG                           16 value(s)
+    SOIL_STOCK_N_TOT                           10 value(s)
+    SOIL_STOCK_PROFILE_MAX                      6 value(s)
+    SOIL_STOCK_PROFILE_MIN                      6 value(s)
+    WD_BIOMASS_CRS                             37 value(s)
+    WD_BIOMASS_FINE                            35 value(s)
+
+======================================================================
+TREE AGB -> TBio_target -> B(6)
+======================================================================
+  station   type                raw unit          t DM/ha  use?
+  US-Bar    deciduous         10600 gC m-2          212.0  yes
+  US-Bar    deciduous           150 gC m-2            3.0  too small
+  US-Dk2    deciduous             0 gC m-2            0.0  too small
+  US-Dk2    deciduous         18000 gC m-2          360.0  yes
+  US-Dk3    evergreen           350 gC m-2            7.0  too small
+  US-Dk3    evergreen           375 gC m-2            7.5  too small
+  US-Dk3    evergreen           378 gC m-2            7.6  too small
+  US-Dk3    evergreen           398 gC m-2            8.0  too small
+  US-Dk3    evergreen           408 gC m-2            8.2  too small
+  US-Dk3    evergreen          7345 gC m-2          146.9  yes
+  US-Dk3    evergreen          7664 gC m-2          153.3  yes
+  US-Dk3    evergreen          7754 gC m-2          155.1  yes
+  US-Dk3    evergreen          7821 gC m-2          156.4  yes
+  US-Dk3    evergreen          8042 gC m-2          160.8  yes
+  US-Dk3    evergreen          8171 gC m-2          163.4  yes
+  US-Dk3    evergreen          8464 gC m-2          169.3  yes
+  US-Dk3    evergreen          8859 gC m-2          177.2  yes
+  US-Dk3    evergreen          9123 gC m-2          182.5  yes
+  US-Dk3    evergreen          9498 gC m-2          190.0  yes
+  US-Fmf    evergreen          2660 gC m-2           53.2  yes
+  US-Fmf    evergreen          3910 gC m-2           78.2  yes
+  US-Fuf    evergreen          5533 gC m-2          110.7  yes
+  US-Fuf    evergreen          5601 gC m-2          112.0  yes
+  US-Ha1    deciduous         10163 gC m-2          203.3  yes
+  US-Ha1    deciduous         10696 gC m-2          213.9  yes
+  US-Ha1    deciduous         10725 gC m-2          214.5  yes
+  US-Ha1    deciduous         10891 gC m-2          217.8  yes
+  US-Ha1    deciduous         11105 gC m-2          222.1  yes
+  US-Ha1    deciduous         11146 gC m-2          222.9  yes
+  US-Ha1    deciduous         11250 gC m-2          225.0  yes
+  US-Ha1    deciduous         11381 gC m-2          227.6  yes
+  US-Ha1    deciduous         11458 gC m-2          229.2  yes
+  US-Ha1    deciduous         11727 gC m-2          234.5  yes
+  US-Ha1    deciduous  11843.973153 gC m-2          236.9  yes
+  US-Ha1    deciduous         11981 gC m-2          239.6  yes
+  US-Ha1    deciduous  12125.607432 gC m-2          242.5  yes
+  US-Ha1    deciduous         12321 gC m-2          246.4  yes
+  US-Ha1    deciduous         12466 gC m-2          249.3  yes
+  US-Ha1    deciduous         12604 gC m-2          252.1  yes
+  US-Ha1    deciduous         12943 gC m-2          258.9  yes
+  US-Ho1    evergreen         10200 gC m-2          204.0  yes
+  US-Ho1    evergreen         11200 gC m-2          224.0  yes
+  US-Ho1    evergreen           970 gC m-2           19.4  too small
+  US-Ho2    evergreen          1150 gC m-2           23.0  yes
+  US-Ho2    evergreen         13050 gC m-2          261.0  yes
+  US-Ho2    evergreen         15100 gC m-2          302.0  yes
+  US-Ho3    evergreen          6100 gC m-2          122.0  yes
+  US-MMS    deciduous         10552 gC m-2          211.0  yes
+  US-MMS    deciduous         10588 gC m-2          211.8  yes
+  US-MMS    deciduous         10618 gC m-2          212.4  yes
+  US-MMS    deciduous         10733 gC m-2          214.7  yes
+  US-MMS    deciduous         10760 gC m-2          215.2  yes
+  US-MMS    deciduous       10806.2 gC m-2          216.1  yes
+  US-MMS    deciduous         10842 gC m-2          216.8  yes
+  US-MMS    deciduous         10963 gC m-2          219.3  yes
+  US-MMS    deciduous         11287 gC m-2          225.7  yes
+  US-MMS    deciduous         11506 gC m-2          230.1  yes
+  US-MMS    deciduous         11611 gC m-2          232.2  yes
+  US-MMS    deciduous         11838 gC m-2          236.8  yes
+  US-MMS    deciduous           208 gC m-2            4.2  too small
+  US-MMS    deciduous           218 gC m-2            4.4  too small
+  US-MMS    deciduous           219 gC m-2            4.4  too small
+  US-MMS    deciduous           224 gC m-2            4.5  too small
+  US-MMS    deciduous           224 gC m-2            4.5  too small
+  US-MMS    deciduous           227 gC m-2            4.5  too small
+  US-MMS    deciduous           230 gC m-2            4.6  too small
+  US-MMS    deciduous        9038.7 gC m-2          180.8  yes
+  US-Me1    evergreen             0 gC m-2            0.0  too small
+  US-Me1    evergreen             0 gC m-2            0.0  too small
+  US-Me2    evergreen          2496 gC m-2           49.9  yes
+  US-Me2    evergreen  443.95509503 gC m-2            8.9  too small
+  US-Me2    evergreen  4435.1119994 gC m-2           88.7  yes
+  US-Me2    evergreen  452.80554869 gC m-2            9.1  too small
+  US-Me2    evergreen  460.10972745 gC m-2            9.2  too small
+  US-Me2    evergreen   4641.747784 gC m-2           92.8  yes
+  US-Me2    evergreen  469.24831463 gC m-2            9.4  too small
+  US-Me2    evergreen  477.98289883 gC m-2            9.6  too small
+  US-Me2    evergreen  4793.8053523 gC m-2           95.9  yes
+  US-Me2    evergreen  485.76130987 gC m-2            9.7  too small
+  US-Me2    evergreen  496.26140507 gC m-2            9.9  too small
+  US-Me2    evergreen  4968.8831826 gC m-2           99.4  yes
+  US-Me2    evergreen   506.1776831 gC m-2           10.1  too small
+  US-Me2    evergreen  514.03435729 gC m-2           10.3  too small
+  US-Me2    evergreen  5140.6894352 gC m-2          102.8  yes
+  US-Me2    evergreen  525.91518937 gC m-2           10.5  too small
+  US-Me2    evergreen  5305.4365914 gC m-2          106.1  yes
+  US-Me2    evergreen  535.12650483 gC m-2           10.7  too small
+  US-Me2    evergreen  5504.2730671 gC m-2          110.1  yes
+  US-Me2    evergreen  5699.6935828 gC m-2          114.0  yes
+  US-Me2    evergreen  5871.0926993 gC m-2          117.4  yes
+  US-Me2    evergreen   6100.944853 gC m-2          122.0  yes
+  US-Me2    evergreen  6293.0243086 gC m-2          125.9  yes
+  US-Me2    evergreen         794.1 gC m-2           15.9  too small
+  US-Me2    evergreen        8438.6 gC m-2          168.8  yes
+  US-Me3    evergreen           205 gC m-2            4.1  too small
+  US-Me3    evergreen          62.4 gC m-2            1.2  too small
+  US-Me4    evergreen         11982 gC m-2          239.6  yes
+  US-Me4    evergreen         12097 gC m-2          241.9  yes
+  US-Me4    evergreen           206 gC m-2            4.1  too small
+  US-Me4    evergreen           236 gC m-2            4.7  too small
+  US-Me5    evergreen           104 gC m-2            2.1  too small
+  US-Me5    evergreen           672 gC m-2           13.4  too small
+  US-Me6    evergreen         116.9 gC m-2            2.3  too small
+  US-Me6    evergreen         214.8 gC m-2            4.3  too small
+  US-Me6    evergreen        265.43 gC m-2            5.3  too small
+  US-Me6    evergreen   273.8070206 gC m-2            5.5  too small
+  US-Me6    evergreen         32.34 gC m-2            0.6  too small
+  US-Me6    evergreen         326.7 gC m-2            6.5  too small
+  US-Me6    evergreen   330.4221183 gC m-2            6.6  too small
+  US-Me6    evergreen  397.16796718 gC m-2            7.9  too small
+  US-Me6    evergreen         59.01 gC m-2            1.2  too small
+  US-Me6    evergreen         64.99 gC m-2            1.3  too small
+  US-Me6    evergreen         689.7 gC m-2           13.8  too small
+  US-Me6    evergreen         71.83 gC m-2            1.4  too small
+  US-NR1    evergreen         14500 gC m-2          290.0  yes
+  US-NR1    evergreen         14500 gC m-2          290.0  yes
+  US-NR1    evergreen         14500 gC m-2          290.0  yes
+  US-NR1    evergreen         14500 gC m-2          290.0  yes
+  US-NR1    evergreen         14500 gC m-2          290.0  yes
+  US-NR1    evergreen         14500 gC m-2          290.0  yes
+  US-NR1    evergreen         14500 gC m-2          290.0  yes
+  US-NR1    evergreen         17750 gC m-2          355.0  yes
+  US-NR1    evergreen         17750 gC m-2          355.0  yes
+  US-NR1    evergreen         17750 gC m-2          355.0  yes
+  US-NR1    evergreen         17750 gC m-2          355.0  yes
+  US-NR1    evergreen         17750 gC m-2          355.0  yes
+  US-NR1    evergreen         17750 gC m-2          355.0  yes
+  US-NR1    evergreen         17750 gC m-2          355.0  yes
+  US-NR1    evergreen          2950 gC m-2           59.0  yes
+  US-NR1    evergreen          2950 gC m-2           59.0  yes
+  US-NR1    evergreen          2950 gC m-2           59.0  yes
+  US-NR1    evergreen          2950 gC m-2           59.0  yes
+  US-NR1    evergreen          2950 gC m-2           59.0  yes
+  US-NR1    evergreen          2950 gC m-2           59.0  yes
+  US-NR1    evergreen          2950 gC m-2           59.0  yes
+  US-SP1    evergreen         131.5 gC m-2            2.6  too small
+  US-SP1    evergreen          6846 gC m-2          136.9  yes
+  US-SP1    evergreen        6977.5 gC m-2          139.6  yes
+  US-SP2    evergreen         197.5 gC m-2            4.0  too small
+  US-SP2    evergreen          2182 gC m-2           43.6  yes
+  US-SP2    evergreen        2379.5 gC m-2           47.6  yes
+  US-SP3    evergreen           173 gC m-2            3.5  too small
+  US-SP3    evergreen          4545 gC m-2           90.9  yes
+  US-SP3    evergreen          4718 gC m-2           94.4  yes
+  US-Slt    deciduous         217.2 gC m-2            4.3  too small
+  US-Slt    deciduous         221.7 gC m-2            4.4  too small
+  US-Slt    deciduous         224.8 gC m-2            4.5  too small
+  US-Slt    deciduous        3788.6 gC m-2           75.8  yes
+  US-Slt    deciduous        3887.7 gC m-2           77.8  yes
+  US-Slt    deciduous        4002.1 gC m-2           80.0  yes
+  US-Slt    deciduous        4005.8 gC m-2           80.1  yes
+  US-Slt    deciduous        4006.7 gC m-2           80.1  yes
+  US-Slt    deciduous        4109.4 gC m-2           82.2  yes
+  US-Slt    deciduous        4231.5 gC m-2           84.6  yes
+  US-UMB    deciduous        6476.7 gC m-2          129.5  yes
+  US-UMB    deciduous          6670 gC m-2          133.4  yes
+  US-UMB    deciduous        6860.6 gC m-2          137.2  yes
+  US-UMB    deciduous        6866.1 gC m-2          137.3  yes
+  US-UMB    deciduous        7011.9 gC m-2          140.2  yes
+  US-UMB    deciduous        7181.6 gC m-2          143.6  yes
+  US-UMB    deciduous        7361.3 gC m-2          147.2  yes
+  US-UMB    deciduous        7513.7 gC m-2          150.3  yes
+  US-UMB    deciduous       7666.67 gC m-2          153.3  yes
+  US-UMB    deciduous        7693.5 gC m-2          153.9  yes
+  US-UMB    deciduous        7829.1 gC m-2          156.6  yes
+  US-UMB    deciduous        7864.1 gC m-2          157.3  yes
+  US-UMB    deciduous        7971.7 gC m-2          159.4  yes
+  US-UMB    deciduous        7993.1 gC m-2          159.9  yes
+  US-UMB    deciduous        8119.5 gC m-2          162.4  yes
+  US-UMB    deciduous        8164.5 gC m-2          163.3  yes
+  US-UMd    deciduous        5653.7 gC m-2          113.1  yes
+  US-UMd    deciduous        5778.2 gC m-2          115.6  yes
+  US-UMd    deciduous        5929.4 gC m-2          118.6  yes
+  US-UMd    deciduous        6074.3 gC m-2          121.5  yes
+  US-UMd    deciduous        7888.8 gC m-2          157.8  yes
+  US-WCr    deciduous           0.8 gC m-2            0.0  too small
+  US-WCr    deciduous           1.2 gC m-2            0.0  too small
+  US-WCr    deciduous        142.77 gC m-2            2.9  too small
+  US-WCr    deciduous          1470 gC m-2           29.4  yes
+  US-WCr    deciduous           199 gC m-2            4.0  too small
+  US-WCr    deciduous          2120 gC m-2           42.4  yes
+  US-WCr    deciduous         223.5 gC m-2            4.5  too small
+  US-WCr    deciduous           300 gC m-2            6.0  too small
+  US-WCr    deciduous           320 gC m-2            6.4  too small
+  US-WCr    deciduous          3710 gC m-2           74.2  yes
+  US-WCr    deciduous          3820 gC m-2           76.4  yes
+  US-WCr    deciduous          5520 gC m-2          110.4  yes
+  US-WCr    deciduous       7361.89 gC m-2          147.2  yes
+
+  20 station(s) with a usable standing tree AGB (>= 20 t DM/ha)
+  4 rejected (increment, subplot or unknown unit): US-Me1, US-Me3, US-Me5, US-Me6
+
+  station   type         t DM/ha   implied B(6) gC/m2
+  US-Bar    deciduous      212.0                 9546
+  US-Dk2    deciduous      360.0                16946
+  US-Dk3    evergreen      190.0                 8444
+  US-Fmf    evergreen       78.2                 2856
+  US-Fuf    evergreen      112.0                 4547
+  US-Ha1    deciduous      258.9                11889
+  US-Ho1    evergreen      224.0                10146
+  US-Ho2    evergreen      302.0                14046
+  US-Ho3    evergreen      122.0                 5046
+  US-MMS    deciduous      236.8                10784
+  US-Me2    evergreen      168.8                 7385
+  US-Me4    evergreen      241.9                11043
+  US-NR1    evergreen      355.0                16696
+  US-SP1    evergreen      139.6                 5924
+  US-SP2    evergreen       47.6                 1326
+  US-SP3    evergreen       94.4                 3664
+  US-Slt    deciduous       84.6                 3178
+  US-UMB    deciduous      163.3                 7110
+  US-UMd    deciduous      157.8                 6835
+  US-WCr    deciduous      147.2                 6308
+
+======================================================================
+PFT MEANS -- one IC vector per forest type
+======================================================================
+  deciduous  n=8   mean   202.6  median   187.6  range 85-360 t DM/ha
+             -> TBio_target 203 implies B(6) = 50*203 - (B1+B2+B3+B4)
+  evergreen  n=12  mean   172.9  median   154.2  range 48-355 t DM/ha
+             -> TBio_target 173 implies B(6) = 50*173 - (B1+B2+B3+B4)
+
+full dump -> /vol_efthymios/NFS07/dd1136/T_and_C/input_data/badm_biomass.csv
+
+finished   : 2026-08-10T22:57:08Z
+exit status: 0

@@ -1,0 +1,11 @@
+job        : 36111  task none
+node       : soeepyc05
+started    : 2026-08-10T15:02:05Z
+station    : US-HBK   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/era5_land/fixed_lma
+
+  loading RES_US_HBK.mat (315 MB)
+
+finished   : 2026-08-10T15:02:53Z
+exit status: 1  (0 figures written, 2 nothing to do, 1 GRAPH_MOD failed)
+png files   : 0

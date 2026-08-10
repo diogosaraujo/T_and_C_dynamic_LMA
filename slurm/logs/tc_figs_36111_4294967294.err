@@ -1,0 +1,4 @@
+  GRAPH_MOD failed for /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/era5_land/fixed_lma: Creating dialog boxes that block execution is not supported when MATLAB is in a configuration that is non-interactive or disables window display.
+      inputdlg (line 55)
+      GRAPH_MOD (line 55)
+      make_figures (line 64)

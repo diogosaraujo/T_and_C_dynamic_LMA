@@ -72,6 +72,25 @@ if ! ls "$RUNDIR"/RES_*.mat >/dev/null 2>&1; then
     exit 0
 fi
 
+# model_run/GRAPH_MOD.m is a COPY of the template, refreshed by
+# submit_build_model_run.sh. Editing the repo and going straight to the figures
+# runs the old script and fails identically to before the fix (jobs 36111-36114),
+# which reads as "the fix did not work" rather than "the fix was not deployed".
+# Compare instead of trusting: this is cheap and the failure mode is expensive.
+TEMPLATE="${TEMPLATE:-$REPO_ROOT/T&C/Thanos_US_xRM}"
+if [ -f "$TEMPLATE/GRAPH_MOD.m" ] && [ -f "$MODEL_RUN/GRAPH_MOD.m" ]; then
+    if ! cmp -s "$TEMPLATE/GRAPH_MOD.m" "$MODEL_RUN/GRAPH_MOD.m"; then
+        echo "ERROR: $MODEL_RUN/GRAPH_MOD.m differs from the repo template." >&2
+        echo "       The run tree has a stale copy; figures would be drawn by the" >&2
+        echo "       old script (or fail the way it used to). Refresh it first:" >&2
+        echo "         sbatch slurm/submit_build_model_run.sh --stations all" >&2
+        exit 1
+    fi
+elif [ ! -f "$MODEL_RUN/GRAPH_MOD.m" ]; then
+    echo "ERROR: no $MODEL_RUN/GRAPH_MOD.m -- run submit_build_model_run.sh first" >&2
+    exit 1
+fi
+
 # LMOD is only initialised for shells that read .bashrc, so source it defensively.
 if ! command -v module >/dev/null 2>&1; then
     # shellcheck disable=SC1091

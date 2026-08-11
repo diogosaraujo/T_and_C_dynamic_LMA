@@ -1,0 +1,31 @@
+job        : 36340
+node       : soeepyc05
+started    : 2026-08-11T20:17:27Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+template   : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Thanos_US_xRM
+meteo      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+
+root      : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+template  : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Thanos_US_xRM
+stations  : 2 (17 excluded)
+soil      : 101 sites, 101 profiles
+canopy    : 117 (GEDI window median 73, AmeriFlux BADM HEIGHTC 44)
+ZR95      : 117   EC heights: 511
+meteo dir : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+
+==================================================================
+READY: 2/2 stations have every input
+==================================================================
+silt clamp: no station needed it -- textures unchanged
+
+shared Code/ already up to date (145 files)
+  US-HBK   written  ms=17 Kbot=NaN ZR95=1000 zatm=30
+  US-Ha2   written  ms=16 Kbot=NaN ZR95=1100 zatm=35
+
+manifest : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/build_manifest.json
+run list : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/run_list.txt  ->  sbatch --array=1-4 slurm/submit_tc_run.sh
+
+finished   : 2026-08-11T20:17:29Z
+exit status: 0  (1 = a generated file is untrustworthy, or nothing built;
+                        stations blocked for missing inputs are reported, not fatal)
+50G	/vol_efthymios/NFS07/dd1136/T_and_C/model_run

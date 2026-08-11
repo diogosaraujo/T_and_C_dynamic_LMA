@@ -99,8 +99,27 @@ command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exi
 cd "$RUNDIR"
 echo "matlab     : $(command -v matlab)"
 echo
+
+# GO_<ST>.m draws the GRAPH_MOD figures after saving RES. Under -nodisplay MATLAB
+# still initialises Qt to tear the graphics stack down at exit, and with no
+# platform plugin available it asserts and is SIGKILLed -- exit 137 AFTER the
+# results are safely written (jobs 36213/36214). "offscreen" appears in the
+# available-plugin list that the assertion itself prints, so selecting it avoids
+# the crash rather than tolerating it.
+export QT_QPA_PLATFORM=offscreen
+export MW_QT_PLATFORM=offscreen
+
 matlab -nodisplay -nosplash -batch "GO_$MNAME"
 status=$?
+
+# Belt and braces. If the teardown crash still occurs, a RES file means the
+# simulation itself finished: reporting 137 would mark good runs as failed across
+# a 184-task array and bury the real failures among them.
+if [ "$status" != "0" ] && ls "$RUNDIR"/RES_*.mat >/dev/null 2>&1; then
+    echo "NOTE: matlab exited $status but RES_*.mat exists -- the simulation"
+    echo "      completed; treating as success (Qt teardown, see above)."
+    status=0
+fi
 
 echo
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"

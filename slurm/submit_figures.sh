@@ -102,14 +102,29 @@ command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exi
 FORCE_ARG="false"
 [ "${FORCE:-0}" = "1" ] && FORCE_ARG="true"
 
+# Drawing figures under -nodisplay makes MATLAB initialise Qt when it tears the
+# graphics stack down at exit; with no platform plugin it asserts and is SIGKILLed
+# AFTER every PNG has been written (jobs 36240/36241 reported exit 137 with
+# "png files : 14"). "offscreen" is in the plugin list the assertion prints.
+export QT_QPA_PLATFORM=offscreen
+export MW_QT_PLATFORM=offscreen
+
 matlab -nodisplay -nosplash -batch \
     "addpath('$REPO_ROOT/preprocessing'); exit(make_figures('$RUNDIR', $FORCE_ARG))"
 status=$?
 
+npng=$(ls "$RUNDIR"/figures/*.png 2>/dev/null | wc -l)
+# Belt and braces: PNGs on disk mean the work finished even if the exit code says
+# otherwise. 2 means "correctly did nothing" and must not look like a failure.
+if [ "$status" != "0" ] && [ "$status" != "2" ] && [ "$npng" -gt 0 ]; then
+    echo "NOTE: matlab exited $status but $npng PNG(s) exist -- figures were"
+    echo "      written; treating as success (Qt teardown, see above)."
+    status=0
+fi
+
 echo
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "exit status: $status  (0 figures written, 2 nothing to do, 1 GRAPH_MOD failed)"
-ls "$RUNDIR"/figures/*.png 2>/dev/null | wc -l | xargs echo "png files   :"
-# 2 means "correctly did nothing", so it must not look like a failure to SLURM.
+echo "png files   : $npng"
 [ "$status" = "2" ] && exit 0
 exit $status

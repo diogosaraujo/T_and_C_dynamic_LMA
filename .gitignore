@@ -13,6 +13,11 @@ T&C/Thanos_US_xRM/RES_US_xRM.mat
 /US-*/
 RES_*.mat
 
+# AmeriFlux BASE/BIF pulled back from the cluster for local analysis. The BASE
+# half-hourly CSVs are hundreds of MB per station (US-Ha2 alone is 298 MB) and are
+# re-downloadable with preprocessing/download_ameriflux.py.
+/ameriflux/
+
 # Python
 __pycache__/
 *.py[cod]

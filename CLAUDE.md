@@ -46,8 +46,10 @@ vegetation; Low/understory off).
   verify the yearly SLA actually reaches the `LAI = Sl*B(1)` computation (plot `Sl_H_t` vs
   `LAI_H` to confirm dynamic propagation).
 - **SLA units:** T&C needs SLA in **m²/gC**. LMA→SLA is `SLA = 1/(LMA · f_C)` with carbon
-  fraction **f_C = 0.5** (decided; confirm with data provider whether LMA is dry-mass or
-  carbon based). Paschalis's shared code applied only `SLA = 1/LMA` (missing f_C).
+  fraction **f_C = 0.5**. ✅ **CONFIRMED 2026-08-11: the PLSR LMA is DRY MASS**, so the 0.5
+  is required to reach gC. Not an open question any more — it is a factor of 2 on every
+  station's leaf area, so do not revisit it casually. Paschalis's shared code applied only
+  `SLA = 1/LMA` (missing f_C), which would double SLA and hence LAI.
 
 ---
 
@@ -306,7 +308,6 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
   not read modelled biomass as a validation target.
 - **Soil depth for forests** (§6): don't inherit 1 m blindly.
 - **Reanalysis vs in-situ forcing** (§1): state it; validate against towers.
-- **f_C = 0.5** (§2): confirm LMA basis with data provider.
 
 ## 10. Open TODOs
 - [x] AmeriFlux BASE + BADM fetch (`preprocessing/download_ameriflux.py`) and a coverage

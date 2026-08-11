@@ -1,0 +1,64 @@
+job        : 36338
+node       : soeepyc05
+started    : 2026-08-11T19:30:45Z
+badm dir   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_vs_badm.csv
+
+BADM      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ameriflux
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+site list : 118 stations
+
+==============================================================================
+110 stations scanned
+  23 report LMA in BADM
+  20 have BOTH a measurement and a PLSR series
+==============================================================================
+
+  station  type         BADM PLSR mean  diff %    PLSR range  pctile
+  US-Bar   deciduous    74.4      75.5     +1%         66-85     38%
+  US-Dk2   deciduous    98.0      84.8    -13%         79-92    100%
+  US-Dk3   evergreen   170.7      95.9    -44%        91-103    100%
+  US-Fmf   evergreen   325.0     114.5    -65%        66-157    100%
+  US-Fuf   evergreen   325.0     113.3    -65%        66-157    100%
+  US-Ha1   deciduous     5.9      86.1  +1359%         79-95      0%
+  US-Ha2   evergreen   131.0     102.6    -22%        78-119    100%
+  US-Ho1   evergreen   226.0      88.0    -61%        72-105    100%
+  US-Ho2   evergreen   226.0      88.0    -61%        72-105    100%
+  US-Ho3   evergreen   226.0      88.0    -61%        72-105    100%
+  US-LPH   deciduous    73.0      85.4    +17%         78-95      0%
+  US-MMS   deciduous    42.5     101.8   +140%        86-130      0%
+  US-MOz   deciduous    99.5     134.7    +35%       107-153      0%
+  US-Me2   evergreen   127.0     151.8    +19%       130-178      0%
+  US-Me4   evergreen   120.0     151.8    +26%       130-178      0%
+  US-NR1   evergreen   237.7     160.3    -33%       117-202    100%
+  US-SP2   evergreen    50.0     121.2   +142%       115-127      0%
+  US-SP3   evergreen    50.0     121.2   +142%       115-127      0%
+  US-UMB   deciduous    73.8      99.5    +35%        84-115      0%
+  US-WCr   deciduous    43.7     103.9   +138%        82-120      0%
+
+  diff % = PLSR mean relative to the measurement (negative = PLSR too low)
+  pctile = where the measurement falls in the PLSR distribution;
+           0 or 100 means it lies outside the simulated range entirely
+
+==============================================================================
+IS THE OFFSET SYSTEMATIC?
+==============================================================================
+  deciduous  n=8   mean +213.9%  median  +35.1%  sd 436.1  range -13..+1359%
+             7/8 measurements fall OUTSIDE the PLSR series range
+             -> MIXED signs: looks like spatial mismatch, not a common bias
+  evergreen  n=12  mean   -6.7%  median  -38.2%  sd  73.1  range -65..+142%
+             12/12 measurements fall OUTSIDE the PLSR series range
+             -> MIXED signs: looks like spatial mismatch, not a common bias
+
+  Interpreting this:
+   * consistent sign + tight sd  -> a correction to apply to the LMA series
+   * mixed signs / wide sd       -> ~9 km pixel vs tower footprint; report as
+                                    uncertainty rather than correcting
+   * an offset in EVERGREEN only -> a needleleaf retrieval problem, which would
+                                    affect 53 of the 98 stations
+
+per-station dump -> /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_vs_badm.csv
+
+finished   : 2026-08-11T19:30:52Z
+exit status: 0

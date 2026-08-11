@@ -1,0 +1,145 @@
+job        : 36336  task none
+node       : soeepyc05
+started    : 2026-08-11T18:42:59Z
+station    : US-Ha2
+
+--- environment ---
+  DISPLAY      : '<unset>'
+  QT_QPA_PLAT  : '<unset>'
+  mem alloc    : 49152 MB   cpus: 2
+  free mem     : 234 GB available of 251 GB
+  libGL        : 0 entries
+  xcb libs     : 0
+  matlabroot   : /opt/apps/matlab_2025a
+  libqxcb      : /opt/apps/matlab_2025a/bin/glnxa64/platforms/libqxcb.so
+  missing deps : ALL RESOLVED
+  platforms    : libqlinuxfb.so libqminimal.so libqoffscreen.so libqvnc.so libqxcb.so 
+-------------------
+station : US-Ha2
+  fixed : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/era5_land/fixed_lma
+  dyn   : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/era5_land/dyn_lma
+  out   : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare
+  loaded both arms (13150 daily, 315576 hourly steps)
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_table_parameters.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig19c_LAI.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig21c_productivity.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig22c_efficiency.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig101c_assimilation.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig103c_LAI_NPP_age.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig104c_phenology.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig105c_carbon_pools.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig106c_soilT_beta.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig1001c_monthly_fluxes.png
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In print (line 31)
+In GRAPH_COMPARE>save_fig (line 401)
+In GRAPH_COMPARE (line 230)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In print (line 31)
+In GRAPH_COMPARE>save_fig (line 401)
+In GRAPH_COMPARE (line 230)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In matlab.graphics.internal.export.setPaintDisabled
+In matlab.graphics.internal/mlprintjob/setPaintDisabled
+In alternatePrintPath
+In alternatePrintPath
+In onCleanup/delete (line 29)
+In alternatePrintPath
+In print (line 86)
+In GRAPH_COMPARE>save_fig (line 401)
+In GRAPH_COMPARE (line 230)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In matlab.graphics.internal.export.setPaintDisabled
+In matlab.graphics.internal/mlprintjob/setPaintDisabled
+In alternatePrintPath
+In alternatePrintPath
+In onCleanup/delete (line 29)
+In alternatePrintPath
+In print (line 86)
+In GRAPH_COMPARE>save_fig (line 401)
+In GRAPH_COMPARE (line 230)] 
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig1002c_monthly_balance.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig1003c_fraction_fluxes.png
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In print (line 31)
+In GRAPH_COMPARE>save_fig (line 401)
+In GRAPH_COMPARE (line 230)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In print (line 31)
+In GRAPH_COMPARE>save_fig (line 401)
+In GRAPH_COMPARE (line 230)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In matlab.graphics.internal.export.setPaintDisabled
+In matlab.graphics.internal/mlprintjob/setPaintDisabled
+In alternatePrintPath
+In alternatePrintPath
+In onCleanup/delete (line 29)
+In alternatePrintPath
+In print (line 86)
+In GRAPH_COMPARE>save_fig (line 401)
+In GRAPH_COMPARE (line 230)] 
+[Warning: Error in state of SceneNode.
+Enforcing Delaunay constraints leads to unstable repeated constraint
+intersections.
+This may be due to near coincident intersecting constraints or near duplicate
+points.
+] 
+[> In defaulterrorcallback (line 12)
+In matlab.graphics.internal.export.setPaintDisabled
+In matlab.graphics.internal/mlprintjob/setPaintDisabled
+In alternatePrintPath
+In alternatePrintPath
+In onCleanup/delete (line 29)
+In alternatePrintPath
+In print (line 86)
+In GRAPH_COMPARE>save_fig (line 401)
+In GRAPH_COMPARE (line 230)] 
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare/US_Ha2_fig1004c_fraction_balance.png
+
+13 of 13 figure(s) written to /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/figures_compare
+
+finished   : 2026-08-11T18:45:03Z
+exit status: 0
+png files   : 13  (was 0)

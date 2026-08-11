@@ -100,15 +100,11 @@ cd "$RUNDIR"
 echo "matlab     : $(command -v matlab)"
 echo
 
-# GO_<ST>.m draws the GRAPH_MOD figures after saving RES. Under -nodisplay MATLAB
-# still initialises Qt to tear the graphics stack down at exit, and with no
-# platform plugin available it asserts and is SIGKILLed -- exit 137 AFTER the
-# results are safely written (jobs 36213/36214). "offscreen" appears in the
-# available-plugin list that the assertion itself prints, so selecting it avoids
-# the crash rather than tolerating it.
-export QT_QPA_PLATFORM=offscreen
-export MW_QT_PLATFORM=offscreen
-
+# DO NOT set QT_QPA_PLATFORM=offscreen here. It does stop the Qt teardown crash,
+# but it forces software rendering, and GRAPH_MOD draws 315,576-point lines: jobs
+# 36261/36262 finished the simulation in ~20 min and then spent 7.5 h rendering
+# before the 8 h wall clock killed them. The teardown crash is harmless by
+# comparison -- RES is already on disk -- and the exit-code check below covers it.
 matlab -nodisplay -nosplash -batch "GO_$MNAME"
 status=$?
 

@@ -595,26 +595,15 @@ rmpath('{code_rel}')
 
 save(['RES_', id_location], '-v7.3');
 
-%%% Figures. GRAPH_MOD opens figures, so under 'matlab -batch' they must be
-%%% written to disk and closed -- otherwise the job accumulates invisible handles
-%%% and exits without leaving anything behind.
-fig_dir = 'figures';
-if ~exist(fig_dir, 'dir'), mkdir(fig_dir); end
-try
-    set(0, 'DefaultFigureVisible', 'off');
-    GRAPH_MOD;
-    h = findobj('Type', 'figure');
-    for kf = 1:numel(h)
-        nm = get(h(kf), 'Name');
-        if isempty(nm), nm = sprintf('fig%02d', get(h(kf), 'Number')); end
-        nm = regexprep(nm, '[^0-9A-Za-z_-]', '_');
-        saveas(h(kf), fullfile(fig_dir, sprintf('%s_%s.png', id_location, nm)));
-    end
-    close all
-    fprintf('wrote %d figure(s) to %s\\n', numel(h), fig_dir);
-catch ME
-    fprintf(2, 'GRAPH_MOD failed (results are still saved): %s\\n', ME.message);
-end
+%%% NO FIGURES HERE -- deliberately. Plotting used to run at the end of this
+%%% script, and GRAPH_MOD draws 315,576-point lines: jobs 36261/36262 finished the
+%%% simulation in ~20 min, then spent 7.5 h rendering and were killed by the 8 h
+%%% wall clock with the science already complete but the job marked failed.
+%%% Figures are now a separate, cheap, independently retryable step:
+%%%     sbatch slurm/submit_figures.sh <STATION> <fixed_lma|dyn_lma>
+%%% which draws them from RES_*.mat. Keeping them out of here means a plotting
+%%% problem can never cost a simulation, and the run time is the science alone.
+fprintf('done. figures: sbatch slurm/submit_figures.sh %s <arm>\\n', id_location);
 """
 
 

@@ -102,12 +102,6 @@ command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exi
 FORCE_ARG="false"
 [ "${FORCE:-0}" = "1" ] && FORCE_ARG="true"
 
-# Drawing figures under -nodisplay makes MATLAB initialise Qt when it tears the
-# graphics stack down at exit; with no platform plugin it asserts and is SIGKILLed
-# AFTER every PNG has been written (jobs 36240/36241 reported exit 137 with
-# "png files : 14"). "offscreen" is in the plugin list the assertion prints.
-export QT_QPA_PLATFORM=offscreen
-export MW_QT_PLATFORM=offscreen
 
 matlab -nodisplay -nosplash -batch \
     "addpath('$REPO_ROOT/preprocessing'); exit(make_figures('$RUNDIR', $FORCE_ARG))"

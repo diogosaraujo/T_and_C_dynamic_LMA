@@ -608,7 +608,12 @@ if switch_veg == 1
     legend('Total weighted')
     for ij=1:length(NNd)
         if mod(ij,365)==0
-            plot([ij ij],[min((LAI_H+LAI_L)*Ccrown')-0.1,max((LAI_H+LAI_L)*Ccrown')+0.1],'--y')
+            %%% HandleVisibility off: these are year separators, not data. legend()
+            %%% is called above, before this loop, so without it MATLAB auto-extends
+            %%% the legend with one 'dataN' entry per year -- 36 of them here, which
+            %%% crowded out the plot.
+            plot([ij ij],[min((LAI_H+LAI_L)*Ccrown')-0.1,max((LAI_H+LAI_L)*Ccrown')+0.1],...
+                '--y','HandleVisibility','off')
         end
     end
     %figure(16)

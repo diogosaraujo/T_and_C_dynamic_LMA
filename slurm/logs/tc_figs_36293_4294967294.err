@@ -1,0 +1,81 @@
+MATLAB: <unknown>:0: <unknown>: Assertion `This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+Available platform plugins are: linuxfb, minimal, offscreen, vnc, xcb.
+' failed.
+
+--------------------------------------------------------------------------------
+                Assertion detected at 2026-08-11 11:32:40 -0400
+--------------------------------------------------------------------------------
+
+Configuration:
+  Crash Decoding           : Disabled - No sandbox or build area path
+  Crash Mode               : continue (default)
+  Default Encoding         : UTF-8
+  Deployed                 : false
+  GNU C Library            : 2.36 stable
+  Graphics Driver          : Uninitialized software 
+  Graphics card 1          : 0x1a03 ( 0x1a03 ) 0x2000 Version 0.0.0.0 (0-0-0)
+  MATLAB Architecture      : glnxa64
+  MATLAB Entitlement ID    : 872120
+  MATLAB Root              : /opt/apps/matlab_2025a
+  MATLAB Version           : 25.1.0.2943329 (R2025a)
+  OpenGL                   : software
+  Operating System         : Linux 6.1.0-45-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.170-1 (2026-04-30) x86_64
+  Process ID               : 4016106
+  Processor ID             : x86 Family 23 Model 49 Stepping 0, AuthenticAMD
+  Session Key              : 6fqwrf98sfb4utolzuz91yp3s
+  Window System            : No active display
+
+Fault Count: 1
+
+
+Assertion:
+This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+Available platform plugins are: linuxfb, minimal, offscreen, vnc, xcb.
+
+
+Current Thread: 'MCR 0 interpret' id 22684921071296
+
+Register State (captured):
+  RAX = 0000000000000000  RBX = 000014a2cd060428
+  RCX = 0000000000000000  RDX = 000014a2cd049d18
+  RSP = 000014a1bea96650  RBP = 000014a1bea96a30
+  RSI = 000014a2cd02eab5  RDI = 000014a1bea96660
+
+   R8 = 0000000000000002   R9 = 000014a1bea96940
+  R10 = 0000000000000000  R11 = 0000000000000000
+  R12 = 000014a2cd02eab5  R13 = 000014a1bea96aa0
+  R14 = 000014a1bea96f00  R15 = 000014a1ac00dfa8
+
+  RIP = 000014a2ccfd20ff  EFL = 0000000000000000
+
+   CS = 0000   FS = 0000   GS = 0000
+
+Stack Trace (captured):
+[  0] 0x000014a2ccfcbb93      /opt/apps/matlab_2025a/bin/glnxa64/libmwfl.so+00326547
+[  1] 0x000014a2ccfcbddc      /opt/apps/matlab_2025a/bin/glnxa64/libmwfl.so+00327132 _ZN10foundation4core4diag15stacktrace_base7captureEm+00000028
+[  2] 0x000014a2ccfcdc9a      /opt/apps/matlab_2025a/bin/glnxa64/libmwfl.so+00335002
+[  3] 0x000014a2ccfce8b2      /opt/apps/matlab_2025a/bin/glnxa64/libmwfl.so+00338098
+[  4] 0x000014a2ccfce937      /opt/apps/matlab_2025a/bin/glnxa64/libmwfl.so+00338231
+[  5] 0x000014a24419cb1a /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/foundation/platform/pf_matlab_integ/../../../../../../bin/glnxa64/libmwpf_internal.so+00355098
+[  6] 0x000014a28b0fa3f1 /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/cefclient/../../../../bin/glnxa64/libQt5Core.so.5+00693233
+[  7] 0x000014a28b0fa496 /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/cefclient/../../../../bin/glnxa64/libQt5Core.so.5+00693398
+[  8] 0x000014a28b0ed5cd /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/cefclient/../../../../bin/glnxa64/libQt5Core.so.5+00640461 _ZNK14QMessageLogger5fatalEPKcz+00000153
+[  9] 0x000014a28ac70114 /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/cefclient/../../../../bin/glnxa64/libQt5Gui.so.5+01118484 _ZN22QGuiApplicationPrivate25createPlatformIntegrationEv+00003008
+[ 10] 0x000014a28ac7054b /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/cefclient/../../../../bin/glnxa64/libQt5Gui.so.5+01119563 _ZN22QGuiApplicationPrivate21createEventDispatcherEv+00000019
+[ 11] 0x000014a28b2244d0 /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/cefclient/../../../../bin/glnxa64/libQt5Core.so.5+01914064 _ZN23QCoreApplicationPrivate4initEv+00000534
+[ 12] 0x000014a28ac7147c /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/cefclient/../../../../bin/glnxa64/libQt5Gui.so.5+01123452 _ZN22QGuiApplicationPrivate4initEv+00000032
+[ 13] 0x000014a28a79212f /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/cefclient/../../../../bin/glnxa64/libQt5Widgets.so.5+01532207 _ZN19QApplicationPrivate4initEv+00000009
+[ 14] 0x000014a2441d399e /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/foundation/platform/pf_matlab_integ/../../../../../../bin/glnxa64/libmwpf_internal.so+00579998 _ZN16PFGuiApplicationC2ERiPPc+00000030
+[ 15] 0x000014a24419a2fb /opt/apps/matlab_2025a/bin/glnxa64/matlab_startup_plugins/foundation/platform/pf_matlab_integ/../../../../../../bin/glnxa64/libmwpf_internal.so+00344827 _ZN9GuiThread3runEv+00001579
+[ 16] 0x000014a2cd3ef8c3 /opt/apps/matlab_2025a/bin/glnxa64/../../sys/os/glnxa64/libstdc++.so.6+00903363
+[ 17] 0x000014a2cd19a1f5                    /lib/x86_64-linux-gnu/libc.so.6+00561653
+[ 18] 0x000014a2cd21a89c                    /lib/x86_64-linux-gnu/libc.so.6+01087644
+
+** This crash report has been saved to disk as /volume/NFS/dd1136/matlab_crash_dump.4016106-1 **
+
+
+
+MATLAB is exiting because of fatal error
+/var/spool/slurmd/job36293/slurm_script: line 107: 4016106 Killed                  matlab -nodisplay -nosplash -batch "addpath('$REPO_ROOT/preprocessing'); exit(make_figures('$RUNDIR', $FORCE_ARG))"

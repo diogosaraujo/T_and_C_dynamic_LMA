@@ -88,16 +88,17 @@ echo "  xcb libs     : $(ldconfig -p 2>/dev/null | grep -c libxcb)"
 # "no Qt platform plugin could be initialized" is what you get when libqxcb.so is
 # present but a dependency is missing -- a per-node property of the OS install.
 MLROOT="$(dirname "$(dirname "$(readlink -f "$(command -v matlab)")")")"
-PLUG="$MLROOT/bin/glnxa64/qt/plugins/platforms"
 echo "  matlabroot   : $MLROOT"
-if [ -d "$PLUG" ]; then
-    echo "  qt platforms : $(ls "$PLUG" 2>/dev/null | tr '\n' ' ')"
-    if [ -f "$PLUG/libqxcb.so" ]; then
-        miss=$(ldd "$PLUG/libqxcb.so" 2>/dev/null | grep "not found" | awk '{print $1}' | tr '\n' ' ')
-        echo "  libqxcb deps : ${miss:-ALL RESOLVED}"
-    fi
+# Find the plugin wherever MATLAB actually keeps it; the layout differs between
+# releases and a guessed path produced a misleading "directory not found".
+QXCB="$(find "$MLROOT" -name 'libqxcb.so' 2>/dev/null | head -1)"
+if [ -n "$QXCB" ]; then
+    echo "  libqxcb      : $QXCB"
+    miss=$(ldd "$QXCB" 2>/dev/null | grep "not found" | awk '{print $1}' | tr '\n' ' ')
+    echo "  missing deps : ${miss:-ALL RESOLVED}"
+    echo "  platforms    : $(ls "$(dirname "$QXCB")" 2>/dev/null | tr '\n' ' ')"
 else
-    echo "  qt platforms : directory not found at $PLUG"
+    echo "  libqxcb      : not found anywhere under $MLROOT"
 fi
 echo "-------------------"
 

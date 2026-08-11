@@ -15,8 +15,14 @@ PARTITION="${PARTITION:-SOE_main}"
 # LMOD module providing python3.
 PYTHON_MODULE="${PYTHON_MODULE:-Python/3.13.7}"
 
+# Where the per-station run tree lives, a sibling of input_data. Each submit script
+# derived this privately, which meant it was undefined in an interactive shell and
+# "$MODEL_RUN/US-HBK/..." silently became "/US-HBK/...". Defining it here makes the
+# same path available to anyone who sources this file to poke at the tree by hand.
+MODEL_RUN="${MODEL_RUN:-$(dirname "$TC_INPUT_DATA")/model_run}"
+
 # Exported so download_era5_land.py picks up TC_INPUT_DATA as its default output root.
-export TC_INPUT_DATA TC_VENV PARTITION PYTHON_MODULE
+export TC_INPUT_DATA TC_VENV PARTITION PYTHON_MODULE MODEL_RUN
 
 # AmeriFlux credentials are NOT set here -- never commit them. Export them in your shell
 # before submitting; SLURM copies the submitting environment into the job:

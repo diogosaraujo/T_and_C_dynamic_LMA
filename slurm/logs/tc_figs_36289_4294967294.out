@@ -1,0 +1,11 @@
+job        : 36289  task none
+node       : soeepyc06
+started    : 2026-08-11T14:35:06Z
+station    : US-Ha2   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/era5_land/dyn_lma
+
+  figures in /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Ha2/era5_land/dyn_lma/figures are newer than RES_US_Ha2.mat -- nothing to do
+
+finished   : 2026-08-11T14:35:57Z
+exit status: 2  (0 figures written, 2 nothing to do, 1 GRAPH_MOD failed)
+png files   : 14

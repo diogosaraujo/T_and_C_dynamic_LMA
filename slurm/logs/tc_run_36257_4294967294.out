@@ -1,0 +1,44 @@
+job        : 36257  task none
+node       : soeepyc06
+started    : 2026-08-11T06:12:46Z
+station    : US-HBK   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+Iter:
+        1000
+
+Iter:
+        2000
+
+Iter:
+        3000
+
+Iter:
+        4000
+
+Iter:
+        5000
+
+Iter:
+        6000
+
+Iter:
+        7000
+
+Iter:
+        8000
+
+Iter:
+        9000
+
+Iter:
+       10000
+
+Iter:
+       11000
+

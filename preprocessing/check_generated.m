@@ -30,10 +30,16 @@ end
 % Code/VEGETATION_DYNAMIC.m are hand-edited during the project and are the only
 % MATLAB outside the generator that changes; a syntax error in either is silent
 % until a whole array has run, since GO wraps GRAPH_MOD in a try/catch.
+% Also lint the hand-written MATLAB in the repo itself. GRAPH_COMPARE.m and
+% make_figures.m are edited here and only ever run on the cluster, so a syntax
+% slip otherwise costs a full submit/queue/fail round trip to discover.
+here = fileparts(mfilename('fullpath'));
 files = [dir(fullfile(root, '*', 'era5_land', '*', 'GO_*.m'));
          dir(fullfile(root, '*', 'era5_land', '*', 'MOD_PARAM_*.m'));
          dir(fullfile(root, 'GRAPH_MOD.m'));
-         dir(fullfile(root, 'Code', 'VEGETATION_DYNAMIC.m'))];
+         dir(fullfile(root, 'Code', 'VEGETATION_DYNAMIC.m'));
+         dir(fullfile(here, 'GRAPH_COMPARE.m'));
+         dir(fullfile(here, 'make_figures.m'))];
 if isempty(files)
     fprintf('no generated .m files under %s\n', root);
     status = 1;

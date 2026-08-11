@@ -614,7 +614,9 @@ save(['RES_', id_location], '-v7.3');
 %%%     sbatch slurm/submit_figures.sh <STATION> <fixed_lma|dyn_lma>
 %%% which draws them from RES_*.mat. Keeping them out of here means a plotting
 %%% problem can never cost a simulation, and the run time is the science alone.
-fprintf('done. figures: sbatch slurm/submit_figures.sh %s <arm>\\n', id_location);
+%%% id_location is the MATLAB-safe name (US_HBK); the submit scripts take the
+%%% AmeriFlux id (US-HBK), so print that rather than something that will not work.
+fprintf('done. figures: sbatch slurm/submit_figures.sh %s <arm>\\n', '{station}');
 """
 
 

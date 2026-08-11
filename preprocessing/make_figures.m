@@ -38,10 +38,20 @@ end
 fig_dir = fullfile(rundir, 'figures');
 if ~exist(fig_dir, 'dir')
     mkdir(fig_dir);
-elseif ~force && ~isempty(dir(fullfile(fig_dir, '*.png')))
-    fprintf('  figures already present in %s (pass force=true to redraw)\n', fig_dir);
-    status = 2;
-    return
+elseif ~force
+    % Skip only if the figures are NEWER than the results. Keying the skip on
+    % existence alone silently left stale PNGs in place after a re-run, so the
+    % figures showed one model configuration while RES held another -- and the
+    % only way to notice was to remember which came first.
+    png = dir(fullfile(fig_dir, '*.png'));
+    if ~isempty(png) && max([png.datenum]) >= d(1).datenum
+        fprintf('  figures in %s are newer than %s -- nothing to do\n', ...
+            fig_dir, d(1).name);
+        status = 2;
+        return
+    elseif ~isempty(png)
+        fprintf('  figures are OLDER than %s -- redrawing\n', d(1).name);
+    end
 end
 
 % GRAPH_MOD lives at the model_run root and the T&C source in root/Code, the same

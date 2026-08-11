@@ -333,7 +333,9 @@ DECIDUOUS_PFT = [
     ("LDay_cr_H",    "LDay_cr_H",    "12.0",    "[h] day length for senescence. ZURICH 12.30"),
     ("Klf_H",        "Klf_H",        "0.025",   "[1/d] dead leaf fall turnover. ZURICH 1/15"),
     ("eps_ac_H",     "eps_ac_H",     "0.3",     "[-] allocation to reserve. ZURICH 1"),
-    ("dd_max_H",     "dd_max_H",     "0.0",     "[1/d] max drought leaf mortality"),
+    # ZURICH, not the PFT table: see the go_H note below. The table's 0 is outside
+    # Table 3's 1/600-1/30 and disables drought leaf mortality entirely.
+    ("dd_max_H",     "dd_max_H",     "1/365",   "[1/d] max drought leaf mortality; ZURICH (table's 0 is outside Table 3)"),
     ("drn_H",        "drn_H",        "0.0020",  "[1/d] root turnover"),
     ("dsn_H",        "dsn_H",        "0.0027",  "[1/d] sapwood transfer"),
     ("LtR_H",        "LtR_H",        "1.5",     "[-] max leaf-to-root ratio"),
@@ -366,7 +368,20 @@ DECIDUOUS_PFT = [
     ("mjDay_H",      "mjDay_H",      "230",     "[day] last day leaf onset may trigger (was 220)"),
     ("r_H",          "r_H",          "0.02",    "[-] respiration coefficient (was 0.055)"),
     ("gR_H",         "gR_H",         "0.22",    "[-] growth respiration (was 0.25)"),
-    ("go_H",         "go_H",         "0.001",   "[mol/s m2] cuticular conductance (was 0.01)"),
+    # THREE PARAMETERS COME FROM ZURICH, NOT THE PFT TABLE: go_H, dd_max_H, dc_C_H.
+    #
+    # Fatichi et al. (2012) Part 1 Table 3 publishes "expected realistic ranges"
+    # spanning all vegetation types. On every parameter where the PFT table and
+    # MOD_PARAM_ZURICH_SMA disagree AND Table 3 gives a bound, ZURICH is inside it
+    # and the table is outside:
+    #     go_H      ZURICH 0.01     table 0.001   range 0.005-0.04
+    #     dd_max_H  ZURICH 1/365    table 0       range 1/600-1/30
+    #     dc_C_H    ZURICH 2/365    table 78/365  range 1/365-1/15
+    # dc_C_H is the clearest: both are written as N/365 and they differ by a factor
+    # of 39, with only ZURICH's landing in range. So for these three the deciduous
+    # site file is better vetted than the generic PFT column, and it is the right
+    # source anyway -- ZURICH is a deciduous parameterisation, US_xRM is not.
+    ("go_H",         "go_H",         "0.01",    "[mol/s m2] cuticular conductance; ZURICH (table's 0.001 is below Table 3)"),
     ("Ha_H",         "Ha_H",         "72",      "[kJ/mol] entropy factor (was 89)"),
     # PsiG50/PsiG99 set the growth-limitation curve in BetaFactor (Bfac_all);
     # PsiX50 belongs to the plant-hydraulics module, which is off here
@@ -381,6 +396,10 @@ DECIDUOUS_PFT = [
     # instruction, flagged here because it is the one adopted value I cannot
     # independently justify.
     ("PsiL00_H",     "PsiL00_H",     "0.4",     "[MPa] leaf 2% loss = -1-(-1.4); POSITIVE, see note"),
+    # Now that Tcold = 5 makes cold shedding live, dc_C sets how fast leaves drop.
+    # 78/365 (PFT table AND US_xRM) is 3.2x above Table 3's 1/365-1/15; ZURICH's
+    # 2/365 is inside. Same N/365 form, factor of 39 apart.
+    ("dc_C_H",       "dc_C_H",       "2/365",   "[1/(d C)] cold foliage loss; ZURICH (78/365 is 3.2x above Table 3)"),
     # --- INITIAL CONDITIONS: not in the table, so chosen here -----------------
     # The table carries no state, and neither shipped IC set fits: US_xRM starts a
     # mature EVERGREEN canopy in full leaf on 1 January (LAI 4.03, 215 gC of
@@ -476,12 +495,32 @@ def render_mod_param(template: str, st: dict) -> tuple[str, list[str]]:
     # conifer, so it is already self-consistent. Deciduous stations need the whole
     # PFT swapped, not just the aSE_H switch.
     if st["ase"] == 1:
+        # Leaf optics. The template hardcodes Veg_Optical_Parameter(2) = NET Boreal
+        # for BOTH PFTs, so a broadleaf deciduous canopy runs with needleleaf
+        # optics: NIR reflectance 0.35 instead of 0.45 and a leaf-angle parameter
+        # of 0.01 (near-vertical, needle-like) instead of 0.25 (horizontal). That
+        # biases absorbed radiation and the light-interception profile.
+        # Class 7 = BDT temperate (the file's own header lists the classes).
+        # Evergreen is left alone deliberately: rows 1 (NET Temperate), 2 (NET
+        # Boreal) and 3 are numerically IDENTICAL in OPTICAL_PAR_VEG, so the
+        # template's class 2 is already correct for the needleleaf sites.
+        sub("pft_optics", r"^\s*\[PFT_opt_H\(1\)\]\s*=\s*Veg_Optical_Parameter\([^)]*\);.*$",
+            "[PFT_opt_H(1)]=Veg_Optical_Parameter(7); %% BDT temperate "
+            "(was 2 = NET Boreal, a needleleaf class)")
+
         # Initial conditions carry no PFT-table provenance -- the table has no
         # state at all -- so they must not be stamped as if they did.
         IC_KEYS = {"LAI_H", "B_H", "PHE_S_H", "AgeL_H"}
+        # These three come from the deciduous SITE file, not the PFT table: the
+        # table puts all three outside Table 3's published ranges (see the note on
+        # go_H above). Stamped accordingly so the provenance in the generated
+        # MOD_PARAM is true rather than uniform.
+        ZURICH_KEYS = {"go_H", "dd_max_H", "dc_C_H"}
         for key, lhs, val, note in DECIDUOUS_PFT:
             src = ("initial condition, chosen here: no state in the PFT table"
-                   if key in IC_KEYS else "PARAMETERS_ALL_CY_Cb.m PFT 8")
+                   if key in IC_KEYS else
+                   "MOD_PARAM_ZURICH_SMA.m deciduous" if key in ZURICH_KEYS else
+                   "PARAMETERS_ALL_CY_Cb.m PFT 8")
             sub(f"pft_{key}", rf"^\s*{lhs}\s*=\s*[^;]*;.*$",
                 f"{lhs.replace(chr(92), '')} = [{val}]; %% {note} [{src}]")
 
@@ -490,7 +529,7 @@ def render_mod_param(template: str, st: dict) -> tuple[str, list[str]]:
         # Every deciduous parameter must land. A silently-missed one leaves a
         # conifer value in a deciduous run, which is exactly the failure that
         # produced 38 dying forests and passed every check we had.
-        required += [f"pft_{k}" for k, _, _, _ in DECIDUOUS_PFT]
+        required += [f"pft_{k}" for k, _, _, _ in DECIDUOUS_PFT] + ["pft_optics"]
     problems = [f"{k}: matched {fired.get(k, 0)}x (expected 1)"
                 for k in required if fired.get(k, 0) != 1]
     # Tdp(1,:) = Ta(1)*ones(1,ms) is the initial soil temperature and MUST survive.

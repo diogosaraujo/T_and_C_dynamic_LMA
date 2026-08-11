@@ -126,6 +126,22 @@ echo "  mem alloc    : ${SLURM_MEM_PER_NODE:-?} MB   cpus: ${SLURM_CPUS_PER_TASK
 echo "  free mem     : $(free -g 2>/dev/null | awk '/^Mem:/{print $7" GB available of "$2" GB"}')"
 echo "  libGL        : $(ldconfig -p 2>/dev/null | grep -c libGL) entries"
 echo "  xcb libs     : $(ldconfig -p 2>/dev/null | grep -c libxcb)"
+# THE question: can MATLAB's Qt platform plugin resolve its shared libraries on
+# THIS node? "no Qt platform plugin could be initialized" is what you get when
+# libqxcb.so exists but one of its dependencies is missing, and that is a
+# per-node property of the OS install, not of MATLAB or of our code.
+MLROOT="$(dirname "$(dirname "$(readlink -f "$(command -v matlab)")")")"
+PLUG="$MLROOT/bin/glnxa64/qt/plugins/platforms"
+echo "  matlabroot   : $MLROOT"
+if [ -d "$PLUG" ]; then
+    echo "  qt platforms : $(ls "$PLUG" 2>/dev/null | tr '\n' ' ')"
+    if [ -f "$PLUG/libqxcb.so" ]; then
+        miss=$(ldd "$PLUG/libqxcb.so" 2>/dev/null | grep "not found" | awk '{print $1}' | tr '\n' ' ')
+        echo "  libqxcb deps : ${miss:-ALL RESOLVED}"
+    fi
+else
+    echo "  qt platforms : directory not found at $PLUG"
+fi
 echo "-------------------"
 
 # Count BEFORE, so success can be judged on what this run produced.

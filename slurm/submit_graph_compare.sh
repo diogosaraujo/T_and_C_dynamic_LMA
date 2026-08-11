@@ -74,6 +74,18 @@ if [ -n "${QT_PLATFORM:-}" ]; then
     echo "Qt platform : $QT_PLATFORM"
 fi
 
+# Same environment diagnostics as submit_figures.sh: figure creation has failed on
+# some nodes and not others, but node/date/input all changed together so the cause
+# is not established. Log what could differ so a failure is evidence, not a guess.
+echo "--- environment ---"
+echo "  DISPLAY      : '${DISPLAY:-<unset>}'"
+echo "  QT_QPA_PLAT  : '${QT_QPA_PLATFORM:-<unset>}'"
+echo "  mem alloc    : ${SLURM_MEM_PER_NODE:-?} MB   cpus: ${SLURM_CPUS_PER_TASK:-?}"
+echo "  free mem     : $(free -g 2>/dev/null | awk '/^Mem:/{print $7" GB available of "$2" GB"}')"
+echo "  libGL        : $(ldconfig -p 2>/dev/null | grep -c libGL) entries"
+echo "  xcb libs     : $(ldconfig -p 2>/dev/null | grep -c libxcb)"
+echo "-------------------"
+
 OUT="$SDIR/figures_compare"
 before=$(ls "$OUT"/*.png 2>/dev/null | wc -l)
 

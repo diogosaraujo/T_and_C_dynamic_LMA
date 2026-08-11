@@ -116,6 +116,18 @@ if [ -n "${QT_PLATFORM:-}" ]; then
     echo "Qt platform : $QT_PLATFORM"
 fi
 
+# Environment diagnostics. Figure jobs have failed on some nodes and not others,
+# but node/date/input all changed together, so the cause is NOT established. Log
+# the things that could differ so the next failure is evidence rather than a guess.
+echo "--- environment ---"
+echo "  DISPLAY      : '${DISPLAY:-<unset>}'"
+echo "  QT_QPA_PLAT  : '${QT_QPA_PLATFORM:-<unset>}'"
+echo "  mem alloc    : ${SLURM_MEM_PER_NODE:-?} MB   cpus: ${SLURM_CPUS_PER_TASK:-?}"
+echo "  free mem     : $(free -g 2>/dev/null | awk '/^Mem:/{print $7" GB available of "$2" GB"}')"
+echo "  libGL        : $(ldconfig -p 2>/dev/null | grep -c libGL) entries"
+echo "  xcb libs     : $(ldconfig -p 2>/dev/null | grep -c libxcb)"
+echo "-------------------"
+
 # Count BEFORE, so success can be judged on what this run produced.
 npng_before=$(ls "$RUNDIR"/figures/*.png 2>/dev/null | wc -l)
 echo "png before  : $npng_before"

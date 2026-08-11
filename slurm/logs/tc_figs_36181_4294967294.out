@@ -1,0 +1,53 @@
+job        : 36181  task none
+node       : soeepyc06
+started    : 2026-08-10T23:58:50Z
+station    : US-HBK   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/era5_land/dyn_lma
+
+  loading RES_US_HBK.mat (304 MB)
+
+== MAIN VARIABLES HydrologicalBalanceModel ==
+  Precipitation [mm]                                         44840.7352
+  Ground Evaporation [mm]                                    6298.369
+  Transpiration High Vegetation [mm]                         5285.0827
+  Transpiration Low Vegetation [mm]                          0
+  Sublimation/Evaporation Snow [mm]                          1445.6168
+  Saturation Excess (Dunne) [mm]                             1.4271e-10
+  Infiltration Excess (Horton) [mm]                          2.0741
+  Evaporation from Interception [mm]                         1577.7074
+  Evaporation from Urban Soil [mm]                           0
+  Evaporation from Rocks [mm]                                0
+  Evaporation from Litter [mm]                               0
+  Recharge [mm]                                              30202.4721
+  Net Lateral Subsurface [mm]                                0
+  Soil Water Content Variation [mm]                          -20.2254
+  Snowpack Water Content Variation [mm]                      8.8579
+  TOTAL BALANCE [mm]                                         -4.0745e-09
+
+== CARBON BALANCE HIGH-VEGETATION - CROWN1 ==
+  GPP Gross Primary Productivity [gC/m^2]                    22087.8711
+  NPP Net Primary Productivity [gC/m^2]                      14153.9099
+  ANPP Net Primary Productivity [gC/m^2]                     10669.9232
+  RA Autrophic Respiration [gC/m^2]                          7933.9612
+  Rg Growth Respiration [gC/m^2]                             4077.8784
+  Rml Leaf Maintenance Respiration [gC/m^2]                  3035.1304
+  Rexmy Exudation and Root Export [gC/m^2]                   432.4112
+  Rms Sapwood Maintenance Respiration [gC/m^2]               91.6461
+  Rms Carbohydrate Maintenance Respiration [gC/m^2]          59.9508
+  Rmr Root Maintenance Respiration  [gC/m^2]                 669.3557
+
+== CARBON BALANCE LOW-VEGETATION CROWN1 ==
+  GPP Gross Primary Productivity [gC/m^2]                    0
+  NPP Net Primary Productivity [gC/m^2]                      0
+  ANPP Net Primary Productivity [gC/m^2]                     0
+  RA Autrophic Respiration [gC/m^2]                          0
+  Rg Growth Respiration [gC/m^2]                             0
+  Rml Leaf Maintenance Respiration [gC/m^2]                  0
+  Rexmy Exudation and Root Export [gC/m^2]                   0
+  Rms Sapwood Maintenance Respiration [gC/m^2]               0
+  Rms Carbohydrate Maintenance Respiration [gC/m^2]          0
+  Rmr Root Maintenance Respiration  [gC/m^2]                 0
+
+finished   : 2026-08-10T23:59:51Z
+exit status: 137  (0 figures written, 2 nothing to do, 1 GRAPH_MOD failed)
+png files   : 14

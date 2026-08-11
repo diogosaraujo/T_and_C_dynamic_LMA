@@ -326,7 +326,18 @@ DECIDUOUS_PFT = [
     # (name, LHS as written in the template, value, comment)
     ("Tcold_H",      "Tcold_H",      "5",       "[C] cold leaf shed (was -50: never fired). ZURICH 7"),
     ("age_cr_H",     "age_cr_H",     "110",     "[day] critical leaf age (was 1220). ZURICH 150"),
-    ("Tlo_H",        "Tlo_H",        "13.0",    "[C] mean T for leaf onset (was 1.5). ZURICH 12.9"),
+    # Tlo comes from the table's COLD-ADAPTED column 2, not the deciduous column 8.
+    # It is compared against Tsmm, a 30-day running mean of the PROFILE-MEAN SOIL
+    # temperature (VEGGIE_UNIT: Tsm = mean(Tdp)), which lags air by ~1 month. At
+    # Hubbard Brook column 8's 13 C is not reached until DOY 178, putting leaf-out
+    # in late June: the tower's own CO2 flux gives sustained uptake from DOY 149
+    # (29 May, sd 6 d over 7 yr) and the model was +39 days late. Column 2 is an
+    # evergreen column, but Tlo is a climate threshold rather than a leaf-form
+    # trait, and column 2 is the only cold-adapted set in the table (Tlo 4,
+    # LDay_min 9.5, low dc_C). Two independent checks corroborate ~4: calibrating
+    # against the tower gives 4.8, and a 10 C air-temperature criterion gives 4.1.
+    # One value for every deciduous station -- deliberately NOT calibrated per site.
+    ("Tlo_H",        "Tlo_H",        "4.0",     "[C] mean T leaf onset; PFT 2 cold-adapted (col 8's 13 gives DOY 178 vs tower 149)"),
     ("dmg_H",        "dmg_H",        "30",      "[day] day of max growth"),
     ("Trr_H",        "Trr_H",        "3.0",     "[gC/m2 d] translocation rate (was 0.5). ZURICH 3.5"),
     ("LDay_min_H",   "LDay_min_H",   "11.5",    "[h] min day length for leaf onset (was 14.1). ZURICH 11.0"),

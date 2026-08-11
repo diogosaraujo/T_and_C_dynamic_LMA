@@ -102,18 +102,40 @@ command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exi
 FORCE_ARG="false"
 [ "${FORCE:-0}" = "1" ] && FORCE_ARG="true"
 
+# Whether MATLAB can create a figure at all is NODE-DEPENDENT here: it works on
+# soeepyc05 (jobs 36119-36122 wrote 14 PNGs in ~96 s) and dies at the first
+# figure() on soeepyc06/07 with "no Qt platform plugin could be initialized"
+# (36295/36296, 0 PNGs). QT_PLATFORM lets that be tested instead of guessed --
+# the assertion itself lists linuxfb, minimal, offscreen, vnc, xcb.
+#   QT_PLATFORM=offscreen  renders correctly but is very slow (>3.7 h in job 36261)
+#   QT_PLATFORM=minimal    untested, lighter than offscreen
+#   unset                  crashes on nodes without a usable plugin
+if [ -n "${QT_PLATFORM:-}" ]; then
+    export QT_QPA_PLATFORM="$QT_PLATFORM"
+    export MW_QT_PLATFORM="$QT_PLATFORM"
+    echo "Qt platform : $QT_PLATFORM"
+fi
+
+# Count BEFORE, so success can be judged on what this run produced.
+npng_before=$(ls "$RUNDIR"/figures/*.png 2>/dev/null | wc -l)
+echo "png before  : $npng_before"
+echo
 
 matlab -nodisplay -nosplash -batch \
     "addpath('$REPO_ROOT/preprocessing'); exit(make_figures('$RUNDIR', $FORCE_ARG))"
 status=$?
 
 npng=$(ls "$RUNDIR"/figures/*.png 2>/dev/null | wc -l)
-# Belt and braces: PNGs on disk mean the work finished even if the exit code says
-# otherwise. 2 means "correctly did nothing" and must not look like a failure.
-if [ "$status" != "0" ] && [ "$status" != "2" ] && [ "$npng" -gt 0 ]; then
-    echo "NOTE: matlab exited $status but $npng PNG(s) exist -- figures were"
-    echo "      written; treating as success (Qt teardown, see above)."
+# Judge on what THIS run produced. Keying the check on "PNGs exist" let 14
+# leftovers from a run on another node mask a MATLAB that wrote nothing, and the
+# job reported success (36240/36241/36292). Only an increase proves work happened.
+if [ "$status" != "0" ] && [ "$status" != "2" ] && [ "$npng" -gt "$npng_before" ]; then
+    echo "NOTE: matlab exited $status but the PNG count rose $npng_before -> $npng,"
+    echo "      so figures were written; treating as success."
     status=0
+elif [ "$status" != "0" ] && [ "$status" != "2" ]; then
+    echo "FAILED: matlab exited $status and the PNG count did not rise"
+    echo "        ($npng_before -> $npng). No figures were produced by this run."
 fi
 
 echo

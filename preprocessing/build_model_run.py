@@ -407,10 +407,19 @@ DECIDUOUS_PFT = [
     # instruction, flagged here because it is the one adopted value I cannot
     # independently justify.
     ("PsiL00_H",     "PsiL00_H",     "0.4",     "[MPa] leaf 2% loss = -1-(-1.4); POSITIVE, see note"),
-    # Now that Tcold = 5 makes cold shedding live, dc_C sets how fast leaves drop.
-    # 78/365 (PFT table AND US_xRM) is 3.2x above Table 3's 1/365-1/15; ZURICH's
-    # 2/365 is inside. Same N/365 form, factor of 39 apart.
-    ("dc_C_H",       "dc_C_H",       "2/365",   "[1/(d C)] cold foliage loss; ZURICH (78/365 is 3.2x above Table 3)"),
+    # With Tcold = 5 making cold shedding live, dc_C sets how fast leaves drop.
+    # Three candidates, all judged against the simulated autumn at US-HBK:
+    #   78/365 = 0.2137  PFT col 8 and US_xRM -- 3.2x ABOVE Table 3's 1/365-1/15
+    #    2/365 = 0.0055  ZURICH -- in range, but the canopy is still at 75% of peak
+    #                    on 31 Oct and not bare until 21 Dec
+    #            0.0274  PFT col 2, the cold-adapted column -- bare ~11 Oct, inside
+    #                    the observed mid-Oct to early-Nov window for northern
+    #                    hardwood, and in Table 3's range
+    # Column 2 also supplies Tlo (see above), so the deciduous set keeps ONE
+    # coherent story: cold-climate thresholds from PFT 2, the rest from column 8.
+    # A value fitted to this station's autumn (~4/365) would match slightly better
+    # but is per-site tuning, which this project deliberately avoids.
+    ("dc_C_H",       "dc_C_H",       "0.0274",  "[1/(d C)] cold foliage loss; PFT 2 cold-adapted (ZURICH 2/365 sheds into December)"),
     # --- INITIAL CONDITIONS: not in the table, so chosen here -----------------
     # The table carries no state, and neither shipped IC set fits: US_xRM starts a
     # mature EVERGREEN canopy in full leaf on 1 January (LAI 4.03, 215 gC of
@@ -655,6 +664,40 @@ def build_station(st, tmpl_txt, args, out_root):
     return probs
 
 
+def read_lma_measured(path) -> dict[str, float]:
+    """StationID -> measured canopy-average LMA [g/m2], from lma_vs_badm.csv.
+
+    ONLY LMA_SPP == '(All)' is accepted. A single-species value -- Acer
+    pensylvanicum at US-Ha1, white pine at the deciduous US-UMB -- describes one
+    species, often understory, and is not comparable to the canopy-mean Sl that
+    T&C uses. Mixing those in would rescale a whole series toward the wrong target.
+    """
+    out = {}
+    if not path:
+        return out
+    p = Path(path)
+    if not p.is_file():
+        print(f"  ! LMA bias table not found: {p}", file=sys.stderr)
+        return out
+    skipped = 0
+    for r in csv.DictReader(open(p, newline="", encoding="utf-8-sig")):
+        sid = (r.get("StationID") or "").strip()
+        val = (r.get("badm_LMA_g_m2") or "").strip()
+        spp = (r.get("LMA_SPP") or "").strip()
+        if not sid or not val:
+            continue
+        if spp not in ("(All)", ""):
+            skipped += 1
+            continue
+        try:
+            out[sid] = float(val)
+        except ValueError:
+            pass
+    print(f"LMA bias   : {len(out)} station(s) with a canopy-average measurement "
+          f"({skipped} single-species entries ignored) from {p.name}")
+    return out
+
+
 def write_lma_mat(path: Path, series, sl_fixed, arm):
     """LMA_<ST>.mat with years, LMA, SLA_H, SLA_L -- the LMA_US_xRM.mat layout.
 
@@ -692,6 +735,12 @@ def main() -> int:
                    help="CSV of stations to drop (default: excluded_stations.csv)")
     p.add_argument("--soil", type=Path, default=INPUT_ROOT / "soil")
     p.add_argument("--lma", type=Path, default=INPUT_ROOT / "lma")
+    p.add_argument("--lma-bias", type=Path, default=None,
+                   help="lma_vs_badm.csv; multiplicatively rescale each station's LMA "
+                        "series so its mean matches the measured LMA. Only stations "
+                        "with a CANOPY-AVERAGE measurement (LMA_SPP '(All)') are used: "
+                        "single-species values are not comparable to T&C's canopy-mean "
+                        "Sl. Off unless given.")
     p.add_argument("--meteo", type=Path, default=INPUT_ROOT / "meteo")
     p.add_argument("--canopy", type=Path,
                    default=INPUT_ROOT / "canopy_height" / "canopy_height_gedi.csv")
@@ -711,6 +760,7 @@ def main() -> int:
     wanted = None if a.stations.strip().lower() == "all" else {
         s.strip() for s in a.stations.split(",") if s.strip()}
     excluded = read_excluded(a.exclude_file)
+    lma_meas = read_lma_measured(a.lma_bias)
     stations = [x for x in read_stations(a.site_list or DEFAULT_SITE_LISTS, wanted)
                 if x["station_id"] not in excluded]
     if not stations:
@@ -777,6 +827,20 @@ def main() -> int:
         if not st["lma"]:
             miss.append("LMA series")
         else:
+            # Optional multiplicative bias correction toward a measured LMA. The
+            # series is rescaled so its mean equals the measurement while its
+            # RELATIVE year-to-year variation is untouched -- additive re-centring
+            # would preserve the absolute spread instead, shrinking the relative
+            # signal (at US-Ha2, CV 10.2% -> 8.0%) and with it the treatment effect
+            # this study measures. Retrieval errors are also proportional more
+            # often than additive.
+            raw_mean = sum(v for _, v in st["lma"]) / len(st["lma"])
+            meas = lma_meas.get(sid)
+            if meas:
+                k = meas / raw_mean
+                st["lma"] = [(y, v * k) for y, v in st["lma"]]
+                st["lma_bias_k"] = k
+                st["lma_raw_mean"] = raw_mean
             st["lma_mean"] = sum(v for _, v in st["lma"]) / len(st["lma"])
             st["sl"] = 1.0 / (st["lma_mean"] * F_C)
 
@@ -870,9 +934,13 @@ def main() -> int:
         probs = build_station(st, tmpl_txt, a, a.root)
         if probs:
             all_probs[st["station_id"]] = probs
+        bias = ""
+        if "lma_bias_k" in st:
+            bias = (f"  LMA x{st['lma_bias_k']:.3f} "
+                    f"({st['lma_raw_mean']:.1f}->{st['lma_mean']:.1f} g/m2)")
         print(f"  {st['station_id']:<8} written  ms={st['_soil_block'][0]} "
               f"Kbot={'0.01' if st['_kbot'] else 'NaN'} ZR95={st['zr95']:g} "
-              f"zatm={st['zatm']:g}"
+              f"zatm={st['zatm']:g}{bias}"
               + ("   <-- SUBSTITUTION PROBLEM" if probs else ""))
 
     if all_probs:

@@ -70,7 +70,7 @@ try
     plot(D.NNd, D.LAItot, '--', 'Color', CD, 'LineWidth', 1.2);
     ylabel('[LAI]'); xlabel('Day');
     title(sprintf('%s  LAI - Leaf Area Index (total weighted)', station));
-    legend('fixed LMA', 'dynamic LMA', 'Location', 'best');
+    legend('fixed LMA', 'dynamic LMA', 'Location', 'eastoutside');
     save_fig(out_dir, station, 'fig19c_LAI', dpi);
 catch ME
     nfail = nfail + 1; warn(ME, 'fig19c');
@@ -91,7 +91,7 @@ try
     xlabel('Year'); ylabel('[gC/m^2]');
     title(sprintf('%s  Vegetation Productivities   (solid = fixed, dashed = dynamic)', station));
     legend('GPP fixed','NPP fixed','ANPP fixed','GPP dyn','NPP dyn','ANPP dyn', ...
-        'Location','best','NumColumns',2);
+        'Location','eastoutside');
     save_fig(out_dir, station, 'fig21c_productivity', dpi);
 catch ME
     nfail = nfail + 1; warn(ME, 'fig21c');
@@ -101,20 +101,25 @@ end
 % Original dashed line style retained; the arms differ by colour.
 try
     nfig = nfig + 1;
-    newfig();
+    [~, tl] = newtiles(3, 2);
     E = {  @(a) a.GPP_yr./a.ET_yr,                'EWUE = GPP/ET',        '[gC/m^2 mm]'
            @(a) a.GPP_yr./a.T_yr,                 'WUE_T = GPP/T',        '[gC/m^2 mm]'
            @(a) 0.001*a.GPP_yr.*a.VPD_yr./a.ET_yr,'IWUE = GPP*VPD/ET',    '[gC/m^2 mm]'
            @(a) a.GPP_yr./a.T_yr,                 'WUE_{leaf} = Ag/T',    '[gC/m^2 mm]'
            @(a) a.ANPP_yr./a.Pr_yr,               'RAIN USE EFFICIENCY',  '[gC/m^2 mm]'
            @(a) a.ET_yr./(a.ET_yr+a.Lk_yr),       'HORTON INDEX',         '[-]' };
+    ax1 = [];
     for k = 1:6
-        subplot(3,2,k); hold on; grid on;
-        plot(F.Yrs_yr, E{k,1}(F), '--', 'Color', CF, 'LineWidth', 1.2);
-        plot(D.Yrs_yr, E{k,1}(D), '--', 'Color', CD, 'LineWidth', 1.2);
-        xlabel('Year'); ylabel(E{k,3}); title(E{k,2});
-        if k == 1, legend('fixed','dynamic','Location','best'); end
+        ax = tile(tl);
+        plot(ax, F.Yrs_yr, E{k,1}(F), '--', 'Color', CF, 'LineWidth', 1.2);
+        plot(ax, D.Yrs_yr, E{k,1}(D), '--', 'Color', CD, 'LineWidth', 1.2);
+        ylabel(ax, E{k,3}); title(ax, E{k,2});
+        if k >= 5, xlabel(ax, 'Year'); end   % x label only on the bottom row
+        if k == 1, ax1 = ax; end
     end
+    title(tl, sprintf('%s  water- and rain-use efficiency', station), ...
+          'FontWeight','bold','Interpreter','none');
+    outside_legend(tl, ax1, {'fixed LMA','dynamic LMA'});
     save_fig(out_dir, station, 'fig22c_efficiency', dpi);
 catch ME
     nfail = nfail + 1; warn(ME, 'fig22c');
@@ -123,17 +128,19 @@ end
 %% ------------------------------- 101c assimilation (was High vs Low)
 try
     nfig = nfig + 1;
-    newfig();
-    subplot(2,1,1); hold on; grid on;
-    plot(F.NN, F.An_H, 'b', 'LineWidth', 1.0);
-    plot(F.NN, F.Rdark_H, 'r', 'LineWidth', 1.0);
-    ylabel('[\mu mol CO_2 / m^2 s]'); title('Assimilation Rate -- FIXED LMA');
-    legend('Net Assimilation','Foliage Respiration','Location','best');
-    subplot(2,1,2); hold on; grid on;
-    plot(D.NN, D.An_H, 'b', 'LineWidth', 1.0);
-    plot(D.NN, D.Rdark_H, 'r', 'LineWidth', 1.0);
-    ylabel('[\mu mol CO_2 / m^2 s]'); xlabel('Hour');
-    title('Assimilation Rate -- DYNAMIC LMA');
+    [~, tl] = newtiles(2, 1);
+    ax = tile(tl);
+    plot(ax, F.NN, F.An_H, 'b', 'LineWidth', 1.0);
+    plot(ax, F.NN, F.Rdark_H, 'r', 'LineWidth', 1.0);
+    ylabel(ax, '[\mu mol CO_2 / m^2 s]'); title(ax, 'FIXED LMA');
+    ax2 = tile(tl);
+    plot(ax2, D.NN, D.An_H, 'b', 'LineWidth', 1.0);
+    plot(ax2, D.NN, D.Rdark_H, 'r', 'LineWidth', 1.0);
+    ylabel(ax2, '[\mu mol CO_2 / m^2 s]'); xlabel(ax2, 'Hour');
+    title(ax2, 'DYNAMIC LMA');
+    title(tl, sprintf('%s  assimilation rate', station), ...
+          'FontWeight','bold','Interpreter','none');
+    outside_legend(tl, ax, {'Net Assimilation','Foliage Respiration'});
     save_fig(out_dir, station, 'fig101c_assimilation', dpi);
 catch ME
     nfail = nfail + 1; warn(ME, 'fig101c');
@@ -142,24 +149,26 @@ end
 %% ------------------------------- 103c LAI / GPP-NPP / leaf age
 try
     nfig = nfig + 1;
-    newfig();
-    subplot(3,1,1); hold on; grid on;
+    [~, tl] = newtiles(3, 1);
+    ax = tile(tl);
     plot(F.NNd, F.LAI_H, '-', 'Color', CF, 'LineWidth', 1.2);
     plot(D.NNd, D.LAI_H, '--','Color', CD, 'LineWidth', 1.2);
     plot(F.NNd, F.LAIdead_H, ':', 'Color', CF, 'LineWidth', 1.0);
     plot(D.NNd, D.LAIdead_H, ':', 'Color', CD, 'LineWidth', 1.0);
-    ylabel('[LAI]'); title('LAI (dotted = dead LAI)');
-    legend('fixed','dynamic','Location','best');
-    subplot(3,1,2); hold on; grid on;
+    ylabel(ax, '[LAI]'); title(ax, 'LAI (dotted = dead LAI)');
+    ax2 = tile(tl);
     plot(F.NNd, F.NPP_H, '-', 'Color', CF, 'LineWidth', 1.2);
     plot(D.NNd, D.NPP_H, '--','Color', CD, 'LineWidth', 1.2);
     plot(F.NNd, F.NPP_H+F.RA_H, ':', 'Color', CF, 'LineWidth', 1.0);
     plot(D.NNd, D.NPP_H+D.RA_H, ':', 'Color', CD, 'LineWidth', 1.0);
-    ylabel('[gC / m^2 d]'); title('GPP/NPP (dotted = GPP)');
-    subplot(3,1,3); hold on; grid on;
+    ylabel(ax2, '[gC / m^2 d]'); title(ax2, 'GPP/NPP (dotted = GPP)');
+    ax3 = tile(tl);
     plot(F.NNd, F.AgeL_H, '-', 'Color', CF, 'LineWidth', 1.2);
     plot(D.NNd, D.AgeL_H, '--','Color', CD, 'LineWidth', 1.2);
-    ylabel('[days]'); xlabel('Day'); title('Average Leaf Age');
+    ylabel(ax3, '[days]'); xlabel(ax3, 'Day'); title(ax3, 'Average Leaf Age');
+    title(tl, sprintf('%s  canopy carbon and leaf age', station), ...
+          'FontWeight','bold','Interpreter','none');
+    outside_legend(tl, ax, {'fixed LMA','dynamic LMA'});
     save_fig(out_dir, station, 'fig103c_LAI_NPP_age', dpi);
 catch ME
     nfail = nfail + 1; warn(ME, 'fig103c');
@@ -168,12 +177,16 @@ end
 %% ------------------------------- 104c phenology state
 try
     nfig = nfig + 1;
-    newfig();
-    subplot(2,1,1); plot(F.NNd, F.PHE_S_H, 'Color', CF, 'LineWidth', 1.2); grid on;
-    ylabel('[#]'); title('PHENOLOGY STATE -- FIXED LMA   (1 dormant, 2 max growth, 3 normal, 4 senescence)');
-    ylim([0 5]);
-    subplot(2,1,2); plot(D.NNd, D.PHE_S_H, 'Color', CD, 'LineWidth', 1.2); grid on;
-    ylabel('[#]'); xlabel('Day'); title('PHENOLOGY STATE -- DYNAMIC LMA'); ylim([0 5]);
+    [~, tl] = newtiles(2, 1);
+    ax = tile(tl);
+    plot(ax, F.NNd, F.PHE_S_H, 'Color', CF, 'LineWidth', 1.2);
+    ylabel(ax, '[#]'); title(ax, 'FIXED LMA'); ylim(ax, [0 5]);
+    ax2 = tile(tl);
+    plot(ax2, D.NNd, D.PHE_S_H, 'Color', CD, 'LineWidth', 1.2);
+    ylabel(ax2, '[#]'); xlabel(ax2, 'Day'); title(ax2, 'DYNAMIC LMA'); ylim(ax2, [0 5]);
+    title(tl, sprintf(['%s  phenology state   ' ...
+        '(1 dormant, 2 max growth, 3 normal, 4 senescence)'], station), ...
+        'FontWeight','bold','Interpreter','none');
     save_fig(out_dir, station, 'fig104c_phenology', dpi);
 catch ME
     nfail = nfail + 1; warn(ME, 'fig104c');
@@ -182,15 +195,17 @@ end
 %% ------------------------------- 105c carbon pools
 try
     nfig = nfig + 1;
-    newfig();
+    [~, tl] = newtiles(2, 1);
     nm = {'Foliage','Sapwood','Fine Roots','Carbohydrate Reserve'};
-    subplot(2,1,1); hold on; grid on;
-    for k = 1:4, plot(F.NNd, F.B_H(:,k), 'LineWidth', 1.2); end
-    title('Carbon Pool H_{VEG} -- FIXED LMA'); ylabel('gC/m^2');
-    legend(nm, 'Location','best','NumColumns',2);
-    subplot(2,1,2); hold on; grid on;
-    for k = 1:4, plot(D.NNd, D.B_H(:,k), 'LineWidth', 1.2); end
-    title('Carbon Pool H_{VEG} -- DYNAMIC LMA'); ylabel('gC/m^2'); xlabel('Days');
+    ax = tile(tl);
+    for k = 1:4, plot(ax, F.NNd, F.B_H(:,k), 'LineWidth', 1.2); end
+    title(ax, 'FIXED LMA'); ylabel(ax, 'gC/m^2');
+    ax2 = tile(tl);
+    for k = 1:4, plot(ax2, D.NNd, D.B_H(:,k), 'LineWidth', 1.2); end
+    title(ax2, 'DYNAMIC LMA'); ylabel(ax2, 'gC/m^2'); xlabel(ax2, 'Days');
+    title(tl, sprintf('%s  carbon pools B(1:4)', station), ...
+          'FontWeight','bold','Interpreter','none');
+    outside_legend(tl, ax, nm);
     save_fig(out_dir, station, 'fig105c_carbon_pools', dpi);
 catch ME
     nfail = nfail + 1; warn(ME, 'fig105c');
@@ -199,14 +214,18 @@ end
 %% ------------------------------- 106c soil T and beta, side by side
 try
     nfig = nfig + 1;
-    newfig();
+    [~, tl] = newtiles(1, 2);
     A = {F, D}; ttl = {'FIXED LMA','DYNAMIC LMA'};
     for k = 1:2
-        subplot(1,2,k); hold on; grid on;
-        yyaxis left;  plot(A{k}.NNd, A{k}.TdpI_H, 'LineWidth', 1.0); ylabel('Soil T 30-day mean [\circC]');
-        yyaxis right; plot(A{k}.NNd, A{k}.Bfac_dayH, 'LineWidth', 1.0); ylabel('\beta factor [-]');
-        xlabel('Day'); title(ttl{k});
+        ax = tile(tl);
+        yyaxis(ax,'left');  plot(ax, A{k}.NNd, A{k}.TdpI_H, 'LineWidth', 1.0);
+        ylabel(ax, 'Soil T 30-day mean [\circC]');
+        yyaxis(ax,'right'); plot(ax, A{k}.NNd, A{k}.Bfac_dayH, 'LineWidth', 1.0);
+        ylabel(ax, '\beta factor [-]');
+        xlabel(ax, 'Day'); title(ax, ttl{k});
     end
+    title(tl, sprintf('%s  soil temperature and water-stress factor', station), ...
+          'FontWeight','bold','Interpreter','none');
     save_fig(out_dir, station, 'fig106c_soilT_beta', dpi);
 catch ME
     nfail = nfail + 1; warn(ME, 'fig106c');
@@ -220,13 +239,15 @@ mb = { '1001c_monthly_fluxes',   1
 for m = 1:4
     try
         nfig = nfig + 1;
-        newfig();
+        [~, tl] = newtiles(1, 2);
         A = {F, D}; ttl = {'FIXED LMA','DYNAMIC LMA'};
         for k = 1:2
-            subplot(1,2,k);
+            ax = tile(tl);
             draw_monthly(A{k}, mb{m,2});
-            title(ttl{k});
+            title(ax, ttl{k});
         end
+        title(tl, sprintf('%s  %s', station, strrep(mb{m,1}(6:end),'_',' ')), ...
+              'FontWeight','bold','Interpreter','none');
         save_fig(out_dir, station, ['fig' mb{m,1}], dpi);
     catch ME
         nfail = nfail + 1; warn(ME, mb{m,1});
@@ -394,6 +415,38 @@ fh = figure('Units','inches','Position',[0 0 11 6.5], ...
             'PaperUnits','inches','PaperSize',[11 6.5], ...
             'PaperPosition',[0 0 11 6.5],'Color','w');
 set(gca,'FontSize',9);
+end
+
+function [fh, tl] = newtiles(nr, nc)
+%NEWTILES  A figure with a tiled layout instead of subplot.
+%
+% subplot laid the panels out badly here: under -nodisplay every multi-panel
+% figure came back with axes about a third of their proper height and large dead
+% gaps between them, which made the 3x2 efficiency figure unreadable. tiledlayout
+% computes the grid deterministically, honours 'compact' spacing, and lets a
+% legend sit OUTSIDE the panels via lgd.Layout.Tile -- inside, the legend was
+% overlapping the axes and stealing width from them.
+fh = figure('Units','inches','Position',[0 0 11 6.5], ...
+            'PaperUnits','inches','PaperSize',[11 6.5], ...
+            'PaperPosition',[0 0 11 6.5],'Color','w');
+tl = tiledlayout(fh, nr, nc, 'TileSpacing','compact', 'Padding','compact');
+end
+
+function ax = tile(tl)
+ax = nexttile(tl);
+set(ax,'FontSize',9);
+hold(ax,'on'); grid(ax,'on');
+end
+
+function outside_legend(tl, ax, labels, where)
+% One legend for the whole layout, parked outside the panel grid.
+if nargin < 4 || isempty(where), where = 'east'; end
+lg = legend(ax, labels);
+try
+    lg.Layout.Tile = where;      % tiledlayout-aware placement
+catch
+    set(lg, 'Location', 'best'); % older releases: at least do not error
+end
 end
 
 function save_fig(out_dir, station, name, dpi)

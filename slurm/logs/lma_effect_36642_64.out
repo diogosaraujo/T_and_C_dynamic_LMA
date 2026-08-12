@@ -1,0 +1,18 @@
+job        : 36706  task 64
+node       : soeepyc08
+started    : 2026-08-12T18:34:36Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+cache      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+cache     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect
+site list : 118 stations, 98 present in model_run
+
+  [1/1] US-Slt: ok
+
+cache now holds 64 station file(s)
+next: python analyze_lma_effect.py --report
+
+cache holds: 64 station file(s)
+finished   : 2026-08-12T18:34:42Z
+exit status: 0

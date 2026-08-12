@@ -1,0 +1,8 @@
+usage: build_model_run.py [-h] [--root ROOT] [--template TEMPLATE]
+                          [--stations STATIONS] [--site-list SITE_LIST]
+                          [--exclude-file EXCLUDE_FILE] [--soil SOIL]
+                          [--lma LMA] [--lma-bias LMA_BIAS] [--meteo METEO]
+                          [--canopy CANOPY] [--root-depth ROOT_DEPTH]
+                          [--heights HEIGHTS] [--meteo-years METEO_YEARS]
+                          [--dry-run]
+build_model_run.py: error: unrecognized arguments: slurm/submit_build_model_run.sh

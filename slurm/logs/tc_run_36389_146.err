@@ -1,0 +1,16 @@
+{Error using fzero (line 339)
+Initial function value must be finite and real.
+
+Error in SVAT_UNIT (line 333)
+        [Ts,~,exitflag]=fzero(@Surface_Temperature_Snow,Tstm0,Opt_ST,dt,Ta,ea,Latm,SvF,Pre,...
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in HYDROLOGIC_UNIT (line 211)
+    dQVEG,HV,QEV,TsV,Ts_under,WAT,q_run,EG_dis,J_Hdis,J_Ldis,Imelt,Smelt]=SVAT_UNIT(Tstm0,Pr,Ta,Ds,Ws,zatm,Tstm1,Tstm1_under,dt,ea,Latm,N,Pre,...
+                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in MAIN_FRAME_SLA (line 543)
+        snow_alb,tau_sno(i),e_sno(i),Ws_under(i),dQVEG(i),HV(i),QEV(i),TsV(i),Ts_under(i),EK(i),POT(i,:)]=HYDROLOGIC_UNIT(V(i-1,:),Oice(i-1,:),aR,Zs,...
+                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in GO_US_Wi2 (line 38)
+MAIN_FRAME_SLA;
+^^^^^^^^^^^^^^
+} 

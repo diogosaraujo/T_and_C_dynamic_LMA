@@ -1,0 +1,12 @@
+job        : 36386
+node       : soeepyc05
+started    : 2026-08-12T05:27:09Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+template   : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/T&C/Thanos_US_xRM
+meteo      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+
+
+finished   : 2026-08-12T05:27:09Z
+exit status: 2  (1 = a generated file is untrustworthy, or nothing built;
+                        stations blocked for missing inputs are reported, not fatal)
+44G	/vol_efthymios/NFS07/dd1136/T_and_C/model_run

@@ -1,0 +1,22 @@
+job        : 36418  task 26
+node       : soeepyc05
+started    : 2026-08-12T06:15:34Z
+station    : US-DPP   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-DPP/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+[Warning: Failure at t=1.892233e-01.  Unable to meet integration tolerances
+without reducing the step size below the smallest value allowed (4.440892e-16)
+at time t.] 
+[> In ode23s (line 382)
+In HYDROLOGIC_UNIT (line 388)
+In MAIN_FRAME_SLA (line 543)
+In GO_US_DPP (line 38)] 
+
+finished   : 2026-08-12T06:51:18Z
+exit status: 1
+  (no RES_*.mat produced)

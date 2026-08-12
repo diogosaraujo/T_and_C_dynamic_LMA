@@ -1,0 +1,41 @@
+job        : 36381  task none
+node       : soeepyc05
+started    : 2026-08-12T04:26:04Z
+station    : US-HBK
+
+--- environment ---
+  DISPLAY      : '<unset>'
+  QT_QPA_PLAT  : '<unset>'
+  mem alloc    : 49152 MB   cpus: 2
+  free mem     : 234 GB available of 251 GB
+  libGL        : 0 entries
+  xcb libs     : 0
+  matlabroot   : /opt/apps/matlab_2025a
+  libqxcb      : /opt/apps/matlab_2025a/bin/glnxa64/platforms/libqxcb.so
+  missing deps : ALL RESOLVED
+  platforms    : libqlinuxfb.so libqminimal.so libqoffscreen.so libqvnc.so libqxcb.so 
+-------------------
+station : US-HBK
+  fixed : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/era5_land/fixed_lma
+  dyn   : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/era5_land/dyn_lma
+  out   : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare
+  loaded both arms (13150 daily, 315576 hourly steps)
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_table_parameters.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig19c_LAI.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig21c_productivity.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig22c_efficiency.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig101c_assimilation.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig103c_LAI_NPP_age.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig104c_phenology.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig105c_carbon_pools.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig106c_soilT_beta.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig1001c_monthly_fluxes.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig1002c_monthly_balance.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig1003c_fraction_fluxes.png
+  wrote /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare/US_HBK_fig1004c_fraction_balance.png
+
+13 of 13 figure(s) written to /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-HBK/figures_compare
+
+finished   : 2026-08-12T04:27:57Z
+exit status: 0
+png files   : 13  (was 13)

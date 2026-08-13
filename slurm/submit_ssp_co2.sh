@@ -12,7 +12,11 @@
 ## distributed through input4MIPs), so ONE series per scenario serves all five
 ## GCMs and there is nothing model-specific to fetch.
 ##
-## DOWNLOAD THE THREE FILES FIRST, into $TC_INPUT_DATA/co2/raw/:
+## With no arguments it DOWNLOADS the three input4MIPs files from ESGF and then
+## converts them; already-downloaded files are reused. If the download fails it
+## falls back to converting whatever is already in $TC_INPUT_DATA/co2/raw/.
+##
+## The datasets, should you ever need to fetch them by hand:
 ##
 ##   historical 1980-2014  input4MIPs.CMIP6.CMIP.UoM.UoM-CMIP-1-2-0
 ##   ssp126     2015-2100  input4MIPs.CMIP6.ScenarioMIP.UoM.UoM-IMAGE-ssp126-1-2-1
@@ -22,9 +26,13 @@
 ## account for some nodes) or http://greenhousegases.science.unimelb.edu.au
 ## (the same data, no account). The scenario is read from each filename.
 ##
-## This job does NOT download: ESGF URLs are version-stamped and move, and a
-## silently-stale CO2 pathway would scale photosynthesis at every station and year
-## without ever failing. Fetch them once by hand, then this is reproducible.
+## The ESGF index is queried rather than any URL being hard-coded, because ESGF is
+## mid-migration to ESGF-NG and the endpoints move: esgf-node.llnl.gov now 302s to
+## an ORNL bridge, and three more index nodes are tried after it. Two quirks are
+## handled and both return an EMPTY result rather than an error, so neither is
+## self-announcing: the CMIP historical collection indexes the variable with
+## HYPHENS while ScenarioMIP uses UNDERSCORES, and the year-0 start of the
+## historical file needs has_year_zero on the calendar.
 ##
 ## Writes $TC_INPUT_DATA/co2/co2_<scenario>.csv, which build_gcm_meteo.py
 ## interpolates onto the hourly stamp.
@@ -62,27 +70,22 @@ cd "$REPO_ROOT/preprocessing" || exit 1
 
 # --report and an explicit --from-netcdf/--from-csv pass straight through.
 if [ "$#" -gt 0 ]; then
-    python fetch_ssp_co2.py --out "$CO2_DIR" "$@"
+    python fetch_ssp_co2.py --out "$CO2_DIR" --raw-dir "$RAW_DIR" "$@"
     status=$?
 else
-    shopt -s nullglob
-    RAW=( "$RAW_DIR"/*.nc "$RAW_DIR"/*.csv )
-    shopt -u nullglob
-    if [ ${#RAW[@]} -eq 0 ]; then
-        echo "ERROR: no .nc or .csv in $RAW_DIR" >&2
-        echo >&2
-        echo "Download the three input4MIPs GHG concentration files into that" >&2
-        echo "directory first -- dataset names are in the header of this script." >&2
-        echo "Then re-run. Nothing else in the GCM pipeline needs them, but" >&2
-        echo "build_gcm_meteo.py will emit Ca = NaN without them and T&C will" >&2
-        echo "not run on that forcing." >&2
-        exit 1
-    fi
-    echo "found ${#RAW[@]} raw file(s):"
-    printf '  %s\n' "${RAW[@]}"
-    echo
-    python fetch_ssp_co2.py --out "$CO2_DIR" --from-netcdf "${RAW[@]}"
+    python fetch_ssp_co2.py --out "$CO2_DIR" --raw-dir "$RAW_DIR" --download
     status=$?
+    if [ $status -ne 0 ]; then
+        shopt -s nullglob
+        RAW=( "$RAW_DIR"/*.nc "$RAW_DIR"/*.csv )
+        shopt -u nullglob
+        if [ ${#RAW[@]} -gt 0 ]; then
+            echo
+            echo "download failed; converting the ${#RAW[@]} file(s) already in $RAW_DIR"
+            python fetch_ssp_co2.py --out "$CO2_DIR" --from-netcdf "${RAW[@]}"
+            status=$?
+        fi
+    fi
 fi
 
 echo

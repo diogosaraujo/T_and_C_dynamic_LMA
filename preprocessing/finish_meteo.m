@@ -1,4 +1,4 @@
-function finish_meteo(raw_dir, out_dir, partition_dir, year_tag)
+function finish_meteo(raw_dir, out_dir, partition_dir, year_tag, t_bef_in, t_aft_in)
 %FINISH_METEO  Second stage of the T&C forcing build.
 %
 %   finish_meteo(raw_dir, out_dir, partition_dir, year_tag)
@@ -53,8 +53,19 @@ if nargin < 4 || isempty(year_tag),      year_tag = '1985_2020';                
 if nargin < 3 || isempty(partition_dir), partition_dir = fullfile('..','T&C','Diogo'); end
 if nargin < 2 || isempty(out_dir),       out_dir = raw_dir;                       end
 
-T_BEF = 1.0;    % de-accumulated ERA5-Land hour H covers (H-1, H]
-T_AFT = 0.0;
+% Defaults are the ERA5-Land convention: de-accumulated hour H covers (H-1, H].
+% The GCM path passes 0/1 instead, because build_gcm_meteo.py CONSTRUCTS the
+% hourly series and places the value at hour H over (H, H+1]. A constructed
+% series has no convention of its own to discover, so it is imposed at both ends
+% and must agree -- getting this backwards shifts the solar geometry by an hour
+% and shows up as a systematic Rn bias, not as an error.
+if nargin < 6 || isempty(t_aft_in), t_aft_in = 0.0; end
+if nargin < 5 || isempty(t_bef_in), t_bef_in = 1.0; end
+T_BEF = t_bef_in;
+T_AFT = t_aft_in;
+why = {'imposed (constructed hourly series)', 'ERA5-Land, de-accumulated'};
+fprintf('t_bef/t_aft = %g/%g -- %s\n', T_BEF, T_AFT, ...
+    why{1 + double(T_BEF == 1.0 && T_AFT == 0.0)});
 
 addpath(partition_dir);
 if ~exist('C_Automatic_Radiation_Partition', 'file')

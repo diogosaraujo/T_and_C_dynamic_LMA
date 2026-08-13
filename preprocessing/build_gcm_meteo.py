@@ -331,6 +331,10 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
         return diag, None
 
     from scipy.io import savemat
+    # Per-SCENARIO subdirectory, because finish_meteo.m globs every
+    # Meteo_*_raw.mat in a directory and stamps them all with one year tag --
+    # and historical (1980-2014) and the SSPs (2015-2100) do not share one.
+    out_dir = out_dir / scenario
     out_dir.mkdir(parents=True, exist_ok=True)
     savemat(out_dir / f"Meteo_{mat_name(station)}_{mat_name(gcm)}_{scenario}_raw.mat",
             {k: (np.asarray(v).reshape(-1, 1) if isinstance(v, np.ndarray) else v)

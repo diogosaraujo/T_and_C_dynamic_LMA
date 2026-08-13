@@ -95,18 +95,23 @@ command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exi
 
 # The year tag is taken from the raw files themselves rather than assumed, because
 # historical (1980-2014) and the SSPs (2015-2100) differ.
-for tag in $(ls "$METEO_DIR"/Meteo_*_raw.mat 2>/dev/null \
-             | sed -E 's/.*_(historical|ssp[0-9]+)_raw\.mat/\1/' | sort -u); do
-    case "$tag" in historical) YEARS=1980_2014 ;; *) YEARS=2015_2100 ;; esac
-    echo "  partition: $tag -> $YEARS"
-    matlab -nodisplay -nosplash -batch \
-        "finish_meteo('$METEO_DIR','$METEO_DIR','$PARTITION_DIR','${tag}_${YEARS}',0,1)"
+s2=0
+for SUB in "$METEO_DIR"/*/; do
+    tag=$(basename "$SUB")
+    ls "$SUB"/Meteo_*_raw.mat >/dev/null 2>&1 || continue
+    case "$tag" in
+        historical) YEARS=1980_2014 ;;
+        ssp*)       YEARS=2015_2100 ;;
+        *)          continue ;;
+    esac
+    echo "  partition: $tag -> $YEARS  ($(ls "$SUB"/Meteo_*_raw.mat | wc -l) file(s))"
+    matlab -nodisplay -nosplash -batch         "finish_meteo('$SUB','$SUB','$PARTITION_DIR','$YEARS',0,1)"
+    s2=$(( s2 || $? ))
 done
-s2=$?
 
 echo
-echo "raw  files : $(ls "$METEO_DIR"/Meteo_*_raw.mat 2>/dev/null | wc -l)"
-echo "final files: $(ls "$METEO_DIR"/Meteo_*_[0-9]*.mat 2>/dev/null | wc -l)"
+echo "raw  files : $(find "$METEO_DIR" -name 'Meteo_*_raw.mat' 2>/dev/null | wc -l)"
+echo "final files: $(find "$METEO_DIR" -name 'Meteo_*_raw.mat' -prune -o -name 'Meteo_*.mat' -print 2>/dev/null | wc -l)"
 du -sh "$METEO_DIR" 2>/dev/null || true
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "exit status: stage1=$s1 stage2=$s2"

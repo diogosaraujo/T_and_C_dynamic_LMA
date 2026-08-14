@@ -1,0 +1,17 @@
+job        : 37136  task 38
+node       : soeepyc07
+started    : 2026-08-14T06:41:24Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 38
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] IPSL-CM6A-LR   ssp585      tasmin   31411 days x 101 stations
+
+extracted  : 36 of 105 npz files
+143M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T07:09:16Z
+exit status: 0

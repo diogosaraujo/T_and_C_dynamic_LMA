@@ -1,0 +1,17 @@
+job        : 37150  task 50
+node       : soeepyc05
+started    : 2026-08-14T07:09:23Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 50
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] MPI-ESM1-2-HR  ssp126      tas      31411 days x 101 stations
+
+extracted  : 53 of 105 npz files
+265M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T08:13:52Z
+exit status: 0

@@ -1,0 +1,17 @@
+job        : 37145  task 46
+node       : soeepyc05
+started    : 2026-08-14T06:44:01Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 46
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] MPI-ESM1-2-HR  historical  hurs     12784 days x 101 stations
+
+extracted  : 40 of 105 npz files
+179M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T07:18:38Z
+exit status: 0

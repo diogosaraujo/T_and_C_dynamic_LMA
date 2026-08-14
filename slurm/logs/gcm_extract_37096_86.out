@@ -1,0 +1,17 @@
+job        : 37189  task 86
+node       : soeepyc05
+started    : 2026-08-14T08:28:58Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 86
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] UKESM1-0-LL    historical  tasmax   12600 days x 101 stations  ! calendar '360_day'
+
+extracted  : 74 of 105 npz files
+369M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T08:55:03Z
+exit status: 0

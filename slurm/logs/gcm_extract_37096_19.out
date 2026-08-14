@@ -5,3 +5,13 @@ nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
 output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
 
 args       : --force --index 19
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] GFDL-ESM4      ssp585      pr       31390 days x 101 stations  ! calendar '365_day'
+
+extracted  : 22 of 105 npz files
+62M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T06:35:37Z
+exit status: 0

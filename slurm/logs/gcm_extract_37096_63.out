@@ -1,0 +1,17 @@
+job        : 37163  task 63
+node       : soeepyc07
+started    : 2026-08-14T07:42:16Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 63
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] MPI-ESM1-2-HR  ssp585      sfcWind  31411 days x 101 stations
+
+extracted  : 47 of 105 npz files
+229M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T07:50:56Z
+exit status: 0

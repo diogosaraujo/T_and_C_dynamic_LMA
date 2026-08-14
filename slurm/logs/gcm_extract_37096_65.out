@@ -1,0 +1,17 @@
+job        : 37165  task 65
+node       : soeepyc05
+started    : 2026-08-14T07:48:48Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 65
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] MRI-ESM2-0     historical  tasmax   12784 days x 101 stations
+
+extracted  : 55 of 105 npz files
+272M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T08:14:27Z
+exit status: 0

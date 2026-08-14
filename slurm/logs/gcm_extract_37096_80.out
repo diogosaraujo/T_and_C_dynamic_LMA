@@ -1,0 +1,17 @@
+job        : 37182  task 80
+node       : soeepyc05
+started    : 2026-08-14T08:20:34Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 80
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] MRI-ESM2-0     ssp585      tasmin   31411 days x 101 stations
+
+extracted  : 91 of 105 npz files
+462M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T09:31:21Z
+exit status: 0

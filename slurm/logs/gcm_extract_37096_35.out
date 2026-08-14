@@ -1,0 +1,17 @@
+job        : 37133  task 35
+node       : soeepyc05
+started    : 2026-08-14T06:35:41Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 35
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] IPSL-CM6A-LR   ssp126      sfcWind  31411 days x 101 stations
+
+extracted  : 49 of 105 npz files
+242M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T07:52:29Z
+exit status: 0

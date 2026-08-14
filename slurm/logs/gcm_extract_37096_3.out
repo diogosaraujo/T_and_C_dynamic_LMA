@@ -5,3 +5,13 @@ nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
 output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
 
 args       : --force --index 3
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] GFDL-ESM4      historical  tasmin   12775 days x 101 stations  ! calendar '365_day'
+
+extracted  : 16 of 105 npz files
+43M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T06:02:39Z
+exit status: 0

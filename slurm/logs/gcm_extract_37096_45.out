@@ -1,0 +1,17 @@
+job        : 37144  task 45
+node       : soeepyc05
+started    : 2026-08-14T06:43:57Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 45
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] MPI-ESM1-2-HR  historical  tasmin   12784 days x 101 stations
+
+extracted  : 39 of 105 npz files
+179M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T07:18:04Z
+exit status: 0

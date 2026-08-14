@@ -1,0 +1,17 @@
+job        : 37200  task 96
+node       : soeepyc07
+started    : 2026-08-14T09:05:15Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 96
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] UKESM1-0-LL    ssp126      pr       30960 days x 101 stations  ! calendar '360_day'
+
+extracted  : 79 of 105 npz files
+380M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T09:16:20Z
+exit status: 0

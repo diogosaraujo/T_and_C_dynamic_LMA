@@ -1,0 +1,17 @@
+job        : 37202  task 98
+node       : soeepyc05
+started    : 2026-08-14T09:16:24Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 98
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] UKESM1-0-LL    ssp126      sfcWind  30960 days x 101 stations  ! calendar '360_day'
+
+extracted  : 104 of 105 npz files
+544M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T09:57:14Z
+exit status: 0

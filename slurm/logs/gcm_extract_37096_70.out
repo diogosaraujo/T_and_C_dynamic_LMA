@@ -1,0 +1,17 @@
+job        : 37170  task 70
+node       : soeepyc05
+started    : 2026-08-14T07:56:43Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 70
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] MRI-ESM2-0     historical  sfcWind  12784 days x 101 stations
+
+extracted  : 63 of 105 npz files
+307M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T08:22:26Z
+exit status: 0

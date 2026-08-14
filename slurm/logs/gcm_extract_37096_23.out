@@ -1,0 +1,17 @@
+job        : 37119  task 23
+node       : soeepyc07
+started    : 2026-08-14T06:02:40Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 23
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] IPSL-CM6A-LR   historical  tasmax   12784 days x 101 stations
+
+extracted  : 20 of 105 npz files
+55M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T06:07:38Z
+exit status: 0

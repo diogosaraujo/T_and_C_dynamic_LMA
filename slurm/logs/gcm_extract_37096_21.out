@@ -1,0 +1,17 @@
+job        : 37117  task 21
+node       : soeepyc05
+started    : 2026-08-14T06:00:24Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 21
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] GFDL-ESM4      ssp585      sfcWind  31390 days x 101 stations  ! calendar '365_day'
+
+extracted  : 39 of 105 npz files
+179M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T07:16:14Z
+exit status: 0

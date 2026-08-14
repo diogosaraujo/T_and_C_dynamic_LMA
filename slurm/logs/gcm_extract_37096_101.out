@@ -1,0 +1,17 @@
+job        : 37205  task 101
+node       : soeepyc07
+started    : 2026-08-14T09:21:05Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 101
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] UKESM1-0-LL    ssp585      tasmin   30960 days x 101 stations  ! calendar '360_day'
+
+extracted  : 95 of 105 npz files
+491M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T09:43:45Z
+exit status: 0

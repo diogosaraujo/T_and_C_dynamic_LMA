@@ -1,0 +1,17 @@
+job        : 37137  task 39
+node       : soeepyc07
+started    : 2026-08-14T06:41:24Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 39
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] IPSL-CM6A-LR   ssp585      hurs     31411 days x 101 stations
+
+extracted  : 37 of 105 npz files
+157M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T07:09:30Z
+exit status: 0

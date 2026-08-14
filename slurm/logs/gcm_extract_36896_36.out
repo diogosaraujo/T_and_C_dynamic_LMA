@@ -1,0 +1,6 @@
+job        : 36932  task 36
+node       : soeepyc07
+started    : 2026-08-13T18:53:57Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+

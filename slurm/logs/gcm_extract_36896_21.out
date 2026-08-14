@@ -1,0 +1,16 @@
+job        : 36917  task 21
+node       : soeepyc07
+started    : 2026-08-13T18:51:38Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] GFDL-ESM4 ssp585 sfcWind: FAILED -- ValueError: illegal calendar or reference date for python datetime
+
+extracted  : 0 of 105 npz files
+512	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-13T18:58:44Z
+exit status: 1

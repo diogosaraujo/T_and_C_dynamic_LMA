@@ -1,0 +1,4 @@
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fetch_ssp_co2.py:195: CFWarning: this date/calendar/year zero convention is not supported by CF
+  dates = _n.num2date(t[:], t.units, cal, has_year_zero=True,
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fetch_ssp_co2.py:199: CFWarning: this date/calendar/year zero convention is not supported by CF
+  dates = _n.num2date(t[:], t.units, cal, has_year_zero=True)

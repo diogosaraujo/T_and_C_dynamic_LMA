@@ -1,0 +1,16 @@
+job        : 36923  task 27
+node       : soeepyc07
+started    : 2026-08-13T18:52:18Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] IPSL-CM6A-LR   historical  rsds     12784 days x 101 stations
+
+extracted  : 6 of 105 npz files
+14M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-13T23:04:20Z
+exit status: 0

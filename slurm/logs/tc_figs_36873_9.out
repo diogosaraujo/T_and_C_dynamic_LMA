@@ -1,0 +1,14 @@
+job        : 36892  task 9
+node       : soeepyc10
+started    : 2026-08-13T18:41:27Z
+station    : US-CRK   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-CRK/era5_land/fixed_lma
+
+--- environment ---
+  DISPLAY      : '<unset>'
+  QT_QPA_PLAT  : '<unset>'
+  mem alloc    : 32768 MB   cpus: 2
+  free mem     : 243 GB available of 251 GB
+  libGL        : 0 entries
+  xcb libs     : 0
+  matlabroot   : /opt/apps/matlab_2025a

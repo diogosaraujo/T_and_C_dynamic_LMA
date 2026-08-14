@@ -1,0 +1,16 @@
+job        : 36951  task 48
+node       : soeepyc07
+started    : 2026-08-13T22:51:18Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] MPI-ESM1-2-HR  historical  rsds     12784 days x 101 stations
+
+extracted  : 12 of 105 npz files
+30M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T02:57:13Z
+exit status: 0

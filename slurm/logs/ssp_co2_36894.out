@@ -1,0 +1,41 @@
+job        : 36894
+node       : soeepyc10
+started    : 2026-08-13T18:43:05Z
+raw inputs : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2/raw
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2
+
+downloading input4MIPs CO2 for: historical, ssp126, ssp585
+  raw dir: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2/raw
+
+  historical  (UoM-CMIP-1-2-0)
+    esgf-node.ornl.gov: 2 file(s), variable_id with hyphens, narrowed
+    -> mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_CMIP_UoM-CMIP-1-2-0_gr1-GMNHSH_0000-2014.nc  [298 kB]
+  ssp126  (UoM-IMAGE-ssp126-1-2-1)
+    esgf-node.ornl.gov: 2 file(s), variable_id with underscores, narrowed
+    -> mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_ScenarioMIP_UoM-IMAGE-ssp126-1-2-1_gr1-GMNHSH_2015-2500.nc  [42 kB]
+  ssp585  (UoM-REMIND-MAGPIE-ssp585-1-2-1)
+    esgf-node.ornl.gov: 2 file(s), variable_id with underscores, narrowed
+    -> mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_ScenarioMIP_UoM-REMIND-MAGPIE-ssp585-1-2-1_gr1-GMNHSH_2015-2500.nc  [42 kB]
+
+    mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_CMIP_UoM-CMIP-1-2-0_gr1-GMNHSH_0000-2014.nc: dims ('time', 'sector') -> sector 0 (global mean) of 3
+  mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_CMIP_UoM-CMIP-1-2-0_gr1-GMNHSH_0000-2014.nc -> co2_historical.csv  (35 years, 276.3-397.5 ppm)
+    mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_ScenarioMIP_UoM-IMAGE-ssp126-1-2-1_gr1-GMNHSH_2015-2500.nc: dims ('time', 'sector') -> sector 0 (global mean) of 3
+  mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_ScenarioMIP_UoM-IMAGE-ssp126-1-2-1_gr1-GMNHSH_2015-2500.nc -> co2_ssp126.csv  (86 years, 384.3-474.0 ppm)
+    mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_ScenarioMIP_UoM-REMIND-MAGPIE-ssp585-1-2-1_gr1-GMNHSH_2015-2500.nc: dims ('time', 'sector') -> sector 0 (global mean) of 3
+  mole-fraction-of-carbon-dioxide-in-air_input4MIPs_GHGConcentrations_ScenarioMIP_UoM-REMIND-MAGPIE-ssp585-1-2-1_gr1-GMNHSH_2015-2500.nc -> co2_ssp585.csv  (86 years, 399.9-2209.1 ppm)
+
+scenario             years  first ppm  last ppm   change
+historical       1980-2014      338.7     397.5    +58.8
+ssp126           2015-2100      399.9     445.6    +45.7
+ssp585           2015-2100      399.9    1135.2   +735.3
+
+series built:
+   504 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2/co2_historical.csv
+   1218 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2/co2_ssp126.csv
+   1228 /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2/co2_ssp585.csv
+
+sanity check -- historical should end near 397 ppm, ssp126 near 446 and
+ssp585 near 1135 by 2100. A factor of 1e6 out means the mole-fraction
+to ppm conversion did not fire.
+finished   : 2026-08-13T18:43:16Z
+exit status: 0

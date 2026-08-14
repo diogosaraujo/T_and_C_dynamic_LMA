@@ -1,0 +1,16 @@
+job        : 36900  task 4
+node       : soeepyc07
+started    : 2026-08-13T18:44:42Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] GFDL-ESM4 historical huss: FAILED -- ValueError: illegal calendar or reference date for python datetime
+
+extracted  : 0 of 105 npz files
+512	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-13T18:54:34Z
+exit status: 1

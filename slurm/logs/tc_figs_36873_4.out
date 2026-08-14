@@ -1,0 +1,14 @@
+job        : 36887  task 4
+node       : soeepyc08
+started    : 2026-08-13T18:41:27Z
+station    : US-Blk   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Blk/era5_land/dyn_lma
+
+--- environment ---
+  DISPLAY      : '<unset>'
+  QT_QPA_PLAT  : '<unset>'
+  mem alloc    : 32768 MB   cpus: 2
+  free mem     : 244 GB available of 251 GB
+  libGL        : 0 entries
+  xcb libs     : 0
+  matlabroot   : /opt/apps/matlab_2025a

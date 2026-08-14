@@ -1,0 +1,56 @@
+job        : 36877  task 4
+node       : soeepyc07
+started    : 2026-08-13T18:41:26Z
+station    : US-Blk   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Blk/era5_land/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+Iter:
+     2
+
+Iter:
+        1000
+
+Iter:
+        2000
+
+Iter:
+        3000
+
+Iter:
+        4000
+
+Iter:
+        5000
+
+Iter:
+        6000
+
+Iter:
+        7000
+
+Iter:
+        8000
+
+Iter:
+        9000
+
+Iter:
+       10000
+
+Iter:
+       11000
+
+Iter:
+       12000
+
+Iter:
+       13000
+
+Iter:
+       14000
+
+Iter:
+       15000
+

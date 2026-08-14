@@ -1,0 +1,16 @@
+job        : 36918  task 22
+node       : soeepyc07
+started    : 2026-08-13T18:51:43Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+  [1/1] IPSL-CM6A-LR   historical  tas      12784 days x 101 stations
+
+extracted  : 5 of 105 npz files
+11M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-13T22:54:18Z
+exit status: 0

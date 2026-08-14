@@ -1,0 +1,8 @@
+job        : 36882  task 9
+node       : soeepyc08
+started    : 2026-08-13T18:41:27Z
+station    : US-CRK   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-CRK/era5_land/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+

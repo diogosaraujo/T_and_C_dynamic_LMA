@@ -1,0 +1,6 @@
+job        : 36867
+node       : soeepyc07
+started    : 2026-08-13T18:03:55Z
+raw inputs : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2/raw
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2
+

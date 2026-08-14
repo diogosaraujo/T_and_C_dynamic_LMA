@@ -1,0 +1,7 @@
+ERROR: no .nc or .csv in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2/raw
+
+Download the three input4MIPs GHG concentration files into that
+directory first -- dataset names are in the header of this script.
+Then re-run. Nothing else in the GCM pipeline needs them, but
+build_gcm_meteo.py will emit Ca = NaN without them and T&C will
+not run on that forcing.

@@ -1,0 +1,6 @@
+job        : 36973  task 61
+node       : soeepyc05
+started    : 2026-08-14T02:53:42Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+

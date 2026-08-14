@@ -90,6 +90,11 @@ CO2_DIR = INPUT_ROOT / "co2"
 MATLAB_EPOCH_OFFSET = 719529.0            # datenum(1970,1,1)
 
 
+def _count(d):
+    import collections
+    return collections.Counter(d.values())
+
+
 def mat_name(s: str) -> str:
     return s.replace("-", "_")
 
@@ -291,21 +296,20 @@ def read_co2(scenario, co2_dir):
     return np.array(y)[o], np.array(c)[o]
 
 
-def read_elevation():
-    """StationID -> Zbas [m], from the same BADM table the ERA5 path uses."""
-    p = INPUT_ROOT / "ameriflux" / "badm_values.csv"
-    out = {}
-    if not p.is_file():
-        return out
-    for r in csv.DictReader(open(p, newline="", encoding="utf-8-sig")):
-        sid = (r.get("StationID") or r.get("SITE_ID") or "").strip()
-        for k in ("Zbas", "elevation", "ELEV", "LOCATION_ELEV"):
-            if sid and r.get(k):
-                try:
-                    out[sid] = float(r[k]); break
-                except (TypeError, ValueError):
-                    pass
-    return out
+def read_elevation(ameriflux_dir=None):
+    """StationID -> Zbas [m], reusing the ERA5 path's reader.
+
+    Not re-implemented here. Elevation lives in three different places -- the
+    long-format badm_values.csv, the site registry in site_metadata.json, and
+    badm_coverage.csv where it is stored as text like '2753 (site registry)' --
+    and build_meteo_input.read_elevation already tries all three in order of
+    directness. A second guess at the schema found zero of 101 stations (job
+    37223) and skipped every one of them, which is exactly the drift that reusing
+    the tested reader avoids.
+    """
+    from build_meteo_input import read_elevation as _read
+    out, src = _read(ameriflux_dir or (INPUT_ROOT / "ameriflux"))
+    return out, src
 
 
 # ------------------------------------------------------------------------- build
@@ -428,13 +432,16 @@ def main(argv=None) -> int:
     ap.add_argument("--stations-root", type=Path, default=STATION_ROOT)
     ap.add_argument("--out", type=Path, default=OUT_ROOT)
     ap.add_argument("--co2-dir", type=Path, default=CO2_DIR)
+    ap.add_argument("--ameriflux", type=Path, default=None,
+                    help="directory holding badm_values.csv / site_metadata.json "
+                         "(default: $TC_INPUT_DATA/ameriflux)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args(argv)
 
     stations = read_stations()
     if a.station:
         stations = [s for s in stations if s["station"] in set(a.station)]
-    elev = read_elevation()
+    elev, elev_src = read_elevation(a.ameriflux)
 
     work = [(g, s) for g in (a.gcm or GCMS) for s in (a.scenario or SCENARIOS)]
     if a.index is not None:
@@ -444,7 +451,15 @@ def main(argv=None) -> int:
     elif not (a.all or a.gcm or a.scenario):
         ap.error("give --index / --gcm / --scenario / --all")
 
-    print(f"stations : {len(stations)}   elevation known for {len(elev)}")
+    print(f"stations : {len(stations)}   elevation known for {len(elev)}"
+          + (f" ({', '.join(f'{k}={v}' for k, v in sorted(_count(elev_src).items()))})"
+             if elev else ""))
+    if not elev:
+        print("  ! no elevation for ANY station -- Pre and the radiation partition "
+              "both need Zbas.\n"
+              "    Check that $TC_INPUT_DATA/ameriflux holds badm_values.csv, "
+              "site_metadata.json or badm_coverage.csv,\n"
+              "    or pass --ameriflux <dir>.", file=sys.stderr)
     print(f"input    : {a.stations_root}")
     print(f"output   : {a.out}")
     print(f"precip   : {a.precip_scheme}   seed {a.seed}\n")

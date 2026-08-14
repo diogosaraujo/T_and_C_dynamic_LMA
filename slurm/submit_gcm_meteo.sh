@@ -65,14 +65,21 @@ echo
 source "$TC_VENV/bin/activate" || { echo "ERROR: venv $TC_VENV missing" >&2; exit 1; }
 cd "$REPO_ROOT/preprocessing" || exit 1
 
-ARGS=()
-if [ "$#" -eq 0 ] && [ -n "${SLURM_ARRAY_TASK_ID:-}" ]; then
-    ARGS=(--index "$SLURM_ARRAY_TASK_ID")
-elif [ "$#" -eq 0 ]; then
-    ARGS=(--all)
-else
-    ARGS=("$@")
+# Add the array index unless the caller already chose what to work on. Passing a
+# NON-selector flag (--force, --dry-run) must not suppress it: job 36991 ran
+# "sbatch --array=1-105 ... --force", $# was 1 rather than 0, --index was never
+# added, and all 105 tasks died in argparse one second in.
+have_selector=0
+for _a in "$@"; do
+    case "$_a" in --index|--all|--gcm|--scenario|--station) have_selector=1 ;; esac
+done
+ARGS=("$@")
+if [ "$have_selector" -eq 0 ] && [ -n "${SLURM_ARRAY_TASK_ID:-}" ]; then
+    ARGS+=(--index "$SLURM_ARRAY_TASK_ID")
+elif [ "$have_selector" -eq 0 ]; then
+    ARGS+=(--all)
 fi
+echo "args       : ${ARGS[*]}"
 
 python build_gcm_meteo.py \
     --stations-root "$STATION_DIR" --out "$METEO_DIR" --co2-dir "$CO2_DIR" \

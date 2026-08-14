@@ -56,12 +56,21 @@ PY
 
 cd "$REPO_ROOT/preprocessing" || exit 1
 
-if [ "$#" -eq 0 ] && [ -n "${SLURM_ARRAY_TASK_ID:-}" ]; then
-    set -- --index "$SLURM_ARRAY_TASK_ID"
-elif [ "$#" -eq 0 ]; then
-    echo "no arguments and not an array job -- extracting everything serially"
-    set -- --all
+# Add the array index unless the caller already chose what to work on. Passing a
+# NON-selector flag (--force, --dry-run) must not suppress it: job 36991 ran
+# "sbatch --array=1-105 ... --force", $# was 1 rather than 0, --index was never
+# added, and all 105 tasks died in argparse one second in.
+have_selector=0
+for _a in "$@"; do
+    case "$_a" in --index|--all|--report|--gcm|--scenario|--variable) have_selector=1 ;; esac
+done
+if [ "$have_selector" -eq 0 ] && [ -n "${SLURM_ARRAY_TASK_ID:-}" ]; then
+    set -- "$@" --index "$SLURM_ARRAY_TASK_ID"
+elif [ "$have_selector" -eq 0 ]; then
+    echo "no selector and not an array job -- extracting everything serially"
+    set -- "$@" --all
 fi
+echo "args       : $*"
 
 python extract_gcm_stations.py --out "$OUT_DIR" "$@"
 status=$?

@@ -1,0 +1,7 @@
+job        : 37100  task 4
+node       : soeepyc05
+started    : 2026-08-14T05:37:56Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+args       : --force --index 4

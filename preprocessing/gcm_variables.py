@@ -17,16 +17,15 @@ rather than something we have to defend from scratch.
 WHICH VARIABLES. T&C reads 7 of the 9 NEX-GDDP variables:
 
     tas tasmax tasmin   ->  Ta, and the diurnal amplitude
-    huss                ->  Tdew, ea      (NOT hurs -- see build_gcm_meteo.py)
+    hurs                ->  Tdew, ea      (see HUMIDITY below)
     pr                  ->  Pr
     rsds                ->  Rsw, then SAB/SAD/PAR/N in the MATLAB stage
     sfcWind             ->  Ws
 
 rlds is NOT used: T&C computes incoming longwave internally from Ta, ea and N via
-Incoming_Longwave(), so supplying it would be ignored. hurs is not used either --
-holding huss constant through the day gives a constant Tdew and a VPD that varies
-with hourly Ta, which is the physically right diurnal cycle; interpolating hurs
-instead flattens VPD, and VPD drives stomatal conductance directly.
+Incoming_Longwave(), so supplying it would be ignored. huss is not used either --
+hurs is taken for all five models so the humidity route is identical across the
+ensemble; see HUMIDITY below for what that costs and why it is the right trade.
 
 Pre is absent from NEX-GDDP entirely and is computed barometrically from station
 elevation (see build_gcm_meteo.py).
@@ -65,15 +64,34 @@ VARIABLES = {
     "tas":     dict(units="K",        role="daily mean air temperature"),
     "tasmax":  dict(units="K",        role="daily maximum, sets diurnal amplitude"),
     "tasmin":  dict(units="K",        role="daily minimum, sets diurnal amplitude"),
-    "huss":    dict(units="kg/kg",    role="specific humidity -> Tdew, ea"),
+    "hurs":    dict(units="%",        role="relative humidity -> Tdew, ea"),
     "pr":      dict(units="kg/m2/s",  role="precipitation -> Pr [mm/h]"),
     "rsds":    dict(units="W/m2",     role="downwelling shortwave -> Rsw"),
     "sfcWind": dict(units="m/s",      role="10 m wind speed -> Ws"),
 }
 UNUSED = {
     "rlds": "T&C computes incoming longwave internally via Incoming_Longwave(Ta,ea,N)",
-    "hurs": "huss is used instead -- constant q through the day gives a correct VPD cycle",
+    "huss": "hurs is used instead, for ensemble consistency -- see HUMIDITY below",
 }
+
+# HUMIDITY: hurs everywhere, huss only as a fallback.
+#
+# IPSL-CM6A-LR ships no huss in this archive, so a huss-first policy would treat
+# one model of five differently from the other four. That is the wrong trade: a
+# model-dependent humidity route puts part of the GCM-to-GCM spread down to
+# method rather than climate, and cross-model spread is exactly what the
+# five-model subset exists to measure. One route for all five is worth more than
+# a marginally better route for four.
+#
+# What it costs, stated rather than waved away: from hurs the daily vapour
+# pressure is e = (hurs/100) * esat(tas), and esat is convex in temperature, so
+# esat evaluated at the daily MEAN sits a few percent below the mean of esat over
+# the day. e therefore carries a small low bias that huss would not have. The
+# STRUCTURE is unaffected -- both routes yield one daily vapour pressure held
+# constant through the day, with esat following hourly Ta, so VPD still peaks in
+# the afternoon either way. The earlier concern about hurs flattening VPD applies
+# only to interpolating RH hourly, which is not what is done here.
+HUMIDITY_PREFERENCE = ["hurs", "huss"]
 
 # Physical constants, matching what the ERA5 path already uses so the two forcings
 # are built with identical thermodynamics.

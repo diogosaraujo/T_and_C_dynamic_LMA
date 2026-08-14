@@ -26,17 +26,17 @@ dewpoint step, which disagrees by ~0.5 K and biases Ds = esat - ea everywhere.
 Here ea = tetens(Tdew) reproduces e to round-off by construction, and the build
 asserts it.
 
-huss is preferred over hurs deliberately. Specific humidity is conserved through
-the day in the absence of mixing, so holding q constant gives a constant Tdew and
-an esat that follows hourly Ta -- i.e. VPD peaks in the afternoon, as it must.
-Interpolating hurs instead would hold RH constant and flatten VPD, and VPD drives
-stomatal conductance directly.
+hurs is used for ALL five models, via e = (hurs/100) * esat(tas), so the humidity
+route is identical across the ensemble. IPSL-CM6A-LR ships no huss, and a
+huss-first policy would have treated one model of five differently -- putting part
+of the GCM-to-GCM spread down to method rather than climate, in exactly the
+comparison the five-model subset exists to make.
 
-Where a model ships no huss at all -- IPSL-CM6A-LR in this archive -- hurs is
-used instead, via e = (hurs/100) * esat(tas). The destination is the same daily
-vapour pressure and the same exact inverse, so Tdew is still constant through the
-day and VPD still follows hourly Ta. Which source was used is carried in the npz
-and reported per station in the build log, so the substitution is never silent.
+Either route ends at ONE daily vapour pressure held constant through the day,
+with esat following hourly Ta, so VPD peaks in the afternoon regardless. The cost
+of hurs is that esat is convex in temperature, so esat(daily mean) sits a few
+percent below the mean of esat over the day and e carries a small low bias. That
+is a bias shared by all five models, which is the point.
 
 The GCMs also do not share a CALENDAR: GFDL-ESM4 is 365-day, UKESM1-0-LL 360-day,
 the rest standard. real_dates() places each on the real axis -- see its docstring
@@ -339,11 +339,13 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
     # (IPSL-CM6A-LR). Both give a constant Tdew through the day, so VPD still
     # follows hourly Ta -- the difference is that hurs was itself derived against
     # the model's own daily temperature, which adds a little noise but no bias.
-    hum_src = meta["huss"]["source_var"]
+    hum_src = meta["hurs"]["source_var"]
     if hum_src == "hurs":
-        e_pa = np.clip(get("huss"), 0.0, 100.0) / 100.0 * tetens(tas)
+        # NEX-GDDP occasionally reports RH slightly above 100 after downscaling;
+        # the drought-layer methods clip it the same way.
+        e_pa = np.clip(get("hurs"), 0.0, 100.0) / 100.0 * tetens(tas)
     else:
-        e_pa = vapour_pressure_from_q(get("huss"), p_pa)
+        e_pa = vapour_pressure_from_q(get("hurs"), p_pa)
     Tdew_d = tetens_inverse(e_pa)
     # Dewpoint cannot exceed the air temperature; where the GCM's q implies it,
     # cap at saturation rather than emit a negative vapour-pressure deficit.

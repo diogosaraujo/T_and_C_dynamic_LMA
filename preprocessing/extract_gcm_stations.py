@@ -54,7 +54,8 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gcm_variables import (GCMS, SCENARIOS, VARIABLES, NEXGDDP_ROOT,   # noqa: E402
-                           find_year_files, expected_years, tasks)
+                           HUMIDITY_PREFERENCE, find_year_files,
+                           expected_years, tasks)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
@@ -125,14 +126,12 @@ def extract(gcm, scenario, var, stations, out_root, force=False):
     except ImportError:
         raise SystemExit("netCDF4 is required -- add it to requirements.txt")
 
-    # Humidity fallback. IPSL-CM6A-LR ships no huss in this archive -- all three
-    # of its huss tasks reported "no files" (job 36896) -- so hurs stands in.
-    # They are not equivalent: holding specific humidity constant through the day
-    # gives a VPD that peaks in the afternoon, while constant RH flattens it, and
-    # VPD drives stomatal conductance. Which one was used is recorded in the npz
-    # and build_gcm_meteo.py converts accordingly, so the substitution is visible
-    # downstream rather than silent.
-    src_var, alts = var, ([var] if var != "huss" else ["huss", "hurs"])
+    # Humidity: hurs for every model, so the route is identical across the
+    # ensemble. huss is kept only as a fallback for a model that ships no hurs.
+    # Whichever was read is recorded in the npz and build_gcm_meteo.py converts
+    # accordingly, so a substitution can never be silent.
+    src_var = var
+    alts = HUMIDITY_PREFERENCE if var in HUMIDITY_PREFERENCE else [var]
     files, want = {}, expected_years(scenario)
     for cand in alts:
         files = find_year_files(gcm, scenario, cand)
@@ -142,7 +141,8 @@ def extract(gcm, scenario, var, stations, out_root, force=False):
     have = [y for y in want if y in files]
     if not have:
         return "no files", (f"{NEXGDDP_ROOT/gcm/scenario/var} empty or unreadable"
-                            + (f" (also tried {alts[1]})" if len(alts) > 1 else ""))
+                            + (f" (also tried {', '.join(alts[1:])})"
+                               if len(alts) > 1 else ""))
     missing = [y for y in want if y not in files]
 
     vals, ymd, doys = [], [], []

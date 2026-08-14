@@ -1,0 +1,15 @@
+job        : 37001  task 10
+node       : soeepyc05
+started    : 2026-08-14T05:33:51Z
+nexgddp    : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+
+nexgddp  : /vol_efthymios/NFS07/Data/CMIP6/NEXGDDP
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+stations : 101
+
+
+extracted  : 13 of 105 npz files
+36M	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+finished   : 2026-08-14T05:33:52Z
+exit status: 2

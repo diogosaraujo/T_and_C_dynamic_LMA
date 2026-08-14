@@ -1,0 +1,4 @@
+usage: extract_gcm_stations.py [-h] [--index INDEX] [--gcm GCM]
+                               [--scenario SCENARIO] [--variable VARIABLE]
+                               [--all] [--report] [--out OUT] [--force]
+extract_gcm_stations.py: error: give --index / --gcm / --scenario / --variable / --all, or --report

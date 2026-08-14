@@ -25,7 +25,7 @@
 #SBATCH --mem=8G
 #SBATCH -p SOE_main
 #SBATCH -J gcm_extract
-#SBATCH -t 08:00:00
+#SBATCH -t 24:00:00
 #SBATCH -o slurm/logs/gcm_extract_%A_%a.out
 #SBATCH -e slurm/logs/gcm_extract_%A_%a.err
 

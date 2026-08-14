@@ -26,11 +26,21 @@ dewpoint step, which disagrees by ~0.5 K and biases Ds = esat - ea everywhere.
 Here ea = tetens(Tdew) reproduces e to round-off by construction, and the build
 asserts it.
 
-huss is used rather than hurs deliberately. Specific humidity is conserved through
+huss is preferred over hurs deliberately. Specific humidity is conserved through
 the day in the absence of mixing, so holding q constant gives a constant Tdew and
 an esat that follows hourly Ta -- i.e. VPD peaks in the afternoon, as it must.
 Interpolating hurs instead would hold RH constant and flatten VPD, and VPD drives
 stomatal conductance directly.
+
+Where a model ships no huss at all -- IPSL-CM6A-LR in this archive -- hurs is
+used instead, via e = (hurs/100) * esat(tas). The destination is the same daily
+vapour pressure and the same exact inverse, so Tdew is still constant through the
+day and VPD still follows hourly Ta. Which source was used is carried in the npz
+and reported per station in the build log, so the substitution is never silent.
+
+The GCMs also do not share a CALENDAR: GFDL-ESM4 is 365-day, UKESM1-0-LL 360-day,
+the rest standard. real_dates() places each on the real axis -- see its docstring
+for what that costs.
 
 =============================================================================
 DISAGGREGATION: what is constructed rather than measured
@@ -204,20 +214,63 @@ def hourly_precip(pr_daily_mm, scheme, doy, rng):
 
 
 # ------------------------------------------------------------------------ inputs
+def real_dates(ymd, doy, calendar):
+    """Place a GCM calendar on the real one. Returns (datetime64[D], keep mask, note).
+
+    The GCMs do not share a calendar. GFDL-ESM4 is 365-day, UKESM1-0-LL is
+    360-day, the rest are standard, and the extraction stores date COMPONENTS
+    precisely so this decision lives here rather than failing at read time.
+
+      standard / noleap / all_leap  (year, month, day) IS a real date, so it is
+            used directly. A 365-day model simply never emits 29 February, which
+            leaves a one-day gap in leap years -- harmless, since T&C indexes the
+            hourly loop rather than assuming a fixed year length.
+      360_day  every month has 30 days, so 30 February exists and 31 January does
+            not; no direct mapping is possible. The day-of-year is stretched onto
+            the real year, which is the standard ISIMIP treatment.
+    """
+    y, m, d = ymd[:, 0], ymd[:, 1], ymd[:, 2]
+    if str(calendar) in ("360_day", "360"):
+        out = np.empty(len(y), dtype="datetime64[D]")
+        for k, (yy, dd) in enumerate(zip(y, doy)):
+            leap = (yy % 4 == 0 and (yy % 100 != 0 or yy % 400 == 0))
+            ny = 366 if leap else 365
+            rd = int(round((dd - 0.5) * ny / 360.0))
+            out[k] = np.datetime64(f"{yy:04d}-01-01", "D") + min(max(rd, 0), ny - 1)
+        return out, np.ones(len(y), bool), "360-day stretched onto the real year"
+    out = np.empty(len(y), dtype="datetime64[D]")
+    keep = np.ones(len(y), bool)
+    for k in range(len(y)):
+        try:
+            out[k] = np.datetime64(f"{y[k]:04d}-{m[k]:02d}-{d[k]:02d}", "D")
+        except ValueError:                    # e.g. 29 Feb from an all_leap model
+            keep[k] = False
+    note = None if keep.all() else f"{(~keep).sum()} date(s) absent from the real calendar"
+    return out, keep, note
+
+
 def load_station_series(gcm, scenario, station_root):
-    """{var: (dates, values, stations)} for one model/scenario."""
-    out = {}
+    """{var: (values, stations)} plus shared date axis, for one model/scenario."""
+    out, meta = {}, {}
     for v in VARIABLES:
         p = station_root / gcm / scenario / f"{v}.npz"
         if not p.is_file():
             return None, f"missing {p}"
         d = np.load(p, allow_pickle=False)
-        out[v] = (d["dates"], d["values"], [str(x) for x in d["stations"]])
-    # every variable must share one calendar, or the alignment below is a lie
+        if "ymd" not in d:
+            return None, (f"{p.name} predates the calendar fix -- re-extract with "
+                          f"submit_gcm_extract.sh --force")
+        out[v] = (d["ymd"], d["values"], [str(x) for x in d["stations"]])
+        meta[v] = dict(calendar=str(d["calendar"]), source_var=str(d["source_var"]),
+                       doy=d["doy"])
+    # Every variable must share one date axis, or the column-wise alignment below
+    # is silently wrong rather than merely misaligned.
     ref = out["tas"][0]
-    for v, (dd, _, _) in out.items():
-        if dd.shape != ref.shape or not np.array_equal(dd, ref):
-            return None, f"{v} has a different calendar than tas ({len(dd)} vs {len(ref)} days)"
+    for v, (yy, _, _) in out.items():
+        if yy.shape != ref.shape or not np.array_equal(yy, ref):
+            return None, (f"{v} has a different date axis than tas "
+                          f"({len(yy)} vs {len(ref)} days)")
+    out["_meta"] = meta
     return out, None
 
 
@@ -258,12 +311,14 @@ def read_elevation():
 # ------------------------------------------------------------------------- build
 def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
               scheme, seed, out_dir, dry):
-    dates = series["tas"][0]
-    days = EPOCH + dates.astype("timedelta64[D]")
+    meta = series["_meta"]
+    cal = meta["tas"]["calendar"]
+    days, keep, cal_note = real_dates(series["tas"][0], meta["tas"]["doy"], cal)
+    days = days[keep]
     doy = (days - days.astype("datetime64[Y]")).astype(int) + 1
     n = len(days)
 
-    get = lambda v: np.asarray(series[v][1][:, si], dtype=float)
+    get = lambda v: np.asarray(series[v][1][keep, si], dtype=float)
     tas, tmax, tmin = get("tas") - 273.15, get("tasmax") - 273.15, get("tasmin") - 273.15
     # tasmax < tasmin happens in a handful of downscaled cells; swap rather than
     # propagate a negative amplitude into the diurnal cycle.
@@ -278,7 +333,17 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
     Ws = np.repeat(get("sfcWind").reshape(n, 1), 24, axis=1)
 
     p_pa = barometric_pressure_pa(zbas)
-    e_pa = vapour_pressure_from_q(get("huss"), p_pa)
+    # Whichever humidity variable the extraction found, the destination is the
+    # same: a daily vapour pressure, then Tdew through the exact Tetens inverse.
+    # huss is preferred; hurs is the fallback where a model ships no huss
+    # (IPSL-CM6A-LR). Both give a constant Tdew through the day, so VPD still
+    # follows hourly Ta -- the difference is that hurs was itself derived against
+    # the model's own daily temperature, which adds a little noise but no bias.
+    hum_src = meta["huss"]["source_var"]
+    if hum_src == "hurs":
+        e_pa = np.clip(get("huss"), 0.0, 100.0) / 100.0 * tetens(tas)
+    else:
+        e_pa = vapour_pressure_from_q(get("huss"), p_pa)
     Tdew_d = tetens_inverse(e_pa)
     # Dewpoint cannot exceed the air temperature; where the GCM's q implies it,
     # cap at saturation rather than emit a negative vapour-pressure deficit.
@@ -313,7 +378,8 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
     if dead:
         return None, f"all-NaN in {', '.join(dead)}"
 
-    diag = dict(hours=int(out["Date"].size),
+    diag = dict(hours=int(out["Date"].size), calendar=cal, humidity=hum_src,
+                cal_note=cal_note,
                 years=f"{int(days[0].astype('datetime64[Y]').astype(int))+1970}-"
                       f"{int(days[-1].astype('datetime64[Y]').astype(int))+1970}",
                 Ta_C=[round(float(np.nanmin(out["Ta"])), 1),

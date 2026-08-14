@@ -28,11 +28,19 @@ grid cell is not the tower.
 
 Output, one file per task:
     $TC_INPUT_DATA/gcm_stations/<GCM>/<scenario>/<var>.npz
-        values   float32 (ndays, nstation)   in the file's native units
-        dates    int64   (ndays,)            days since 1850-01-01, proleptic
-        stations <U8     (nstation,)
-        lat lon  float32 (nstation,)         the GRID CELL centre actually used
-        offset_km float32 (nstation,)        station-to-cell-centre distance
+        values     float32 (ndays, nstation) in the file's native units
+        ymd        int32   (ndays, 3)         year, month, day IN THE MODEL'S OWN
+                                              calendar -- not datetime64, because
+                                              the models do not share one
+        doy        int32   (ndays,)           day-of-year, needed to place a
+                                              360-day calendar on the real one
+        calendar   str                        as declared by the file
+        source_var str                        which variable was actually read
+                                              (huss, or hurs where a model has no
+                                              huss -- IPSL-CM6A-LR)
+        stations   <U8     (nstation,)
+        lat lon    float32 (nstation,)        the GRID CELL centre actually used
+        offset_km  float32 (nstation,)        station-to-cell-centre distance
 """
 from __future__ import annotations
 
@@ -117,42 +125,76 @@ def extract(gcm, scenario, var, stations, out_root, force=False):
     except ImportError:
         raise SystemExit("netCDF4 is required -- add it to requirements.txt")
 
-    files = find_year_files(gcm, scenario, var)
-    want = expected_years(scenario)
+    # Humidity fallback. IPSL-CM6A-LR ships no huss in this archive -- all three
+    # of its huss tasks reported "no files" (job 36896) -- so hurs stands in.
+    # They are not equivalent: holding specific humidity constant through the day
+    # gives a VPD that peaks in the afternoon, while constant RH flattens it, and
+    # VPD drives stomatal conductance. Which one was used is recorded in the npz
+    # and build_gcm_meteo.py converts accordingly, so the substitution is visible
+    # downstream rather than silent.
+    src_var, alts = var, ([var] if var != "huss" else ["huss", "hurs"])
+    files, want = {}, expected_years(scenario)
+    for cand in alts:
+        files = find_year_files(gcm, scenario, cand)
+        if files:
+            src_var = cand
+            break
     have = [y for y in want if y in files]
     if not have:
-        return "no files", f"{NEXGDDP_ROOT/gcm/scenario/var} empty or unreadable"
+        return "no files", (f"{NEXGDDP_ROOT/gcm/scenario/var} empty or unreadable"
+                            + (f" (also tried {alts[1]})" if len(alts) > 1 else ""))
     missing = [y for y in want if y not in files]
 
-    vals, dates = [], []
+    vals, ymd, doys = [], [], []
     iy = ix = clat = clon = None
+    calendar = "standard"
     for y in have:
         with netCDF4.Dataset(files[y]) as nc:
             if iy is None:
                 iy, ix, clat, clon = locate(nc, stations)
-            v = nc.variables[var]
-            # One read of the whole (time, lat, lon) block would pull the entire
-            # global field into memory; slice per station index pair instead. The
-            # file is open once either way, which is what actually costs.
-            arr = np.empty((v.shape[0], len(stations)), dtype=np.float32)
-            for k, (j, i) in enumerate(zip(iy, ix)):
-                arr[:, k] = np.asarray(v[:, j, i], dtype=np.float32).ravel()
+            v = nc.variables[src_var]
+            # ONE contiguous read of the bounding box holding every station, then
+            # index inside it. The obvious version -- 101 strided v[:, j, i] point
+            # reads per file -- walks the whole compressed chunk structure once
+            # per station and measured 3.3-4 h per 35-year task (job 36896), which
+            # put the 86-year SSP tasks over the wall clock. CONUS occupies about
+            # 3% of a global 0.25-degree field, so the box costs little memory and
+            # turns 101 reads into 1.
+            wide = (ix.max() - ix.min()) > v.shape[2] // 2      # wraps the meridian
+            if wide:
+                arr = np.empty((v.shape[0], len(stations)), dtype=np.float32)
+                for k, (j, i) in enumerate(zip(iy, ix)):
+                    arr[:, k] = np.asarray(v[:, j, i], dtype=np.float32).ravel()
+            else:
+                y0, y1 = int(iy.min()), int(iy.max()) + 1
+                x0, x1 = int(ix.min()), int(ix.max()) + 1
+                box = np.asarray(v[:, y0:y1, x0:x1], dtype=np.float32)
+                arr = box[:, iy - y0, ix - x0]
             vals.append(arr)
+
             t = nc.variables["time"]
+            calendar = getattr(t, "calendar", "standard")
             import netCDF4 as _n
-            d = _n.num2date(t[:], t.units, getattr(t, "calendar", "standard"),
-                            only_use_cftime_datetimes=False,
-                            only_use_python_datetimes=True)
-            dates.append(np.array([np.datetime64(x.date(), "D") for x in d]))
+            # cftime objects ALWAYS work; Python datetimes do not. GFDL-ESM4 uses a
+            # 365-day calendar and every one of its 21 tasks died on
+            # "illegal calendar or reference date for python datetime". Store the
+            # date COMPONENTS rather than a datetime64 so any calendar survives,
+            # and let build_gcm_meteo.py decide how to place them on a real axis.
+            d = _n.num2date(t[:], t.units, calendar,
+                            only_use_cftime_datetimes=True)
+            ymd.append(np.array([(x.year, x.month, x.day) for x in d], dtype=np.int32))
+            doys.append(np.array([getattr(x, "dayofyr", 0) for x in d], dtype=np.int32))
 
     values = np.concatenate(vals, axis=0)
-    dd = np.concatenate(dates)
-    order = np.argsort(dd)
-    values, dd = values[order], dd[order]
+    YMD = np.concatenate(ymd, axis=0)
+    DOY = np.concatenate(doys)
+    order = np.lexsort((YMD[:, 2], YMD[:, 1], YMD[:, 0]))
+    values, YMD, DOY = values[order], YMD[order], DOY[order]
 
     out.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(
-        out, values=values, dates=(dd - EPOCH).astype(np.int64),
+        out, values=values, ymd=YMD, doy=DOY,
+        calendar=np.array(calendar), source_var=np.array(src_var),
         stations=np.array([s["station"] for s in stations]),
         lat=clat.astype(np.float32), lon=clon.astype(np.float32),
         offset_km=haversine_km([s["lat"] for s in stations],
@@ -160,11 +202,16 @@ def extract(gcm, scenario, var, stations, out_root, force=False):
                                clat, clon).astype(np.float32),
         units=np.array(VARIABLES[var]["units"]),
         years_missing=np.array(missing, dtype=np.int64))
-    note = None
+    notes = []
+    if src_var != var:
+        notes.append(f"USED {src_var} (no {var} for this model)")
+    if calendar not in ("standard", "gregorian", "proleptic_gregorian"):
+        notes.append(f"calendar '{calendar}'")
     if missing:
-        note = (f"{len(missing)} year-file(s) missing: "
-                f"{missing[0]}..{missing[-1]}" if len(missing) > 2 else str(missing))
-    return f"{values.shape[0]} days x {values.shape[1]} stations", note
+        notes.append(f"{len(missing)} year-file(s) missing: {missing[0]}..{missing[-1]}"
+                     if len(missing) > 2 else f"missing {missing}")
+    return (f"{values.shape[0]} days x {values.shape[1]} stations",
+            "; ".join(notes) or None)
 
 
 def report(out_root, stations):

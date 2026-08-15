@@ -65,8 +65,8 @@ export MATLAB_MODULES MAX_ARRAY_CHUNK
 tc_init_lmod() {
     command -v module >/dev/null 2>&1 && return 0
     for p in /opt/apps/lmod/lmod/init/profile \
+             /opt/sw/admin/lmod/lmod/init/profile \
              /usr/share/lmod/lmod/init/profile \
-             /opt/sw/packages/lmod/lmod/init/profile \
              /etc/profile.d/lmod.sh /etc/profile.d/modules.sh; do
         # shellcheck disable=SC1090
         [ -f "$p" ] && . "$p" && command -v module >/dev/null 2>&1 && return 0

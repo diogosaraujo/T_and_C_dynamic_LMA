@@ -59,6 +59,7 @@ RAW_DIR="${RAW_DIR:-$CO2_DIR/raw}"
 mkdir -p "$REPO_ROOT/slurm/logs" "$CO2_DIR" "$RAW_DIR"
 echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "raw inputs : $RAW_DIR"
 echo "output     : $CO2_DIR"

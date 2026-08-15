@@ -45,6 +45,7 @@ GCM_METEO="${GCM_METEO:-$TC_INPUT_DATA/gcm_meteo}"
 mkdir -p "$REPO_ROOT/slurm/logs"
 echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "model_run  : $MODEL_RUN$([ -d "$MODEL_RUN" ] || echo '   <-- NOT FOUND')"
 echo "plsr       : $PLSR_ROOT$([ -d "$PLSR_ROOT" ] || echo '   <-- NOT FOUND')"

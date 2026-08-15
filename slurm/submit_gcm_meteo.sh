@@ -49,6 +49,7 @@ PRECIP_SCHEME="${PRECIP_SCHEME:-block}"
 mkdir -p "$REPO_ROOT/slurm/logs" "$METEO_DIR"
 echo "job        : ${SLURM_JOB_ID:-interactive}${SLURM_ARRAY_TASK_ID:+  task $SLURM_ARRAY_TASK_ID}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "stations   : $STATION_DIR$([ -d "$STATION_DIR" ] || echo '   <-- NOT FOUND')"
 echo "co2        : $CO2_DIR$([ -d "$CO2_DIR" ] || echo '   <-- NOT FOUND, Ca will be NaN')"
@@ -93,12 +94,7 @@ esac
 [ $s1 -eq 0 ] || { echo "stage 1 failed -- not running the partition" >&2; exit $s1; }
 
 # ---------------------------------------------------------------- stage 2
-if ! command -v module >/dev/null 2>&1; then
-    # shellcheck disable=SC1091
-    [ -f /opt/apps/lmod/lmod/init/profile ] && source /opt/apps/lmod/lmod/init/profile
-fi
-module load Matlab/2025a 2>/dev/null || ml Matlab/2025a 2>/dev/null || true
-command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exit 1; }
+tc_load_matlab || exit 1
 
 # The year tag is taken from the raw files themselves rather than assumed, because
 # historical (1980-2014) and the SSPs (2015-2100) differ.

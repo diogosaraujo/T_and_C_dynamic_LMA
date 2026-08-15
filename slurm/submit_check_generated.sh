@@ -31,16 +31,12 @@ MODEL_RUN="${MODEL_RUN:-$(dirname "$TC_INPUT_DATA")/model_run}"
 mkdir -p "$REPO_ROOT/slurm/logs"
 echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "model_run  : $MODEL_RUN"
 echo
 
-if ! command -v module >/dev/null 2>&1; then
-    # shellcheck disable=SC1091
-    [ -f /opt/apps/lmod/lmod/init/profile ] && source /opt/apps/lmod/lmod/init/profile
-fi
-module load Matlab/2025a 2>/dev/null || ml Matlab/2025a 2>/dev/null || true
-command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exit 1; }
+tc_load_matlab || exit 1
 
 cd "$REPO_ROOT/preprocessing"
 matlab -nodisplay -nosplash -batch "exit(check_generated('$MODEL_RUN'))"

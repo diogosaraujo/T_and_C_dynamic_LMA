@@ -34,6 +34,7 @@ mkdir -p "$REPO_ROOT/slurm/logs" "$OUT_DIR"
 
 echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "repo       : $REPO_ROOT"
 echo "output     : $OUT_DIR"

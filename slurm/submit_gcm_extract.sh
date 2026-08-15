@@ -41,6 +41,7 @@ OUT_DIR="${OUT_DIR:-$TC_INPUT_DATA/gcm_stations}"
 mkdir -p "$REPO_ROOT/slurm/logs" "$OUT_DIR"
 echo "job        : ${SLURM_JOB_ID:-interactive}${SLURM_ARRAY_TASK_ID:+  task $SLURM_ARRAY_TASK_ID}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "nexgddp    : $NEXGDDP_ROOT$([ -d "$NEXGDDP_ROOT" ] || echo '   <-- NOT FOUND')"
 echo "output     : $OUT_DIR"

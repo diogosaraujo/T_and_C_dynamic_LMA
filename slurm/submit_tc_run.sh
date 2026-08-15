@@ -71,6 +71,7 @@ MNAME="${STATION//-/_}"          # US-Ha2 -> US_Ha2, the MATLAB-safe name
 mkdir -p "$REPO_ROOT/slurm/logs"
 echo "job        : ${SLURM_JOB_ID:-interactive}  task ${SLURM_ARRAY_TASK_ID:-none}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "station    : $STATION   arm: $ARM"
 echo "rundir     : $RUNDIR"
@@ -89,12 +90,7 @@ if ! ls "$RUNDIR"/Meteo_*.mat >/dev/null 2>&1; then
 fi
 
 # LMOD is only initialised for shells that read .bashrc, so source it defensively.
-if ! command -v module >/dev/null 2>&1; then
-    # shellcheck disable=SC1091
-    [ -f /opt/apps/lmod/lmod/init/profile ] && source /opt/apps/lmod/lmod/init/profile
-fi
-module load Matlab/2025a 2>/dev/null || ml Matlab/2025a 2>/dev/null || true
-command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exit 1; }
+tc_load_matlab || exit 1
 
 cd "$RUNDIR"
 echo "matlab     : $(command -v matlab)"

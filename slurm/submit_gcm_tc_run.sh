@@ -1,8 +1,18 @@
 #!/bin/bash
 ## Run T&C for one GCM station/scenario/arm, or a job array over many.
 ##
+##   SOE:
 ##     sbatch slurm/submit_gcm_tc_run.sh US-Wrc ssp585 GFDL-ESM4 dyn_lma
-##     sbatch --array=1-1000%200 slurm/submit_gcm_tc_run.sh    # from run_list_gcm.txt
+##     sbatch --array=1-500 slurm/submit_gcm_tc_run.sh         # from run_list_gcm.txt
+##
+##   AMAREL -- the partition MUST be given on the command line, because sbatch
+##   parses "#SBATCH -p" before the script body runs and it cannot read config.sh:
+##     sbatch -p main --array=1-500 slurm/submit_gcm_tc_run.sh
+##     OFFSET=500  sbatch -p main --array=1-500 slurm/submit_gcm_tc_run.sh
+##     OFFSET=1000 sbatch -p main --array=1-500 slurm/submit_gcm_tc_run.sh
+##     ...   2,760 entries = 6 chunks of 500 (MaxSubmitPU on 'main' is 500)
+##   The script prints the partition it landed on and warns if it looks wrong for
+##   the host, so a forgotten -p shows up in the first lines of the log.
 ##
 ## Separate from submit_tc_run.sh because the run list carries four fields
 ## ("<station> <scenario> <GCM> <arm>") against that script's two, and the
@@ -20,6 +30,11 @@
 ##
 ## MaxArraySize is 1001 on Amarel and MaxSubmitPU on the 'main' QOS is 500, so
 ## chunk the list into arrays of at most 500 and submit the next as one drains.
+##
+## STORAGE. Full hourly RES is kept deliberately, so the 2,760 runs come to about
+## 1.59 TB against a 2 TB /scratch hard limit. That fits only if results are
+## drained to the SOE HPC DURING the campaign rather than after it -- run the
+## chunks in order and rsync each one off before launching the next.
 
 #SBATCH -N 1
 #SBATCH --ntasks=1
@@ -64,6 +79,7 @@ MNAME="${STATION//-/_}"
 mkdir -p "$REPO_ROOT/slurm/logs"
 echo "job        : ${SLURM_JOB_ID:-interactive}  task ${SLURM_ARRAY_TASK_ID:-none}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "station    : $STATION   scenario: $SCEN   gcm: $GCM   arm: $ARM"
 echo "rundir     : $RUNDIR"
@@ -77,12 +93,7 @@ ls "$RUNDIR"/Meteo_*.mat >/dev/null 2>&1 || {
     echo "ERROR: no Meteo_*.mat in $RUNDIR -- the GCM forcing builder has not run" >&2
     exit 1; }
 
-if ! command -v module >/dev/null 2>&1; then
-    # shellcheck disable=SC1091
-    [ -f /opt/apps/lmod/lmod/init/profile ] && source /opt/apps/lmod/lmod/init/profile
-fi
-module load Matlab/2025a 2>/dev/null || ml Matlab/2025a 2>/dev/null || true
-command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exit 1; }
+tc_load_matlab || exit 1
 
 cd "$RUNDIR" || exit 1
 echo "matlab     : $(command -v matlab)"

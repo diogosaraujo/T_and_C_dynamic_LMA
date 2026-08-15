@@ -41,6 +41,7 @@ mkdir -p "$REPO_ROOT/slurm/logs" "$OUT_DIR"
 
 echo "array task : $SHARD of $NUM_SHARDS"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo
 

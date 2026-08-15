@@ -47,6 +47,7 @@ mkdir -p "$REPO_ROOT/slurm/logs" "$METEO_DIR"
 
 echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "era5       : $ERA5_DIR$([ -d "$ERA5_DIR" ] || echo '   <-- NOT FOUND')"
 echo "ameriflux  : $AMERIFLUX_DIR$([ -d "$AMERIFLUX_DIR" ] || echo '   <-- NOT FOUND (Zbas)')"
@@ -77,12 +78,7 @@ fi
 
 echo
 echo "=== stage 2: radiation partition (MATLAB) ==="
-if ! command -v module >/dev/null 2>&1; then
-    # shellcheck disable=SC1091
-    [ -f /opt/apps/lmod/lmod/init/profile ] && source /opt/apps/lmod/lmod/init/profile
-fi
-module load Matlab/2025a 2>/dev/null || ml Matlab/2025a 2>/dev/null || true
-command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exit 1; }
+tc_load_matlab || exit 1
 
 matlab -nodisplay -nosplash -batch \
     "finish_meteo('$METEO_DIR','$METEO_DIR','$PARTITION_DIR','$YEAR_TAG')"

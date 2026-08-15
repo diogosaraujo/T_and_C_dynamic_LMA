@@ -35,6 +35,7 @@ OUT_CSV="${OUT_CSV:-$TC_INPUT_DATA/lma_vs_badm.csv}"
 mkdir -p "$REPO_ROOT/slurm/logs"
 echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "badm dir   : $BADM_DIR$([ -d "$BADM_DIR" ] || echo '   <-- NOT FOUND')"
 echo "model_run  : $MODEL_RUN"

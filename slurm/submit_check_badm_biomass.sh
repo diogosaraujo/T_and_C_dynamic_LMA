@@ -36,6 +36,7 @@ mkdir -p "$REPO_ROOT/slurm/logs"
 
 echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
+tc_check_partition
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "badm dir   : $BADM_DIR$([ -d "$BADM_DIR" ] || echo '   <-- NOT FOUND')"
 echo "output     : $OUT_CSV"

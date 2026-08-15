@@ -102,16 +102,20 @@ command -v matlab >/dev/null 2>&1 || { echo "ERROR: matlab not on PATH" >&2; exi
 
 # The year tag is taken from the raw files themselves rather than assumed, because
 # historical (1980-2014) and the SSPs (2015-2100) differ.
+# One directory per (scenario, GCM), and this task only touches the ones stage 1
+# just wrote. finish_meteo.m globs a whole directory, so a shared one means every
+# concurrent task re-partitions every file and several write the same output at
+# once -- job 37232 corrupted files that way.
 s2=0
-for SUB in "$METEO_DIR"/*/; do
-    tag=$(basename "$SUB")
+for SUB in "$METEO_DIR"/*/*/; do
+    tag=$(basename "$(dirname "$SUB")")
     ls "$SUB"/Meteo_*_raw.mat >/dev/null 2>&1 || continue
     case "$tag" in
         historical) YEARS=1980_2014 ;;
         ssp*)       YEARS=2015_2100 ;;
         *)          continue ;;
     esac
-    echo "  partition: $tag -> $YEARS  ($(ls "$SUB"/Meteo_*_raw.mat | wc -l) file(s))"
+    echo "  partition: $tag/$(basename "$SUB") -> $YEARS  ($(ls "$SUB"/Meteo_*_raw.mat | wc -l) file(s))"
     matlab -nodisplay -nosplash -batch         "finish_meteo('$SUB','$SUB','$PARTITION_DIR','$YEARS',0,1)"
     s2=$(( s2 || $? ))
 done

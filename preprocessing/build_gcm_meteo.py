@@ -403,10 +403,18 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
         return diag, None
 
     from scipy.io import savemat
-    # Per-SCENARIO subdirectory, because finish_meteo.m globs every
-    # Meteo_*_raw.mat in a directory and stamps them all with one year tag --
-    # and historical (1980-2014) and the SSPs (2015-2100) do not share one.
-    out_dir = out_dir / scenario
+    # One directory per (scenario, GCM). Two reasons, and BOTH are needed:
+    #   * finish_meteo.m globs every Meteo_*_raw.mat in a directory and stamps
+    #     them all with one year tag, and historical (1980-2014) and the SSPs
+    #     (2015-2100) do not share one.
+    #   * the 15 array tasks run CONCURRENTLY, so a directory shared between
+    #     GCMs means every task partitions every file that happens to be there
+    #     and several write the same output at once. Job 37232 did exactly that:
+    #     task 1 processed 283 files instead of its own 101, and MATLAB failed
+    #     with "appears to be corrupt" on a file another task was writing.
+    # Per-task ownership of the output directory is what makes the stage safe to
+    # parallelise at all.
+    out_dir = out_dir / scenario / mat_name(gcm)
     out_dir.mkdir(parents=True, exist_ok=True)
     savemat(out_dir / f"Meteo_{mat_name(station)}_{mat_name(gcm)}_{scenario}_raw.mat",
             {k: (np.asarray(v).reshape(-1, 1) if isinstance(v, np.ndarray) else v)

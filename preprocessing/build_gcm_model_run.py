@@ -295,7 +295,7 @@ def main(argv=None) -> int:
                 if not series:
                     blocked.append((sid, gcm, scen, "empty series after clipping"))
                     continue
-                mfile = (a.meteo / scen /
+                mfile = (a.meteo / scen / mat_name(gcm) /
                          f"Meteo_{mname}_{mat_name(gcm)}_{scen}_{YEAR_TAG[scen]}.mat")
                 if not mfile.is_file():
                     blocked.append((sid, gcm, scen, f"no forcing {mfile.name}"))

@@ -1,0 +1,9 @@
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/Meteo_US_Fuf_GFDL_ESM4_ssp126_2015_2100.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 

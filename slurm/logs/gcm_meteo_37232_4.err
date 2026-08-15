@@ -1,0 +1,18 @@
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/historical/Meteo_US_Bar_GFDL_ESM4_historical_1980_2014.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/Meteo_US_NC3_IPSL_CM6A_LR_ssp585_2015_2100.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 

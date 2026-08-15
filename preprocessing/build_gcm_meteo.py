@@ -104,9 +104,15 @@ def tetens(t_c):
     return TETENS_A * np.exp(TETENS_B * t_c / (t_c + TETENS_C))
 
 
+# The lowest vapour pressure the inverse is allowed to see. e -> 0 sends Tdew to
+# -inf, so a floor is unavoidable; 1e-3 Pa corresponds to Tdew = -103 C, far below
+# anything physical, and is reached only where the GCM reports hurs = 0 exactly.
+E_FLOOR_PA = 1e-3
+
+
 def tetens_inverse(e_pa):
     """Dewpoint [C] from vapour pressure [Pa] -- the exact inverse of tetens()."""
-    e = np.clip(np.asarray(e_pa, dtype=float), 1e-3, None)
+    e = np.clip(np.asarray(e_pa, dtype=float), E_FLOOR_PA, None)
     L = np.log(e / TETENS_A)
     return TETENS_C * L / (TETENS_B - L)
 
@@ -350,6 +356,14 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
         e_pa = np.clip(get("hurs"), 0.0, 100.0) / 100.0 * tetens(tas)
     else:
         e_pa = vapour_pressure_from_q(get("hurs"), p_pa)
+    # Apply the floor HERE, not inside the inverse. hurs == 0 appears in the
+    # downscaled output, which makes e exactly 0; flooring inside tetens_inverse
+    # left the round-trip check comparing a floored value against an unfloored
+    # one, and it failed by exactly the floor (1.00e-03 Pa) at 8-11 stations per
+    # task in job 37232. Flooring once, before both uses, makes the identity hold
+    # and keeps the check meaningful.
+    n_floored = int(np.sum(e_pa < E_FLOOR_PA))
+    e_pa = np.maximum(e_pa, E_FLOOR_PA)
     Tdew_d = tetens_inverse(e_pa)
     # Dewpoint cannot exceed the air temperature; where the GCM's q implies it,
     # cap at saturation rather than emit a negative vapour-pressure deficit.
@@ -386,6 +400,7 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
 
     diag = dict(hours=int(out["Date"].size), calendar=cal, humidity=hum_src,
                 cal_note=cal_note,
+                zero_rh_days=n_floored,
                 years=f"{int(days[0].astype('datetime64[Y]').astype(int))+1970}-"
                       f"{int(days[-1].astype('datetime64[Y]').astype(int))+1970}",
                 Ta_C=[round(float(np.nanmin(out["Ta"])), 1),

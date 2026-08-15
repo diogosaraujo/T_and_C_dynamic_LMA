@@ -1,7 +1,7 @@
 #!/bin/bash
 ## Stages 1 and 2: daily GCM station series -> hourly T&C forcing.
 ##
-##     sbatch --array=1-15%8 slurm/submit_gcm_meteo.sh      # 5 GCM x 3 scenarios
+##     sbatch --array=1-15 slurm/submit_gcm_meteo.sh        # 5 GCM x 3 scenarios
 ##     sbatch slurm/submit_gcm_meteo.sh --dry-run           # diagnostics, writes nothing
 ##     sbatch slurm/submit_gcm_meteo.sh --gcm GFDL-ESM4 --scenario historical
 ##
@@ -27,7 +27,7 @@
 #SBATCH -N 1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=48G
+#SBATCH --mem=64G
 #SBATCH -p SOE_main
 #SBATCH -J gcm_meteo
 #SBATCH -t 12:00:00

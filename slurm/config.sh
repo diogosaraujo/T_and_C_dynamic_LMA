@@ -33,8 +33,14 @@ if [ "$TC_CLUSTER" = "amarel" ]; then
     PARTITION="${PARTITION:-main}"
     # Amarel's MATLAB module naming differs from SOE's; several are tried in
     # order and the first that loads wins.
-    MATLAB_MODULES="${MATLAB_MODULES:-MATLAB/R2023a MATLAB/R2022b MATLAB/R2021a MATLAB matlab}"
-    PYTHON_MODULE="${PYTHON_MODULE:-python/3.11.5}"
+    # Confirmed from "module avail" on amarel1 (2026-08): R2024a is the default,
+    # R2023a also present. Nothing else MATLAB-like exists, so the old guesses at
+    # R2022b/R2021a are dropped rather than left to fail silently down the list.
+    MATLAB_MODULES="${MATLAB_MODULES:-MATLAB/R2024a MATLAB/R2023a MATLAB}"
+    # Amarel's newest is python/3.8.2 (python/2.7.12 is the only other). That is
+    # old enough to matter: the preprocessing venv should be built against it, or
+    # better, only MATLAB work should run here and the Python stages stay on SOE.
+    PYTHON_MODULE="${PYTHON_MODULE:-python/3.8.2}"
     # main allows 3 days; MaxArraySize is 1001 and MaxSubmitPU on 'main' is 500,
     # so arrays must be chunked at 500 (submit_gcm_tc_run.sh takes OFFSET).
     MAX_ARRAY_CHUNK="${MAX_ARRAY_CHUNK:-500}"

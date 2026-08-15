@@ -105,9 +105,25 @@ def tetens(t_c):
 
 
 # The lowest vapour pressure the inverse is allowed to see. e -> 0 sends Tdew to
-# -inf, so a floor is unavoidable; 1e-3 Pa corresponds to Tdew = -103 C, far below
-# anything physical, and is reached only where the GCM reports hurs = 0 exactly.
-E_FLOOR_PA = 1e-3
+# -infinity, so a floor is unavoidable: the downscaled output reports hurs = 0
+# exactly at some hours, and 0% relative humidity is itself unphysical.
+#
+# The floor is set at Tdew = -80 C, roughly the coldest dewpoint ever observed on
+# Earth (Antarctic plateau), rather than at an arbitrary small number. The earlier
+# 1e-3 Pa corresponds to Tdew = -103 C, which has no physical referent and looks
+# alarming in a diagnostic.
+#
+# The choice barely matters downstream and that is the point: at Ta = -20 C, a
+# floor of -80 C gives Ds = 99.92% of the maximum possible and -103 C gives
+# 99.9991%. Anything below about -60 C means "no water vapour at all" to four
+# decimal places. What matters is that the floor is finite, documented, and does
+# not print a number that invites a reader to think it is a temperature.
+#
+# Tdew is not inert in T&C: C_Automatic_Radiation_Partition uses it for the
+# clear-sky precipitable-water attenuation, so an absurd value would propagate
+# into the Gueymard transmittance. At -80 C that term is already saturated.
+TDEW_FLOOR_C = -80.0
+E_FLOOR_PA = TETENS_A * np.exp(TETENS_B * TDEW_FLOOR_C / (TDEW_FLOOR_C + TETENS_C))
 
 
 def tetens_inverse(e_pa):
@@ -362,7 +378,7 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
     # one, and it failed by exactly the floor (1.00e-03 Pa) at 8-11 stations per
     # task in job 37232. Flooring once, before both uses, makes the identity hold
     # and keeps the check meaningful.
-    n_floored = int(np.sum(e_pa < E_FLOOR_PA))
+    n_floored = int(np.sum(e_pa < E_FLOOR_PA))   # days the GCM reported hurs ~ 0
     e_pa = np.maximum(e_pa, E_FLOOR_PA)
     Tdew_d = tetens_inverse(e_pa)
     # Dewpoint cannot exceed the air temperature; where the GCM's q implies it,

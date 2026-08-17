@@ -1,0 +1,141 @@
+job        : 37481  task 5
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+started    : 2026-08-17T18:25:36Z
+stations   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+co2        : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+precip     : block
+
+args       : --index 5
+stations : 101   elevation known for 118 (badm_values=110, site_registry=8)
+input    : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+precip   : block   seed 20260813
+
+  IPSL-CM6A-LR ssp126 (ECS 4.6 K): 31411 days, 101 stations
+    US-Bar: {'hours': 753864, 'calendar': 'standard', 'humidity': 'hurs', 'cal_note': None, 'zero_rh_days': 0, 'years': '2015-2100', 'Ta_C': [-39.3, 35.2], 'Ta_mean': 5.57, 'Pre_mbar': 981.1, 'Pr_mm_yr': 1390.5, 'Pr_max_h': 11.5, 'Rsw_max': 982.2, 'Ds_mean': 284.5, 'Ca': [399.9, 474.0]}
+    US-Blk: {'hours': 753864, 'calendar': 'standard', 'humidity': 'hurs', 'cal_note': None, 'zero_rh_days': 0, 'years': '2015-2100', 'Ta_C': [-50.1, 40.0], 'Ta_mean': 8.02, 'Pre_mbar': 826.5, 'Pr_mm_yr': 434.3, 'Pr_max_h': 6.3, 'Rsw_max': 991.0, 'Ds_mean': 677.0, 'Ca': [399.9, 474.0]}
+    -> 101/101 built
+BUILT_DIR: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/IPSL_CM6A_LR
+
+next: finish_meteo.m adds SAB/SAD/PAR/N (see slurm/submit_gcm_meteo.sh)
+matlab     : /opt/apps/matlab_2025a/bin/matlab  (module Matlab/2025a)
+  partition: ssp126/IPSL_CM6A_LR -> 2015_2100  (101 file(s))
+    ----------------------------------------------------
+	Your license will expire in 13 days.
+	Please contact your system administrator or
+	MathWorks to renew this license.
+    ----------------------------------------------------
+t_bef/t_aft = 0/1 -- imposed (constructed hourly series)
+101 raw file(s) in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/IPSL_CM6A_LR
+
+  US_Bar_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  332.0  Rswmax  982.2  band resid max 110.8 W/m2 (2.68% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Blk_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  338.3  Rswmax  991.0  band resid max 113.8 W/m2 (2.28% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPF_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  364.6  Rswmax 1056.2  band resid max 126.0 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPk_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  362.5  Rswmax 1047.1  band resid max 122.4 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CRK_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  366.2  Rswmax 1042.4  band resid max 122.3 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CS2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  328.4  Rswmax  971.5  band resid max 109.1 W/m2 (2.15% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  374.7  Rswmax 1082.7  band resid max 123.0 W/m2 (1.97% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ3_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  372.9  Rswmax 1082.7  band resid max 122.4 W/m2 (1.95% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ4_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  372.9  Rswmax 1083.0  band resid max 123.3 W/m2 (1.93% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_ChR_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  346.9  Rswmax  991.6  band resid max 118.7 W/m2 (1.77% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cst_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  363.9  Rswmax 1037.3  band resid max 117.8 W/m2 (2.69% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cwt_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  346.8  Rswmax  991.2  band resid max 120.4 W/m2 (1.90% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_DPP_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  344.1  Rswmax  992.6  band resid max 114.9 W/m2 (1.91% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  327.4  Rswmax  957.3  band resid max 113.6 W/m2 (2.85% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk3_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  327.4  Rswmax  957.3  band resid max 118.5 W/m2 (2.87% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fmf_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  372.1  Rswmax 1084.2  band resid max 128.8 W/m2 (2.23% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fuf_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  372.1  Rswmax 1084.7  band resid max 129.2 W/m2 (2.22% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GBT_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  362.5  Rswmax 1045.3  band resid max 121.8 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GLE_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  362.6  Rswmax 1045.3  band resid max 121.8 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HB2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  322.0  Rswmax  949.8  band resid max 107.6 W/m2 (2.75% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HB3_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  321.9  Rswmax  949.8  band resid max 107.4 W/m2 (2.74% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HBK_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  333.0  Rswmax  985.8  band resid max 104.1 W/m2 (2.62% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ha1_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  337.2  Rswmax  992.9  band resid max 103.1 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ha2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  337.3  Rswmax  992.9  band resid max 103.2 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho1_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  333.7  Rswmax  985.7  band resid max 102.2 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  333.7  Rswmax  985.7  band resid max 102.3 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho3_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  333.7  Rswmax  985.7  band resid max 102.0 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_LPH_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  336.6  Rswmax  992.9  band resid max 103.3 W/m2 (2.56% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MEF_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  375.8  Rswmax 1081.2  band resid max 129.3 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MMS_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  341.9  Rswmax  987.8  band resid max 114.5 W/m2 (2.18% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MOz_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  358.0  Rswmax 1021.9  band resid max 116.0 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MRf_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  351.4  Rswmax 1038.7  band resid max  99.9 W/m2 (1.41% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me1_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  354.0  Rswmax 1027.9  band resid max 104.4 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  359.1  Rswmax 1032.5  band resid max 107.0 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me4_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  357.3  Rswmax 1032.2  band resid max 107.8 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me6_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  358.1  Rswmax 1033.3  band resid max 108.2 W/m2 (1.80% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me7_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  359.1  Rswmax 1032.5  band resid max 107.1 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MtB_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  386.2  Rswmax 1113.9  band resid max 132.1 W/m2 (2.62% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  332.1  Rswmax  956.1  band resid max 113.8 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC3_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  332.1  Rswmax  956.1  band resid max 113.7 W/m2 (2.34% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC5_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  326.3  Rswmax  953.7  band resid max 117.1 W/m2 (2.89% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NMj_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  319.9  Rswmax  949.5  band resid max  98.1 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NR1_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  367.4  Rswmax 1062.2  band resid max 124.3 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Oho_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  330.2  Rswmax  969.5  band resid max 111.7 W/m2 (2.39% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFL_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.7  Rswmax  957.4  band resid max 103.5 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFb_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.6  Rswmax  957.2  band resid max 103.5 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFc_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.6  Rswmax  957.2  band resid max 103.3 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFg_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.6  Rswmax  957.2  band resid max 110.4 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFh_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.3  Rswmax  957.6  band resid max 110.2 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFi_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.4  Rswmax  957.4  band resid max 110.1 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFj_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.4  Rswmax  957.5  band resid max 110.0 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFk_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.8  Rswmax  957.5  band resid max 103.9 W/m2 (2.01% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFm_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.8  Rswmax  957.5  band resid max 103.4 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFn_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.7  Rswmax  957.4  band resid max 103.0 W/m2 (2.05% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFp_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.8  Rswmax  957.4  band resid max 110.4 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFq_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.4  Rswmax  957.7  band resid max 110.4 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFs_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.5  Rswmax  957.7  band resid max 110.2 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFt_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.4  Rswmax  957.8  band resid max 110.2 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SB1_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  331.9  Rswmax  964.1  band resid max 120.2 W/m2 (2.28% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SHC_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  371.5  Rswmax 1079.9  band resid max 120.3 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP1_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  343.0  Rswmax  985.1  band resid max 112.5 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  342.5  Rswmax  982.6  band resid max 113.2 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP3_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  342.4  Rswmax  982.8  band resid max 116.0 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP4_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  342.5  Rswmax  982.5  band resid max 116.6 W/m2 (2.04% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SSH_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  332.4  Rswmax  955.4  band resid max 117.0 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Slt_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  345.7  Rswmax 1008.9  band resid max 110.6 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_TEF_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  336.1  Rswmax  980.0  band resid max 111.4 W/m2 (1.88% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_UMB_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  316.5  Rswmax  939.4  band resid max 104.2 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_UMd_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  316.5  Rswmax  939.4  band resid max 103.9 W/m2 (2.31% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcm_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  380.3  Rswmax 1096.8  band resid max 127.4 W/m2 (2.31% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcp_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  378.3  Rswmax 1096.8  band resid max 128.6 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcs_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  379.2  Rswmax 1096.5  band resid max 128.7 W/m2 (2.34% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_WBW_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  346.8  Rswmax  991.4  band resid max 118.0 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_WCr_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  323.9  Rswmax  958.4  band resid max 108.4 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi1_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  320.3  Rswmax  949.9  band resid max 102.7 W/m2 (1.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi2_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  320.6  Rswmax  950.2  band resid max 101.7 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi3_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  320.8  Rswmax  950.5  band resid max 101.2 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi4_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  320.3  Rswmax  949.8  band resid max 101.7 W/m2 (1.94% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wrc_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  342.9  Rswmax 1009.2  band resid max 102.8 W/m2 (1.84% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xAB_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  344.8  Rswmax 1006.3  band resid max 100.9 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xBL_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  330.6  Rswmax  959.1  band resid max 120.2 W/m2 (1.98% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xBR_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  331.8  Rswmax  982.2  band resid max 110.8 W/m2 (2.68% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xGR_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  344.8  Rswmax  991.2  band resid max 120.9 W/m2 (1.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xHA_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  337.2  Rswmax  992.9  band resid max 103.2 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xJE_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  340.7  Rswmax  980.2  band resid max 112.8 W/m2 (1.57% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xLE_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  360.7  Rswmax 1024.9  band resid max 114.4 W/m2 (1.53% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xML_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  338.3  Rswmax  977.0  band resid max 119.2 W/m2 (2.35% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xNW_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  369.4  Rswmax 1062.1  band resid max 124.8 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xRM_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  365.0  Rswmax 1057.5  band resid max 122.3 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xRN_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  347.0  Rswmax  991.4  band resid max 117.9 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSB_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  343.4  Rswmax  983.6  band resid max 113.4 W/m2 (2.00% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSC_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  338.5  Rswmax  958.4  band resid max 122.3 W/m2 (2.01% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSE_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  337.1  Rswmax  968.8  band resid max 119.3 W/m2 (2.23% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSP_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  374.7  Rswmax 1082.6  band resid max 123.1 W/m2 (1.97% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xST_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  324.2  Rswmax  958.4  band resid max 107.7 W/m2 (2.12% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTA_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  359.1  Rswmax 1025.6  band resid max 119.0 W/m2 (1.43% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTE_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  373.6  Rswmax 1083.1  band resid max 123.0 W/m2 (1.94% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTR_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  324.6  Rswmax  960.4  band resid max 107.8 W/m2 (2.12% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xUK_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  357.9  Rswmax 1015.4  band resid max 112.5 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xWR_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  343.1  Rswmax 1009.2  band resid max 102.8 W/m2 (1.84% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xYE_IPSL_CM6A_LR_ssp126  753864 h  N 0.00-1.00  PARBmax  351.9  Rswmax 1012.3  band resid max 118.7 W/m2 (1.77% of hours > 1; reference US_xRM: 77.2, 3.27%)
+
+101/101 written to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/IPSL_CM6A_LR
+
+raw  files : 2930
+final files: 2930
+164G	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+finished   : 2026-08-17T18:47:29Z
+exit status: stage1=0 stage2=0

@@ -1,0 +1,141 @@
+job        : 37485  task 9
+node       : soeepyc08
+cluster    : soe   partition: SOE_main
+started    : 2026-08-17T18:25:37Z
+stations   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+co2        : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+precip     : block
+
+args       : --index 9
+stations : 101   elevation known for 118 (badm_values=110, site_registry=8)
+input    : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+precip   : block   seed 20260813
+
+  MPI-ESM1-2-HR ssp585 (ECS 3.0 K): 31411 days, 101 stations
+    US-Bar: {'hours': 753864, 'calendar': 'proleptic_gregorian', 'humidity': 'hurs', 'cal_note': None, 'zero_rh_days': 0, 'years': '2015-2100', 'Ta_C': [-35.2, 39.4], 'Ta_mean': 6.52, 'Pre_mbar': 981.1, 'Pr_mm_yr': 1438.2, 'Pr_max_h': 18.64, 'Rsw_max': 992.8, 'Ds_mean': 319.0, 'Ca': [399.9, 1135.2]}
+    US-Blk: {'hours': 753864, 'calendar': 'proleptic_gregorian', 'humidity': 'hurs', 'cal_note': None, 'zero_rh_days': 0, 'years': '2015-2100', 'Ta_C': [-45.0, 50.2], 'Ta_mean': 8.98, 'Pre_mbar': 826.5, 'Pr_mm_yr': 388.7, 'Pr_max_h': 10.48, 'Rsw_max': 996.0, 'Ds_mean': 787.0, 'Ca': [399.9, 1135.2]}
+    -> 101/101 built
+BUILT_DIR: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/MPI_ESM1_2_HR
+
+next: finish_meteo.m adds SAB/SAD/PAR/N (see slurm/submit_gcm_meteo.sh)
+matlab     : /opt/apps/matlab_2025a/bin/matlab  (module Matlab/2025a)
+  partition: ssp585/MPI_ESM1_2_HR -> 2015_2100  (101 file(s))
+    ----------------------------------------------------
+	Your license will expire in 13 days.
+	Please contact your system administrator or
+	MathWorks to renew this license.
+    ----------------------------------------------------
+t_bef/t_aft = 0/1 -- imposed (constructed hourly series)
+101 raw file(s) in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/MPI_ESM1_2_HR
+
+  US_Bar_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  336.8  Rswmax  992.8  band resid max 108.4 W/m2 (2.68% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Blk_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  340.7  Rswmax  996.0  band resid max 113.3 W/m2 (2.28% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPF_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  365.1  Rswmax 1055.1  band resid max 124.0 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPk_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  361.0  Rswmax 1044.3  band resid max 117.8 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CRK_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  377.7  Rswmax 1075.1  band resid max 124.7 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CS2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  337.7  Rswmax  982.5  band resid max 110.5 W/m2 (2.15% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  372.8  Rswmax 1082.1  band resid max 122.4 W/m2 (1.97% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ3_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  370.9  Rswmax 1082.6  band resid max 121.6 W/m2 (1.95% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ4_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  370.7  Rswmax 1084.3  band resid max 123.9 W/m2 (1.93% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_ChR_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  354.5  Rswmax 1004.3  band resid max 119.5 W/m2 (1.77% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cst_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  374.8  Rswmax 1050.2  band resid max 121.4 W/m2 (2.70% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cwt_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  352.3  Rswmax 1002.8  band resid max 120.0 W/m2 (1.90% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_DPP_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  343.5  Rswmax  979.5  band resid max 115.6 W/m2 (1.91% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  344.1  Rswmax  965.4  band resid max 114.6 W/m2 (2.85% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk3_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  344.0  Rswmax  965.4  band resid max 117.4 W/m2 (2.87% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fmf_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  372.3  Rswmax 1082.8  band resid max 126.3 W/m2 (2.23% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fuf_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  371.5  Rswmax 1082.5  band resid max 126.8 W/m2 (2.22% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GBT_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  359.9  Rswmax 1044.6  band resid max 117.4 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GLE_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  360.0  Rswmax 1044.6  band resid max 117.4 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HB2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  338.7  Rswmax  962.7  band resid max 110.7 W/m2 (2.75% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HB3_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  338.9  Rswmax  962.7  band resid max 110.6 W/m2 (2.74% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HBK_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  339.9  Rswmax  993.5  band resid max 101.7 W/m2 (2.62% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ha1_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  346.9  Rswmax 1006.6  band resid max 102.7 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ha2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  347.0  Rswmax 1006.6  band resid max 102.8 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho1_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  341.6  Rswmax  990.0  band resid max 101.2 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  341.5  Rswmax  990.0  band resid max 101.3 W/m2 (2.20% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho3_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  341.6  Rswmax  990.0  band resid max 101.0 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_LPH_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  347.1  Rswmax 1006.6  band resid max 102.9 W/m2 (2.56% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MEF_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  372.2  Rswmax 1068.3  band resid max 126.7 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MMS_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  350.6  Rswmax 1001.3  band resid max 112.5 W/m2 (2.18% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MOz_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  359.9  Rswmax 1027.4  band resid max 118.7 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MRf_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  346.1  Rswmax 1008.4  band resid max 100.6 W/m2 (1.41% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me1_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  344.9  Rswmax 1017.0  band resid max 103.9 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  349.7  Rswmax 1021.4  band resid max 105.6 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me4_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  348.0  Rswmax 1021.1  band resid max 106.4 W/m2 (1.82% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me6_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  348.8  Rswmax 1022.2  band resid max 106.8 W/m2 (1.80% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me7_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  349.7  Rswmax 1021.4  band resid max 105.7 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MtB_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  387.3  Rswmax 1123.0  band resid max 129.5 W/m2 (2.62% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  341.7  Rswmax  959.8  band resid max 113.4 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC3_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  341.7  Rswmax  959.8  band resid max 113.2 W/m2 (2.34% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC5_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  343.2  Rswmax  966.9  band resid max 114.1 W/m2 (2.89% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NMj_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  325.0  Rswmax  956.7  band resid max 104.9 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NR1_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  366.9  Rswmax 1051.0  band resid max 121.3 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Oho_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  339.0  Rswmax  977.4  band resid max 111.2 W/m2 (2.39% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFL_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.4  Rswmax  963.9  band resid max 106.8 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFb_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.4  Rswmax  963.7  band resid max 106.8 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFc_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.4  Rswmax  963.7  band resid max 106.6 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFg_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.4  Rswmax  963.7  band resid max 112.5 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFh_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.3  Rswmax  963.6  band resid max 112.0 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFi_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.4  Rswmax  963.5  band resid max 111.8 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFj_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.4  Rswmax  963.6  band resid max 111.7 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFk_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.6  Rswmax  964.0  band resid max 107.3 W/m2 (2.01% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFm_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.6  Rswmax  964.0  band resid max 106.8 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFn_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.5  Rswmax  963.9  band resid max 106.3 W/m2 (2.05% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFp_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.6  Rswmax  963.9  band resid max 112.5 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFq_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.4  Rswmax  963.8  band resid max 112.2 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFs_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.5  Rswmax  963.7  band resid max 112.0 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFt_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.4  Rswmax  963.8  band resid max 111.9 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SB1_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  344.0  Rswmax  980.2  band resid max 116.1 W/m2 (2.28% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SHC_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  366.5  Rswmax 1073.2  band resid max 119.8 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP1_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  358.9  Rswmax  994.7  band resid max 114.7 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  356.8  Rswmax  991.0  band resid max 115.1 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP3_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  356.9  Rswmax  991.2  band resid max 120.1 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP4_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  356.8  Rswmax  990.9  band resid max 120.8 W/m2 (2.04% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SSH_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  335.1  Rswmax  971.2  band resid max 118.4 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Slt_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  357.2  Rswmax 1023.0  band resid max 104.1 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_TEF_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  332.5  Rswmax  972.2  band resid max 109.6 W/m2 (1.88% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_UMB_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  324.9  Rswmax  956.9  band resid max 105.6 W/m2 (2.33% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_UMd_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  324.9  Rswmax  956.9  band resid max 105.4 W/m2 (2.31% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcm_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  380.6  Rswmax 1111.2  band resid max 125.6 W/m2 (2.31% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcp_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  378.6  Rswmax 1111.2  band resid max 126.8 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcs_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  379.4  Rswmax 1110.8  band resid max 126.9 W/m2 (2.34% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_WBW_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  354.4  Rswmax 1004.1  band resid max 118.8 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_WCr_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  330.0  Rswmax  964.5  band resid max 110.1 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi1_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  326.3  Rswmax  956.6  band resid max 106.7 W/m2 (1.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi2_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  326.7  Rswmax  956.8  band resid max 105.8 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi3_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  326.9  Rswmax  957.1  band resid max 105.2 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi4_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  326.3  Rswmax  956.5  band resid max 105.8 W/m2 (1.94% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wrc_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  339.8  Rswmax 1011.5  band resid max 101.7 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xAB_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  341.6  Rswmax 1005.4  band resid max  99.8 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xBL_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  339.7  Rswmax  972.8  band resid max 115.1 W/m2 (1.98% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xBR_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  336.6  Rswmax  992.8  band resid max 108.4 W/m2 (2.68% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xGR_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  349.5  Rswmax  996.0  band resid max 120.4 W/m2 (1.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xHA_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  346.9  Rswmax 1006.6  band resid max 102.7 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xJE_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  352.9  Rswmax 1008.5  band resid max 116.2 W/m2 (1.57% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xLE_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  365.3  Rswmax 1036.2  band resid max 115.3 W/m2 (1.53% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xML_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  344.0  Rswmax  984.4  band resid max 117.5 W/m2 (2.35% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xNW_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  368.8  Rswmax 1050.8  band resid max 121.8 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xRM_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  364.7  Rswmax 1052.1  band resid max 119.6 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xRN_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  354.6  Rswmax 1004.1  band resid max 118.7 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSB_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  357.9  Rswmax  991.1  band resid max 117.6 W/m2 (2.00% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSC_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  341.0  Rswmax  975.4  band resid max 117.2 W/m2 (2.01% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSE_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  337.1  Rswmax  966.0  band resid max 114.2 W/m2 (2.23% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSP_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  372.8  Rswmax 1082.1  band resid max 122.5 W/m2 (1.97% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xST_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  329.3  Rswmax  970.6  band resid max 108.2 W/m2 (2.12% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTA_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  366.8  Rswmax 1038.6  band resid max 119.1 W/m2 (1.43% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTE_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  371.7  Rswmax 1083.0  band resid max 124.0 W/m2 (1.94% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTR_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  330.3  Rswmax  973.3  band resid max 109.0 W/m2 (2.12% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xUK_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  363.3  Rswmax 1024.9  band resid max 115.9 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xWR_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  340.0  Rswmax 1011.5  band resid max 101.7 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xYE_MPI_ESM1_2_HR_ssp585  753864 h  N 0.00-1.00  PARBmax  349.1  Rswmax 1016.1  band resid max 115.1 W/m2 (1.77% of hours > 1; reference US_xRM: 77.2, 3.27%)
+
+101/101 written to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/MPI_ESM1_2_HR
+
+raw  files : 2930
+final files: 2930
+164G	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+finished   : 2026-08-17T18:45:25Z
+exit status: stage1=0 stage2=0

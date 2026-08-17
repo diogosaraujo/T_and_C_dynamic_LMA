@@ -1,0 +1,141 @@
+job        : 37488  task 12
+node       : soeepyc09
+cluster    : soe   partition: SOE_main
+started    : 2026-08-17T18:25:36Z
+stations   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+co2        : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+precip     : block
+
+args       : --index 12
+stations : 101   elevation known for 118 (badm_values=110, site_registry=8)
+input    : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+precip   : block   seed 20260813
+
+  MRI-ESM2-0 ssp585 (ECS 3.2 K): 31411 days, 101 stations
+    US-Bar: {'hours': 753864, 'calendar': 'proleptic_gregorian', 'humidity': 'hurs', 'cal_note': None, 'zero_rh_days': 0, 'years': '2015-2100', 'Ta_C': [-37.5, 36.3], 'Ta_mean': 7.03, 'Pre_mbar': 981.1, 'Pr_mm_yr': 1538.0, 'Pr_max_h': 19.37, 'Rsw_max': 978.6, 'Ds_mean': 295.5, 'Ca': [399.9, 1135.2]}
+    US-Blk: {'hours': 753864, 'calendar': 'proleptic_gregorian', 'humidity': 'hurs', 'cal_note': None, 'zero_rh_days': 2, 'years': '2015-2100', 'Ta_C': [-54.3, 47.4], 'Ta_mean': 9.28, 'Pre_mbar': 826.5, 'Pr_mm_yr': 503.1, 'Pr_max_h': 9.37, 'Rsw_max': 986.9, 'Ds_mean': 705.3, 'Ca': [399.9, 1135.2]}
+    -> 101/101 built
+BUILT_DIR: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/MRI_ESM2_0
+
+next: finish_meteo.m adds SAB/SAD/PAR/N (see slurm/submit_gcm_meteo.sh)
+matlab     : /opt/apps/matlab_2025a/bin/matlab  (module Matlab/2025a)
+  partition: ssp585/MRI_ESM2_0 -> 2015_2100  (101 file(s))
+    ----------------------------------------------------
+	Your license will expire in 13 days.
+	Please contact your system administrator or
+	MathWorks to renew this license.
+    ----------------------------------------------------
+t_bef/t_aft = 0/1 -- imposed (constructed hourly series)
+101 raw file(s) in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/MRI_ESM2_0
+
+  US_Bar_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  326.9  Rswmax  978.6  band resid max 104.2 W/m2 (2.68% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Blk_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  338.8  Rswmax  986.9  band resid max 112.5 W/m2 (2.28% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPF_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  360.9  Rswmax 1045.3  band resid max 121.5 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPk_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  360.2  Rswmax 1043.2  band resid max 118.8 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CRK_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  364.6  Rswmax 1046.0  band resid max 121.6 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CS2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  328.7  Rswmax  965.9  band resid max 104.9 W/m2 (2.15% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  373.3  Rswmax 1087.8  band resid max 122.6 W/m2 (1.97% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ3_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  370.2  Rswmax 1089.3  band resid max 122.1 W/m2 (1.95% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ4_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  369.7  Rswmax 1090.6  band resid max 124.8 W/m2 (1.93% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_ChR_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  343.4  Rswmax  992.2  band resid max 116.1 W/m2 (1.77% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cst_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  357.8  Rswmax 1027.2  band resid max 118.3 W/m2 (2.70% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cwt_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  342.8  Rswmax  990.5  band resid max 117.2 W/m2 (1.90% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_DPP_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  343.8  Rswmax  974.1  band resid max 115.8 W/m2 (1.90% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  326.2  Rswmax  958.3  band resid max 111.3 W/m2 (2.85% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk3_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  326.2  Rswmax  958.3  band resid max 116.4 W/m2 (2.87% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fmf_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  373.2  Rswmax 1083.5  band resid max 129.4 W/m2 (2.23% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fuf_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  372.7  Rswmax 1083.3  band resid max 129.8 W/m2 (2.21% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GBT_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  360.0  Rswmax 1037.2  band resid max 117.7 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GLE_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  360.1  Rswmax 1037.2  band resid max 117.7 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HB2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  329.8  Rswmax  949.6  band resid max 109.8 W/m2 (2.75% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HB3_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  329.8  Rswmax  949.6  band resid max 109.6 W/m2 (2.74% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HBK_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  329.5  Rswmax  978.7  band resid max  99.0 W/m2 (2.62% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ha1_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  332.7  Rswmax  984.8  band resid max  98.2 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ha2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  332.8  Rswmax  984.8  band resid max  98.3 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho1_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  329.6  Rswmax  983.4  band resid max  98.4 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  329.6  Rswmax  983.4  band resid max  98.5 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho3_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  329.6  Rswmax  983.4  band resid max  98.2 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_LPH_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  332.8  Rswmax  984.8  band resid max  98.4 W/m2 (2.56% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MEF_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  364.8  Rswmax 1061.5  band resid max 122.5 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MMS_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  341.1  Rswmax  984.0  band resid max 108.9 W/m2 (2.18% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MOz_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  351.1  Rswmax 1012.4  band resid max 114.1 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MRf_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  343.0  Rswmax 1004.5  band resid max 100.2 W/m2 (1.41% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me1_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  349.5  Rswmax 1013.5  band resid max 103.8 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  354.4  Rswmax 1018.0  band resid max 105.6 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me4_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  352.7  Rswmax 1017.7  band resid max 106.3 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me6_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  353.5  Rswmax 1018.8  band resid max 106.7 W/m2 (1.80% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me7_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  354.4  Rswmax 1018.0  band resid max 105.6 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MtB_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  386.8  Rswmax 1108.3  band resid max 131.3 W/m2 (2.62% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  316.0  Rswmax  947.6  band resid max 112.4 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC3_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  318.1  Rswmax  947.6  band resid max 112.3 W/m2 (2.34% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC5_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  323.5  Rswmax  953.7  band resid max 114.3 W/m2 (2.89% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NMj_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  312.5  Rswmax  944.9  band resid max 100.4 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NR1_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  360.5  Rswmax 1045.5  band resid max 118.8 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Oho_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  327.7  Rswmax  962.8  band resid max 109.5 W/m2 (2.39% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFL_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.2  Rswmax  946.1  band resid max 101.7 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFb_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.2  Rswmax  946.0  band resid max 101.7 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFc_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.2  Rswmax  946.0  band resid max 101.5 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFg_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.2  Rswmax  945.9  band resid max 107.9 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFh_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  319.4  Rswmax  954.1  band resid max 107.4 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFi_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.0  Rswmax  954.0  band resid max 107.3 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFj_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.0  Rswmax  954.1  band resid max 107.2 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFk_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.4  Rswmax  946.3  band resid max 102.1 W/m2 (2.01% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFm_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.4  Rswmax  946.3  band resid max 101.7 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFn_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.3  Rswmax  946.2  band resid max 101.2 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFp_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.4  Rswmax  946.2  band resid max 107.9 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFq_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  319.5  Rswmax  954.3  band resid max 107.6 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFs_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.1  Rswmax  954.2  band resid max 107.4 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFt_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  319.5  Rswmax  954.3  band resid max 107.4 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SB1_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  328.6  Rswmax  966.6  band resid max 115.2 W/m2 (2.28% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SHC_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  367.0  Rswmax 1076.6  band resid max 117.6 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP1_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  339.1  Rswmax  973.0  band resid max 114.3 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  338.7  Rswmax  976.6  band resid max 114.7 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP3_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  338.6  Rswmax  976.7  band resid max 117.9 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP4_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  338.6  Rswmax  976.6  band resid max 118.5 W/m2 (2.04% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SSH_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  325.9  Rswmax  950.9  band resid max 114.9 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Slt_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  347.9  Rswmax 1008.2  band resid max 102.8 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_TEF_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  331.3  Rswmax  975.1  band resid max 105.5 W/m2 (1.88% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_UMB_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  315.4  Rswmax  938.8  band resid max 101.5 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_UMd_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  314.1  Rswmax  938.8  band resid max 101.2 W/m2 (2.31% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcm_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  378.6  Rswmax 1100.1  band resid max 123.7 W/m2 (2.31% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcp_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  376.6  Rswmax 1100.2  band resid max 124.8 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcs_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  377.4  Rswmax 1099.9  band resid max 125.2 W/m2 (2.34% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_WBW_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  343.3  Rswmax  992.0  band resid max 115.3 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_WCr_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.5  Rswmax  955.0  band resid max 105.6 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi1_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  318.2  Rswmax  952.0  band resid max 103.8 W/m2 (1.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi2_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  318.5  Rswmax  952.2  band resid max 102.8 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi3_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  318.7  Rswmax  952.6  band resid max 102.3 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi4_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  318.2  Rswmax  951.9  band resid max 102.9 W/m2 (1.94% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wrc_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  341.0  Rswmax  997.5  band resid max 101.8 W/m2 (1.84% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xAB_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  342.9  Rswmax  995.6  band resid max  99.9 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xBL_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  328.5  Rswmax  959.9  band resid max 114.1 W/m2 (1.98% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xBR_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  326.7  Rswmax  978.6  band resid max 104.1 W/m2 (2.68% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xGR_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  338.9  Rswmax  988.9  band resid max 117.6 W/m2 (1.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xHA_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  332.7  Rswmax  984.8  band resid max  98.2 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xJE_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  342.0  Rswmax  995.4  band resid max 115.5 W/m2 (1.57% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xLE_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  349.9  Rswmax 1018.0  band resid max 112.5 W/m2 (1.53% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xML_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  335.0  Rswmax  977.2  band resid max 114.8 W/m2 (2.35% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xNW_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  362.3  Rswmax 1045.4  band resid max 119.3 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xRM_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  359.8  Rswmax 1043.0  band resid max 117.2 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xRN_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  343.6  Rswmax  992.0  band resid max 115.3 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSB_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  338.8  Rswmax  971.9  band resid max 115.1 W/m2 (2.00% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSC_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  328.9  Rswmax  962.3  band resid max 116.5 W/m2 (2.01% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSE_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.0  Rswmax  949.1  band resid max 112.5 W/m2 (2.23% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSP_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  373.3  Rswmax 1087.8  band resid max 122.7 W/m2 (1.97% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xST_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  321.3  Rswmax  960.6  band resid max 104.2 W/m2 (2.12% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTA_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  356.1  Rswmax 1016.1  band resid max 115.5 W/m2 (1.43% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTE_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  370.9  Rswmax 1089.7  band resid max 124.5 W/m2 (1.94% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTR_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  322.9  Rswmax  961.9  band resid max 104.9 W/m2 (2.12% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xUK_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  348.4  Rswmax 1010.5  band resid max 113.3 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xWR_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  341.2  Rswmax  997.5  band resid max 101.8 W/m2 (1.84% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xYE_MRI_ESM2_0_ssp585  753864 h  N 0.00-1.00  PARBmax  346.9  Rswmax 1005.7  band resid max 113.1 W/m2 (1.77% of hours > 1; reference US_xRM: 77.2, 3.27%)
+
+101/101 written to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/MRI_ESM2_0
+
+raw  files : 2930
+final files: 2930
+164G	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+finished   : 2026-08-17T18:47:16Z
+exit status: stage1=0 stage2=0

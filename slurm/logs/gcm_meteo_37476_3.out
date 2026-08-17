@@ -1,0 +1,141 @@
+job        : 37479  task 3
+node       : soeepyc06
+cluster    : soe   partition: SOE_main
+started    : 2026-08-17T18:25:36Z
+stations   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+co2        : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/co2
+output     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+precip     : block
+
+args       : --index 3
+stations : 101   elevation known for 118 (badm_values=110, site_registry=8)
+input    : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_stations
+output   : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+precip   : block   seed 20260813
+
+  GFDL-ESM4 ssp585 (ECS 2.6 K): 31390 days, 101 stations
+    US-Bar: {'hours': 753360, 'calendar': '365_day', 'humidity': 'hurs', 'cal_note': None, 'zero_rh_days': 0, 'years': '2015-2100', 'Ta_C': [-39.4, 38.4], 'Ta_mean': 6.37, 'Pre_mbar': 981.1, 'Pr_mm_yr': 1505.3, 'Pr_max_h': 17.8, 'Rsw_max': 985.8, 'Ds_mean': 308.3, 'Ca': [399.9, 1135.2]}
+    US-Blk: {'hours': 753360, 'calendar': '365_day', 'humidity': 'hurs', 'cal_note': None, 'zero_rh_days': 0, 'years': '2015-2100', 'Ta_C': [-53.1, 44.5], 'Ta_mean': 8.72, 'Pre_mbar': 826.5, 'Pr_mm_yr': 467.8, 'Pr_max_h': 9.76, 'Rsw_max': 993.7, 'Ds_mean': 683.4, 'Ca': [399.9, 1135.2]}
+    -> 101/101 built
+BUILT_DIR: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/GFDL_ESM4
+
+next: finish_meteo.m adds SAB/SAD/PAR/N (see slurm/submit_gcm_meteo.sh)
+matlab     : /opt/apps/matlab_2025a/bin/matlab  (module Matlab/2025a)
+  partition: ssp585/GFDL_ESM4 -> 2015_2100  (101 file(s))
+    ----------------------------------------------------
+	Your license will expire in 13 days.
+	Please contact your system administrator or
+	MathWorks to renew this license.
+    ----------------------------------------------------
+t_bef/t_aft = 0/1 -- imposed (constructed hourly series)
+101 raw file(s) in /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/GFDL_ESM4
+
+  US_Bar_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  330.3  Rswmax  985.8  band resid max 107.4 W/m2 (2.68% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Blk_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  341.3  Rswmax  993.7  band resid max 113.2 W/m2 (2.28% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPF_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  363.6  Rswmax 1053.4  band resid max 126.5 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CPk_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  360.5  Rswmax 1041.8  band resid max 121.9 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CRK_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  370.3  Rswmax 1046.5  band resid max 123.9 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CS2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  329.0  Rswmax  973.5  band resid max 106.5 W/m2 (2.15% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  373.1  Rswmax 1077.3  band resid max 120.1 W/m2 (1.97% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ3_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  370.2  Rswmax 1078.5  band resid max 119.6 W/m2 (1.95% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_CZ4_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  370.2  Rswmax 1079.9  band resid max 122.5 W/m2 (1.93% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_ChR_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  346.4  Rswmax  994.5  band resid max 121.8 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cst_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  365.3  Rswmax 1044.0  band resid max 119.0 W/m2 (2.69% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Cwt_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  346.2  Rswmax  996.0  band resid max 119.5 W/m2 (1.89% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_DPP_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  344.7  Rswmax  972.8  band resid max 117.0 W/m2 (1.90% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  326.7  Rswmax  962.8  band resid max 112.2 W/m2 (2.85% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Dk3_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  326.7  Rswmax  962.8  band resid max 116.8 W/m2 (2.87% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fmf_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  371.6  Rswmax 1084.1  band resid max 126.3 W/m2 (2.23% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Fuf_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  371.4  Rswmax 1083.4  band resid max 126.9 W/m2 (2.21% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GBT_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  362.2  Rswmax 1037.2  band resid max 122.3 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_GLE_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  362.2  Rswmax 1037.2  band resid max 122.3 W/m2 (1.76% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HB2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  332.9  Rswmax  962.6  band resid max 108.3 W/m2 (2.75% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HB3_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  332.9  Rswmax  962.5  band resid max 108.1 W/m2 (2.74% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_HBK_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  333.4  Rswmax  987.5  band resid max 101.3 W/m2 (2.61% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ha1_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  334.3  Rswmax  980.0  band resid max 102.3 W/m2 (2.54% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ha2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  334.4  Rswmax  980.0  band resid max 102.4 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho1_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  331.2  Rswmax  984.8  band resid max 102.0 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  331.2  Rswmax  984.8  band resid max 102.1 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Ho3_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  331.2  Rswmax  984.8  band resid max 101.8 W/m2 (2.18% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_LPH_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  334.5  Rswmax  980.0  band resid max 102.5 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MEF_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  370.2  Rswmax 1071.2  band resid max 126.0 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MMS_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  348.7  Rswmax  991.0  band resid max 113.8 W/m2 (2.18% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MOz_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  352.8  Rswmax 1010.1  band resid max 117.6 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MRf_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  349.2  Rswmax 1021.6  band resid max 100.9 W/m2 (1.41% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me1_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  349.5  Rswmax 1022.9  band resid max 105.6 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  353.4  Rswmax 1026.5  band resid max 107.9 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me4_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  351.6  Rswmax 1026.2  band resid max 108.6 W/m2 (1.83% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me6_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  352.5  Rswmax 1027.3  band resid max 109.0 W/m2 (1.80% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Me7_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  353.4  Rswmax 1026.5  band resid max 107.9 W/m2 (1.81% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_MtB_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  386.5  Rswmax 1117.4  band resid max 130.7 W/m2 (2.62% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  321.0  Rswmax  955.6  band resid max 115.0 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC3_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  321.0  Rswmax  955.6  band resid max 114.8 W/m2 (2.34% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NC5_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  326.7  Rswmax  959.9  band resid max 114.3 W/m2 (2.89% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NMj_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  319.7  Rswmax  943.0  band resid max 104.9 W/m2 (2.19% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_NR1_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  364.6  Rswmax 1055.6  band resid max 124.7 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Oho_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  331.9  Rswmax  964.2  band resid max 110.2 W/m2 (2.38% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFL_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.6  Rswmax  955.6  band resid max 105.6 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFb_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.6  Rswmax  955.4  band resid max 105.6 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFc_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.6  Rswmax  955.4  band resid max 105.4 W/m2 (2.05% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFg_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.5  Rswmax  955.4  band resid max 107.8 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFh_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  327.7  Rswmax  954.7  band resid max 107.9 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFi_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  327.8  Rswmax  954.6  band resid max 107.7 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFj_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  327.8  Rswmax  954.6  band resid max 107.7 W/m2 (2.06% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFk_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.7  Rswmax  955.7  band resid max 106.0 W/m2 (2.01% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFm_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.7  Rswmax  955.7  band resid max 105.5 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFn_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.7  Rswmax  955.6  band resid max 105.1 W/m2 (2.05% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFp_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.8  Rswmax  955.6  band resid max 107.8 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFq_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  327.8  Rswmax  954.8  band resid max 108.1 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFs_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  327.9  Rswmax  954.8  band resid max 107.9 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_PFt_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  327.8  Rswmax  954.9  band resid max 107.8 W/m2 (2.07% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SB1_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  340.3  Rswmax  970.5  band resid max 115.9 W/m2 (2.28% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SHC_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  367.5  Rswmax 1066.2  band resid max 117.8 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP1_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  350.3  Rswmax  978.2  band resid max 114.1 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  350.5  Rswmax  979.9  band resid max 114.6 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP3_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  350.4  Rswmax  979.9  band resid max 118.1 W/m2 (2.03% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SP4_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  350.3  Rswmax  979.8  band resid max 118.7 W/m2 (2.04% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_SSH_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  329.3  Rswmax  954.6  band resid max 118.9 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Slt_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  344.7  Rswmax 1007.0  band resid max 106.5 W/m2 (2.02% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_TEF_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  333.4  Rswmax  976.6  band resid max 109.4 W/m2 (1.88% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_UMB_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  317.4  Rswmax  946.0  band resid max 107.2 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_UMd_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  317.4  Rswmax  945.9  band resid max 107.0 W/m2 (2.31% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcm_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  382.8  Rswmax 1099.8  band resid max 125.9 W/m2 (2.31% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcp_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  380.8  Rswmax 1100.0  band resid max 126.9 W/m2 (2.32% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Vcs_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  381.7  Rswmax 1099.6  band resid max 127.4 W/m2 (2.34% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_WBW_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  346.3  Rswmax  994.3  band resid max 121.0 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_WCr_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.3  Rswmax  955.6  band resid max 106.1 W/m2 (2.05% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi1_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  322.9  Rswmax  952.0  band resid max 107.4 W/m2 (1.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi2_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  323.8  Rswmax  952.2  band resid max 106.4 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi3_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  324.0  Rswmax  952.5  band resid max 105.8 W/m2 (1.96% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wi4_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  323.4  Rswmax  951.9  band resid max 106.4 W/m2 (1.94% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_Wrc_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  342.3  Rswmax 1010.4  band resid max 102.2 W/m2 (1.84% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xAB_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  345.0  Rswmax 1008.7  band resid max 101.5 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xBL_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  337.6  Rswmax  964.9  band resid max 117.2 W/m2 (1.99% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xBR_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  330.1  Rswmax  985.8  band resid max 107.4 W/m2 (2.68% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xGR_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  344.5  Rswmax  993.3  band resid max 119.5 W/m2 (1.92% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xHA_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  334.4  Rswmax  980.0  band resid max 102.3 W/m2 (2.55% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xJE_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  352.6  Rswmax  995.3  band resid max 113.9 W/m2 (1.57% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xLE_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  358.1  Rswmax 1026.9  band resid max 114.0 W/m2 (1.53% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xML_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  334.7  Rswmax  987.9  band resid max 118.4 W/m2 (2.35% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xNW_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  366.6  Rswmax 1055.5  band resid max 125.2 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xRM_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  363.2  Rswmax 1055.5  band resid max 123.1 W/m2 (2.11% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xRN_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  346.4  Rswmax  994.3  band resid max 120.9 W/m2 (1.78% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSB_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  348.4  Rswmax  978.8  band resid max 115.5 W/m2 (1.99% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSC_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  339.2  Rswmax  964.1  band resid max 119.8 W/m2 (2.01% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSE_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  332.3  Rswmax  954.5  band resid max 115.9 W/m2 (2.23% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xSP_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  373.1  Rswmax 1077.3  band resid max 120.2 W/m2 (1.97% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xST_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.2  Rswmax  957.2  band resid max 106.2 W/m2 (2.12% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTA_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  357.5  Rswmax 1025.8  band resid max 118.6 W/m2 (1.43% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTE_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  370.9  Rswmax 1078.8  band resid max 122.4 W/m2 (1.94% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xTR_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  328.3  Rswmax  958.0  band resid max 106.8 W/m2 (2.12% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xUK_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  354.8  Rswmax 1008.7  band resid max 115.6 W/m2 (2.08% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xWR_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  342.4  Rswmax 1010.4  band resid max 102.2 W/m2 (1.84% of hours > 1; reference US_xRM: 77.2, 3.27%)
+  US_xYE_GFDL_ESM4_ssp585  753360 h  N 0.00-1.00  PARBmax  350.7  Rswmax 1012.9  band resid max 115.6 W/m2 (1.77% of hours > 1; reference US_xRM: 77.2, 3.27%)
+
+101/101 written to /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/GFDL_ESM4
+
+raw  files : 2930
+final files: 2930
+164G	/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+finished   : 2026-08-17T18:41:12Z
+exit status: stage1=0 stage2=0

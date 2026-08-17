@@ -1,0 +1,31 @@
+job        : 37491
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-17T19:30:22Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr       : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr      : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+stations  : 101   gcms 5   scenarios 3
+target    : 3030 run directories
+
+========================================================================
+DRY RUN -- 0 run directories written, 58 blocked
+========================================================================
+station-to-PLSR-pixel distance: mean 27.4 km, median 14.3, max 187.9
+
+blocked (58):
+  ! US-CS2   GFDL-ESM4      -           only 6 historical years in the projection
+  ! US-HB2   -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MtB   GFDL-ESM4      ssp126      empty series after clipping
+  ! US-Slt   GFDL-ESM4      -           no LU 41 (deciduous) pixel in ecoregion 5 for GFDL-ESM4 ssp126
+  ! US-Slt   IPSL-CM6A-LR   -           no LU 41 (deciduous) pixel in ecoregion 5 for IPSL-CM6A-LR ssp126
+  ! US-Slt   MPI-ESM1-2-HR  -           no LU 41 (deciduous) pixel in ecoregion 5 for MPI-ESM1-2-HR ssp126
+  ! US-Slt   MRI-ESM2-0     -           no LU 41 (deciduous) pixel in ecoregion 5 for MRI-ESM2-0 ssp126
+  ! US-Slt   UKESM1-0-LL    -           no LU 41 (deciduous) pixel in ecoregion 5 for UKESM1-0-LL ssp126
+
+finished   : 2026-08-17T19:31:17Z
+exit status: 0

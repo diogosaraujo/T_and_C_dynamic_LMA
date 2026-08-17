@@ -244,6 +244,13 @@ def main(argv=None) -> int:
     ap.add_argument("--root", type=Path, default=MODEL_RUN)
     ap.add_argument("--plsr-root", type=Path, default=PLSR_ROOT)
     ap.add_argument("--meteo", type=Path, default=GCM_METEO)
+    ap.add_argument("--max-pixel-km", type=float, default=50.0,
+                    help="report stations whose nearest same-forest-type PLSR pixel "
+                         "is further than this (default 50 km). Reporting only; "
+                         "use --exclude-far to actually block them.")
+    ap.add_argument("--exclude-far", action="store_true",
+                    help="block combinations beyond --max-pixel-km instead of "
+                         "reporting them")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args(argv)
 
@@ -258,8 +265,8 @@ def main(argv=None) -> int:
     print(f"stations  : {len(stations)}   gcms {len(gcms)}   scenarios {len(scens)}")
     print(f"target    : {len(stations)*len(gcms)*len(scens)*len(ARMS)} run directories\n")
 
-    written, blocked, runs = 0, [], []
-    offsets = []
+    written, ok_arms, blocked, runs = 0, 0, [], []
+    offsets = []          # (station, km) so far matches can be named, not just counted
     for st in stations:
         sid, mname = st["station_id"], mat_name(st["station_id"])
         era5_mp = a.root / sid / "era5_land" / "fixed_lma" / f"MOD_PARAM_{mname}.m"
@@ -280,8 +287,12 @@ def main(argv=None) -> int:
                 blocked.append((sid, gcm, "-",
                                 f"only {len(hist)} historical years in the projection"))
                 continue
+            if a.exclude_far and hd["pixel_km"] > a.max_pixel_km:
+                blocked.append((sid, gcm, "-", f"nearest {st['forest_type']} pixel is "
+                                               f"{hd['pixel_km']:.0f} km away"))
+                continue
             fixed_mean = float(np.mean([v for _, v in hist]))
-            offsets.append(hd["pixel_km"])
+            offsets.append((sid, hd["pixel_km"]))
 
             for scen in scens:
                 if scen == "historical":
@@ -306,33 +317,55 @@ def main(argv=None) -> int:
                     blocked.append((sid, gcm, scen, err))
                     continue
                 written += n
+                ok_arms += len(ARMS)
                 for arm in ARMS:
                     runs.append(f"{sid} {scen} {gcm} {arm}")
 
     print(f"{'=' * 72}")
-    print(f"{'DRY RUN -- ' if a.dry_run else ''}{written} run directories written, "
-          f"{len(blocked)} blocked")
+    verb = "would be built" if a.dry_run else "written"
+    print(f"{'DRY RUN -- ' if a.dry_run else ''}{ok_arms} run directories {verb}, "
+          f"{len(blocked)} combination(s) blocked")
     print(f"{'=' * 72}")
+
     if offsets:
-        o = np.array(offsets)
-        print(f"station-to-PLSR-pixel distance: mean {o.mean():.1f} km, "
-              f"median {np.median(o):.1f}, max {o.max():.1f}")
+        o = np.array([d for _, d in offsets])
+        print("\nSTATION-TO-PLSR-PIXEL DISTANCE")
+        print("  " + "  ".join(f"p{p}={np.percentile(o, p):.1f}" for p in (50, 75, 90, 95, 99))
+              + f"  max={o.max():.1f} km  (n={len(o)})")
+        far = sorted({s for s, d in offsets if d > a.max_pixel_km},
+                     key=lambda s: -max(d for ss, d in offsets if ss == s))
+        if far:
+            print(f"  beyond {a.max_pixel_km:.0f} km -- the LMA series comes from a pixel that far "
+                  f"from the tower:")
+            for s in far[:15]:
+                d = max(d for ss, d in offsets if ss == s)
+                print(f"    {s:<9} {d:6.1f} km")
+            print(f"  These are NOT blocked. A distant pixel still has the right forest type and\n"
+                  f"  ecoregion, but it is not the tower's own climate -- decide per station\n"
+                  f"  whether that is acceptable, or re-run with --max-pixel-km to exclude them.")
+
     if blocked:
-        print(f"\nblocked ({len(blocked)}):")
-        seen = set()
+        # Group by reason, because one cause usually explains many rows and the
+        # per-row list buries that. Every row is still printed underneath.
+        import collections
+        cat = collections.Counter()
         for sid, gcm, scen, why in blocked:
-            k = why.split(" ")[0] + why[-20:]
-            if k in seen and len(blocked) > 30:
-                continue
-            seen.add(k)
-            print(f"  ! {sid:<8} {gcm:<14} {scen:<11} {why}")
+            key = re.sub(r"\d+", "N", why)
+            key = re.sub(r"(for |in ecoregion )\S+", r"\1...", key)
+            cat[key] += 1
+        print(f"\nBLOCKED, by cause ({len(blocked)} total)")
+        for why, n in cat.most_common():
+            print(f"  {n:>4d} x  {why}")
+        print(f"\nBLOCKED, in full")
+        for sid, gcm, scen, why in sorted(blocked):
+            print(f"  ! {sid:<9} {gcm:<14} {scen:<11} {why}")
     if runs and not a.dry_run:
         lst = a.root / "run_list_gcm.txt"
         lst.write_text("".join(r + "\n" for r in runs), encoding="utf-8")
         print(f"\nrun list : {lst}  ({len(runs)} arms)")
         print(f"           sbatch --array=1-{len(runs)}%NN slurm/submit_tc_run.sh "
               f"(with RUN_LIST=run_list_gcm.txt)")
-    return 0 if written or a.dry_run else 1
+    return 0 if ok_arms else 1
 
 
 if __name__ == "__main__":

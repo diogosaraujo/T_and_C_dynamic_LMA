@@ -1,0 +1,45 @@
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/historical/MRI_ESM2_0/Meteo_US_SHC_MRI_ESM2_0_historical_1980_2014.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/IPSL_CM6A_LR/Meteo_US_HB2_IPSL_CM6A_LR_ssp126_2015_2100.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/MRI_ESM2_0/Meteo_US_PFk_MRI_ESM2_0_ssp126_2015_2100.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/UKESM1_0_LL/Meteo_US_Oho_UKESM1_0_LL_ssp126_2015_2100.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp585/IPSL_CM6A_LR/Meteo_US_Fmf_IPSL_CM6A_LR_ssp585_2015_2100.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 

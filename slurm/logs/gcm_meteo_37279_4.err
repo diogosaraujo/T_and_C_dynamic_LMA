@@ -1,0 +1,10 @@
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/historical/GFDL_ESM4/Meteo_US_Bar_GFDL_ESM4_historical_1980_2014.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+[2026-08-14T22:24:04.285] error: *** JOB 37283 ON soeepyc05 CANCELLED AT 2026-08-14T22:24:04 DUE to SIGNAL Terminated ***

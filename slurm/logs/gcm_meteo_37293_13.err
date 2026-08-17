@@ -1,0 +1,4 @@
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_gcm_meteo.py:266: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
+  out[k] = np.datetime64(f"{yy:04d}-01-01", "D") + min(max(rd, 0), ny - 1)
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_gcm_meteo.py:266: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
+  out[k] = np.datetime64(f"{yy:04d}-01-01", "D") + min(max(rd, 0), ny - 1)

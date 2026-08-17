@@ -1,0 +1,27 @@
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/historical/MPI_ESM1_2_HR/Meteo_US_SSH_MPI_ESM1_2_HR_historical_1980_2014.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/GFDL_ESM4/Meteo_US_CPk_GFDL_ESM4_ssp126_2015_2100.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+{Error using save
+Unable to write to file
+'/vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/ssp126/MPI_ESM1_2_HR/Meteo_US_Me7_MPI_ESM1_2_HR_ssp126_2015_2100.mat'
+because it appears to be corrupt.
+
+Error in finish_meteo (line 187)
+    save(outfile, '-struct', 'S', '-v7.3');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 

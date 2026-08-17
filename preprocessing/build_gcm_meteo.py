@@ -529,7 +529,16 @@ def main(argv=None) -> int:
             ok += 1
             if a.dry_run or ok <= 2:
                 print(f"    {s['station']}: {diag}")
-        print(f"    -> {ok}/{len(stations)} built\n", flush=True)
+        print(f"    -> {ok}/{len(stations)} built")
+        # Machine-readable marker for the submit script. Stage 2 must partition
+        # ONLY what this task wrote: finish_meteo.m globs a directory, and a shell
+        # glob over the whole tree makes all 15 concurrent tasks partition all 15
+        # directories and overwrite each other. Job 37293 did exactly that -- every
+        # task reported 15 partition passes of 101 files, and MATLAB failed with
+        # "appears to be corrupt" on a file another task was writing.
+        if not a.dry_run and ok:
+            print(f"BUILT_DIR: {(a.out / sc / mat_name(g)).resolve()}")
+        print(flush=True)
     print("next: finish_meteo.m adds SAB/SAD/PAR/N (see slurm/submit_gcm_meteo.sh)")
     return rc
 

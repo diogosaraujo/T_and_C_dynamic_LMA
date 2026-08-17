@@ -82,10 +82,9 @@ elif [ "$have_selector" -eq 0 ]; then
 fi
 echo "args       : ${ARGS[*]}"
 
-python build_gcm_meteo.py \
-    --stations-root "$STATION_DIR" --out "$METEO_DIR" --co2-dir "$CO2_DIR" \
-    --precip-scheme "$PRECIP_SCHEME" "${ARGS[@]}"
-s1=$?
+STAGE1_LOG="${TMPDIR:-/tmp}/gcm_meteo_s1_${SLURM_JOB_ID:-$$}_${SLURM_ARRAY_TASK_ID:-0}.txt"
+python build_gcm_meteo.py     --stations-root "$STATION_DIR" --out "$METEO_DIR" --co2-dir "$CO2_DIR"     --precip-scheme "$PRECIP_SCHEME" "${ARGS[@]}" 2>&1 | tee "$STAGE1_LOG"
+s1=${PIPESTATUS[0]}
 
 # A dry run writes no _raw.mat, so stage 2 would find nothing and error.
 case " ${ARGS[*]} " in *" --dry-run "*)
@@ -102,8 +101,13 @@ tc_load_matlab || exit 1
 # just wrote. finish_meteo.m globs a whole directory, so a shared one means every
 # concurrent task re-partitions every file and several write the same output at
 # once -- job 37232 corrupted files that way.
+# ONLY the directories this task's stage 1 wrote, named by it explicitly. A glob
+# over the tree makes every concurrent task partition every directory -- job 37293
+# ran 15 passes per task and corrupted files other tasks were writing.
 s2=0
-for SUB in "$METEO_DIR"/*/*/; do
+BUILT=$(grep '^BUILT_DIR: ' "$STAGE1_LOG" 2>/dev/null | sed 's/^BUILT_DIR: //' | sort -u)
+[ -n "$BUILT" ] || echo "no BUILT_DIR markers from stage 1 -- nothing to partition" >&2
+for SUB in $BUILT; do
     tag=$(basename "$(dirname "$SUB")")
     ls "$SUB"/Meteo_*_raw.mat >/dev/null 2>&1 || continue
     case "$tag" in
@@ -120,6 +124,7 @@ echo
 echo "raw  files : $(find "$METEO_DIR" -name 'Meteo_*_raw.mat' 2>/dev/null | wc -l)"
 echo "final files: $(find "$METEO_DIR" -name 'Meteo_*_raw.mat' -prune -o -name 'Meteo_*.mat' -print 2>/dev/null | wc -l)"
 du -sh "$METEO_DIR" 2>/dev/null || true
+rm -f "$STAGE1_LOG"
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "exit status: stage1=$s1 stage2=$s2"
 exit $(( s1 || s2 ))

@@ -1,0 +1,103 @@
+job        : 37513
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-17T23:02:13Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr       : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr      : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+stations  : 101   gcms 5   scenarios 3
+target    : 3030 run directories
+
+========================================================================
+DRY RUN -- 2650 run directories would be built, 58 combination(s) blocked
+========================================================================
+
+STATION-TO-PLSR-PIXEL DISTANCE
+  p50=14.3  p75=29.0  p90=52.2  p95=116.4  p99=180.0  max=187.9 km  (n=445)
+  beyond 50 km -- the LMA series comes from a pixel that far from the tower:
+    US-Ha2     187.9 km
+    US-xUK     170.0 km
+    US-MtB     140.7 km
+    US-PFt     118.9 km
+    US-PFh     116.4 km
+    US-PFg     113.3 km
+    US-DPP     110.0 km
+    US-PFb     109.8 km
+    US-Wi4      53.6 km
+    US-Wi2      50.1 km
+  These are NOT blocked. A distant pixel still has the right forest type and
+  ecoregion, but it is not the tower's own climate -- decide per station
+  whether that is acceptable, or re-run with --max-pixel-km to exclude them.
+
+BLOCKED, by cause (58 total)
+    40 x  only N historical years in the projection
+    10 x  empty series after clipping
+     5 x  no LU N (deciduous) pixel in ecoregion ... for ... sspN
+     3 x  no eraN_land MOD_PARAM; run build_model_run.py first
+
+BLOCKED, in full
+  ! US-CS2    GFDL-ESM4      -           only 6 historical years in the projection
+  ! US-CS2    IPSL-CM6A-LR   -           only 6 historical years in the projection
+  ! US-CS2    MPI-ESM1-2-HR  -           only 6 historical years in the projection
+  ! US-CS2    MRI-ESM2-0     -           only 6 historical years in the projection
+  ! US-CS2    UKESM1-0-LL    -           only 6 historical years in the projection
+  ! US-Dk3    GFDL-ESM4      -           only 17 historical years in the projection
+  ! US-Dk3    IPSL-CM6A-LR   -           only 17 historical years in the projection
+  ! US-Dk3    MPI-ESM1-2-HR  -           only 17 historical years in the projection
+  ! US-Dk3    MRI-ESM2-0     -           only 17 historical years in the projection
+  ! US-Dk3    UKESM1-0-LL    -           only 17 historical years in the projection
+  ! US-HB2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-HB3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MtB    GFDL-ESM4      ssp126      empty series after clipping
+  ! US-MtB    GFDL-ESM4      ssp585      empty series after clipping
+  ! US-MtB    IPSL-CM6A-LR   ssp126      empty series after clipping
+  ! US-MtB    IPSL-CM6A-LR   ssp585      empty series after clipping
+  ! US-MtB    MPI-ESM1-2-HR  ssp126      empty series after clipping
+  ! US-MtB    MPI-ESM1-2-HR  ssp585      empty series after clipping
+  ! US-MtB    MRI-ESM2-0     ssp126      empty series after clipping
+  ! US-MtB    MRI-ESM2-0     ssp585      empty series after clipping
+  ! US-MtB    UKESM1-0-LL    ssp126      empty series after clipping
+  ! US-MtB    UKESM1-0-LL    ssp585      empty series after clipping
+  ! US-NC5    GFDL-ESM4      -           only 5 historical years in the projection
+  ! US-NC5    IPSL-CM6A-LR   -           only 5 historical years in the projection
+  ! US-NC5    MPI-ESM1-2-HR  -           only 5 historical years in the projection
+  ! US-NC5    MRI-ESM2-0     -           only 5 historical years in the projection
+  ! US-NC5    UKESM1-0-LL    -           only 5 historical years in the projection
+  ! US-NMj    GFDL-ESM4      -           only 0 historical years in the projection
+  ! US-NMj    IPSL-CM6A-LR   -           only 0 historical years in the projection
+  ! US-NMj    MPI-ESM1-2-HR  -           only 0 historical years in the projection
+  ! US-NMj    MRI-ESM2-0     -           only 0 historical years in the projection
+  ! US-NMj    UKESM1-0-LL    -           only 0 historical years in the projection
+  ! US-Oho    GFDL-ESM4      -           only 19 historical years in the projection
+  ! US-Oho    IPSL-CM6A-LR   -           only 19 historical years in the projection
+  ! US-Oho    MPI-ESM1-2-HR  -           only 19 historical years in the projection
+  ! US-Oho    MRI-ESM2-0     -           only 19 historical years in the projection
+  ! US-Oho    UKESM1-0-LL    -           only 19 historical years in the projection
+  ! US-SB1    GFDL-ESM4      -           only 6 historical years in the projection
+  ! US-SB1    IPSL-CM6A-LR   -           only 6 historical years in the projection
+  ! US-SB1    MPI-ESM1-2-HR  -           only 6 historical years in the projection
+  ! US-SB1    MRI-ESM2-0     -           only 6 historical years in the projection
+  ! US-SB1    UKESM1-0-LL    -           only 6 historical years in the projection
+  ! US-Slt    GFDL-ESM4      -           no LU 41 (deciduous) pixel in ecoregion 5 for GFDL-ESM4 ssp126
+  ! US-Slt    IPSL-CM6A-LR   -           no LU 41 (deciduous) pixel in ecoregion 5 for IPSL-CM6A-LR ssp126
+  ! US-Slt    MPI-ESM1-2-HR  -           no LU 41 (deciduous) pixel in ecoregion 5 for MPI-ESM1-2-HR ssp126
+  ! US-Slt    MRI-ESM2-0     -           no LU 41 (deciduous) pixel in ecoregion 5 for MRI-ESM2-0 ssp126
+  ! US-Slt    UKESM1-0-LL    -           no LU 41 (deciduous) pixel in ecoregion 5 for UKESM1-0-LL ssp126
+  ! US-Vcm    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xLE    GFDL-ESM4      -           only 8 historical years in the projection
+  ! US-xLE    IPSL-CM6A-LR   -           only 8 historical years in the projection
+  ! US-xLE    MPI-ESM1-2-HR  -           only 8 historical years in the projection
+  ! US-xLE    MRI-ESM2-0     -           only 8 historical years in the projection
+  ! US-xLE    UKESM1-0-LL    -           only 8 historical years in the projection
+  ! US-xYE    GFDL-ESM4      -           only 4 historical years in the projection
+  ! US-xYE    IPSL-CM6A-LR   -           only 4 historical years in the projection
+  ! US-xYE    MPI-ESM1-2-HR  -           only 4 historical years in the projection
+  ! US-xYE    MRI-ESM2-0     -           only 4 historical years in the projection
+  ! US-xYE    UKESM1-0-LL    -           only 4 historical years in the projection
+
+finished   : 2026-08-17T23:02:46Z
+exit status: 0

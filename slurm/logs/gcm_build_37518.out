@@ -1,0 +1,43 @@
+job        : 37518
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-18T04:06:14Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr       : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+
+inspecting GFDL-ESM4 ssp126
+
+   eco  stations                    ModelForest in file       LU         pixels  verdict
+     1  ever (3 st)                 43,evergreen              42,43          85  ok
+     2  ever (2 st)                 evergreen                 42             96  ok
+     5  deci (1 st)                 evergreen                 42              2  MISSING deciduous
+     7  deci (3 st)                 43,deciduous              41,43         107  ok
+    10  ever (3 st)                 evergreen                 42            136  ok
+    17  deci (1 st)                 deciduous                 41             10  ok
+    19  ever (1 st)                 evergreen                 42            113  ok
+    25  ever (5 st)                 evergreen                 42             77  ok
+    32  deci (1 st)                 deciduous                 41              1  ok
+    34  deci (1 st)                 deciduous                 41            154  ok
+    35  deci (1 st)                 deciduous                 41             51  ok
+    38  ever (1 st)                 evergreen                 42              1  ok
+    39  ever (2 st)                 evergreen                 42             22  ok
+    40  ever (3 st)                 evergreen                 42            193  ok
+    47  ever (1 st)                 deciduous,evergreen       41,42          52  ok
+    49  deci,ever (7 st)            43,deciduous,evergreen    41,42,43      274  ok
+    53  deci,ever (24 st)           43,deciduous,evergreen    41,42,43      196  ok
+    61  deci,ever (4 st)            43,deciduous,evergreen    41,42,43      326  ok
+    63  deci (6 st)                 43,deciduous,evergreen    41,42,43      226  ok
+    64  ever (6 st)                 evergreen                 42             70  ok
+    67  ever (2 st)                 43,deciduous,evergreen    41,42,43      175  ok
+    68  deci,ever (4 st)            43,deciduous,evergreen    41,42,43      411  ok
+    72  ever (8 st)                 evergreen                 42             78  ok
+    75  ever (11 st)                deciduous,evergreen       41,42         182  ok
+
+1 ecoregion(s) cannot serve one of their stations' forest
+types from this product. Those stations need the PLSR to project their
+own type over the containing cell, which the fit can do but this file
+does not carry.
+
+finished   : 2026-08-18T04:06:18Z
+exit status: 0

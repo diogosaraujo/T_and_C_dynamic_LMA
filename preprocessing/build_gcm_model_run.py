@@ -502,9 +502,40 @@ def main(argv=None) -> int:
           f"{len(blocked)} combination(s) blocked")
     print(f"{'=' * 72}")
 
+    if how:
+        print("\nHOW EACH (station, GCM) PAIR GOT ITS SERIES")
+        tot = sum(how.values())
+        for k, n in how.most_common():
+            print(f"  {n:>5d}  ({100*n/tot:4.1f}%)  {k}")
+
+    if lu_mismatch:
+        seen_lu = {}
+        for sid, ft, howstr, npx, cb, eb, luu in lu_mismatch:
+            seen_lu[sid] = (ft, howstr, npx, cb, eb, luu)
+        print(f"\nBASELINE SUBSTITUTED FROM THE ECOREGION ({len(seen_lu)} station(s))")
+        print("  The cell the station sits in is not mapped as its forest type. Its")
+        print("  DYNAMICS are still used; only the LEVEL comes from the ecoregion mean")
+        print("  of the station's own type -- the substitution build_lma_input.py makes")
+        print("  for the ERA5-Land runs:")
+        print("      mu_Y_row = np.where(in_fit, mu_Y_pix_final[idx], mu_Y_eco)")
+        print(f"\n    {'station':10s}{'type':11s}{'cell LU':>8s}{'cell base':>11s}"
+              f"{'eco base':>10s}{'shift':>8s}  n_cells")
+        for sid, (ft, howstr, npx, cb, eb, luu) in sorted(seen_lu.items()):
+            if cb is None:
+                print(f"    {sid:10s}{ft:11s}{'-':>8s}{'-':>11s}"
+                      f"{(eb if eb is not None else float('nan')):>10.1f}{'-':>8s}"
+                      f"  {npx:>4d}   [outside every cell]")
+            else:
+                print(f"    {sid:10s}{ft:11s}{luu:>8d}{cb:>11.1f}{eb:>10.1f}"
+                      f"{eb - cb:>+8.1f}  {npx:>4d}")
+        print("\n  One departure from the ERA5 path: there the station's OWN forest-type"
+              "\n  beta is applied to the pixel's climate. These projections ship as"
+              "\n  finished values, so the anomaly carries the model of the cell's own"
+              "\n  type. The level is corrected; the sensitivity is not.")
+
     if offsets:
         o = np.array([d for _, d in offsets])
-        print("\nSTATION-TO-PLSR-PIXEL DISTANCE")
+        print("\nSTATION-TO-CELL-CENTRE DISTANCE (own-cell matches only)")
         print("  " + "  ".join(f"p{p}={np.percentile(o, p):.1f}" for p in (50, 75, 90, 95, 99))
               + f"  max={o.max():.1f} km  (n={len(o)})")
         far = sorted({s for s, d in offsets if d > a.max_pixel_km},

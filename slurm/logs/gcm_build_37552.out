@@ -1,0 +1,32 @@
+job        : 37552
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+started    : 2026-08-18T23:33:43Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr       : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr      : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+stations  : 1   gcms 5   scenarios 3
+target    : 30 run directories
+
+========================================================================
+30 run directories written, 0 combination(s) blocked
+========================================================================
+
+HOW EACH (station, GCM) PAIR GOT ITS SERIES
+      5  (100.0%)  own cell
+
+STATION-TO-CELL-CENTRE DISTANCE (own-cell matches only)
+  p50=8.5  p75=8.5  p90=8.5  p95=8.5  p99=8.5  max=8.5 km  (n=5)
+
+run list : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/run_list_gcm.txt  (30 arms)
+           sbatch --array=1-30%NN slurm/submit_tc_run.sh (with RUN_LIST=run_list_gcm.txt)
+
+run list   : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/run_list_gcm.txt  (30 arms)
+next       : sbatch --array=1-30%NN slurm/submit_gcm_tc_run.sh
+             (MaxArraySize is 1001 on Amarel -- chunk if N exceeds it)
+finished   : 2026-08-18T23:33:47Z
+exit status: 0

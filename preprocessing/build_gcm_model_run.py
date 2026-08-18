@@ -109,9 +109,15 @@ SITE_LISTS = [REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv"
 EXCLUDED = Path(__file__).resolve().parent / "excluded_stations.csv"
 ARMS = ["fixed_lma", "dyn_lma"]
 
-HIST_YEARS = (1985, 2014)      # the projections start in 1985, not 1980
-FUT_YEARS = (2015, 2100)
-YEAR_TAG = {"historical": "1980_2014", "ssp126": "2015_2100", "ssp585": "2015_2100"}
+# DERIVED from gcm_variables.SCENARIOS, never restated. The LMA series written
+# here and the forcing built by build_gcm_meteo.py must agree year for year,
+# because MAIN_FRAME_SLA looks the simulated year up in the LMA file and stops if
+# it is not there. Job 37524 is what a restated constant costs: the forcing said
+# 1980-2014, this file said 1985-2014, and the historical dyn_lma arm died 27 s in
+# on 1 January 1980. The window now has exactly one home.
+HIST_YEARS = SCENARIOS["historical"]
+FUT_YEARS = SCENARIOS["ssp585"]
+YEAR_TAG = {s: f"{y0}_{y1}" for s, (y0, y1) in SCENARIOS.items()}
 # LU code -> forest type, the 40 + lu_id convention (1 deciduous, 2 evergreen).
 LU_OF = {"deciduous": 41, "evergreen": 42}
 SL_LINE = re.compile(r"^Sl_H\s*=\s*\[[^\]]*\];.*$", re.M)

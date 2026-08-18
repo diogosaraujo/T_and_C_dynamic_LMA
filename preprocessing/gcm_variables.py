@@ -53,9 +53,16 @@ GCMS = ["GFDL-ESM4", "IPSL-CM6A-LR", "MPI-ESM1-2-HR", "MRI-ESM2-0", "UKESM1-0-LL
 ECS_K = {"GFDL-ESM4": 2.6, "MPI-ESM1-2-HR": 3.0, "MRI-ESM2-0": 3.2,
          "IPSL-CM6A-LR": 4.6, "UKESM1-0-LL": 5.4}
 
-# scenario -> (first year, last year). NEX-GDDP historical starts in 1950 but the
-# drought layers this pairs with use 1980-2014, so we match that.
-SCENARIOS = {"historical": (1980, 2014),
+# scenario -> (first year, last year). NEX-GDDP historical starts in 1950 and the
+# drought layers this pairs with use 1980-2014, but the historical window here is
+# 1985-2014 to match the rest of the experiment: the ERA5-Land forcing starts in
+# 1985 (build_meteo_input.py --start-year) and the PLSR LMA projections start in
+# 1985, so nothing earlier can be run with a dynamic SLA anyway. Job 37524 is what
+# a mismatch costs -- the historical dyn_lma arm died on 1 January 1980 because
+# MAIN_FRAME_SLA had no SLA for that year. Keeping one start date across the
+# observations, ERA5-Land and the GCMs is what makes the historical arms
+# comparable; do not widen this without widening the LMA series too.
+SCENARIOS = {"historical": (1985, 2014),
              "ssp126": (2015, 2100),
              "ssp585": (2015, 2100)}
 

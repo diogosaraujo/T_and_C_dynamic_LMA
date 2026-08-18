@@ -96,7 +96,8 @@ esac
 tc_load_matlab || exit 1
 
 # The year tag is taken from the raw files themselves rather than assumed, because
-# historical (1980-2014) and the SSPs (2015-2100) differ.
+# historical (1985-2014) and the SSPs (2015-2100) differ. The historical window is
+# 1985-2014 to match ERA5-Land and the PLSR LMA series -- see gcm_variables.py.
 # One directory per (scenario, GCM), and this task only touches the ones stage 1
 # just wrote. finish_meteo.m globs a whole directory, so a shared one means every
 # concurrent task re-partitions every file and several write the same output at
@@ -111,7 +112,7 @@ for SUB in $BUILT; do
     tag=$(basename "$(dirname "$SUB")")
     ls "$SUB"/Meteo_*_raw.mat >/dev/null 2>&1 || continue
     case "$tag" in
-        historical) YEARS=1980_2014 ;;
+        historical) YEARS=1985_2014 ;;
         ssp*)       YEARS=2015_2100 ;;
         *)          continue ;;
     esac

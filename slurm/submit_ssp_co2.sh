@@ -18,7 +18,7 @@
 ##
 ## The datasets, should you ever need to fetch them by hand:
 ##
-##   historical 1980-2014  input4MIPs.CMIP6.CMIP.UoM.UoM-CMIP-1-2-0
+##   historical 1985-2014  input4MIPs.CMIP6.CMIP.UoM.UoM-CMIP-1-2-0
 ##   ssp126     2015-2100  input4MIPs.CMIP6.ScenarioMIP.UoM.UoM-IMAGE-ssp126-1-2-1
 ##   ssp585     2015-2100  input4MIPs.CMIP6.ScenarioMIP.UoM.UoM-REMIND-MAGPIE-ssp585-1-2-1
 ##

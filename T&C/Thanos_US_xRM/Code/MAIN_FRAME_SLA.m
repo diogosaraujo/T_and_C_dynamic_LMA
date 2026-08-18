@@ -292,6 +292,22 @@ for i=2:NN
     if exist('SLA_ex', 'var')
         
         sl_ix = find(SLA_ex.years == Datam(i,1));
+        %%% A missing year is a STOP, not something to paper over. Holding the
+        %%% previous SLA would silently run part of the record with the wrong
+        %%% leaf area and still write a plausible-looking RES file, which is
+        %%% worse than a crash. This only replaces the bare "Index exceeds array
+        %%% bounds" that sl_ix(1) throws on an empty match (job 37524, where the
+        %%% forcing began in 1980 and the LMA series in 1985) with a message that
+        %%% names the year and the coverage. The fix is always upstream: make the
+        %%% forcing window and the LMA series span the same years.
+        if isempty(sl_ix)
+            error('MAIN_FRAME_SLA:YearMissing', ...
+                  ['No SLA for simulated year %d. The LMA file covers %d-%d ' ...
+                   '(%d years). Rebuild the forcing or the LMA series so the ' ...
+                   'two span the same years.'], ...
+                  Datam(i,1), min(SLA_ex.years), max(SLA_ex.years), ...
+                  numel(SLA_ex.years));
+        end
         Sl_H = 0.9*Sl_H + 0.1*SLA_ex.SLA_H(sl_ix(1),:);% for smooth change on year change
         Sl_L = 0.9*Sl_L + 0.1*SLA_ex.SLA_L(sl_ix(1),:);
 

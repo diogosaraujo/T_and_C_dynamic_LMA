@@ -22,7 +22,7 @@ averaged away here.
 SOURCE FILES, from https://esgf-node.llnl.gov/search/input4mips/ or
 http://greenhousegases.science.unimelb.edu.au :
 
-    historical 1980-2014   input4MIPs.CMIP6.CMIP.UoM.UoM-CMIP-1-2-0
+    historical 1985-2014   input4MIPs.CMIP6.CMIP.UoM.UoM-CMIP-1-2-0
     ssp126     2015-2100   input4MIPs.CMIP6.ScenarioMIP.UoM.UoM-IMAGE-ssp126-1-2-1
     ssp585     2015-2100   input4MIPs.CMIP6.ScenarioMIP.UoM.UoM-REMIND-MAGPIE-ssp585-1-2-1
 
@@ -48,7 +48,10 @@ import numpy as np
 INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
                                  "/vol_efthymios/NFS07/dd1136/T_and_C/input_data"))
 OUT_DIR = INPUT_ROOT / "co2"
-SCENARIOS = {"historical": (1980, 2014), "ssp126": (2015, 2100), "ssp585": (2015, 2100)}
+# Mirrors gcm_variables.SCENARIOS -- kept as a literal so this script stays
+# standalone. Ca is interpolated onto the forcing years, so a CSV covering more
+# years than the run does no harm; one covering fewer would extrapolate flat.
+SCENARIOS = {"historical": (1985, 2014), "ssp126": (2015, 2100), "ssp585": (2015, 2100)}
 CO2_VARS = ["mole_fraction_of_carbon_dioxide_in_air",
             "mole-fraction-of-carbon-dioxide-in-air", "co2"]
 

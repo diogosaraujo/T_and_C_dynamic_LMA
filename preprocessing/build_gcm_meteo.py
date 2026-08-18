@@ -340,9 +340,21 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
     meta = series["_meta"]
     cal = meta["tas"]["calendar"]
     days, keep, cal_note = real_dates(series["tas"][0], meta["tas"]["doy"], cal)
+    # Clip to the scenario's run window before anything else reads the arrays.
+    # Folding it into `keep` rather than trimming afterwards means the day axis,
+    # doy, and every variable through get() are cut by the same mask, so they
+    # cannot drift apart. The extraction deliberately keeps a wider archive than
+    # the run needs (historical NEX-GDDP goes back to 1950), so this is where the
+    # window is actually imposed -- the year filter is on the stored year COLUMN,
+    # which is exact for every calendar including the 360-day stretch.
+    y0, y1 = SCENARIOS[scenario]
+    yr = np.asarray(series["tas"][0][:, 0], dtype=int)
+    keep = keep & (yr >= y0) & (yr <= y1)
     days = days[keep]
     doy = (days - days.astype("datetime64[Y]")).astype(int) + 1
     n = len(days)
+    if n == 0:
+        return None, f"no days inside {y0}-{y1}"
 
     get = lambda v: np.asarray(series[v][1][keep, si], dtype=float)
     tas, tmax, tmin = get("tas") - 273.15, get("tasmax") - 273.15, get("tasmin") - 273.15
@@ -436,7 +448,7 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
     from scipy.io import savemat
     # One directory per (scenario, GCM). Two reasons, and BOTH are needed:
     #   * finish_meteo.m globs every Meteo_*_raw.mat in a directory and stamps
-    #     them all with one year tag, and historical (1980-2014) and the SSPs
+    #     them all with one year tag, and historical (1985-2014) and the SSPs
     #     (2015-2100) do not share one.
     #   * the 15 array tasks run CONCURRENTLY, so a directory shared between
     #     GCMs means every task partitions every file that happens to be there

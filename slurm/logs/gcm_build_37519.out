@@ -1,0 +1,69 @@
+job        : 37519
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-18T04:35:55Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr       : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr      : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+stations  : 101   gcms 5   scenarios 3
+target    : 3030 run directories
+
+========================================================================
+DRY RUN -- 2770 run directories would be built, 38 combination(s) blocked
+========================================================================
+
+STATION-TO-PLSR-PIXEL DISTANCE
+  p50=9.8  p75=13.0  p90=14.4  p95=15.5  p99=16.9  max=16.9 km  (n=250)
+
+BLOCKED, by cause (38 total)
+    20 x  only N historical years in the projection
+    10 x  empty series after clipping
+     5 x  no LU N (deciduous) cell anywhere in ecoregion ... for ... sspN -- the deciduous PLSR was not fitted here
+     3 x  no eraN_land MOD_PARAM; run build_model_run.py first
+
+BLOCKED, in full
+  ! US-CS2    GFDL-ESM4      -           only 6 historical years in the projection
+  ! US-CS2    IPSL-CM6A-LR   -           only 6 historical years in the projection
+  ! US-CS2    MPI-ESM1-2-HR  -           only 6 historical years in the projection
+  ! US-CS2    MRI-ESM2-0     -           only 6 historical years in the projection
+  ! US-CS2    UKESM1-0-LL    -           only 6 historical years in the projection
+  ! US-HB2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-HB3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MtB    GFDL-ESM4      ssp126      empty series after clipping
+  ! US-MtB    GFDL-ESM4      ssp585      empty series after clipping
+  ! US-MtB    IPSL-CM6A-LR   ssp126      empty series after clipping
+  ! US-MtB    IPSL-CM6A-LR   ssp585      empty series after clipping
+  ! US-MtB    MPI-ESM1-2-HR  ssp126      empty series after clipping
+  ! US-MtB    MPI-ESM1-2-HR  ssp585      empty series after clipping
+  ! US-MtB    MRI-ESM2-0     ssp126      empty series after clipping
+  ! US-MtB    MRI-ESM2-0     ssp585      empty series after clipping
+  ! US-MtB    UKESM1-0-LL    ssp126      empty series after clipping
+  ! US-MtB    UKESM1-0-LL    ssp585      empty series after clipping
+  ! US-Oho    GFDL-ESM4      -           only 19 historical years in the projection
+  ! US-Oho    IPSL-CM6A-LR   -           only 19 historical years in the projection
+  ! US-Oho    MPI-ESM1-2-HR  -           only 19 historical years in the projection
+  ! US-Oho    MRI-ESM2-0     -           only 19 historical years in the projection
+  ! US-Oho    UKESM1-0-LL    -           only 19 historical years in the projection
+  ! US-Slt    GFDL-ESM4      -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for GFDL-ESM4 ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Slt    IPSL-CM6A-LR   -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for IPSL-CM6A-LR ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Slt    MPI-ESM1-2-HR  -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for MPI-ESM1-2-HR ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Slt    MRI-ESM2-0     -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for MRI-ESM2-0 ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Slt    UKESM1-0-LL    -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for UKESM1-0-LL ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Vcm    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xLE    GFDL-ESM4      -           only 9 historical years in the projection
+  ! US-xLE    IPSL-CM6A-LR   -           only 9 historical years in the projection
+  ! US-xLE    MPI-ESM1-2-HR  -           only 9 historical years in the projection
+  ! US-xLE    MRI-ESM2-0     -           only 9 historical years in the projection
+  ! US-xLE    UKESM1-0-LL    -           only 9 historical years in the projection
+  ! US-xYE    GFDL-ESM4      -           only 4 historical years in the projection
+  ! US-xYE    IPSL-CM6A-LR   -           only 4 historical years in the projection
+  ! US-xYE    MPI-ESM1-2-HR  -           only 4 historical years in the projection
+  ! US-xYE    MRI-ESM2-0     -           only 4 historical years in the projection
+  ! US-xYE    UKESM1-0-LL    -           only 4 historical years in the projection
+
+finished   : 2026-08-18T04:36:30Z
+exit status: 0

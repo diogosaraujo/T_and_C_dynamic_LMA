@@ -282,6 +282,16 @@ def station_series(st, gcm, scenario, plsr_root):
 
     # ---- 3. the station falls outside every cell in the table: nothing local to
     #         borrow dynamics from, so the ecoregion mean supplies both.
+    #
+    #         How far the nearest cell is decides whether this is real. A station
+    #         genuinely between forest cells sits tens of km from the nearest one;
+    #         a station a few km away means the containing test is wrong -- a
+    #         coordinate convention (cell corner vs centre) or a grid step
+    #         mis-inferred from sparse coordinates.
+    all_lat = np.array([k[0] for k in keys]); all_lon = np.array([k[1] for k in keys])
+    d_any = float(haversine_km(st["lat"], st["lon"], all_lat, all_lon).min())
+    s_lat = np.array([k[0] for k in same]); s_lon = np.array([k[1] for k in same])
+    d_same = float(haversine_km(st["lat"], st["lon"], s_lat, s_lon).min())
     years = sorted({y for k in same for y in px[k]["anom"]})
     series = []
     for y in years:
@@ -291,6 +301,7 @@ def station_series(st, gcm, scenario, plsr_root):
     return series, {
         "pixel_km": float("nan"), "n_pixels": len(same), "note": note,
         "how": "ecoregion mean (station outside every cell)",
+        "d_nearest_any": d_any, "d_nearest_same": d_same,
         "lu_used": lu, "lu_wanted": lu, "eco_base": eco_base,
         "grid_deg": round(half * 2, 4),
         "pixel_lat": float(np.mean([k[0] for k in same])),
@@ -467,7 +478,9 @@ def main(argv=None) -> int:
             if hd.get("how") != "own cell":
                 lu_mismatch.append((sid, st["forest_type"], hd.get("how"),
                                     hd.get("n_pixels"), hd.get("cell_base"),
-                                    hd.get("eco_base"), hd.get("lu_used")))
+                                    hd.get("eco_base"), hd.get("lu_used"),
+                                    hd.get("d_nearest_any"), hd.get("d_nearest_same"),
+                                    hd.get("grid_deg")))
 
             for scen in scens:
                 if scen == "historical":
@@ -510,8 +523,8 @@ def main(argv=None) -> int:
 
     if lu_mismatch:
         seen_lu = {}
-        for sid, ft, howstr, npx, cb, eb, luu in lu_mismatch:
-            seen_lu[sid] = (ft, howstr, npx, cb, eb, luu)
+        for sid, ft, howstr, npx, cb, eb, luu, da, ds, gd in lu_mismatch:
+            seen_lu[sid] = (ft, howstr, npx, cb, eb, luu, da, ds, gd)
         print(f"\nBASELINE SUBSTITUTED FROM THE ECOREGION ({len(seen_lu)} station(s))")
         print("  The cell the station sits in is not mapped as its forest type. Its")
         print("  DYNAMICS are still used; only the LEVEL comes from the ecoregion mean")
@@ -520,11 +533,12 @@ def main(argv=None) -> int:
         print("      mu_Y_row = np.where(in_fit, mu_Y_pix_final[idx], mu_Y_eco)")
         print(f"\n    {'station':10s}{'type':11s}{'cell LU':>8s}{'cell base':>11s}"
               f"{'eco base':>10s}{'shift':>8s}  n_cells")
-        for sid, (ft, howstr, npx, cb, eb, luu) in sorted(seen_lu.items()):
+        for sid, (ft, howstr, npx, cb, eb, luu, da, ds, gd) in sorted(seen_lu.items()):
             if cb is None:
                 print(f"    {sid:10s}{ft:11s}{'-':>8s}{'-':>11s}"
                       f"{(eb if eb is not None else float('nan')):>10.1f}{'-':>8s}"
-                      f"  {npx:>4d}   [outside every cell]")
+                      f"  {npx:>4d}   OUTSIDE: nearest cell {da:.1f} km "
+                      f"(same type {ds:.1f} km), grid {gd} deg")
             else:
                 print(f"    {sid:10s}{ft:11s}{luu:>8d}{cb:>11.1f}{eb:>10.1f}"
                       f"{eb - cb:>+8.1f}  {npx:>4d}")

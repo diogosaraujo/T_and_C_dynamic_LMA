@@ -32,9 +32,14 @@ The PLSR projections arrive per ecoregion x GCM x scenario, already computed:
         one row per (pixel, year), 1985-2100, with
         LMA_Future = LMA_Baseline + LMA_Anomaly   (exact; verified on read)
 
-Each station takes the nearest pixel of its own forest type -- LU 41 deciduous,
-42 evergreen, the same 40+lu_id convention build_lma_input.py uses for the
-historical series.
+Each station takes THE CELL IT SITS IN. Land-cover class (LU 41 deciduous, 42
+evergreen) breaks ties within that cell but does not select across cells: a
+0.25 degree cell is labelled by its DOMINANT cover, and a tower can sit in a cell
+whose majority class differs from the stand it measures. Selecting on class first
+sent US-Ha2 -- evergreen hemlock inside a deciduous landscape -- to a pixel
+187.9 km away, about seven cells from where it stands. The LMA series represents
+the cell's climate, and the station shares the climate of its own cell whatever
+the label says.
 
 Note the files span 1985-2100, i.e. they already include the historical period,
 and the two SSPs are identical over 1985-2014 because the scenarios only diverge
@@ -164,23 +169,72 @@ def load_projection(eco, gcm, scenario, plsr_root):
     return px, (f"{bad} unusable row(s)" if bad else None)
 
 
+def grid_step(keys):
+    """Grid spacing in degrees, inferred from the pixel coordinates themselves."""
+    for i in (0, 1):
+        v = np.unique(np.round([k[i] for k in keys], 6))
+        if len(v) > 1:
+            d = np.diff(v)
+            d = d[d > 1e-6]
+            if len(d):
+                return float(np.min(d))
+    return 0.25                                   # NEX-GDDP, if it cannot be told
+
+
 def station_series(st, gcm, scenario, plsr_root):
-    """[(year, LMA)] for one station, plus a diagnostic dict."""
+    """[(year, LMA)] for one station, plus a diagnostic dict.
+
+    THE PIXEL IS THE ONE THE STATION SITS IN, not the nearest one of a matching
+    land-cover class.
+
+    The first version took the nearest pixel whose LU equalled the station's
+    AmeriFlux forest type. On the ERA5-Land 0.1 degree grid the historical path
+    uses, those are almost always the same cell. On the 0.25 degree GCM grid they
+    are not: a ~25 km cell is classified by its DOMINANT cover, and a tower can
+    easily sit in a cell whose majority class differs from the stand it measures.
+    US-Ha2 -- an evergreen hemlock site inside a deciduous-dominated landscape --
+    was matched 187.9 km away, roughly seven cells from where it stands.
+
+    So: take the containing cell when one exists, preferring a matching LU only to
+    break ties within it, and fall back to nearest-matching-LU only when the
+    station falls outside every cell in the table. The land-cover class of a 25 km
+    cell is a property of the landscape; the LMA series is a property of the
+    climate, and it is the climate the station shares with its own cell.
+    """
     px, note = load_projection(st["eco"], gcm, scenario, plsr_root)
     if px is None:
         return None, {"error": note}
+    if not px:
+        return None, {"error": f"projection file for ecoregion {st['eco']} "
+                               f"({gcm} {scenario}) holds no usable pixel"}
     lu = LU_OF.get(st["forest_type"])
-    cand = [k for k in px if lu is None or k[2] == lu]
-    if not cand:
-        return None, {"error": f"no LU {lu} ({st['forest_type']}) pixel in ecoregion "
-                               f"{st['eco']} for {gcm} {scenario}"}
-    lats = np.array([c[0] for c in cand]); lons = np.array([c[1] for c in cand])
-    d = haversine_km(st["lat"], st["lon"], lats, lons)
-    j = int(np.argmin(d))
-    series = px[cand[j]]
-    return (sorted(series.items()),
-            {"pixel_km": float(d[j]), "n_pixels": len(cand), "note": note,
-             "pixel_lat": cand[j][0], "pixel_lon": ((cand[j][1] + 180) % 360) - 180})
+    keys = list(px)
+    half = grid_step(keys) / 2.0 + 1e-6
+
+    slon360 = st["lon"] % 360.0
+    inside = [k for k in keys
+              if abs(k[0] - st["lat"]) <= half
+              and min(abs(k[1] - slon360), 360 - abs(k[1] - slon360)) <= half]
+
+    if inside:
+        match = [k for k in inside if k[2] == lu]
+        chosen = (match or inside)[0]
+        how = "containing cell" if match else f"containing cell, LU {chosen[2]} not {lu}"
+        pool = len(inside)
+    else:
+        cand = [k for k in keys if lu is None or k[2] == lu] or keys
+        lats = np.array([c[0] for c in cand]); lons = np.array([c[1] for c in cand])
+        d = haversine_km(st["lat"], st["lon"], lats, lons)
+        chosen = cand[int(np.argmin(d))]
+        how = "NEAREST -- station outside every cell in the table"
+        pool = len(cand)
+
+    d0 = float(haversine_km(st["lat"], st["lon"],
+                            np.array([chosen[0]]), np.array([chosen[1]]))[0])
+    return (sorted(px[chosen].items()),
+            {"pixel_km": d0, "n_pixels": pool, "note": note, "how": how,
+             "lu_used": chosen[2], "lu_wanted": lu, "grid_deg": round(half * 2, 4),
+             "pixel_lat": chosen[0], "pixel_lon": ((chosen[1] + 180) % 360) - 180})
 
 
 def clip(series, lo, hi):
@@ -265,6 +319,9 @@ def main(argv=None) -> int:
     print(f"stations  : {len(stations)}   gcms {len(gcms)}   scenarios {len(scens)}")
     print(f"target    : {len(stations)*len(gcms)*len(scens)*len(ARMS)} run directories\n")
 
+    import collections
+    how = collections.Counter()
+    lu_mismatch = []
     written, ok_arms, blocked, runs = 0, 0, [], []
     offsets = []          # (station, km) so far matches can be named, not just counted
     for st in stations:
@@ -293,6 +350,10 @@ def main(argv=None) -> int:
                 continue
             fixed_mean = float(np.mean([v for _, v in hist]))
             offsets.append((sid, hd["pixel_km"]))
+            how[hd.get("how", "?")] += 1
+            if hd.get("lu_used") != hd.get("lu_wanted"):
+                lu_mismatch.append((sid, st["forest_type"], hd.get("lu_used"),
+                                    hd.get("pixel_km")))
 
             for scen in scens:
                 if scen == "historical":

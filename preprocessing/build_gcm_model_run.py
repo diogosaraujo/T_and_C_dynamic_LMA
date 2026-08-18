@@ -32,14 +32,23 @@ The PLSR projections arrive per ecoregion x GCM x scenario, already computed:
         one row per (pixel, year), 1985-2100, with
         LMA_Future = LMA_Baseline + LMA_Anomaly   (exact; verified on read)
 
-Each station takes THE CELL IT SITS IN. Land-cover class (LU 41 deciduous, 42
-evergreen) breaks ties within that cell but does not select across cells: a
-0.25 degree cell is labelled by its DOMINANT cover, and a tower can sit in a cell
-whose majority class differs from the stand it measures. Selecting on class first
-sent US-Ha2 -- evergreen hemlock inside a deciduous landscape -- to a pixel
-187.9 km away, about seven cells from where it stands. The LMA series represents
-the cell's climate, and the station shares the climate of its own cell whatever
-the label says.
+Station -> series, in two steps, the same rule build_lma_input.py applies to the
+ERA5-Land runs:
+
+  1. the cell the station SITS IN, if that cell is mapped as the station's own
+     forest type (LU 41 deciduous, 42 evergreen);
+  2. otherwise the ECOREGION MEAN OF THAT FOREST TYPE.
+
+Neither the containing cell's own series nor the nearest same-type cell will do.
+These projections come from a PLSR fitted PER FOREST TYPE, so a deciduous-labelled
+cell carries a deciduous-model LMA and giving it to an evergreen tower would be
+the wrong trait outright. Selecting instead on nearest-same-type sent US-Ha2 --
+evergreen hemlock inside a deciduous-dominated landscape -- to a cell 187.9 km
+away, about seven cells from where it stands. The ecoregion mean keeps the
+station's trait type and only widens the spatial support, which is exactly what
+the historical path does:
+
+    mu_Y_row = np.where(in_fit, mu_Y_pix_final[idx], mu_Y_eco)
 
 Note the files span 1985-2100, i.e. they already include the historical period,
 and the two SSPs are identical over 1985-2014 because the scenarios only diverge
@@ -216,25 +225,50 @@ def station_series(st, gcm, scenario, plsr_root):
               if abs(k[0] - st["lat"]) <= half
               and min(abs(k[1] - slon360), 360 - abs(k[1] - slon360)) <= half]
 
-    if inside:
-        match = [k for k in inside if k[2] == lu]
-        chosen = (match or inside)[0]
-        how = "containing cell" if match else f"containing cell, LU {chosen[2]} not {lu}"
-        pool = len(inside)
-    else:
-        cand = [k for k in keys if lu is None or k[2] == lu] or keys
-        lats = np.array([c[0] for c in cand]); lons = np.array([c[1] for c in cand])
-        d = haversine_km(st["lat"], st["lon"], lats, lons)
-        chosen = cand[int(np.argmin(d))]
-        how = "NEAREST -- station outside every cell in the table"
-        pool = len(cand)
+    match = [k for k in inside if k[2] == lu]
+    if match:
+        chosen = match[0]
+        d0 = float(haversine_km(st["lat"], st["lon"],
+                                np.array([chosen[0]]), np.array([chosen[1]]))[0])
+        return (sorted(px[chosen].items()),
+                {"pixel_km": d0, "n_pixels": len(inside), "note": note,
+                 "how": "own cell", "lu_used": chosen[2], "lu_wanted": lu,
+                 "grid_deg": round(half * 2, 4), "pixel_lat": chosen[0],
+                 "pixel_lon": ((chosen[1] + 180) % 360) - 180})
 
-    d0 = float(haversine_km(st["lat"], st["lon"],
-                            np.array([chosen[0]]), np.array([chosen[1]]))[0])
-    return (sorted(px[chosen].items()),
-            {"pixel_km": d0, "n_pixels": pool, "note": note, "how": how,
-             "lu_used": chosen[2], "lu_wanted": lu, "grid_deg": round(half * 2, 4),
-             "pixel_lat": chosen[0], "pixel_lon": ((chosen[1] + 180) % 360) - 180})
+    # The cell the station sits in is not mapped as its forest type -- either it
+    # carries a different dominant cover, or the station falls outside every cell
+    # in the table. Substitute the ECOREGION MEAN OF THE STATION'S OWN TYPE.
+    #
+    # Not the containing cell's own series: these projections are produced by a
+    # PLSR fit PER FOREST TYPE, so a deciduous-labelled cell carries a
+    # deciduous-model LMA and handing it to an evergreen tower would be the wrong
+    # trait entirely. Not the nearest same-type cell either, which is what sent
+    # US-Ha2 187.9 km away.
+    #
+    # This mirrors build_lma_input.py, which the ERA5-Land runs used:
+    #     mu_Y_row = np.where(in_fit, mu_Y_pix_final[idx], mu_Y_eco)
+    # i.e. the pixel's own baseline where the pixel was in the forest-type fit,
+    # and the ecoregion mean of that type where it was not.
+    same = [k for k in keys if k[2] == lu]
+    if not same:
+        return None, {"error": f"no LU {lu} ({st['forest_type']}) cell anywhere in "
+                               f"ecoregion {st['eco']} for {gcm} {scenario} -- the "
+                               f"{st['forest_type']} PLSR was not fitted here"}
+    years = sorted({y for k in same for y in px[k]})
+    series = []
+    for y in years:
+        v = [px[k][y] for k in same if y in px[k]]
+        if v:
+            series.append((y, float(np.mean(v))))
+    why = ("containing cell is LU " + str(inside[0][2]) if inside
+           else "station outside every cell in the table")
+    return (series,
+            {"pixel_km": 0.0, "n_pixels": len(same), "note": note,
+             "how": f"ecoregion mean of {st['forest_type']} ({why})",
+             "lu_used": lu, "lu_wanted": lu, "grid_deg": round(half * 2, 4),
+             "pixel_lat": float(np.mean([k[0] for k in same])),
+             "pixel_lon": float(np.mean([((k[1] + 180) % 360) - 180 for k in same]))})
 
 
 def clip(series, lo, hi):
@@ -349,11 +383,12 @@ def main(argv=None) -> int:
                                                f"{hd['pixel_km']:.0f} km away"))
                 continue
             fixed_mean = float(np.mean([v for _, v in hist]))
-            offsets.append((sid, hd["pixel_km"]))
-            how[hd.get("how", "?")] += 1
-            if hd.get("lu_used") != hd.get("lu_wanted"):
-                lu_mismatch.append((sid, st["forest_type"], hd.get("lu_used"),
-                                    hd.get("pixel_km")))
+            if hd.get("how") == "own cell":
+                offsets.append((sid, hd["pixel_km"]))
+            how[hd.get("how", "?").split(" (")[0]] += 1
+            if hd.get("how", "").startswith("ecoregion mean"):
+                lu_mismatch.append((sid, st["forest_type"], hd.get("how"),
+                                    hd.get("n_pixels")))
 
             for scen in scens:
                 if scen == "historical":

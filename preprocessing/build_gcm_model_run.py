@@ -349,6 +349,52 @@ def build_one(st, gcm, scenario, series_fixed_mean, series, meteo_src, out_root,
     return len(ARMS), None
 
 
+def inspect(plsr_root, stations, gcm, scenario):
+    """What each ecoregion's projection file actually contains.
+
+    The selection rule depends on whether a mixed ecoregion's file carries BOTH
+    forest types or only the dominant one, and that cannot be inferred from the
+    filename -- there is one file per (ecoregion, GCM, scenario) and no forest
+    type in it. This answers the question directly, per ecoregion, naming the
+    stations that would be affected.
+    """
+    import collections
+    want = collections.defaultdict(set)
+    for st in stations:
+        want[st["eco"]].add(st["forest_type"])
+    print(f"inspecting {gcm} {scenario}\n")
+    print(f"  {'eco':>4s}  {'stations':28s}{'ModelForest in file':26s}"
+          f"{'LU':10s}{'pixels':>7s}  verdict")
+    trouble = []
+    for eco in sorted(want):
+        px, err = load_projection(eco, gcm, scenario, plsr_root)
+        sts = [s for s in stations if s["eco"] == eco]
+        lbl = ",".join(sorted({s["forest_type"][:4] for s in sts})) + f" ({len(sts)} st)"
+        if px is None:
+            print(f"  {eco:>4d}  {lbl:28s}{'-- ' + str(err):26s}")
+            trouble.append((eco, str(err)))
+            continue
+        lus = sorted({k[2] for k in px})
+        have = {41: "deciduous", 42: "evergreen"}
+        types_present = {have.get(l, str(l)) for l in lus}
+        missing = want[eco] - types_present
+        v = "ok" if not missing else f"MISSING {','.join(sorted(missing))}"
+        if missing:
+            trouble.append((eco, v))
+        print(f"  {eco:>4d}  {lbl:28s}{','.join(sorted(types_present)):26s}"
+              f"{','.join(str(l) for l in lus):10s}{len(px):>7d}  {v}")
+    print()
+    if trouble:
+        print(f"{len(trouble)} ecoregion(s) cannot serve one of their stations' forest")
+        print("types from this product. Those stations need the PLSR to project their")
+        print("own type over the containing cell, which the fit can do but this file")
+        print("does not carry.")
+    else:
+        print("Every ecoregion carries every forest type its stations need, so the")
+        print("station's own type can be selected on ModelForest directly.")
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -365,11 +411,17 @@ def main(argv=None) -> int:
     ap.add_argument("--exclude-far", action="store_true",
                     help="block combinations beyond --max-pixel-km instead of "
                          "reporting them")
+    ap.add_argument("--inspect", action="store_true",
+                    help="report what each ecoregion's projection file contains "
+                         "(forest types, LU classes, pixel counts) and stop")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args(argv)
 
     stations = read_stations(set(a.station) if a.station else None)
     gcms = a.gcm or GCMS
+    if a.inspect:
+        return inspect(a.plsr_root, stations, gcms[0],
+                       (a.scenario or ["ssp126"])[0])
     scens = a.scenario or list(SCENARIOS)
 
     print(f"model_run : {a.root}")

@@ -35,20 +35,31 @@ The PLSR projections arrive per ecoregion x GCM x scenario, already computed:
 Station -> series, in two steps, the same rule build_lma_input.py applies to the
 ERA5-Land runs:
 
-  1. the cell the station SITS IN, if that cell is mapped as the station's own
-     forest type (LU 41 deciduous, 42 evergreen);
-  2. otherwise the ECOREGION MEAN OF THAT FOREST TYPE.
+  1. the cell the station SITS IN, whole, if that cell is mapped as the station's
+     own forest type (LU 41 deciduous, 42 evergreen);
+  2. if the cell is mapped as another type: its DYNAMICS, with the LEVEL replaced
+     by the ecoregion mean baseline of the station's own type;
+  3. if the station falls outside every cell in the table: the ecoregion mean of
+     its own type supplies both.
 
-Neither the containing cell's own series nor the nearest same-type cell will do.
-These projections come from a PLSR fitted PER FOREST TYPE, so a deciduous-labelled
-cell carries a deciduous-model LMA and giving it to an evergreen tower would be
-the wrong trait outright. Selecting instead on nearest-same-type sent US-Ha2 --
-evergreen hemlock inside a deciduous-dominated landscape -- to a cell 187.9 km
-away, about seven cells from where it stands. The ecoregion mean keeps the
-station's trait type and only widens the spatial support, which is exactly what
-the historical path does:
+Step 2 is build_lma_input.py's substitution transposed. There:
 
     mu_Y_row = np.where(in_fit, mu_Y_pix_final[idx], mu_Y_eco)
+
+only the pixel MEAN is replaced, while the predictors still come from the
+station's own pixel, so the level moves and the variability does not. Here
+LMA_Baseline IS that per-cell mean and LMA_Anomaly is what the predictors
+produced, so replacing the baseline alone reproduces the split exactly.
+
+Selecting instead on nearest-same-type -- the first version of this -- sent
+US-Ha2, evergreen hemlock inside a deciduous-dominated landscape, to a cell
+187.9 km away, about seven cells from where it stands.
+
+ONE DEPARTURE, stated rather than hidden: in the ERA5 path the station's own
+forest-type beta is applied to the pixel's climate. These projections ship as
+finished values, so under step 2 the anomaly carries the model of the cell's own
+type. The level is corrected; the sensitivity is not. Re-fitting would be the
+only way to close that, and it is not something this script can do.
 
 Note the files span 1985-2100, i.e. they already include the historical period,
 and the two SSPs are identical over 1985-2014 because the scenarios only diverge
@@ -173,7 +184,12 @@ def load_projection(eco, gcm, scenario, plsr_root):
             if abs(base + anom - fut) > 1e-6:
                 bad += 1
                 continue
-            px.setdefault((lat, lon, lu), {})[yr] = fut
+            # Baseline and anomaly are kept SEPARATE, because the fallback
+            # recombines them: LMA_Future = LMA_Baseline + LMA_Anomaly, and the
+            # ERA5-Land rule substitutes only the baseline. LMA_Baseline is
+            # constant per cell, so the dict holds it once.
+            e = px.setdefault((lat, lon, lu), {"base": base, "anom": {}})
+            e["anom"][yr] = anom
     _CACHE[key] = px
     return px, (f"{bad} unusable row(s)" if bad else None)
 
@@ -226,49 +242,59 @@ def station_series(st, gcm, scenario, plsr_root):
               and min(abs(k[1] - slon360), 360 - abs(k[1] - slon360)) <= half]
 
     match = [k for k in inside if k[2] == lu]
-    if match:
-        chosen = match[0]
-        d0 = float(haversine_km(st["lat"], st["lon"],
-                                np.array([chosen[0]]), np.array([chosen[1]]))[0])
-        return (sorted(px[chosen].items()),
-                {"pixel_km": d0, "n_pixels": len(inside), "note": note,
-                 "how": "own cell", "lu_used": chosen[2], "lu_wanted": lu,
-                 "grid_deg": round(half * 2, 4), "pixel_lat": chosen[0],
-                 "pixel_lon": ((chosen[1] + 180) % 360) - 180})
-
-    # The cell the station sits in is not mapped as its forest type -- either it
-    # carries a different dominant cover, or the station falls outside every cell
-    # in the table. Substitute the ECOREGION MEAN OF THE STATION'S OWN TYPE.
-    #
-    # Not the containing cell's own series: these projections are produced by a
-    # PLSR fit PER FOREST TYPE, so a deciduous-labelled cell carries a
-    # deciduous-model LMA and handing it to an evergreen tower would be the wrong
-    # trait entirely. Not the nearest same-type cell either, which is what sent
-    # US-Ha2 187.9 km away.
-    #
-    # This mirrors build_lma_input.py, which the ERA5-Land runs used:
-    #     mu_Y_row = np.where(in_fit, mu_Y_pix_final[idx], mu_Y_eco)
-    # i.e. the pixel's own baseline where the pixel was in the forest-type fit,
-    # and the ecoregion mean of that type where it was not.
     same = [k for k in keys if k[2] == lu]
     if not same:
         return None, {"error": f"no LU {lu} ({st['forest_type']}) cell anywhere in "
                                f"ecoregion {st['eco']} for {gcm} {scenario} -- the "
                                f"{st['forest_type']} PLSR was not fitted here"}
-    years = sorted({y for k in same for y in px[k]})
+
+    # ---- 1. own cell, mapped as the station's own forest type: use it whole.
+    if match:
+        c = match[0]
+        d0 = float(haversine_km(st["lat"], st["lon"],
+                                np.array([c[0]]), np.array([c[1]]))[0])
+        series = sorted((y, px[c]["base"] + a) for y, a in px[c]["anom"].items())
+        return series, {"pixel_km": d0, "n_pixels": len(inside), "note": note,
+                        "how": "own cell", "lu_used": c[2], "lu_wanted": lu,
+                        "grid_deg": round(half * 2, 4), "pixel_lat": c[0],
+                        "pixel_lon": ((c[1] + 180) % 360) - 180}
+
+    # ---- 2. own cell exists but is mapped as another type: keep its DYNAMICS,
+    #         take the LEVEL from the ecoregion mean of the station's own type.
+    #         This is build_lma_input.py's substitution transposed:
+    #             mu_Y_row = np.where(in_fit, mu_Y_pix_final[idx], mu_Y_eco)
+    #         There, only the pixel MEAN is replaced and the predictors still come
+    #         from the station's own pixel. Here, LMA_Baseline is that mean and
+    #         LMA_Anomaly is what the predictors produced, so replacing the
+    #         baseline alone reproduces the same split exactly.
+    eco_base = float(np.mean([px[k]["base"] for k in same]))
+    if inside:
+        c = inside[0]
+        d0 = float(haversine_km(st["lat"], st["lon"],
+                                np.array([c[0]]), np.array([c[1]]))[0])
+        series = sorted((y, eco_base + a) for y, a in px[c]["anom"].items())
+        return series, {
+            "pixel_km": d0, "n_pixels": len(same), "note": note,
+            "how": "own cell dynamics + ecoregion baseline",
+            "lu_used": c[2], "lu_wanted": lu, "eco_base": eco_base,
+            "cell_base": px[c]["base"], "grid_deg": round(half * 2, 4),
+            "pixel_lat": c[0], "pixel_lon": ((c[1] + 180) % 360) - 180}
+
+    # ---- 3. the station falls outside every cell in the table: nothing local to
+    #         borrow dynamics from, so the ecoregion mean supplies both.
+    years = sorted({y for k in same for y in px[k]["anom"]})
     series = []
     for y in years:
-        v = [px[k][y] for k in same if y in px[k]]
-        if v:
-            series.append((y, float(np.mean(v))))
-    why = ("containing cell is LU " + str(inside[0][2]) if inside
-           else "station outside every cell in the table")
-    return (series,
-            {"pixel_km": 0.0, "n_pixels": len(same), "note": note,
-             "how": f"ecoregion mean of {st['forest_type']} ({why})",
-             "lu_used": lu, "lu_wanted": lu, "grid_deg": round(half * 2, 4),
-             "pixel_lat": float(np.mean([k[0] for k in same])),
-             "pixel_lon": float(np.mean([((k[1] + 180) % 360) - 180 for k in same]))})
+        a = [px[k]["anom"][y] for k in same if y in px[k]["anom"]]
+        if a:
+            series.append((y, eco_base + float(np.mean(a))))
+    return series, {
+        "pixel_km": float("nan"), "n_pixels": len(same), "note": note,
+        "how": "ecoregion mean (station outside every cell)",
+        "lu_used": lu, "lu_wanted": lu, "eco_base": eco_base,
+        "grid_deg": round(half * 2, 4),
+        "pixel_lat": float(np.mean([k[0] for k in same])),
+        "pixel_lon": float(np.mean([((k[1] + 180) % 360) - 180 for k in same]))}
 
 
 def clip(series, lo, hi):
@@ -386,9 +412,10 @@ def main(argv=None) -> int:
             if hd.get("how") == "own cell":
                 offsets.append((sid, hd["pixel_km"]))
             how[hd.get("how", "?").split(" (")[0]] += 1
-            if hd.get("how", "").startswith("ecoregion mean"):
+            if hd.get("how") != "own cell":
                 lu_mismatch.append((sid, st["forest_type"], hd.get("how"),
-                                    hd.get("n_pixels")))
+                                    hd.get("n_pixels"), hd.get("cell_base"),
+                                    hd.get("eco_base"), hd.get("lu_used")))
 
             for scen in scens:
                 if scen == "historical":

@@ -1,0 +1,22 @@
+job        : 37524  task none
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-18T05:10:11Z
+station    : US-Wrc   scenario: historical   gcm: GFDL-ESM4   arm: dyn_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Wrc/historical/GFDL-ESM4/dyn_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab  (module Matlab/2025a)
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+    ----------------------------------------------------
+	Your license will expire in 12 days.
+	Please contact your system administrator or
+	MathWorks to renew this license.
+    ----------------------------------------------------
+Iter:
+     2
+
+
+result     : NO RES_*.mat -- the run did not finish
+finished   : 2026-08-18T05:10:38Z
+exit status: 1

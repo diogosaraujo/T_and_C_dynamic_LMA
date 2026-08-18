@@ -1,0 +1,9 @@
+{Index exceeds array bounds.
+
+Error in MAIN_FRAME_SLA (line 295)
+        Sl_H = 0.9*Sl_H + 0.1*SLA_ex.SLA_H(sl_ix(1),:);% for smooth change on year change
+                                           ^^^^^^^^
+Error in GO_US_Wrc (line 38)
+MAIN_FRAME_SLA;
+^^^^^^^^^^^^^^
+} 

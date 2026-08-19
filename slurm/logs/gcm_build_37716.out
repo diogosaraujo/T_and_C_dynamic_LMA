@@ -1,0 +1,134 @@
+job        : 37716
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-19T19:52:56Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr       : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo  : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+plsr      : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA
+gcm meteo : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+stations  : 101   gcms 5   scenarios 3
+target    : 3030 run directories
+
+========================================================================
+DRY RUN -- 2770 run directories would be built, 38 combination(s) blocked
+========================================================================
+
+HOW EACH (station, GCM) PAIR GOT ITS SERIES
+    250  (53.8%)  own cell
+    150  (32.3%)  ecoregion mean
+     65  (14.0%)  own cell dynamics + ecoregion baseline
+
+BASELINE SUBSTITUTED FROM THE ECOREGION (43 station(s))
+  The cell the station sits in is not mapped as its forest type. Its
+  DYNAMICS are still used; only the LEVEL comes from the ecoregion mean
+  of the station's own type -- the substitution build_lma_input.py makes
+  for the ERA5-Land runs:
+      mu_Y_row = np.where(in_fit, mu_Y_pix_final[idx], mu_Y_eco)
+
+    station   type        cell LU  cell base  eco base   shift  n_cells
+    US-Bar    deciduous        42       77.2      78.8    +1.6   159
+    US-CRK    evergreen         -          -     139.1       -   173   OUTSIDE: nearest cell 18.3 km (same type 18.3 km), grid 0.25 deg
+    US-CZ4    evergreen         -          -     148.2       -    70   OUTSIDE: nearest cell 13.8 km (same type 13.8 km), grid 0.25 deg
+    US-DPP    evergreen         -          -     108.6       -    78   OUTSIDE: nearest cell 110.0 km (same type 110.0 km), grid 0.25 deg
+    US-Dk3    evergreen        41       80.0      94.6   +14.7   111
+    US-HBK    deciduous        43       74.3      78.8    +4.4   159
+    US-Ha1    deciduous        43       83.0      78.8    -4.3   159
+    US-Ha2    evergreen        43       83.0      98.1   +15.0    26
+    US-Ho1    evergreen         -          -      84.9       -    20   OUTSIDE: nearest cell 13.7 km (same type 29.9 km), grid 0.25 deg
+    US-Ho2    evergreen         -          -      84.9       -    20   OUTSIDE: nearest cell 13.7 km (same type 30.6 km), grid 0.25 deg
+    US-Ho3    evergreen         -          -      84.9       -    20   OUTSIDE: nearest cell 14.8 km (same type 29.0 km), grid 0.25 deg
+    US-LPH    deciduous        43       83.0      78.8    -4.3   159
+    US-MtB    evergreen         -          -      97.6       -     1   OUTSIDE: nearest cell 140.7 km (same type 140.7 km), grid 0.25 deg
+    US-NC2    evergreen         -          -      86.4       -    22   OUTSIDE: nearest cell 27.2 km (same type 27.2 km), grid 0.25 deg
+    US-NC3    evergreen         -          -      86.4       -    22   OUTSIDE: nearest cell 27.7 km (same type 27.7 km), grid 0.25 deg
+    US-NC5    evergreen        41       77.2      94.6   +17.4   111
+    US-NMj    evergreen        43      101.7     101.0    -0.7     9
+    US-PFL    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 38.2 km (same type 38.2 km), grid 0.25 deg
+    US-PFb    evergreen         -          -     101.0       -     9   OUTSIDE: nearest cell 41.5 km (same type 109.8 km), grid 0.25 deg
+    US-PFc    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 40.7 km (same type 40.7 km), grid 0.25 deg
+    US-PFg    evergreen         -          -     101.0       -     9   OUTSIDE: nearest cell 40.4 km (same type 113.3 km), grid 0.25 deg
+    US-PFh    evergreen         -          -     101.0       -     9   OUTSIDE: nearest cell 37.8 km (same type 116.4 km), grid 0.25 deg
+    US-PFi    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 39.8 km (same type 39.8 km), grid 0.25 deg
+    US-PFj    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 38.3 km (same type 38.3 km), grid 0.25 deg
+    US-PFk    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 36.4 km (same type 36.4 km), grid 0.25 deg
+    US-PFm    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 35.9 km (same type 35.9 km), grid 0.25 deg
+    US-PFn    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 37.0 km (same type 37.0 km), grid 0.25 deg
+    US-PFp    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 36.3 km (same type 36.3 km), grid 0.25 deg
+    US-PFq    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 34.9 km (same type 34.9 km), grid 0.25 deg
+    US-PFs    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 35.9 km (same type 35.9 km), grid 0.25 deg
+    US-PFt    evergreen         -          -     101.0       -     9   OUTSIDE: nearest cell 33.7 km (same type 118.9 km), grid 0.25 deg
+    US-SB1    evergreen        41       75.1      94.6   +19.6   111
+    US-UMB    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 14.5 km (same type 14.5 km), grid 0.25 deg
+    US-UMd    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 15.5 km (same type 15.5 km), grid 0.25 deg
+    US-WCr    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 20.4 km (same type 20.4 km), grid 0.25 deg
+    US-Wi2    evergreen        41      112.4     101.0   -11.5     9
+    US-Wi4    evergreen        41      112.4     101.0   -11.5     9
+    US-xBL    deciduous         -          -      81.7       -   215   OUTSIDE: nearest cell 21.1 km (same type 21.1 km), grid 0.25 deg
+    US-xBR    deciduous        42       77.2      78.8    +1.6   159
+    US-xHA    deciduous        43       83.0      78.8    -4.3   159
+    US-xJE    evergreen         -          -     114.4       -   299   OUTSIDE: nearest cell 21.9 km (same type 21.9 km), grid 0.25 deg
+    US-xTR    deciduous         -          -     105.3       -   167   OUTSIDE: nearest cell 14.9 km (same type 14.9 km), grid 0.25 deg
+    US-xUK    deciduous         -          -     125.0       -    10   OUTSIDE: nearest cell 170.0 km (same type 170.0 km), grid 0.25 deg
+
+  One departure from the ERA5 path: there the station's OWN forest-type
+  beta is applied to the pixel's climate. These projections ship as
+  finished values, so the anomaly carries the model of the cell's own
+  type. The level is corrected; the sensitivity is not.
+
+STATION-TO-CELL-CENTRE DISTANCE (own-cell matches only)
+  p50=9.8  p75=13.0  p90=14.4  p95=15.5  p99=16.9  max=16.9 km  (n=250)
+
+BLOCKED, by cause (38 total)
+    20 x  only N historical years in the projection
+    10 x  empty series after clipping
+     5 x  no LU N (deciduous) cell anywhere in ecoregion ... for ... sspN -- the deciduous PLSR was not fitted here
+     3 x  no eraN_land MOD_PARAM; run build_model_run.py first
+
+BLOCKED, in full
+  ! US-CS2    GFDL-ESM4      -           only 6 historical years in the projection
+  ! US-CS2    IPSL-CM6A-LR   -           only 6 historical years in the projection
+  ! US-CS2    MPI-ESM1-2-HR  -           only 6 historical years in the projection
+  ! US-CS2    MRI-ESM2-0     -           only 6 historical years in the projection
+  ! US-CS2    UKESM1-0-LL    -           only 6 historical years in the projection
+  ! US-HB2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-HB3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MtB    GFDL-ESM4      ssp126      empty series after clipping
+  ! US-MtB    GFDL-ESM4      ssp585      empty series after clipping
+  ! US-MtB    IPSL-CM6A-LR   ssp126      empty series after clipping
+  ! US-MtB    IPSL-CM6A-LR   ssp585      empty series after clipping
+  ! US-MtB    MPI-ESM1-2-HR  ssp126      empty series after clipping
+  ! US-MtB    MPI-ESM1-2-HR  ssp585      empty series after clipping
+  ! US-MtB    MRI-ESM2-0     ssp126      empty series after clipping
+  ! US-MtB    MRI-ESM2-0     ssp585      empty series after clipping
+  ! US-MtB    UKESM1-0-LL    ssp126      empty series after clipping
+  ! US-MtB    UKESM1-0-LL    ssp585      empty series after clipping
+  ! US-Oho    GFDL-ESM4      -           only 19 historical years in the projection
+  ! US-Oho    IPSL-CM6A-LR   -           only 19 historical years in the projection
+  ! US-Oho    MPI-ESM1-2-HR  -           only 19 historical years in the projection
+  ! US-Oho    MRI-ESM2-0     -           only 19 historical years in the projection
+  ! US-Oho    UKESM1-0-LL    -           only 19 historical years in the projection
+  ! US-Slt    GFDL-ESM4      -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for GFDL-ESM4 ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Slt    IPSL-CM6A-LR   -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for IPSL-CM6A-LR ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Slt    MPI-ESM1-2-HR  -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for MPI-ESM1-2-HR ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Slt    MRI-ESM2-0     -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for MRI-ESM2-0 ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Slt    UKESM1-0-LL    -           no LU 41 (deciduous) cell anywhere in ecoregion 5 for UKESM1-0-LL ssp126 -- the deciduous PLSR was not fitted here
+  ! US-Vcm    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xLE    GFDL-ESM4      -           only 9 historical years in the projection
+  ! US-xLE    IPSL-CM6A-LR   -           only 9 historical years in the projection
+  ! US-xLE    MPI-ESM1-2-HR  -           only 9 historical years in the projection
+  ! US-xLE    MRI-ESM2-0     -           only 9 historical years in the projection
+  ! US-xLE    UKESM1-0-LL    -           only 9 historical years in the projection
+  ! US-xYE    GFDL-ESM4      -           only 4 historical years in the projection
+  ! US-xYE    IPSL-CM6A-LR   -           only 4 historical years in the projection
+  ! US-xYE    MPI-ESM1-2-HR  -           only 4 historical years in the projection
+  ! US-xYE    MRI-ESM2-0     -           only 4 historical years in the projection
+  ! US-xYE    UKESM1-0-LL    -           only 4 historical years in the projection
+
+run list   : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/run_list_gcm.txt  (30 arms)
+next       : sbatch --array=1-30%NN slurm/submit_gcm_tc_run.sh
+             (MaxArraySize is 1001 on Amarel -- chunk if N exceeds it)
+finished   : 2026-08-19T19:53:47Z
+exit status: 0

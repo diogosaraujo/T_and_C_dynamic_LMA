@@ -1,0 +1,255 @@
+job        : 37554  task 1
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+started    : 2026-08-18T23:40:04Z
+station    : US-Wrc   scenario: historical   gcm: GFDL-ESM4   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Wrc/historical/GFDL-ESM4/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab  (module Matlab/2025a)
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+    ----------------------------------------------------
+	Your license will expire in 12 days.
+	Please contact your system administrator or
+	MathWorks to renew this license.
+    ----------------------------------------------------
+Iter:
+     2
+
+Iter:
+        1000
+
+Iter:
+        2000
+
+Iter:
+        3000
+
+Iter:
+        4000
+
+Iter:
+        5000
+
+Iter:
+        6000
+
+Iter:
+        7000
+
+Iter:
+        8000
+
+Iter:
+        9000
+
+Iter:
+       10000
+
+Iter:
+       11000
+
+Iter:
+       12000
+
+Iter:
+       13000
+
+Iter:
+       14000
+
+Iter:
+       15000
+
+Iter:
+       16000
+
+Iter:
+       17000
+
+Iter:
+       18000
+
+Iter:
+       19000
+
+Iter:
+       20000
+
+Iter:
+       21000
+
+Iter:
+       22000
+
+Iter:
+       23000
+
+Iter:
+       24000
+
+Iter:
+       25000
+
+Iter:
+       26000
+
+Iter:
+       27000
+
+Iter:
+       28000
+
+Iter:
+       29000
+
+Iter:
+       30000
+
+Iter:
+       31000
+
+Iter:
+       32000
+
+Iter:
+       33000
+
+Iter:
+       34000
+
+Iter:
+       35000
+
+Iter:
+       36000
+
+Iter:
+       37000
+
+Iter:
+       38000
+
+Iter:
+       39000
+
+Iter:
+       40000
+
+Iter:
+       41000
+
+Iter:
+       42000
+
+Iter:
+       43000
+
+Iter:
+       44000
+
+Iter:
+       45000
+
+Iter:
+       46000
+
+Iter:
+       47000
+
+Iter:
+       48000
+
+Iter:
+       49000
+
+Iter:
+       50000
+
+Iter:
+       51000
+
+Iter:
+       52000
+
+Iter:
+       53000
+
+Iter:
+       54000
+
+Iter:
+       55000
+
+Iter:
+       56000
+
+Iter:
+       57000
+
+Iter:
+       58000
+
+Iter:
+       59000
+
+Iter:
+       60000
+
+Iter:
+       61000
+
+Iter:
+       62000
+
+Iter:
+       63000
+
+Iter:
+       64000
+
+Iter:
+       65000
+
+Iter:
+       66000
+
+Iter:
+       67000
+
+Iter:
+       68000
+
+Iter:
+       69000
+
+Iter:
+       70000
+
+Iter:
+       71000
+
+Iter:
+       72000
+
+Iter:
+       73000
+
+Iter:
+       74000
+
+Iter:
+       75000
+
+Iter:
+       76000
+
+Iter:
+       77000
+
+Iter:
+       78000
+
+Iter:
+       79000
+

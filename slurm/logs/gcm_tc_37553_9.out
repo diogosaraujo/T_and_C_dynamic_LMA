@@ -1,0 +1,129 @@
+job        : 37562  task 9
+node       : soeepyc08
+cluster    : soe   partition: SOE_main
+started    : 2026-08-18T23:40:05Z
+station    : US-Wrc   scenario: ssp126   gcm: IPSL-CM6A-LR   arm: fixed_lma
+rundir     : /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Wrc/ssp126/IPSL-CM6A-LR/fixed_lma
+
+matlab     : /opt/apps/matlab_2025a/bin/matlab  (module Matlab/2025a)
+matlab     : /opt/apps/matlab_2025a/bin/matlab
+
+    ----------------------------------------------------
+	Your license will expire in 12 days.
+	Please contact your system administrator or
+	MathWorks to renew this license.
+    ----------------------------------------------------
+Iter:
+     2
+
+Iter:
+        1000
+
+Iter:
+        2000
+
+Iter:
+        3000
+
+Iter:
+        4000
+
+Iter:
+        5000
+
+Iter:
+        6000
+
+Iter:
+        7000
+
+Iter:
+        8000
+
+Iter:
+        9000
+
+Iter:
+       10000
+
+Iter:
+       11000
+
+Iter:
+       12000
+
+Iter:
+       13000
+
+Iter:
+       14000
+
+Iter:
+       15000
+
+Iter:
+       16000
+
+Iter:
+       17000
+
+Iter:
+       18000
+
+Iter:
+       19000
+
+Iter:
+       20000
+
+Iter:
+       21000
+
+Iter:
+       22000
+
+Iter:
+       23000
+
+Iter:
+       24000
+
+Iter:
+       25000
+
+Iter:
+       26000
+
+Iter:
+       27000
+
+Iter:
+       28000
+
+Iter:
+       29000
+
+Iter:
+       30000
+
+Iter:
+       31000
+
+Iter:
+       32000
+
+Iter:
+       33000
+
+Iter:
+       34000
+
+Iter:
+       35000
+
+Iter:
+       36000
+
+Iter:
+       37000
+

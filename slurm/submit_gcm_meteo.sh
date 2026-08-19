@@ -10,9 +10,18 @@
 ##
 ##   1. build_gcm_meteo.py  daily npz -> Meteo_<ST>_<GCM>_<scen>_raw.mat
 ##                          disaggregation, humidity, barometric pressure, CO2
+##                          written to $TC_INPUT_DATA/gcm_meteo -- STAGING ONLY
 ##   2. finish_meteo.m      adds SAB1/SAB2/SAD1/SAD2, PARB/PARD and N via
 ##                          C_Automatic_Radiation_Partition
-##                          -> Meteo_<ST>_<GCM>_<scen>_<years>.mat
+##                          -> model_run/<ST>/<scenario>/<GCM>/
+##                             Meteo_<ST>_<GCM>_<scen>_<years>.mat
+##
+## The FINISHED forcing goes into the run tree, one copy per (station, scenario,
+## GCM), directly above the fixed_lma/dyn_lma pair that reads it -- so model_run is
+## self-contained and ships to another cluster with a plain rsync. Stage 1 routes
+## it by stamping a dest_dir into each raw file; stage 2 obeys that field. The raw
+## files left behind in gcm_meteo are intermediates and can be deleted:
+##     find $TC_INPUT_DATA/gcm_meteo -name 'Meteo_*_raw.mat' -delete
 ##
 ## Stage 2 reuses the SAME tested MATLAB partition as the ERA5 path, called with
 ## t_bef/t_aft = 0/1 instead of 1/0. That is not a tuning knob: build_gcm_meteo.py

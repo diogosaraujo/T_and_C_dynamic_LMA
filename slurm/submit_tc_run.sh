@@ -84,8 +84,12 @@ fi
 for f in "GO_$MNAME.m" "MOD_PARAM_$MNAME.m" "LMA_$MNAME.mat"; do
     [ -f "$RUNDIR/$f" ] || { echo "ERROR: missing $RUNDIR/$f" >&2; exit 1; }
 done
-if ! ls "$RUNDIR"/Meteo_*.mat >/dev/null 2>&1; then
-    echo "ERROR: no Meteo_*.mat in $RUNDIR -- the forcing builder has not run" >&2
+# The forcing is one level UP, at <ST>/era5_land/, shared by fixed_lma and
+# dyn_lma; GO loads it as '../Meteo_*.mat'. Not in the arm directory.
+if ! ls "$(dirname "$RUNDIR")"/Meteo_*.mat >/dev/null 2>&1; then
+    echo "ERROR: no Meteo_*.mat in $(dirname "$RUNDIR") -- the forcing builder has" >&2
+    echo "       not run, or the tree predates the move and needs" >&2
+    echo "       preprocessing/migrate_forcing.py" >&2
     exit 1
 fi
 

@@ -89,8 +89,12 @@ echo
 for f in "GO_$MNAME.m" "MOD_PARAM_$MNAME.m" "LMA_$MNAME.mat"; do
     [ -f "$RUNDIR/$f" ] || { echo "ERROR: missing $RUNDIR/$f" >&2; exit 1; }
 done
-ls "$RUNDIR"/Meteo_*.mat >/dev/null 2>&1 || {
-    echo "ERROR: no Meteo_*.mat in $RUNDIR -- the GCM forcing builder has not run" >&2
+# The forcing is one level UP, shared by fixed_lma and dyn_lma, and GO loads it as
+# '../Meteo_*.mat'. It is not in the arm directory and must not be looked for there.
+ls "$(dirname "$RUNDIR")"/Meteo_*.mat >/dev/null 2>&1 || {
+    echo "ERROR: no Meteo_*.mat in $(dirname "$RUNDIR") -- the GCM forcing builder" >&2
+    echo "       has not run, or the tree predates the move and needs" >&2
+    echo "       preprocessing/migrate_forcing.py" >&2
     exit 1; }
 
 tc_load_matlab || exit 1

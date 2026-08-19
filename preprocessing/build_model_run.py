@@ -587,7 +587,10 @@ cc = 1;     %%% Crown area
 SLA_ex = load('LMA_{mname}.mat');
 
 id_location = '{mname}';
-load('{meteo_name}')
+%%% The forcing sits one level up, shared by fixed_lma and dyn_lma. One copy per
+%%% (station, scenario, GCM), inside model_run, so the tree is self-contained and
+%%% moves between clusters with a plain rsync.
+load('{meteo_path}')
 
 x1 = 1;
 x2 = length(Ta);
@@ -646,17 +649,16 @@ def build_station(st, tmpl_txt, args, out_root):
         (d / f"GO_{mname}.m").write_text(GO_TEMPLATE.format(
             station=sid, forest_type=st["forest_type"], arm=arm, code_rel=code_rel,
             root_rel="../../..",
-            ms=st["_soil_block"][0], mname=mname, meteo_name=st["meteo_name"],
+            ms=st["_soil_block"][0], mname=mname,
+            meteo_path=f"../{st['meteo_name']}",
             main_frame="MAIN_FRAME_SLA" if arm == "dyn_lma" else "MAIN_FRAME",
         ), encoding="utf-8")
 
-        if st.get("meteo_src"):
-            dst = d / st["meteo_name"]
-            if not dst.exists():
-                try:
-                    os.symlink(st["meteo_src"], dst)
-                except OSError:
-                    shutil.copy2(st["meteo_src"], dst)
+        # No symlink and no copy. The forcing lives one level up at
+        # <ST>/era5_land/, written there by finish_meteo.m, and both arms read
+        # that single file. Symlinking a copy into each arm made model_run
+        # depend on absolute paths into input_data, which is what stopped the
+        # tree from being movable between clusters.
         write_lma_mat(d / f"LMA_{mname}.mat", st["lma"], st["sl"], arm)
 
     for s in SCENARIOS:
@@ -800,6 +802,7 @@ def main() -> int:
 
     ready, blocked, all_probs = [], [], {}
     clamped_stations = []
+    unmigrated = []          # forcing found, but still in the staging dir
     for st in stations:
         sid = st["station_id"]
         miss = []
@@ -861,10 +864,21 @@ def main() -> int:
             st["zr95_src"] = "Schenk & Jackson D95"
 
         st["meteo_name"] = f"Meteo_{mat_name(sid)}_{a.meteo_years}.mat"
+        # The forcing belongs at <ST>/era5_land/ in the run tree; finish_meteo.m
+        # writes it there. --meteo is only the legacy staging location, still
+        # accepted so a tree built before the move is not reported as broken.
+        in_tree = a.root / sid / "era5_land" / st["meteo_name"]
         cand = a.meteo / st["meteo_name"]
-        st["meteo_src"] = cand if cand.is_file() else None
+        st["meteo_src"] = (in_tree if in_tree.is_file()
+                           else cand if cand.is_file() else None)
         if st["meteo_src"] is None:
-            miss.append("meteo .mat")
+            miss.append("meteo .mat")           # nowhere at all: a real blocker
+        elif not in_tree.is_file():
+            # Present, just not moved yet. Not a blocker: everything else about
+            # the station is buildable, and migrate_forcing.py is the one-line
+            # fix. Blocking here would refuse the whole fleet over a file that
+            # exists, which is a worse failure than a warning.
+            unmigrated.append(sid)
 
         if layers:
             # Record which stations the silt clamp touched, so a rebuild says out
@@ -881,6 +895,12 @@ def main() -> int:
         ready.append(st)
 
     print(f"{'=' * 66}\nREADY: {len(ready)}/{len(stations)} stations have every input\n{'=' * 66}")
+    if unmigrated:
+        print(f"\n  ! {len(unmigrated)} station(s) still have their forcing in {a.meteo}")
+        print(f"    rather than in <ST>/era5_land/ where GO now loads it from:")
+        print(f"    {', '.join(unmigrated[:8])}{' ...' if len(unmigrated) > 8 else ''}")
+        print("    Run preprocessing/migrate_forcing.py, or these runs will stop at")
+        print("    the forcing check in submit_tc_run.sh.")
     for sid, miss in blocked:
         print(f"  ! {sid:<8} missing: {', '.join(miss)}")
     if blocked:

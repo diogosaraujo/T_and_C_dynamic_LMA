@@ -85,8 +85,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
                                  "/vol_efthymios/NFS07/dd1136/T_and_C/input_data"))
 STATION_ROOT = INPUT_ROOT / "gcm_stations"
-OUT_ROOT = INPUT_ROOT / "gcm_meteo"
+OUT_ROOT = INPUT_ROOT / "gcm_meteo"          # RAW staging only; see build_one
 CO2_DIR = INPUT_ROOT / "co2"
+# Where the finished forcing lands. Same default as config.sh: a sibling of
+# input_data, so the run tree and the downloaded originals stay separate.
+MODEL_RUN = Path(os.environ.get("MODEL_RUN", INPUT_ROOT.parent / "model_run"))
 MATLAB_EPOCH_OFFSET = 719529.0            # datenum(1970,1,1)
 
 
@@ -336,7 +339,7 @@ def read_elevation(ameriflux_dir=None):
 
 # ------------------------------------------------------------------------- build
 def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
-              scheme, seed, out_dir, dry):
+              scheme, seed, out_dir, dry, dest_root=MODEL_RUN):
     meta = series["_meta"]
     cal = meta["tas"]["calendar"]
     days, keep, cal_note = real_dates(series["tas"][0], meta["tas"]["doy"], cal)
@@ -457,8 +460,20 @@ def build_one(gcm, scenario, station, si, series, lat, lon, zbas, co2,
     #     with "appears to be corrupt" on a file another task was writing.
     # Per-task ownership of the output directory is what makes the stage safe to
     # parallelise at all.
+    #
+    # This is the RAW staging area only. The finished file goes to dest_dir below,
+    # inside model_run, and the raw file here is an intermediate that can be
+    # deleted once finish_meteo.m has consumed it.
     out_dir = out_dir / scenario / mat_name(gcm)
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Where finish_meteo.m must put the finished forcing: one copy per (station,
+    # scenario, GCM), directly above the fixed_lma/dyn_lma pair that reads it. The
+    # GCM directory is spelled as model_run spells it (GFDL-ESM4, hyphenated) --
+    # mat_name's underscored form is for MATLAB identifiers and file names, not
+    # for directories in the run tree.
+    out["dest_dir"] = (dest_root / station / scenario / gcm).as_posix()
+
     savemat(out_dir / f"Meteo_{mat_name(station)}_{mat_name(gcm)}_{scenario}_raw.mat",
             {k: (np.asarray(v).reshape(-1, 1) if isinstance(v, np.ndarray) else v)
              for k, v in out.items()}, do_compression=True)
@@ -481,7 +496,12 @@ def main(argv=None) -> int:
     ap.add_argument("--seed", type=int, default=20260813,
                     help="fixes the block placement so builds are reproducible")
     ap.add_argument("--stations-root", type=Path, default=STATION_ROOT)
-    ap.add_argument("--out", type=Path, default=OUT_ROOT)
+    ap.add_argument("--out", type=Path, default=OUT_ROOT,
+                    help="RAW staging root; the finished forcing goes to "
+                         "--model-run, not here")
+    ap.add_argument("--model-run", type=Path, default=MODEL_RUN,
+                    help="run tree the finished forcing is written into, at "
+                         "<ST>/<scenario>/<GCM>/")
     ap.add_argument("--co2-dir", type=Path, default=CO2_DIR)
     ap.add_argument("--ameriflux", type=Path, default=None,
                     help="directory holding badm_values.csv / site_metadata.json "
@@ -535,7 +555,8 @@ def main(argv=None) -> int:
                 print(f"    {s['station']}: no elevation -- skipped"); rc = 1; continue
             diag, err = build_one(g, sc, s["station"], names.index(s["station"]),
                                   series, s["lat"], s["lon"], z, co2,
-                                  a.precip_scheme, a.seed, a.out, a.dry_run)
+                                  a.precip_scheme, a.seed, a.out, a.dry_run,
+                                  a.model_run)
             if diag is None:
                 print(f"    {s['station']}: FAILED -- {err}"); rc = 1; continue
             ok += 1

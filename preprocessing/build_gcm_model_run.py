@@ -6,8 +6,14 @@
     python build_gcm_model_run.py --gcm GFDL-ESM4 --scenario ssp585
 
     model_run/<STATION>/<scenario>/<GCM>/
-        fixed_lma/   GO_<ST>.m  MOD_PARAM_<ST>.m  LMA_<ST>.mat  Meteo_<ST>_<GCM>_<scen>_*.mat
+        Meteo_<ST>_<GCM>_<scen>_<years>.mat     <- the forcing, ONE copy
+        fixed_lma/   GO_<ST>.m  MOD_PARAM_<ST>.m  LMA_<ST>.mat
         dyn_lma/     same
+
+The forcing sits above the arms, not inside them, and GO loads '../<name>'. Both
+arms read the same file, model_run carries everything a run needs, and the tree
+moves between clusters with a plain rsync -- none of which was true while each
+arm held its own absolute symlink into input_data.
 
 WHY THIS IS SHORT, AND WHY IT DOES NOT DUPLICATE build_model_run.py
 
@@ -85,7 +91,6 @@ import argparse
 import csv
 import os
 import re
-import shutil
 import sys
 from pathlib import Path
 
@@ -353,15 +358,14 @@ def build_one(st, gcm, scenario, series_fixed_mean, series, meteo_src, out_root,
         (d / f"GO_{mname}.m").write_text(GO_TEMPLATE.format(
             station=sid, forest_type=st["forest_type"], arm=f"{gcm} {scenario} {arm}",
             code_rel="../../../../Code", root_rel="../../../..",
-            ms=ms, mname=mname, meteo_name=meteo_src.name,
+            ms=ms, mname=mname, meteo_path=f"../{meteo_src.name}",
             main_frame="MAIN_FRAME_SLA" if arm == "dyn_lma" else "MAIN_FRAME",
         ), encoding="utf-8")
-        dst = d / meteo_src.name
-        if not dst.exists():
-            try:
-                os.symlink(meteo_src, dst)
-            except OSError:
-                shutil.copy2(meteo_src, dst)
+        # No symlink and no copy. meteo_src already IS d.parent/<name> -- the
+        # forcing sits at <ST>/<scenario>/<GCM>/, one level above both arms, put
+        # there by finish_meteo.m. Symlinking it into each arm is what made the
+        # tree depend on absolute paths into input_data and stopped it moving
+        # between clusters; it also duplicated a 40-115 MB file per arm.
         write_lma_mat(d / f"LMA_{mname}.mat", series, sl_fixed, arm)
     return len(ARMS), None
 
@@ -500,10 +504,19 @@ def main(argv=None) -> int:
                 if not series:
                     blocked.append((sid, gcm, scen, "empty series after clipping"))
                     continue
-                mfile = (a.meteo / scen / mat_name(gcm) /
-                         f"Meteo_{mname}_{mat_name(gcm)}_{scen}_{YEAR_TAG[scen]}.mat")
+                # The forcing lives IN the run tree, at <ST>/<scenario>/<GCM>/,
+                # one level above the two arms that share it. --meteo is the
+                # legacy staging path, still consulted so a tree that has not
+                # been through migrate_forcing.py says so instead of silently
+                # blocking every combination.
+                fname = f"Meteo_{mname}_{mat_name(gcm)}_{scen}_{YEAR_TAG[scen]}.mat"
+                mfile = a.root / sid / scen / gcm / fname
                 if not mfile.is_file():
-                    blocked.append((sid, gcm, scen, f"no forcing {mfile.name}"))
+                    legacy = a.meteo / scen / mat_name(gcm) / fname
+                    blocked.append((sid, gcm, scen,
+                                    f"forcing still in {legacy.parent} -- run "
+                                    f"migrate_forcing.py" if legacy.is_file()
+                                    else f"no forcing {fname}"))
                     continue
                 n, err = build_one(st, gcm, scen, fixed_mean, series, mfile,
                                    a.root, era5_mp, a.dry_run)

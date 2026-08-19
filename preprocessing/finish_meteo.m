@@ -3,6 +3,14 @@ function finish_meteo(raw_dir, out_dir, partition_dir, year_tag, t_bef_in, t_aft
 %
 %   finish_meteo(raw_dir, out_dir, partition_dir, year_tag)
 %
+% DESTINATION. Each finished file goes to the 'dest_dir' stamped inside its own
+% raw file by the Python builder -- model_run/<ST>/<scenario>/<GCM>/ for the GCM
+% path, model_run/<ST>/era5_land/ for ERA5-Land -- so the forcing sits directly
+% above the fixed_lma/dyn_lma pair that reads it and model_run needs nothing from
+% input_data. out_dir is only the fallback for raw files written before that field
+% existed. raw_dir stays a staging area: raw files are intermediates, consumed
+% here and safe to delete afterwards.
+%
 % build_meteo_input.py writes Meteo_<ST>_raw.mat with everything that is a plain
 % unit conversion. This adds the fields that are not: SAB1/SAB2/SAD1/SAD2,
 % PARB/PARD and the cloud fraction N, by calling the existing, tested
@@ -82,6 +90,7 @@ end
 fprintf('%d raw file(s) in %s\n\n', numel(files), raw_dir);
 
 nok = 0;
+dests = {};
 for k = 1:numel(files)
     f = files(k).name;
     site = regexprep(f, '^Meteo_|_raw\.mat$', '');
@@ -183,15 +192,47 @@ for k = 1:numel(files)
         if isfield(S, fn{1}), S.(fn{1}) = reshape(S.(fn{1}), [], 1); end
     end
 
-    outfile = fullfile(out_dir, sprintf('Meteo_%s_%s.mat', site, year_tag));
+    % WHERE THE FINISHED FILE GOES. The forcing belongs with the runs that read
+    % it, one copy per (station, scenario, GCM) directly above the fixed_lma /
+    % dyn_lma pair that shares it -- so model_run is self-contained and the two
+    % arms read one file instead of holding a symlink each into input_data.
+    %
+    % The destination is carried IN the raw file, stamped by whichever Python
+    % builder wrote it, rather than parsed out of the filename here. Parsing
+    % cannot work: 'Meteo_US_Wrc_GFDL_ESM4_historical_raw.mat' splits on
+    % underscores that belong to the station, the GCM and the scenario alike, and
+    % no rule separates them. The builder already knows all three.
+    %
+    % Falls back to out_dir when the field is absent, so raw files written before
+    % this change still partition where they always did.
+    if isfield(S, 'dest_dir') && ~isempty(S.dest_dir)
+        dest = S.dest_dir;
+        if ~ischar(dest), dest = char(dest); end
+        dest = strtrim(reshape(dest, 1, []));
+        S = rmfield(S, 'dest_dir');     % routing metadata, not forcing
+    else
+        dest = out_dir;
+    end
+    if ~exist(dest, 'dir'), mkdir(dest); end
+
+    outfile = fullfile(dest, sprintf('Meteo_%s_%s.mat', site, year_tag));
     save(outfile, '-struct', 'S', '-v7.3');
     nok = nok + 1;
+    dests{end+1} = dest;   %#ok<AGROW> -- one per file, numel(files) at most
     fprintf(['  %-10s %7d h  N %.2f-%.2f  PARBmax %6.1f  Rswmax %6.1f  ' ...
              'band resid max %5.1f W/m2 (%.2f%% of hours > 1; reference ' ...
              'US_xRM: 77.2, 3.27%%)\n'], ...
         site, numel(S.Date), min(N), max(N), max(PARB), max(S.Rsw), resid, frac);
 end
 
-fprintf('\n%d/%d written to %s\n', nok, numel(files), out_dir);
+% Destinations are per file now, so name them rather than echoing one out_dir --
+% "written to <the one place>" would be a lie the moment routing is in use.
+u = unique(dests);
+if numel(u) == 1
+    fprintf('\n%d/%d written to %s\n', nok, numel(files), u{1});
+else
+    fprintf('\n%d/%d written across %d destination folder(s), e.g. %s\n', ...
+        nok, numel(files), numel(u), u{1});
+end
 rmpath(partition_dir);
 end

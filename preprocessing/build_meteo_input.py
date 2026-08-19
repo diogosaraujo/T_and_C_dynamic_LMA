@@ -65,7 +65,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
                                  "/vol_efthymios/NFS07/dd1136/T_and_C/input_data"))
 DEFAULT_ERA5 = INPUT_ROOT / "era5_land"
-DEFAULT_OUT = INPUT_ROOT / "meteo"
+DEFAULT_OUT = INPUT_ROOT / "meteo"          # RAW staging only; see build()
+# Where the finished forcing lands. Same default as config.sh: a sibling of
+# input_data, so the run tree and the downloaded originals stay separate.
+MODEL_RUN = Path(os.environ.get("MODEL_RUN", INPUT_ROOT.parent / "model_run"))
 # Ca_Data.mat lives with the T&C source inputs, not in T&C/Diogo. It is hourly
 # 1975-2022 at 327-420 ppm; Ca_Data_Ann.mat sits beside it but stops in 2013 and
 # is the wrong one for a 1985-2020 run.
@@ -323,7 +326,8 @@ def orient(name, v):
     return v.reshape(-1, 1)
 
 
-def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
+def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry,
+          dest_root=MODEL_RUN):
     sd = era5_dir / station
     if not sd.is_dir():
         return None, "no ERA5-Land directory"
@@ -405,6 +409,12 @@ def build(station, lat, lon, zbas, era5_dir, ca, years, out_dir, dry):
     from scipy.io import savemat
     out_dir.mkdir(parents=True, exist_ok=True)
     out = {k: orient(k, v) for k, v in out.items()}
+    # out_dir holds the RAW intermediate. finish_meteo.m sends the finished file
+    # to dest_dir instead -- model_run/<ST>/era5_land/, directly above the
+    # fixed_lma/dyn_lma pair that reads it, so the run tree carries its own
+    # forcing and input_data keeps only what was downloaded. One copy, shared by
+    # both arms, because the arms sit one level below it.
+    out["dest_dir"] = (dest_root / station / "era5_land").as_posix()
     savemat(out_dir / f"Meteo_{mat_name(station)}_raw.mat", out, do_compression=True)
     return diag, ""
 
@@ -413,7 +423,12 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--era5", type=Path, default=DEFAULT_ERA5)
-    p.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    p.add_argument("--out", type=Path, default=DEFAULT_OUT,
+                   help="RAW staging root; the finished forcing goes to "
+                        "--model-run, not here")
+    p.add_argument("--model-run", type=Path, default=MODEL_RUN,
+                   help="run tree the finished forcing is written into, at "
+                        "<ST>/era5_land/")
     p.add_argument("--ca", type=Path, default=DEFAULT_CA)
     p.add_argument("--site-list", type=Path, action="append", default=None)
     p.add_argument("--exclude-file", type=Path, default=DEFAULT_EXCLUDED,
@@ -471,7 +486,8 @@ def main() -> int:
                              "or badm_coverage.csv -- needed for the radiation partition"))
             continue
         diag, err = build(sid, st["lat"], st["lon"], z, a.era5, ca,
-                          (a.start_year, a.end_year), a.out, a.dry_run)
+                          (a.start_year, a.end_year), a.out, a.dry_run,
+                          a.model_run)
         if diag is None:
             bad.append((sid, err))
             continue

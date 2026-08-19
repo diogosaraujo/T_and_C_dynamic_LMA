@@ -1,0 +1,25 @@
+job        : 37715
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-19T19:50:42Z
+input_data : /vol_efthymios/NFS07/dd1136/T_and_C/input_data
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+gcm meteo : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+era5 meteo: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+stations  : 101
+
+GCM  forcing : 1515 file(s) to move
+ERA5 forcing : 99 file(s) to move
+
+  moved        1614
+
+1614/1614 file(s) moved into /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+left in input_data:
+101
+now in model_run  :
+1810
+finished   : 2026-08-19T19:50:45Z
+exit status: 0  (1 = something was left behind; read the unmatched list above)

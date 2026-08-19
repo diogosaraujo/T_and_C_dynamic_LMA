@@ -1,0 +1,32 @@
+job        : 37714
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-19T19:49:00Z
+input_data : /vol_efthymios/NFS07/dd1136/T_and_C/input_data
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+gcm meteo : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo
+era5 meteo: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/meteo
+stations  : 101
+
+GCM  forcing : 1515 file(s) to move
+ERA5 forcing : 99 file(s) to move
+
+  would move /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/historical/GFDL_ESM4/Meteo_US_Bar_GFDL_ESM4_historical_1985_2014.mat
+          -> /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Bar/historical/GFDL-ESM4/Meteo_US_Bar_GFDL_ESM4_historical_1985_2014.mat
+
+  would move /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/historical/GFDL_ESM4/Meteo_US_Blk_GFDL_ESM4_historical_1985_2014.mat
+          -> /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Blk/historical/GFDL-ESM4/Meteo_US_Blk_GFDL_ESM4_historical_1985_2014.mat
+
+  would move /vol_efthymios/NFS07/dd1136/T_and_C/input_data/gcm_meteo/historical/GFDL_ESM4/Meteo_US_CPF_GFDL_ESM4_historical_1985_2014.mat
+          -> /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-CPF/historical/GFDL-ESM4/Meteo_US_CPF_GFDL_ESM4_historical_1985_2014.mat
+
+DRY RUN -- nothing moved. 1614 file(s) would move.
+
+left in input_data:
+1715
+now in model_run  :
+196
+finished   : 2026-08-19T19:49:06Z
+exit status: 0  (1 = something was left behind; read the unmatched list above)

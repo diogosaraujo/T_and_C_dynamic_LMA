@@ -3,6 +3,7 @@
 ##
 ##     sbatch slurm/submit_check_treatment.sh US-Ha2 US-HBK
 ##     sbatch slurm/submit_check_treatment.sh --all
+##     sbatch slurm/submit_check_treatment.sh US-Wrc --pair 'ssp585/*'
 ##
 ## Run this BEFORE any analysis. The first full array produced dyn_lma runs that
 ## were bit-identical to fixed_lma at every station -- MAIN_FRAME_SLA updated Sl_H
@@ -10,7 +11,14 @@
 ## Restating_parameters filled once before the time loop. Both arms looked healthy
 ## in every single-run figure; the failure was only visible in the difference.
 ##
-## Exits 1 if any station's arms are identical.
+## EVERY arm pair is checked -- <station>/era5_land AND <station>/<scenario>/<GCM>,
+## 16 per fully-run station. Jobs 37691/37692 are why: the checker only knew the
+## era5_land path, so it vetted the ERA5 pair, printed "the treatment is live", and
+## never opened the 30 GCM arms it had been submitted to vet. --pair takes a glob
+## over the pair label when 16 x 101 is more than you want to read.
+##
+## Exits 1 if any PAIR's arms are identical, or if a named station has no pair at
+## all -- finding nothing is not a pass.
 
 #SBATCH -N 1
 #SBATCH --ntasks=1

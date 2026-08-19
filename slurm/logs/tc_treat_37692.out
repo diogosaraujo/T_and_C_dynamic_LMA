@@ -1,0 +1,31 @@
+job        : 37692
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+started    : 2026-08-19T03:45:40Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+stations  : 1
+
+US-Wrc
+  Sl_H  fixed=0.014114  dyn(final)=0.014463
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.890549                       5.341%
+  An_H     differs         5.92266                       2.539%
+  B_H      differs         93.8619                       1.003%
+  T_H      differs        0.239104                       3.146%
+  EIn_H    differs        0.404522                       3.112%
+  EG       differs        0.150413                       8.010%
+  QE       differs         249.313                       2.852%
+  H        differs         641.132                       2.133%
+  Rn       differs         799.311                       0.450%
+  SWE      differs         19.1651                       0.813%
+  Lk       differs        0.962213                       5.864%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.34% of the fixed-arm mean.
+
+============================================================
+every station's arms differ: the fixed-vs-dynamic treatment is live
+
+finished   : 2026-08-19T03:45:47Z
+exit status: 0  (1 = at least one station has NO treatment effect)

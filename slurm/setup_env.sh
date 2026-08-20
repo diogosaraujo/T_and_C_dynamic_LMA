@@ -46,8 +46,24 @@ if ! python3 -c "import ssl" 2>/dev/null; then
     exit 1
 fi
 
+# A venv is BOUND to the interpreter that created it: bin/python is a link back
+# to it and the whole tree hardcodes its version. So "the directory exists" is
+# not the same as "the venv works". Job 60681690 reused a venv built from the
+# broken python/3.8.2 module and died at exit 127 with
+#     libpython3.8.so.1.0: cannot open shared object file
+# because the module was no longer loaded. Test it and rebuild if it is dead.
+if [ -z "${TC_VENV:-}" ]; then
+    echo "ERROR: TC_VENV is empty -- refusing to touch it" >&2
+    exit 1
+fi
+if [ -d "$TC_VENV" ] && ! "$TC_VENV/bin/python" -c 'import sys' >/dev/null 2>&1; then
+    echo "==> existing venv at $TC_VENV is unusable (its interpreter will not"
+    echo "    start -- most often built against a module that is gone). Recreating."
+    "$TC_VENV/bin/python" -c 'import sys' || true
+    rm -rf "${TC_VENV:?}"
+fi
 if [ ! -d "$TC_VENV" ]; then
-    echo "==> creating venv at $TC_VENV"
+    echo "==> creating venv at $TC_VENV with $(command -v python3)"
     python3 -m venv "$TC_VENV"
 else
     echo "==> reusing existing venv at $TC_VENV"

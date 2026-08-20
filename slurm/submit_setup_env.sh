@@ -36,6 +36,8 @@ echo
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "exit status: $status"
 if [ $status -ne 0 ]; then
-    echo "Setup did not complete -- most often a missing ~/.cdsapirc. See the log above."
+    echo "Setup did not complete. The log above names the cause; the usual ones are"
+    echo "a Python whose ssl module will not import, a venv built against a module"
+    echo "that has since gone away, or (for the ERA5 download stage) no ~/.cdsapirc."
 fi
 exit $status

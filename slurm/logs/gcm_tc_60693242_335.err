@@ -1,0 +1,7 @@
+{Error using MAIN_FRAME_SLA (line 304)
+No SLA for simulated year 2011. The LMA file covers 1985-2010 (26 years).
+Rebuild the forcing or the LMA series so the two span the same years.
+
+Error in GO_US_MtB (line 41)
+MAIN_FRAME_SLA;
+} 

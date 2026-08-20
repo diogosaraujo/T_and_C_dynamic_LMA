@@ -1,0 +1,22 @@
+job        : 60695552  task 338
+node       : hal0305.amarel.rutgers.edu
+cluster    : amarel   partition: main
+started    : 2026-08-20T19:13:12Z
+station    : US-MtB   scenario: historical   gcm: MRI-ESM2-0   arm: fixed_lma
+rundir     : /scratch/dd1136/T_and_C/model_run/US-MtB/historical/MRI-ESM2-0/fixed_lma
+
+matlab     : /opt/sw/packages/MATLAB/R2024a/bin/matlab  (module MATLAB/R2024a)
+matlab     : /opt/sw/packages/MATLAB/R2024a/bin/matlab
+
+Iter:
+     2
+
+Iter:
+        1000
+
+Iter:
+        2000
+
+Iter:
+        3000
+

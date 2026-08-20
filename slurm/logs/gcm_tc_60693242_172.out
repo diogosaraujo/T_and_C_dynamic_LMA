@@ -1,0 +1,814 @@
+job        : 60693713  task 172
+node       : halk0027.amarel.rutgers.edu
+cluster    : amarel   partition: main
+started    : 2026-08-20T18:40:55Z
+station    : US-HBK   scenario: historical   gcm: GFDL-ESM4   arm: fixed_lma
+rundir     : /scratch/dd1136/T_and_C/model_run/US-HBK/historical/GFDL-ESM4/fixed_lma
+
+matlab     : /opt/sw/packages/MATLAB/R2024a/bin/matlab  (module MATLAB/R2024a)
+matlab     : /opt/sw/packages/MATLAB/R2024a/bin/matlab
+
+Iter:
+     2
+
+Iter:
+        1000
+
+Iter:
+        2000
+
+Iter:
+        3000
+
+Iter:
+        4000
+
+Iter:
+        5000
+
+Iter:
+        6000
+
+Iter:
+        7000
+
+Iter:
+        8000
+
+Iter:
+        9000
+
+Iter:
+       10000
+
+Iter:
+       11000
+
+Iter:
+       12000
+
+Iter:
+       13000
+
+Iter:
+       14000
+
+Iter:
+       15000
+
+Iter:
+       16000
+
+Iter:
+       17000
+
+Iter:
+       18000
+
+Iter:
+       19000
+
+Iter:
+       20000
+
+Iter:
+       21000
+
+Iter:
+       22000
+
+Iter:
+       23000
+
+Iter:
+       24000
+
+Iter:
+       25000
+
+Iter:
+       26000
+
+Iter:
+       27000
+
+Iter:
+       28000
+
+Iter:
+       29000
+
+Iter:
+       30000
+
+Iter:
+       31000
+
+Iter:
+       32000
+
+Iter:
+       33000
+
+Iter:
+       34000
+
+Iter:
+       35000
+
+Iter:
+       36000
+
+Iter:
+       37000
+
+Iter:
+       38000
+
+Iter:
+       39000
+
+Iter:
+       40000
+
+Iter:
+       41000
+
+Iter:
+       42000
+
+Iter:
+       43000
+
+Iter:
+       44000
+
+Iter:
+       45000
+
+Iter:
+       46000
+
+Iter:
+       47000
+
+Iter:
+       48000
+
+Iter:
+       49000
+
+Iter:
+       50000
+
+Iter:
+       51000
+
+Iter:
+       52000
+
+Iter:
+       53000
+
+Iter:
+       54000
+
+Iter:
+       55000
+
+Iter:
+       56000
+
+Iter:
+       57000
+
+Iter:
+       58000
+
+Iter:
+       59000
+
+Iter:
+       60000
+
+Iter:
+       61000
+
+Iter:
+       62000
+
+Iter:
+       63000
+
+Iter:
+       64000
+
+Iter:
+       65000
+
+Iter:
+       66000
+
+Iter:
+       67000
+
+Iter:
+       68000
+
+Iter:
+       69000
+
+Iter:
+       70000
+
+Iter:
+       71000
+
+Iter:
+       72000
+
+Iter:
+       73000
+
+Iter:
+       74000
+
+Iter:
+       75000
+
+Iter:
+       76000
+
+Iter:
+       77000
+
+Iter:
+       78000
+
+Iter:
+       79000
+
+Iter:
+       80000
+
+Iter:
+       81000
+
+Iter:
+       82000
+
+Iter:
+       83000
+
+Iter:
+       84000
+
+Iter:
+       85000
+
+Iter:
+       86000
+
+Iter:
+       87000
+
+Iter:
+       88000
+
+Iter:
+       89000
+
+Iter:
+       90000
+
+Iter:
+       91000
+
+Iter:
+       92000
+
+Iter:
+       93000
+
+Iter:
+       94000
+
+Iter:
+       95000
+
+Iter:
+       96000
+
+Iter:
+       97000
+
+Iter:
+       98000
+
+Iter:
+       99000
+
+Iter:
+      100000
+
+Iter:
+      101000
+
+Iter:
+      102000
+
+Iter:
+      103000
+
+Iter:
+      104000
+
+Iter:
+      105000
+
+Iter:
+      106000
+
+Iter:
+      107000
+
+Iter:
+      108000
+
+Iter:
+      109000
+
+Iter:
+      110000
+
+Iter:
+      111000
+
+Iter:
+      112000
+
+Iter:
+      113000
+
+Iter:
+      114000
+
+Iter:
+      115000
+
+Iter:
+      116000
+
+Iter:
+      117000
+
+Iter:
+      118000
+
+Iter:
+      119000
+
+Iter:
+      120000
+
+Iter:
+      121000
+
+Iter:
+      122000
+
+Iter:
+      123000
+
+Iter:
+      124000
+
+Iter:
+      125000
+
+Iter:
+      126000
+
+Iter:
+      127000
+
+Iter:
+      128000
+
+Iter:
+      129000
+
+Iter:
+      130000
+
+Iter:
+      131000
+
+Iter:
+      132000
+
+Iter:
+      133000
+
+Iter:
+      134000
+
+Iter:
+      135000
+
+Iter:
+      136000
+
+Iter:
+      137000
+
+Iter:
+      138000
+
+Iter:
+      139000
+
+Iter:
+      140000
+
+Iter:
+      141000
+
+Iter:
+      142000
+
+Iter:
+      143000
+
+Iter:
+      144000
+
+Iter:
+      145000
+
+Iter:
+      146000
+
+Iter:
+      147000
+
+Iter:
+      148000
+
+Iter:
+      149000
+
+Iter:
+      150000
+
+Iter:
+      151000
+
+Iter:
+      152000
+
+Iter:
+      153000
+
+Iter:
+      154000
+
+Iter:
+      155000
+
+Iter:
+      156000
+
+Iter:
+      157000
+
+Iter:
+      158000
+
+Iter:
+      159000
+
+Iter:
+      160000
+
+Iter:
+      161000
+
+Iter:
+      162000
+
+Iter:
+      163000
+
+Iter:
+      164000
+
+Iter:
+      165000
+
+Iter:
+      166000
+
+Iter:
+      167000
+
+Iter:
+      168000
+
+Iter:
+      169000
+
+Iter:
+      170000
+
+Iter:
+      171000
+
+Iter:
+      172000
+
+Iter:
+      173000
+
+Iter:
+      174000
+
+Iter:
+      175000
+
+Iter:
+      176000
+
+Iter:
+      177000
+
+Iter:
+      178000
+
+Iter:
+      179000
+
+Iter:
+      180000
+
+Iter:
+      181000
+
+Iter:
+      182000
+
+Iter:
+      183000
+
+Iter:
+      184000
+
+Iter:
+      185000
+
+Iter:
+      186000
+
+Iter:
+      187000
+
+Iter:
+      188000
+
+Iter:
+      189000
+
+Iter:
+      190000
+
+Iter:
+      191000
+
+Iter:
+      192000
+
+Iter:
+      193000
+
+Iter:
+      194000
+
+Iter:
+      195000
+
+Iter:
+      196000
+
+Iter:
+      197000
+
+Iter:
+      198000
+
+Iter:
+      199000
+
+Iter:
+      200000
+
+Iter:
+      201000
+
+Iter:
+      202000
+
+Iter:
+      203000
+
+Iter:
+      204000
+
+Iter:
+      205000
+
+Iter:
+      206000
+
+Iter:
+      207000
+
+Iter:
+      208000
+
+Iter:
+      209000
+
+Iter:
+      210000
+
+Iter:
+      211000
+
+Iter:
+      212000
+
+Iter:
+      213000
+
+Iter:
+      214000
+
+Iter:
+      215000
+
+Iter:
+      216000
+
+Iter:
+      217000
+
+Iter:
+      218000
+
+Iter:
+      219000
+
+Iter:
+      220000
+
+Iter:
+      221000
+
+Iter:
+      222000
+
+Iter:
+      223000
+
+Iter:
+      224000
+
+Iter:
+      225000
+
+Iter:
+      226000
+
+Iter:
+      227000
+
+Iter:
+      228000
+
+Iter:
+      229000
+
+Iter:
+      230000
+
+Iter:
+      231000
+
+Iter:
+      232000
+
+Iter:
+      233000
+
+Iter:
+      234000
+
+Iter:
+      235000
+
+Iter:
+      236000
+
+Iter:
+      237000
+
+Iter:
+      238000
+
+Iter:
+      239000
+
+Iter:
+      240000
+
+Iter:
+      241000
+
+Iter:
+      242000
+
+Iter:
+      243000
+
+Iter:
+      244000
+
+Iter:
+      245000
+
+Iter:
+      246000
+
+Iter:
+      247000
+
+Iter:
+      248000
+
+Iter:
+      249000
+
+Iter:
+      250000
+
+Iter:
+      251000
+
+Iter:
+      252000
+
+Iter:
+      253000
+
+Iter:
+      254000
+
+Iter:
+      255000
+
+Iter:
+      256000
+
+Iter:
+      257000
+
+Iter:
+      258000
+
+Iter:
+      259000
+
+Iter:
+      260000
+
+Iter:
+      261000
+
+Iter:
+      262000
+
+COMPUTATIONAL TIME [h] 
+    0.2455
+
+ COMPUTATIONAL TIME [ms/cycle] 
+    3.3634
+
+   2.1973e-09
+
+   1.0488e-14
+
+done. figures: sbatch slurm/submit_figures.sh US-HBK <arm>
+
+result     : 241M /scratch/dd1136/T_and_C/model_run/US-HBK/historical/GFDL-ESM4/fixed_lma/RES_US_HBK.mat
+finished   : 2026-08-20T18:59:04Z
+exit status: 0

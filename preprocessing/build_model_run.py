@@ -706,7 +706,8 @@ def build_station(st, tmpl_txt, args, out_root):
         if ic_table is not None:
             # No fallback to the template pools. A station without a harvested
             # state is refused upstream, in main(), where it can be listed.
-            key = args.ic_key.format(station=sid, scenario="era5_land", gcm="")
+            key = args.ic_key.format(station=sid, scenario="era5_land",
+                                     gcm="", arm=arm)
             txt = apply_ic(txt, ic_table[(sid, key)], f"{sid}/{arm}")
         (d / f"MOD_PARAM_{mname}.m").write_text(txt, encoding="utf-8")
 
@@ -968,9 +969,11 @@ def main() -> int:
         # restarted one in every log and figure, while carrying the LAI ramp this
         # whole exercise exists to remove.
         if ic_table is not None:
-            key = a.ic_key.format(station=sid, scenario="era5_land", gcm="")
-            if (sid, key) not in ic_table:
-                miss.append(f"no harvested state '{key}' in {a.ic}")
+            want = [a.ic_key.format(station=sid, scenario="era5_land", gcm="",
+                                    arm=arm) for arm in (a.arms or ARMS)]
+            gone = [k for k in want if (sid, k) not in ic_table]
+            if gone:
+                miss.append(f"no harvested state {gone} in {a.ic}")
 
         if miss:
             blocked.append((sid, miss))

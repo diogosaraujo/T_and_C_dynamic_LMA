@@ -1,0 +1,15 @@
+# Amarel / run-side only: what the RUN and RESTART chain needs, nothing more.
+#
+#   harvest_state.py          numpy, h5py
+#   build_gcm_model_run.py    numpy, scipy   (write_lma_mat -> savemat)
+#   check_treatment_effect.py numpy, h5py
+#   analyze_lma_effect.py     numpy, h5py, scipy
+#
+# requirements.txt is the PREPROCESSING stack and is deliberately not used here:
+# it pulls rasterio (and therefore GDAL), cdsapi, xarray, netCDF4, openpyxl and
+# pyshp for download and gap-filling steps that stay on the SOE cluster. On
+# Amarel's Python 3.8.2 the GDAL build is the most likely thing to fail, and none
+# of it is needed to run T&C or to read a RES file.
+numpy>=1.24
+h5py>=3.8
+scipy>=1.10

@@ -14,13 +14,14 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck disable=SC1091
 source "$REPO_ROOT/slurm/config.sh"
 
-# LMOD is not initialised in non-interactive shells unless .bashrc ran, so do it here.
-if ! command -v module >/dev/null 2>&1; then
-    # shellcheck disable=SC1091
-    source /opt/apps/lmod/lmod/init/profile
-    export MODULEPATH_ROOT=/opt/apps/lmod/lmod/modulefiles
-    export MODULEPATH=$MODULEPATH_ROOT/Core
-    export LMOD_PACKAGE_PATH=/opt/apps/lmod/lmod/libexec
+# LMOD is not initialised in non-interactive shells unless .bashrc ran, so do it
+# here -- via config.sh's tc_init_lmod, which tries several init paths. Sourcing
+# /opt/apps/lmod/... directly is the SOE location and does not exist on Amarel,
+# so hardcoding it made this script SOE-only.
+if ! tc_init_lmod; then
+    echo "ERROR: could not initialise LMOD on $(hostname)" >&2
+    echo "       'module avail' by hand will show whether modules work at all." >&2
+    exit 1
 fi
 
 echo "==> loading $PYTHON_MODULE"
@@ -38,7 +39,18 @@ fi
 # shellcheck disable=SC1091
 source "$TC_VENV/bin/activate"
 python -m pip install --upgrade pip
-python -m pip install -r "$REPO_ROOT/preprocessing/requirements.txt"
+# Which dependency set. The full preprocessing stack is the default; the run
+# side (Amarel) needs only numpy/h5py/scipy and must not be made to build GDAL.
+#     sbatch slurm/submit_setup_env.sh --run
+REQ="$REPO_ROOT/preprocessing/requirements.txt"
+for arg in "$@"; do
+    case "$arg" in
+        --run)  REQ="$REPO_ROOT/preprocessing/requirements-run.txt" ;;
+        --requirements=*) REQ="${arg#--requirements=}" ;;
+    esac
+done
+echo "==> installing from $REQ"
+python -m pip install -r "$REQ"
 
 echo
 echo "==> installed:"

@@ -42,10 +42,23 @@ through Vegetation_Structural_Attributes, which MAIN_FRAME_SLA calls inside
 accumulated value needs reviewing THEN, deliberately -- not pre-emptily discarded
 now by a rule nobody will remember.
 
-NO FALLBACKS. A missing RES, a missing field, a NaN, an ambiguous array shape or a
-non-finite pool is an error that names the station and stops. A restart built from
-a state that was quietly patched is worse than no restart, because nothing
-downstream can tell the difference.
+NO FALLBACKS, BUT NO HALT ON THE FIRST PROBLEM EITHER. Nothing is ever
+substituted, defaulted or guessed: a station whose state cannot be read simply
+does not get a row. Every such station is named in one report at the end, split
+into the two cases that mean different things --
+
+    NO RESULTS      the run never finished. Expected for the on-hold stations
+                    (CLAUDE.md 9); US-DPP stalls, five more die in the snow
+                    surface-temperature solve.
+    UNUSABLE STATE  a RES exists but the state in it is wrong: a missing field, a
+                    NaN, a negative pool, an ambiguous array shape. This one is an
+                    anomaly and wants looking at.
+
+-- and the exit code is 1 whenever either list is non-empty, so a wrapper still
+gates on it. Halting on the first failure (job 37724, US-DPP) meant seven submit
+cycles to walk past seven known-incomplete stations and no table at the end of it.
+An omission that is reported by name is not a silent fallback; substituting a
+plausible state would have been.
 """
 from __future__ import annotations
 
@@ -61,10 +74,20 @@ POOLS = 8
 FIELDS = ["LAI_H", "PHE_S_H", "AgeL_H"]
 
 
+class NoResults(Exception):
+    """The run never produced output. Expected for the on-hold stations."""
+
+
+class UnusableState(Exception):
+    """A RES exists but the state in it cannot be trusted."""
+
+
 def res_file(d: Path) -> Path:
     hits = sorted(d.glob("RES_*.mat"))
-    if len(hits) != 1:
-        raise SystemExit(f"ERROR: {d} has {len(hits)} RES_*.mat, expected exactly 1")
+    if not hits:
+        raise NoResults("no RES_*.mat -- the run did not finish")
+    if len(hits) > 1:
+        raise UnusableState(f"{len(hits)} RES_*.mat, expected exactly 1")
     return hits[0]
 
 
@@ -77,27 +100,27 @@ def daily_series(f, key: str, station: str) -> np.ndarray:
     helper ravels anything with a size-1 axis and would flatten B_H's pools.
     """
     if key not in f:
-        raise SystemExit(f"ERROR: {station}: RES has no '{key}'")
+        raise UnusableState(f"RES has no '{key}'")
     a = np.squeeze(np.asarray(f[key][()], dtype=float))
     if a.ndim != 1:
-        raise SystemExit(f"ERROR: {station}: '{key}' is {a.shape} after squeeze, "
-                         f"expected one series (is cc > 1?)")
+        raise UnusableState(f"'{key}' is {a.shape} after squeeze, expected one "
+                            f"series (is cc > 1?)")
     return a
 
 
 def pools_series(f, station: str) -> np.ndarray:
     """B_H as (ndays, 8). Identifies the pool axis by length, never by position."""
     if "B_H" not in f:
-        raise SystemExit(f"ERROR: {station}: RES has no 'B_H'")
+        raise UnusableState("RES has no 'B_H'")
     a = np.squeeze(np.asarray(f["B_H"][()], dtype=float))
     if a.ndim != 2:
-        raise SystemExit(f"ERROR: {station}: B_H is {a.shape} after squeeze, "
-                         f"expected 2 axes (days x pools)")
+        raise UnusableState(f"B_H is {a.shape} after squeeze, expected 2 axes "
+                            f"(days x pools)")
     if a.shape[0] == POOLS and a.shape[1] != POOLS:
         a = a.T                                   # (8, ndays) -> (ndays, 8)
     elif a.shape[1] != POOLS:
-        raise SystemExit(f"ERROR: {station}: B_H is {a.shape}, neither axis is "
-                         f"{POOLS} pools -- cannot tell days from pools")
+        raise UnusableState(f"B_H is {a.shape}, neither axis is {POOLS} pools -- "
+                            f"cannot tell days from pools")
     return a
 
 
@@ -109,20 +132,20 @@ def harvest(d: Path, station: str, key: str, drift: bool) -> dict:
 
         last = B[-1, :]
         if not np.isfinite(last).all():
-            raise SystemExit(f"ERROR: {station}: final B_H has non-finite pools: {last}")
+            raise UnusableState(f"final B_H has non-finite pools: {last}")
         if (last < 0).any():
-            raise SystemExit(f"ERROR: {station}: final B_H has negative pools: {last}")
+            raise UnusableState(f"final B_H has negative pools: {last}")
         for i in range(POOLS):
             rec[f"B{i + 1}"] = float(last[i])
 
         for name in FIELDS:
             s = daily_series(f, name, station)
             if s.size != B.shape[0]:
-                raise SystemExit(f"ERROR: {station}: '{name}' has {s.size} days, "
-                                 f"B_H has {B.shape[0]}")
+                raise UnusableState(f"'{name}' has {s.size} days, B_H has "
+                                    f"{B.shape[0]}")
             v = float(s[-1])
             if not np.isfinite(v):
-                raise SystemExit(f"ERROR: {station}: final {name} is not finite")
+                raise UnusableState(f"final {name} is not finite")
             rec[name] = v
 
         if drift:
@@ -168,11 +191,32 @@ def main(argv=None) -> int:
         return 1
     print(f"model_run : {a.root}\npattern   : {a.pattern}\nmatched   : {len(dirs)}\n")
 
-    rows = []
+    rows, no_res, unusable = [], [], []
     for d in dirs:
         rel = d.relative_to(a.root)
         station, key = rel.parts[0], Path(*rel.parts[1:]).as_posix()
-        rows.append(harvest(d, station, key, a.drift))
+        try:
+            rows.append(harvest(d, station, key, a.drift))
+        except NoResults as e:
+            no_res.append((station, key, str(e)))
+        except UnusableState as e:
+            unusable.append((station, key, str(e)))
+
+    if no_res:
+        print(f"NO RESULTS -- {len(no_res)} run(s) never finished, so there is no "
+              f"state to take:")
+        for st, k, why in no_res:
+            print(f"  - {st:<10}{k:<30}{why}")
+        print()
+    if unusable:
+        print(f"UNUSABLE STATE -- {len(unusable)} run(s) produced output whose state "
+              f"cannot be trusted:")
+        for st, k, why in unusable:
+            print(f"  ! {st:<10}{k:<30}{why}")
+        print()
+    if not rows:
+        print("ERROR: nothing could be harvested.", file=sys.stderr)
+        return 1
 
     # Merge with whatever is already there, replacing by (station, key) so a later
     # round does not lose an earlier one.
@@ -212,8 +256,10 @@ def main(argv=None) -> int:
         print("  A few percent means equilibrated. Tens of percent means the wood\n"
               "  pools are still moving and one more spin-up cycle is warranted.")
 
-    print(f"\n{len(rows)} state(s) harvested, {len(merged)} row(s) in {out}")
-    return 0
+    print(f"\n{len(rows)}/{len(dirs)} state(s) harvested, {len(merged)} row(s) in {out}")
+    # Non-zero whenever anything was left out, so a dependent job stops and the
+    # omission gets read rather than inherited.
+    return 1 if (no_res or unusable) else 0
 
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
 #!/bin/bash
 ## Build the Python environment on a compute node.
 ##
-##     sbatch slurm/submit_setup_env.sh
+##     sbatch slurm/submit_setup_env.sh              # full preprocessing stack
+##     sbatch -p main slurm/submit_setup_env.sh --run  # Amarel: numpy/h5py/scipy only
 ##     tail -f slurm/logs/setup_env_<jobid>.out
 ##
 ## Wraps setup_env.sh so no pip work happens in the login shell. Needs outbound HTTPS to
@@ -28,7 +29,7 @@ echo "node    : $(hostname)"
 echo "started : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo
 
-bash "$REPO_ROOT/slurm/setup_env.sh"
+bash "$REPO_ROOT/slurm/setup_env.sh" "$@"
 status=$?
 
 echo

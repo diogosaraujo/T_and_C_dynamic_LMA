@@ -360,7 +360,8 @@ def build_one(st, gcm, scenario, series_fixed_mean, series, meteo_src, out_root,
         if ic_table is not None:
             # No fallback to the template pools: a combination with no harvested
             # state is refused in main(), where it can be named.
-            key = ic_key.format(station=sid, scenario=scenario, gcm=gcm)
+            key = ic_key.format(station=sid, scenario=scenario, gcm=gcm,
+                                arm=arm)
             txt = apply_ic(txt, ic_table[(sid, key)], f"{sid}/{scenario}/{gcm}/{arm}")
         (d / f"MOD_PARAM_{mname}.m").write_text(txt, encoding="utf-8")
         (d / f"GO_{mname}.m").write_text(GO_TEMPLATE.format(
@@ -454,8 +455,10 @@ def main(argv=None) -> int:
                          "harvested state and combinations without one are REFUSED.")
     ap.add_argument("--ic-key", default="era5_land/fixed_lma",
                     help="which harvested state to use, as it appears in the 'key' "
-                         "column. {station}/{scenario}/{gcm} are substituted, so "
-                         "'historical/{gcm}/spinup' picks each GCM's own spin-up.")
+                         "column. {station}/{scenario}/{gcm}/{arm} are substituted. "
+                         "'historical/{gcm}/spinup' gives both historical arms one "
+                         "baseline; 'historical/{gcm}/{arm}' continues each SSP arm "
+                         "from its OWN historical counterpart.")
     ap.add_argument("--require-era5-state", action="store_true",
                     help="drop any station with no 'era5_land/fixed_lma' row in "
                          "--ic, so the GCM fleet covers exactly the stations the "
@@ -564,10 +567,12 @@ def main(argv=None) -> int:
                                     else f"no forcing {fname}"))
                     continue
                 if ic_table is not None:
-                    key = a.ic_key.format(station=sid, scenario=scen, gcm=gcm)
-                    if (sid, key) not in ic_table:
+                    want = [a.ic_key.format(station=sid, scenario=scen, gcm=gcm,
+                                            arm=arm) for arm in arms]
+                    gone = [k for k in want if (sid, k) not in ic_table]
+                    if gone:
                         blocked.append((sid, gcm, scen,
-                                        f"no harvested state '{key}' in {a.ic}"))
+                                        f"no harvested state {gone} in {a.ic}"))
                         continue
                 n, err = build_one(st, gcm, scen, fixed_mean, series, mfile,
                                    a.root, era5_mp, a.dry_run,
@@ -651,8 +656,15 @@ def main(argv=None) -> int:
         for sid, gcm, scen, why in sorted(blocked):
             print(f"  ! {sid:<9} {gcm:<14} {scen:<11} {why}")
     if runs and not a.dry_run:
-        name = ("run_list_gcm.txt" if arms == ARMS
-                else f"run_list_gcm_{'_'.join(arms)}.txt")
+        # The list is named after whatever SUBSET was built. A --scenario
+        # historical build must not overwrite the list a full build wrote, or
+        # the next array silently runs the wrong 923 of 2770 arms.
+        parts = []
+        if set(scens) != set(SCENARIOS):
+            parts += list(scens)
+        if arms != ARMS:
+            parts += arms
+        name = "run_list_gcm.txt" if not parts else f"run_list_gcm_{'_'.join(parts)}.txt"
         lst = a.root / name
         lst.write_text("".join(r + "\n" for r in runs), encoding="utf-8")
         print(f"\nrun list : {lst}  ({len(runs)} arms)")

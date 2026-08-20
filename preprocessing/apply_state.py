@@ -128,7 +128,9 @@ def main(argv=None) -> int:
           f"initial state: {ic_path}  ({len(table)} row(s))\n"
           f"key          : {a.ic_key}\nmatched      : {len(dirs)}\n")
 
-    done, runs, bad = 0, [], []
+    # PASS 1 -- decide, write nothing. The pair rule below needs to know every
+    # refusal before any file is touched.
+    ok, bad = [], []
     for d in dirs:
         rel = d.relative_to(a.root)
         parts = parse_arm(rel)
@@ -149,6 +151,28 @@ def main(argv=None) -> int:
         if rec is None:
             bad.append((rel, f"no harvested state '{key}' in {ic_path.name}"))
             continue
+        ok.append((d, rel, parts, mp, rec))
+
+    # THE PAIR RULE. The experiment measures dyn MINUS fixed, so a fixed arm
+    # whose dynamic twin was refused measures nothing -- it would run, cost an
+    # hour, and produce a result with no counterpart. US-MtB and US-SHC lost
+    # their dynamic arms to short LMA series in jobs 60693242/60700026; without
+    # this, their fixed arms would still have been built and launched.
+    refused_dyn = {(rel.parent, rel.name[len("dyn_lma"):])
+                   for rel, _ in bad if rel.name.startswith("dyn_lma")}
+    keep = []
+    for d, rel, parts, mp, rec in ok:
+        if rel.name.startswith("fixed_lma"):
+            twin = (rel.parent, rel.name[len("fixed_lma"):])
+            if twin in refused_dyn:
+                bad.append((rel, f"dynamic twin dyn_lma{twin[1]} was refused -- an "
+                                 f"unpaired fixed arm measures nothing"))
+                continue
+        keep.append((d, rel, parts, mp, rec))
+
+    # PASS 2 -- write.
+    done, runs = 0, []
+    for d, rel, parts, mp, rec in keep:
         try:
             txt = apply_ic(mp.read_text(encoding="utf-8"), rec, str(rel))
         except SystemExit as e:

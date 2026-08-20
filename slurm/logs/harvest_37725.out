@@ -1,0 +1,46 @@
+job        : 37725
+node       : soeepyc06
+cluster    : soe   partition: SOE_main
+started    : 2026-08-20T04:31:28Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+pattern   : */era5_land/fixed_lma
+matched   : 98
+
+NO RESULTS -- 6 run(s) never finished, so there is no state to take:
+  - US-DPP    era5_land/fixed_lma           no RES_*.mat -- the run did not finish
+  - US-NMj    era5_land/fixed_lma           no RES_*.mat -- the run did not finish
+  - US-Wi1    era5_land/fixed_lma           no RES_*.mat -- the run did not finish
+  - US-Wi2    era5_land/fixed_lma           no RES_*.mat -- the run did not finish
+  - US-Wi4    era5_land/fixed_lma           no RES_*.mat -- the run did not finish
+  - US-xSB    era5_land/fixed_lma           no RES_*.mat -- the run did not finish
+
+station      B1 leaf    B2 sap    B4 res   LAI_H  PHE  drift10y
+US-Bar           0.0     218.1     169.2    0.00    1      7.9%
+US-Blk         301.7     637.5     457.2    5.15    1      9.3%
+US-CPF         231.4     219.8     165.4    3.65    1     11.1%
+US-CPk         123.9     152.0     118.2    1.68    1     23.6%
+US-CRK         378.4     856.3     586.7    5.26    1     32.0%
+US-CS2         301.6     638.6     461.1    5.10    1      2.4%
+US-CZ2         156.6     283.2     194.8    2.35    1     17.3%
+US-CZ3         165.3     273.5     200.3    2.25    1     30.6%
+US-CZ4         246.9     391.5     305.9    3.04    1      9.7%
+US-ChR           0.8     291.1     215.8    0.02    4      8.1%
+US-Cst         361.6     802.1     546.2    5.75    1     18.7%
+US-Cwt           0.4     375.2     279.1    0.01    4      7.7%
+  ... and 80 more
+
+largest 10-year drift in the live pools (B1-B4):
+  US-Fmf    era5_land/fixed_lma            70.6%
+  US-Fuf    era5_land/fixed_lma            53.1%
+  US-xSC    era5_land/fixed_lma            32.6%
+  US-CRK    era5_land/fixed_lma            32.0%
+  US-CZ3    era5_land/fixed_lma            30.6%
+  A few percent means equilibrated. Tens of percent means the wood
+  pools are still moving and one more spin-up cycle is warranted.
+
+92/98 state(s) harvested, 92 row(s) in /vol_efthymios/NFS07/dd1136/T_and_C/model_run/initial_state.csv
+
+finished   : 2026-08-20T04:31:43Z
+exit status: 1  (1 = nothing harvested, or a state was unusable)

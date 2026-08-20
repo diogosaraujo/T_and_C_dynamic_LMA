@@ -68,11 +68,17 @@ def find_pairs(root: Path, station: str, pattern: str | None = None):
     if not sd.is_dir():
         return []
     out = []
-    for fdir in sorted(sd.glob("**/fixed_lma")):
-        label = fdir.parent.relative_to(sd).as_posix()
+    # Every fixed_lma* arm and its dyn_lma* twin. The suffix matters: the restart
+    # runs live alongside the originals as fixed_lma_ic/dyn_lma_ic, and a glob of
+    # bare 'fixed_lma' would check the pre-spin-up pair and report on the wrong
+    # experiment. 'spinup' has no twin and is disposable, so it is not a pair.
+    for fdir in sorted(sd.glob("**/fixed_lma*")):
+        suffix = fdir.name[len("fixed_lma"):]
+        twin = fdir.parent / f"dyn_lma{suffix}"
+        label = f"{fdir.parent.relative_to(sd).as_posix()}:{fdir.name}"
         if pattern and not fnmatch.fnmatch(label, pattern):
             continue
-        out.append((label, one_res(fdir), one_res(fdir.parent / "dyn_lma")))
+        out.append((label, one_res(fdir), one_res(twin)))
     return out
 
 

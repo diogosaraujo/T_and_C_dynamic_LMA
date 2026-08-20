@@ -97,7 +97,8 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_model_run import GO_TEMPLATE, write_lma_mat, mat_name, F_C  # noqa: E402
+from build_model_run import (GO_TEMPLATE, write_lma_mat, mat_name, F_C,  # noqa: E402
+                             is_dynamic, read_ic_table, apply_ic)
 from gcm_variables import GCMS, SCENARIOS                              # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -325,8 +326,9 @@ def clip(series, lo, hi):
 
 # ------------------------------------------------------------------------- build
 def build_one(st, gcm, scenario, series_fixed_mean, series, meteo_src, out_root,
-              era5_mod_param, dry):
+              era5_mod_param, dry, arms=None, ic_table=None, ic_key=""):
     sid, mname = st["station_id"], mat_name(st["station_id"])
+    arms = arms or ARMS
     sl_fixed = 1.0 / (series_fixed_mean * F_C)
     tmpl = era5_mod_param.read_text(encoding="utf-8")
     patched, n = SL_LINE.subn(
@@ -351,15 +353,21 @@ def build_one(st, gcm, scenario, series_fixed_mean, series, meteo_src, out_root,
     if dry:
         return 0, None
 
-    for arm in ARMS:
+    for arm in arms:
         d = out_root / sid / scenario / gcm / arm
         d.mkdir(parents=True, exist_ok=True)
-        (d / f"MOD_PARAM_{mname}.m").write_text(patched, encoding="utf-8")
+        txt = patched
+        if ic_table is not None:
+            # No fallback to the template pools: a combination with no harvested
+            # state is refused in main(), where it can be named.
+            key = ic_key.format(station=sid, scenario=scenario, gcm=gcm)
+            txt = apply_ic(txt, ic_table[(sid, key)], f"{sid}/{scenario}/{gcm}/{arm}")
+        (d / f"MOD_PARAM_{mname}.m").write_text(txt, encoding="utf-8")
         (d / f"GO_{mname}.m").write_text(GO_TEMPLATE.format(
             station=sid, forest_type=st["forest_type"], arm=f"{gcm} {scenario} {arm}",
             code_rel="../../../../Code", root_rel="../../../..",
             ms=ms, mname=mname, meteo_path=f"../{meteo_src.name}",
-            main_frame="MAIN_FRAME_SLA" if arm == "dyn_lma" else "MAIN_FRAME",
+            main_frame="MAIN_FRAME_SLA" if is_dynamic(arm) else "MAIN_FRAME",
         ), encoding="utf-8")
         # No symlink and no copy. meteo_src already IS d.parent/<name> -- the
         # forcing sits at <ST>/<scenario>/<GCM>/, one level above both arms, put
@@ -367,7 +375,7 @@ def build_one(st, gcm, scenario, series_fixed_mean, series, meteo_src, out_root,
         # tree depend on absolute paths into input_data and stopped it moving
         # between clusters; it also duplicated a 40-115 MB file per arm.
         write_lma_mat(d / f"LMA_{mname}.mat", series, sl_fixed, arm)
-    return len(ARMS), None
+    return len(arms), None
 
 
 def inspect(plsr_root, stations, gcm, scenario):
@@ -435,6 +443,23 @@ def main(argv=None) -> int:
     ap.add_argument("--inspect", action="store_true",
                     help="report what each ecoregion's projection file contains "
                          "(forest types, LU classes, pixel counts) and stop")
+    ap.add_argument("--arms", type=lambda x: [y for y in x.split(",") if y],
+                    default=None,
+                    help="arm directory names (default fixed_lma,dyn_lma). Use "
+                         "--arms spinup for the disposable spin-up pass. An arm "
+                         "named dyn_lma* gets the yearly SLA series.")
+    ap.add_argument("--ic", type=Path, default=None,
+                    help="initial_state.csv from harvest_state.py. With this, "
+                         "MOD_PARAM's LAI_H/B_H/PHE_S_H/AgeL_H come from the "
+                         "harvested state and combinations without one are REFUSED.")
+    ap.add_argument("--ic-key", default="era5_land/fixed_lma",
+                    help="which harvested state to use, as it appears in the 'key' "
+                         "column. {station}/{scenario}/{gcm} are substituted, so "
+                         "'historical/{gcm}/spinup' picks each GCM's own spin-up.")
+    ap.add_argument("--require-era5-state", action="store_true",
+                    help="drop any station with no 'era5_land/fixed_lma' row in "
+                         "--ic, so the GCM fleet covers exactly the stations the "
+                         "ERA5 stage completed")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args(argv)
 
@@ -450,12 +475,32 @@ def main(argv=None) -> int:
           f"{'' if a.plsr_root.is_dir() else '   <-- NOT FOUND'}")
     print(f"gcm meteo : {a.meteo}{'' if a.meteo.is_dir() else '   <-- NOT FOUND'}")
     print(f"stations  : {len(stations)}   gcms {len(gcms)}   scenarios {len(scens)}")
-    print(f"target    : {len(stations)*len(gcms)*len(scens)*len(ARMS)} run directories\n")
+    arms = a.arms or ARMS
+    print(f"arms      : {', '.join(arms)}")
+    print(f"target    : {len(stations)*len(gcms)*len(scens)*len(arms)} run directories\n")
 
     import collections
     how = collections.Counter()
     lu_mismatch = []
     written, ok_arms, blocked, runs = 0, 0, [], []
+    ic_table = read_ic_table(a.ic) if a.ic else None
+    if ic_table is not None:
+        print(f"initial state: {a.ic}  ({len(ic_table)} row(s)), key '{a.ic_key}'")
+    # Consistency over coverage: a GCM station with no completed ERA5 run has no
+    # state to seed the spin-up from, so it would silently be the only station in
+    # the fleet whose pools were never equilibrated. Drop it, by name.
+    if a.require_era5_state:
+        if ic_table is None:
+            print("ERROR: --require-era5-state needs --ic", file=sys.stderr)
+            return 1
+        have = {st for (st, k) in ic_table if k == "era5_land/fixed_lma"}
+        dropped = [s["station_id"] for s in stations if s["station_id"] not in have]
+        stations = [s for s in stations if s["station_id"] in have]
+        print(f"era5 states  : {len(have)}   dropped {len(dropped)} station(s) "
+              f"with no completed ERA5 run")
+        for d in dropped:
+            print(f"  - {d}")
+        print()
     offsets = []          # (station, km) so far matches can be named, not just counted
     for st in stations:
         sid, mname = st["station_id"], mat_name(st["station_id"])
@@ -518,14 +563,21 @@ def main(argv=None) -> int:
                                     f"migrate_forcing.py" if legacy.is_file()
                                     else f"no forcing {fname}"))
                     continue
+                if ic_table is not None:
+                    key = a.ic_key.format(station=sid, scenario=scen, gcm=gcm)
+                    if (sid, key) not in ic_table:
+                        blocked.append((sid, gcm, scen,
+                                        f"no harvested state '{key}' in {a.ic}"))
+                        continue
                 n, err = build_one(st, gcm, scen, fixed_mean, series, mfile,
-                                   a.root, era5_mp, a.dry_run)
+                                   a.root, era5_mp, a.dry_run,
+                                   a.arms, ic_table, a.ic_key)
                 if err:
                     blocked.append((sid, gcm, scen, err))
                     continue
                 written += n
-                ok_arms += len(ARMS)
-                for arm in ARMS:
+                ok_arms += len(arms)
+                for arm in arms:
                     runs.append(f"{sid} {scen} {gcm} {arm}")
 
     print(f"{'=' * 72}")
@@ -599,11 +651,13 @@ def main(argv=None) -> int:
         for sid, gcm, scen, why in sorted(blocked):
             print(f"  ! {sid:<9} {gcm:<14} {scen:<11} {why}")
     if runs and not a.dry_run:
-        lst = a.root / "run_list_gcm.txt"
+        name = ("run_list_gcm.txt" if arms == ARMS
+                else f"run_list_gcm_{'_'.join(arms)}.txt")
+        lst = a.root / name
         lst.write_text("".join(r + "\n" for r in runs), encoding="utf-8")
         print(f"\nrun list : {lst}  ({len(runs)} arms)")
         print(f"           sbatch --array=1-{len(runs)}%NN slurm/submit_tc_run.sh "
-              f"(with RUN_LIST=run_list_gcm.txt)")
+              f"(with RUN_LIST={name})")
     return 0 if ok_arms else 1
 
 

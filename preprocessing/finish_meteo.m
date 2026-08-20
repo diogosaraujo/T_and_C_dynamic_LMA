@@ -203,16 +203,21 @@ for k = 1:numel(files)
     % underscores that belong to the station, the GCM and the scenario alike, and
     % no rule separates them. The builder already knows all three.
     %
-    % Falls back to out_dir when the field is absent, so raw files written before
-    % this change still partition where they always did.
-    if isfield(S, 'dest_dir') && ~isempty(S.dest_dir)
-        dest = S.dest_dir;
-        if ~ischar(dest), dest = char(dest); end
-        dest = strtrim(reshape(dest, 1, []));
-        S = rmfield(S, 'dest_dir');     % routing metadata, not forcing
-    else
-        dest = out_dir;
+    % A raw file with no dest_dir is an ERROR, not a reason to fall back to
+    % out_dir. Silently writing the forcing somewhere other than the run tree
+    % produces a file nothing reads, while the log says the station succeeded.
+    % Every builder stamps this field; a file without one predates the move and
+    % must be rebuilt, not guessed at.
+    if ~isfield(S, 'dest_dir') || isempty(S.dest_dir)
+        error('finish_meteo:noDestination', ...
+              ['%s has no dest_dir. It was written before the forcing moved ' ...
+               'into model_run; re-run stage 1 rather than partitioning it ' ...
+               'into %s, where nothing will read it.'], f, out_dir);
     end
+    dest = S.dest_dir;
+    if ~ischar(dest), dest = char(dest); end
+    dest = strtrim(reshape(dest, 1, []));
+    S = rmfield(S, 'dest_dir');         % routing metadata, not forcing
     if ~exist(dest, 'dir'), mkdir(dest); end
 
     outfile = fullfile(dest, sprintf('Meteo_%s_%s.mat', site, year_tag));

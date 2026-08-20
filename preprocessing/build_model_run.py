@@ -76,6 +76,63 @@ KBOT_BEDROCK = 0.01          # [mm/h] near-impermeable, after Fatichi et al. at 
 ZATM_FALLBACK_OFFSET = 12.0  # [m] above canopy where no EC height is reported
 SCENARIOS = ["hist_gcm", "ssp126", "ssp245", "ssp370", "ssp585"]
 ARMS = ["fixed_lma", "dyn_lma"]
+
+
+def is_dynamic(arm: str) -> bool:
+    """Does this arm get the yearly SLA series, or the fixed mean?
+
+    Decided by the arm NAME, explicitly, because the arm set is no longer just
+    two: the spin-up pass runs a single 'spinup' arm, and the restart runs are
+    'fixed_lma_ic'/'dyn_lma_ic'. Anything not named dyn_lma* is fixed, so a new
+    arm name cannot silently acquire the dynamic treatment by accident.
+    """
+    return arm.startswith("dyn_lma")
+
+
+# The four initial-condition lines MOD_PARAM can set. MAIN_FRAME's run(PARAM_IC)
+# (line 222) executes after the arrays are preallocated (lines 112-113), so these
+# assignments survive; anything VEGGIE_UNIT carries that MOD_PARAM does not name
+# starts at its default. See harvest_state.py for what that leaves out.
+IC_LINES = [
+    ("LAI_H",   r"^\s*LAI_H\(1,:\)\s*=[^;]*;.*$",   "LAI_H(1,:)=[{LAI_H:.6g}];"),
+    ("B_H",     r"^\s*B_H\(1,:,:\)\s*=[^;]*;.*$",   "B_H(1,:,:)= [{B}];"),
+    ("PHE_S_H", r"^\s*PHE_S_H\(1,:\)\s*=[^;]*;.*$", "PHE_S_H(1,:)=[{PHE_S_H:.6g}];"),
+    ("AgeL_H",  r"^\s*AgeL_H\(1,:\)\s*=[^;]*;.*$",  "AgeL_H(1,:)=[{AgeL_H:.6g}];"),
+]
+
+
+def read_ic_table(path: Path) -> dict:
+    """{(station, key): row} from harvest_state.py's CSV. Raises if unreadable."""
+    if not path.is_file():
+        raise SystemExit(f"ERROR: no initial-state table at {path} -- run "
+                         f"harvest_state.py first")
+    out = {}
+    with open(path, newline="", encoding="utf-8-sig") as fh:
+        for r in csv.DictReader(fh):
+            out[(r["station"], r["key"])] = r
+    if not out:
+        raise SystemExit(f"ERROR: {path} has no rows")
+    return out
+
+
+def apply_ic(text: str, rec: dict, where: str) -> str:
+    """Write a harvested state into MOD_PARAM's four IC lines.
+
+    Every pattern must match exactly once. A silently unsubstituted IC would
+    leave the station running the template's default pools while every log said
+    it had been restarted, which is precisely the failure this is meant to end.
+    """
+    vals = {k: float(rec[k]) for k in ("LAI_H", "PHE_S_H", "AgeL_H")}
+    vals["B"] = " ".join(f"{float(rec[f'B{i}']):.6g}" for i in range(1, 9))
+    for name, pat, repl in IC_LINES:
+        line = repl.format(**vals) + (f"  %% spun-up IC from {rec['key']}")
+        text, n = re.subn(pat, line, text, flags=re.M)
+        if n != 1:
+            raise SystemExit(f"ERROR: {where}: IC line {name} matched {n} times in "
+                             f"MOD_PARAM, expected exactly 1")
+    return text
+
+
 MISSING = {"", "NA", "N/A", "NaN", "nan", "-9999", None}
 
 
@@ -636,7 +693,9 @@ def build_station(st, tmpl_txt, args, out_root):
     """Write both arms for one station. Returns (n_written, problems)."""
     sid, mname = st["station_id"], mat_name(st["station_id"])
     probs = []
-    for arm in ARMS:
+    arms = getattr(args, "arms", None) or ARMS
+    ic_table = getattr(args, "_ic_table", None)
+    for arm in arms:
         d = out_root / sid / "era5_land" / arm
         d.mkdir(parents=True, exist_ok=True)
         # Depth from the arm directory to the shared Code/ at the tree root.
@@ -644,6 +703,11 @@ def build_station(st, tmpl_txt, args, out_root):
 
         txt, p = render_mod_param(tmpl_txt, st)
         probs += [f"{arm}: {x}" for x in p]
+        if ic_table is not None:
+            # No fallback to the template pools. A station without a harvested
+            # state is refused upstream, in main(), where it can be listed.
+            key = args.ic_key.format(station=sid, scenario="era5_land", gcm="")
+            txt = apply_ic(txt, ic_table[(sid, key)], f"{sid}/{arm}")
         (d / f"MOD_PARAM_{mname}.m").write_text(txt, encoding="utf-8")
 
         (d / f"GO_{mname}.m").write_text(GO_TEMPLATE.format(
@@ -651,7 +715,7 @@ def build_station(st, tmpl_txt, args, out_root):
             root_rel="../../..",
             ms=st["_soil_block"][0], mname=mname,
             meteo_path=f"../{st['meteo_name']}",
-            main_frame="MAIN_FRAME_SLA" if arm == "dyn_lma" else "MAIN_FRAME",
+            main_frame="MAIN_FRAME_SLA" if is_dynamic(arm) else "MAIN_FRAME",
         ), encoding="utf-8")
 
         # No symlink and no copy. The forcing lives one level up at
@@ -717,7 +781,7 @@ def write_lma_mat(path: Path, series, sl_fixed, arm):
         return
     years = np.array([y for y, _ in series], dtype=np.uint16)
     lma = np.array([v for _, v in series], dtype=float)
-    sla = 1.0 / (lma * F_C) if arm == "dyn_lma" else np.full(lma.size, sl_fixed)
+    sla = 1.0 / (lma * F_C) if is_dynamic(arm) else np.full(lma.size, sl_fixed)
     savemat(path, {"years": years, "LMA": lma,
                    "SLA_H": sla.reshape(-1, 1),
                    "SLA_L": np.zeros((lma.size, 1))})
@@ -750,6 +814,18 @@ def main() -> int:
                    default=INPUT_ROOT / "root_depth" / "root_depth_schenk_jackson.csv")
     p.add_argument("--heights", type=Path, default=DEFAULT_HEIGHTS)
     p.add_argument("--meteo-years", default="1985_2020")
+    p.add_argument("--arms", type=lambda s: [x for x in s.split(",") if x],
+                   default=None,
+                   help="arm directory names (default fixed_lma,dyn_lma). An arm "
+                        "named dyn_lma* gets the yearly SLA series; every other "
+                        "name gets the fixed mean.")
+    p.add_argument("--ic", type=Path, default=None,
+                   help="initial_state.csv from harvest_state.py. With this, "
+                        "MOD_PARAM's LAI_H/B_H/PHE_S_H/AgeL_H are replaced by the "
+                        "harvested state and stations without one are REFUSED.")
+    p.add_argument("--ic-key", default="era5_land/fixed_lma",
+                   help="which harvested state to use, as it appears in the 'key' "
+                        "column; {station} is substituted")
     p.add_argument("--dry-run", action="store_true")
     a = p.parse_args()
 
@@ -802,7 +878,11 @@ def main() -> int:
 
     ready, blocked, all_probs = [], [], {}
     clamped_stations = []
-    unmigrated = []          # forcing found, but still in the staging dir
+    ic_table = read_ic_table(a.ic) if a.ic else None
+    if ic_table is not None:
+        print(f"initial state: {a.ic}  ({len(ic_table)} row(s)), "
+              f"key '{a.ic_key}'")
+    a._ic_table = ic_table
     for st in stations:
         sid = st["station_id"]
         miss = []
@@ -864,21 +944,15 @@ def main() -> int:
             st["zr95_src"] = "Schenk & Jackson D95"
 
         st["meteo_name"] = f"Meteo_{mat_name(sid)}_{a.meteo_years}.mat"
-        # The forcing belongs at <ST>/era5_land/ in the run tree; finish_meteo.m
-        # writes it there. --meteo is only the legacy staging location, still
-        # accepted so a tree built before the move is not reported as broken.
+        # The forcing must be at <ST>/era5_land/ in the run tree, where GO loads
+        # it from. The staging directory is checked ONLY so the error can say
+        # which of the two problems it is -- never to run from.
         in_tree = a.root / sid / "era5_land" / st["meteo_name"]
-        cand = a.meteo / st["meteo_name"]
-        st["meteo_src"] = (in_tree if in_tree.is_file()
-                           else cand if cand.is_file() else None)
+        st["meteo_src"] = in_tree if in_tree.is_file() else None
         if st["meteo_src"] is None:
-            miss.append("meteo .mat")           # nowhere at all: a real blocker
-        elif not in_tree.is_file():
-            # Present, just not moved yet. Not a blocker: everything else about
-            # the station is buildable, and migrate_forcing.py is the one-line
-            # fix. Blocking here would refuse the whole fleet over a file that
-            # exists, which is a worse failure than a warning.
-            unmigrated.append(sid)
+            staged = a.meteo / st["meteo_name"]
+            miss.append(f"meteo .mat is in {a.meteo}, not {in_tree.parent} -- run "
+                        f"migrate_forcing.py" if staged.is_file() else "meteo .mat")
 
         if layers:
             # Record which stations the silt clamp touched, so a rebuild says out
@@ -889,18 +963,21 @@ def main() -> int:
             if len(CLAMPED) > before:
                 clamped_stations.append((sid, len(CLAMPED) - before))
 
+        # A restart build refuses any station with no harvested state. Falling
+        # back to the template pools would produce a run indistinguishable from a
+        # restarted one in every log and figure, while carrying the LAI ramp this
+        # whole exercise exists to remove.
+        if ic_table is not None:
+            key = a.ic_key.format(station=sid, scenario="era5_land", gcm="")
+            if (sid, key) not in ic_table:
+                miss.append(f"no harvested state '{key}' in {a.ic}")
+
         if miss:
             blocked.append((sid, miss))
             continue
         ready.append(st)
 
     print(f"{'=' * 66}\nREADY: {len(ready)}/{len(stations)} stations have every input\n{'=' * 66}")
-    if unmigrated:
-        print(f"\n  ! {len(unmigrated)} station(s) still have their forcing in {a.meteo}")
-        print(f"    rather than in <ST>/era5_land/ where GO now loads it from:")
-        print(f"    {', '.join(unmigrated[:8])}{' ...' if len(unmigrated) > 8 else ''}")
-        print("    Run preprocessing/migrate_forcing.py, or these runs will stop at")
-        print("    the forcing check in submit_tc_run.sh.")
     for sid, miss in blocked:
         print(f"  ! {sid:<8} missing: {', '.join(miss)}")
     if blocked:
@@ -982,12 +1059,17 @@ def main() -> int:
     }, indent=2), encoding="utf-8")
     # The job array reads this: one "<station> <arm>" per line, in the order
     # submit_tc_run.sh indexes with SLURM_ARRAY_TASK_ID.
-    (a.root / "run_list.txt").write_text(
-        "".join(f"{s['station_id']} {arm}\n" for s in ready for arm in ARMS),
+    # A restart build writes its own list, so launching the _ic arms cannot
+    # accidentally relaunch (or overwrite the list of) the originals.
+    arms = a.arms or ARMS
+    list_name = "run_list.txt" if arms == ARMS else f"run_list_{'_'.join(arms)}.txt"
+    (a.root / list_name).write_text(
+        "".join(f"{s['station_id']} {arm}\n" for s in ready for arm in arms),
         encoding="utf-8")
     print(f"\nmanifest : {a.root / 'build_manifest.json'}")
-    print(f"run list : {a.root / 'run_list.txt'}  ->  "
-          f"sbatch --array=1-{len(ready) * len(ARMS)} slurm/submit_tc_run.sh")
+    print(f"run list : {a.root / list_name}  ->  "
+          f"RUN_LIST={list_name} sbatch --array=1-{len(ready) * len(arms)} "
+          f"slurm/submit_tc_run.sh")
     # Exit code, in dependency-chain terms: did this produce something a run can
     # trust? A station blocked for a missing input is the NORMAL outcome across a
     # whole network -- 3 of 101 in job 35712, two with no ERA5 and one with no

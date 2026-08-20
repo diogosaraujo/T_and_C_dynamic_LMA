@@ -1,0 +1,20 @@
+node    : hal0321.amarel.rutgers.edu
+started : 2026-08-20T05:33:54Z
+
+==> no python module configured; using /usr/bin/python3
+Python 3.9.21
+==> reusing existing venv at /home/dd1136/envs/tc-preproc
+Requirement already satisfied: pip in /cache/home/dd1136/envs/tc-preproc/lib/python3.9/site-packages (26.0.1)
+==> installing from /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt
+Requirement already satisfied: numpy>=1.24 in /cache/home/dd1136/envs/tc-preproc/lib/python3.9/site-packages (from -r /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt (line 13)) (2.0.2)
+Requirement already satisfied: h5py>=3.8 in /cache/home/dd1136/envs/tc-preproc/lib/python3.9/site-packages (from -r /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt (line 14)) (3.14.0)
+Requirement already satisfied: scipy>=1.10 in /cache/home/dd1136/envs/tc-preproc/lib/python3.9/site-packages (from -r /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt (line 15)) (1.13.1)
+
+==> installed:
+    numpy 2.0.2   scipy 1.13.1   h5py 3.14.0
+
+Setup complete -- run-side environment. No cdsapi and no CDS
+credentials are needed here.
+
+finished   : 2026-08-20T05:33:56Z
+exit status: 0

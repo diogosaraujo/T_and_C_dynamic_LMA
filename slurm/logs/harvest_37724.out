@@ -1,0 +1,13 @@
+job        : 37724
+node       : soeepyc06
+cluster    : soe   partition: SOE_main
+started    : 2026-08-20T03:46:47Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+pattern   : */era5_land/fixed_lma
+matched   : 98
+
+
+finished   : 2026-08-20T03:46:54Z
+exit status: 1  (1 = nothing harvested, or a state was unusable)

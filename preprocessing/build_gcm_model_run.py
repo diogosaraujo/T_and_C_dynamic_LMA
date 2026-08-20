@@ -569,7 +569,7 @@ def main(argv=None) -> int:
                 if ic_table is not None:
                     want = [a.ic_key.format(station=sid, scenario=scen, gcm=gcm,
                                             arm=arm) for arm in arms]
-                    gone = [k for k in want if (sid, k) not in ic_table]
+                    gone = sorted({k for k in want if (sid, k) not in ic_table})
                     if gone:
                         blocked.append((sid, gcm, scen,
                                         f"no harvested state {gone} in {a.ic}"))
@@ -667,9 +667,13 @@ def main(argv=None) -> int:
         name = "run_list_gcm.txt" if not parts else f"run_list_gcm_{'_'.join(parts)}.txt"
         lst = a.root / name
         lst.write_text("".join(r + "\n" for r in runs), encoding="utf-8")
+        # submit_gcm_tc_run.sh, NOT submit_tc_run.sh: this list carries four
+        # fields (station scenario GCM arm) against the ERA5 script's two.
         print(f"\nrun list : {lst}  ({len(runs)} arms)")
-        print(f"           sbatch --array=1-{len(runs)}%NN slurm/submit_tc_run.sh "
-              f"(with RUN_LIST={name})")
+        print(f"next     : RUN_LIST={name} sbatch --array=1-{len(runs)}%NN "
+              f"slurm/submit_gcm_tc_run.sh")
+        print("           (on Amarel add -p main; MaxArraySize is 1001 and "
+              "MaxSubmitPU on 'main' is 500, so chunk with OFFSET beyond that)")
     return 0 if ok_arms else 1
 
 

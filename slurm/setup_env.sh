@@ -24,10 +24,27 @@ if ! tc_init_lmod; then
     exit 1
 fi
 
-echo "==> loading $PYTHON_MODULE"
-module purge
-module load "$PYTHON_MODULE"
+# An empty PYTHON_MODULE means "use the interpreter already on PATH" -- see the
+# note in config.sh about Amarel's broken python/3.8.2.
+if [ -n "${PYTHON_MODULE:-}" ]; then
+    echo "==> loading $PYTHON_MODULE"
+    module purge
+    module load "$PYTHON_MODULE"
+else
+    echo "==> no python module configured; using $(command -v python3)"
+fi
 python3 --version
+
+# Fail here, clearly, rather than 30 lines into pip's retry storm. A Python
+# whose ssl module will not import cannot talk to PyPI at all, and the error it
+# produces down in pip is indistinguishable from a network block.
+if ! python3 -c "import ssl" 2>/dev/null; then
+    echo "ERROR: this Python cannot import ssl, so pip cannot reach PyPI." >&2
+    python3 -c "import ssl" || true
+    echo "       Try a different interpreter, or install the wheels offline:" >&2
+    echo "         pip install --no-index --find-links=<dir> -r <requirements>" >&2
+    exit 1
+fi
 
 if [ ! -d "$TC_VENV" ]; then
     echo "==> creating venv at $TC_VENV"

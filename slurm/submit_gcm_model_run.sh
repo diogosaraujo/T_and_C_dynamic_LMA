@@ -63,12 +63,11 @@ python build_gcm_model_run.py \
 status=$?
 
 echo
-if [ -f "$MODEL_RUN/run_list_gcm.txt" ]; then
-    N=$(wc -l < "$MODEL_RUN/run_list_gcm.txt")
-    echo "run list   : $MODEL_RUN/run_list_gcm.txt  ($N arms)"
-    echo "next       : sbatch --array=1-$N%NN slurm/submit_gcm_tc_run.sh"
-    echo "             (MaxArraySize is 1001 on Amarel -- chunk if N exceeds it)"
-fi
+# The builder prints the run list it actually wrote, and that name depends on
+# which subset was built. This block used to echo run_list_gcm.txt regardless, so
+# job 37727 -- a 435-arm "--arms spinup" build -- ended its log advising an array
+# over the stale 2770-arm full list, which still carries the old template ICs.
+# One source for that line, and it is the builder's.
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "exit status: $status"
 exit $status

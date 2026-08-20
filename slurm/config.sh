@@ -37,10 +37,17 @@ if [ "$TC_CLUSTER" = "amarel" ]; then
     # R2023a also present. Nothing else MATLAB-like exists, so the old guesses at
     # R2022b/R2021a are dropped rather than left to fail silently down the list.
     MATLAB_MODULES="${MATLAB_MODULES:-MATLAB/R2024a MATLAB/R2023a MATLAB}"
-    # Amarel's newest is python/3.8.2 (python/2.7.12 is the only other). That is
-    # old enough to matter: the preprocessing venv should be built against it, or
-    # better, only MATLAB work should run here and the Python stages stay on SOE.
-    PYTHON_MODULE="${PYTHON_MODULE:-python/3.8.2}"
+    # NO python module. Amarel offers only python/2.7.12 and python/3.8.2, and
+    # 3.8.2 is BROKEN on the current OS image: it was built under CentOS 7
+    # (/opt/sw/packages/gcc-4_8/...) and its _ssl links against libssl.so.10,
+    # which the upgraded image no longer ships. Importing ssl therefore fails,
+    # pip cannot reach PyPI over HTTPS, and job 60681599 died with pages of
+    # "SSL module is not available" that look like a firewall block and are not.
+    #
+    # /usr/bin/python3 is 3.9.21 with OpenSSL 3.2.2 and works. An empty
+    # PYTHON_MODULE tells setup_env.sh to use it instead of loading anything.
+    # (Worth reporting the stale module to OARC; it is broken for every user.)
+    PYTHON_MODULE="${PYTHON_MODULE:-}"
     # main allows 3 days; MaxArraySize is 1001 and MaxSubmitPU on 'main' is 500,
     # so arrays must be chunked at 500 (submit_gcm_tc_run.sh takes OFFSET).
     MAX_ARRAY_CHUNK="${MAX_ARRAY_CHUNK:-500}"

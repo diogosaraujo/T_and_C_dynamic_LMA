@@ -971,7 +971,7 @@ def main() -> int:
         if ic_table is not None:
             want = [a.ic_key.format(station=sid, scenario="era5_land", gcm="",
                                     arm=arm) for arm in (a.arms or ARMS)]
-            gone = [k for k in want if (sid, k) not in ic_table]
+            gone = sorted({k for k in want if (sid, k) not in ic_table})
             if gone:
                 miss.append(f"no harvested state {gone} in {a.ic}")
 

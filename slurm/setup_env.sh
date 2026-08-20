@@ -87,6 +87,27 @@ python -m pip install -r "$REQ"
 
 echo
 echo "==> installed:"
+
+# The run-side set (--run) deliberately has no cdsapi: ERA5 downloads happen on
+# the SOE cluster and nothing on the run side touches the Climate Data Store.
+# Checking for it here made a perfectly good Amarel venv exit 1 (job 60681698)
+# over a credential that machine has no use for. Verify what was ASKED for.
+if ! grep -qi '^cdsapi' "$REQ"; then
+    # Import them together: a numpy/scipy ABI mismatch is invisible at install
+    # time and only appears on import, so find it here rather than mid-campaign.
+    python - <<'CHECK'
+import importlib
+for m in ("numpy", "scipy", "scipy.io", "h5py"):
+    importlib.import_module(m)
+import numpy, scipy, h5py
+print(f"    numpy {numpy.__version__}   scipy {scipy.__version__}   h5py {h5py.__version__}")
+CHECK
+    echo
+    echo "Setup complete -- run-side environment. No cdsapi and no CDS"
+    echo "credentials are needed here."
+    exit 0
+fi
+
 # The import must succeed (set -e makes this fatal). cdsapi does not expose
 # __version__, so read the version from package metadata, and treat that as
 # best-effort -- a missing version string is cosmetic, a failed import is not.

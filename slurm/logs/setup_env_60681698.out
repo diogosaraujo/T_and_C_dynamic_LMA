@@ -1,0 +1,54 @@
+node    : hal0321.amarel.rutgers.edu
+started : 2026-08-20T05:27:54Z
+
+==> no python module configured; using /usr/bin/python3
+Python 3.9.21
+==> existing venv at /home/dd1136/envs/tc-preproc is unusable (its interpreter will not
+    start -- most often built against a module that is gone). Recreating.
+==> creating venv at /home/dd1136/envs/tc-preproc with /usr/bin/python3
+Requirement already satisfied: pip in /cache/home/dd1136/envs/tc-preproc/lib/python3.9/site-packages (21.3.1)
+Collecting pip
+  Downloading pip-26.0.1-py3-none-any.whl (1.8 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 21.3.1
+    Uninstalling pip-21.3.1:
+      Successfully uninstalled pip-21.3.1
+Successfully installed pip-26.0.1
+==> installing from /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt
+Collecting numpy>=1.24 (from -r /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt (line 13))
+  Downloading numpy-2.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+Collecting h5py>=3.8 (from -r /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt (line 14))
+  Downloading h5py-3.14.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.7 kB)
+Collecting scipy>=1.10 (from -r /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt (line 15))
+  Downloading scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+Downloading numpy-2.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (19.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 19.5/19.5 MB 68.2 MB/s  0:00:00
+Downloading h5py-3.14.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.6/4.6 MB 29.9 MB/s  0:00:00
+Downloading scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (38.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 38.6/38.6 MB 94.7 MB/s  0:00:00
+Installing collected packages: numpy, scipy, h5py
+
+Successfully installed h5py-3.14.0 numpy-2.0.2 scipy-1.13.1
+
+==> installed:
+    (version lookup unavailable)
+
+==> MISSING ~/.cdsapirc
+
+Create it with your key from https://cds.climate.copernicus.eu/profile :
+
+    cat > ~/.cdsapirc <<'KEY'
+    url: https://cds.climate.copernicus.eu/api
+    key: <your-api-key>
+    KEY
+    chmod 600 ~/.cdsapirc
+
+Also accept the ERA5-Land licence on the dataset page, or every request fails.
+
+finished   : 2026-08-20T05:28:12Z
+exit status: 1
+Setup did not complete. The log above names the cause; the usual ones are
+a Python whose ssl module will not import, a venv built against a module
+that has since gone away, or (for the ERA5 download stage) no ~/.cdsapirc.

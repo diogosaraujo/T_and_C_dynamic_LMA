@@ -1,0 +1,130 @@
+job        : 60692281
+node       : hal0124.amarel.rutgers.edu
+cluster    : amarel   partition: main
+started    : 2026-08-20T17:59:55Z
+model_run  : /scratch/dd1136/T_and_C/model_run
+plsr       : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA   <-- NOT FOUND
+gcm meteo  : /scratch/dd1136/T_and_C/input_data/gcm_meteo   <-- NOT FOUND
+
+model_run : /scratch/dd1136/T_and_C/model_run
+plsr      : /vol_efthymios/NFS07/dd1136/ecoregions/GCMs/PLSR_future_trait_predictions_GCM_clim_DOY_python/LMA   <-- NOT FOUND
+gcm meteo : /scratch/dd1136/T_and_C/input_data/gcm_meteo   <-- NOT FOUND
+stations  : 101   gcms 5   scenarios 1
+arms      : fixed_lma, dyn_lma
+target    : 1010 run directories
+
+initial state: /scratch/dd1136/T_and_C/model_run/initial_state.csv  (527 row(s)), key 'historical/{gcm}/spinup'
+era5 states  : 92   dropped 9 station(s) with no completed ERA5 run
+  - US-DPP
+  - US-HB2
+  - US-HB3
+  - US-NMj
+  - US-Vcm
+  - US-Wi1
+  - US-Wi2
+  - US-Wi4
+  - US-xSB
+
+========================================================================
+0 run directories written, 92 combination(s) blocked
+========================================================================
+
+BLOCKED, by cause (92 total)
+    92 x  no eraN_land MOD_PARAM; run build_model_run.py first
+
+BLOCKED, in full
+  ! US-Bar    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Blk    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-CPF    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-CPk    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-CRK    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-CS2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-CZ2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-CZ3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-CZ4    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-ChR    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Cst    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Cwt    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Dk2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Dk3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Fmf    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Fuf    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-GBT    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-GLE    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-HBK    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Ha1    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Ha2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Ho1    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Ho2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Ho3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-LPH    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MEF    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MMS    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MOz    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MRf    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Me1    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Me2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Me4    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Me6    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Me7    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-MtB    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-NC2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-NC3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-NC5    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-NR1    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Oho    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFL    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFb    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFc    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFg    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFh    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFi    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFj    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFk    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFm    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFn    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFp    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFq    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFs    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-PFt    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-SB1    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-SHC    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-SP1    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-SP2    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-SP3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-SP4    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-SSH    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Slt    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-TEF    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-UMB    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-UMd    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Vcp    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Vcs    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-WBW    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-WCr    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Wi3    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-Wrc    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xAB    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xBL    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xBR    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xGR    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xHA    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xJE    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xLE    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xML    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xNW    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xRM    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xRN    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xSC    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xSE    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xSP    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xST    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xTA    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xTE    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xTR    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xUK    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xWR    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+  ! US-xYE    -              -           no era5_land MOD_PARAM; run build_model_run.py first
+
+finished   : 2026-08-20T17:59:57Z
+exit status: 1

@@ -1,0 +1,17 @@
+node    : hal0321.amarel.rutgers.edu
+started : 2026-08-20T05:04:54Z
+
+==> loading python/3.8.2
+Python 3.8.2
+==> creating venv at /home/dd1136/envs/tc-preproc
+Could not fetch URL https://pypi.org/simple/pip/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host='pypi.org', port=443): Max retries exceeded with url: /simple/pip/ (Caused by SSLError("Can't connect to HTTPS URL because the SSL module is not available.")) - skipping
+Requirement already up-to-date: pip in /cache/home/dd1136/envs/tc-preproc/lib/python3.8/site-packages (19.2.3)
+Could not fetch URL https://pypi.org/simple/pip/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host='pypi.org', port=443): Max retries exceeded with url: /simple/pip/ (Caused by SSLError("Can't connect to HTTPS URL because the SSL module is not available.")) - skipping
+==> installing from /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt
+Collecting numpy>=1.24 (from -r /scratch/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements-run.txt (line 13))
+  Could not fetch URL https://pypi.org/simple/numpy/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host='pypi.org', port=443): Max retries exceeded with url: /simple/numpy/ (Caused by SSLError("Can't connect to HTTPS URL because the SSL module is not available.")) - skipping
+Could not fetch URL https://pypi.org/simple/pip/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host='pypi.org', port=443): Max retries exceeded with url: /simple/pip/ (Caused by SSLError("Can't connect to HTTPS URL because the SSL module is not available.")) - skipping
+
+finished   : 2026-08-20T05:05:18Z
+exit status: 1
+Setup did not complete -- most often a missing ~/.cdsapirc. See the log above.

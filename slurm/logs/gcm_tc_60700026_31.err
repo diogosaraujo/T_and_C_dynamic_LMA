@@ -1,0 +1,7 @@
+{Error using MAIN_FRAME_SLA (line 304)
+No SLA for simulated year 1985. The LMA file covers 1988-2014 (27 years).
+Rebuild the forcing or the LMA series so the two span the same years.
+
+Error in GO_US_SHC (line 41)
+MAIN_FRAME_SLA;
+} 

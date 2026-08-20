@@ -1,0 +1,3 @@
+ERROR: no Meteo_*.mat in /scratch/dd1136/T_and_C/model_run/US-Vcp/historical/MPI-ESM1-2-HR -- the GCM forcing builder
+       has not run, or the tree predates the move and needs
+       preprocessing/migrate_forcing.py

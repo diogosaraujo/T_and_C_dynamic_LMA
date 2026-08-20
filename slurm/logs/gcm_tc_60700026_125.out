@@ -1,0 +1,7 @@
+job        : 60702905  task 125
+node       : halk0014.amarel.rutgers.edu
+cluster    : amarel   partition: main
+started    : 2026-08-20T20:13:23Z
+station    : US-Vcp   scenario: historical   gcm: MPI-ESM1-2-HR   arm: dyn_lma
+rundir     : /scratch/dd1136/T_and_C/model_run/US-Vcp/historical/MPI-ESM1-2-HR/dyn_lma
+

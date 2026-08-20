@@ -1,0 +1,43 @@
+job        : 60692793
+node       : hal0128.amarel.rutgers.edu
+cluster    : amarel   partition: main
+started    : 2026-08-20T18:11:35Z
+model_run  : /scratch/dd1136/T_and_C/model_run
+
+model_run    : /scratch/dd1136/T_and_C/model_run
+pattern      : */historical/*/*_lma
+initial state: /scratch/dd1136/T_and_C/model_run/initial_state.csv  (527 row(s))
+key          : historical/{gcm}/spinup
+matched      : 930
+
+REFUSED -- 60 directory(ies) could not be patched:
+  ! US-DPP/historical/GFDL-ESM4/dyn_lma         no harvested state 'historical/GFDL-ESM4/spinup' in initial_state.csv
+  ! US-DPP/historical/GFDL-ESM4/fixed_lma       no harvested state 'historical/GFDL-ESM4/spinup' in initial_state.csv
+  ! US-DPP/historical/IPSL-CM6A-LR/dyn_lma      no harvested state 'historical/IPSL-CM6A-LR/spinup' in initial_state.csv
+  ! US-DPP/historical/IPSL-CM6A-LR/fixed_lma    no harvested state 'historical/IPSL-CM6A-LR/spinup' in initial_state.csv
+  ! US-DPP/historical/MPI-ESM1-2-HR/dyn_lma     no harvested state 'historical/MPI-ESM1-2-HR/spinup' in initial_state.csv
+  ! US-DPP/historical/MPI-ESM1-2-HR/fixed_lma   no harvested state 'historical/MPI-ESM1-2-HR/spinup' in initial_state.csv
+  ! US-DPP/historical/MRI-ESM2-0/dyn_lma        no harvested state 'historical/MRI-ESM2-0/spinup' in initial_state.csv
+  ! US-DPP/historical/MRI-ESM2-0/fixed_lma      no harvested state 'historical/MRI-ESM2-0/spinup' in initial_state.csv
+  ! US-DPP/historical/UKESM1-0-LL/dyn_lma       no harvested state 'historical/UKESM1-0-LL/spinup' in initial_state.csv
+  ! US-DPP/historical/UKESM1-0-LL/fixed_lma     no harvested state 'historical/UKESM1-0-LL/spinup' in initial_state.csv
+  ! US-NMj/historical/GFDL-ESM4/dyn_lma         no harvested state 'historical/GFDL-ESM4/spinup' in initial_state.csv
+  ! US-NMj/historical/GFDL-ESM4/fixed_lma       no harvested state 'historical/GFDL-ESM4/spinup' in initial_state.csv
+  ! US-NMj/historical/IPSL-CM6A-LR/dyn_lma      no harvested state 'historical/IPSL-CM6A-LR/spinup' in initial_state.csv
+  ! US-NMj/historical/IPSL-CM6A-LR/fixed_lma    no harvested state 'historical/IPSL-CM6A-LR/spinup' in initial_state.csv
+  ! US-NMj/historical/MPI-ESM1-2-HR/dyn_lma     no harvested state 'historical/MPI-ESM1-2-HR/spinup' in initial_state.csv
+  ! US-NMj/historical/MPI-ESM1-2-HR/fixed_lma   no harvested state 'historical/MPI-ESM1-2-HR/spinup' in initial_state.csv
+  ! US-NMj/historical/MRI-ESM2-0/dyn_lma        no harvested state 'historical/MRI-ESM2-0/spinup' in initial_state.csv
+  ! US-NMj/historical/MRI-ESM2-0/fixed_lma      no harvested state 'historical/MRI-ESM2-0/spinup' in initial_state.csv
+  ! US-NMj/historical/UKESM1-0-LL/dyn_lma       no harvested state 'historical/UKESM1-0-LL/spinup' in initial_state.csv
+  ! US-NMj/historical/UKESM1-0-LL/fixed_lma     no harvested state 'historical/UKESM1-0-LL/spinup' in initial_state.csv
+  ... and 40 more
+
+run list : /scratch/dd1136/T_and_C/model_run/run_list_gcm_historical.txt  (870 arms)
+next     : RUN_LIST=run_list_gcm_historical.txt sbatch --array=1-870%NN slurm/submit_gcm_tc_run.sh
+           (on Amarel add -p main; MaxSubmitPU on 'main' is 500, so chunk with OFFSET beyond that)
+
+870/930 arm(s) patched
+
+finished   : 2026-08-20T18:12:04Z
+exit status: 1  (1 = at least one arm was refused; read the list above)

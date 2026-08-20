@@ -93,6 +93,20 @@ if ! ls "$(dirname "$RUNDIR")"/Meteo_*.mat >/dev/null 2>&1; then
     exit 1
 fi
 
+# MATLAB initialises a per-user preference directory (~/.matlab/<release>/) at
+# every startup. With 100 array tasks launching at once against a shared home
+# that becomes a contention point: job 60682984 lost 48 of 435 arms to
+#   foundation::storage::vfs::Exception{... MLintDefaultSettings.txt ... IOError}
+# Every one of them failed BEFORE printing a single Iter line, and still burned
+# two hours of wall clock before giving up -- the failures came in contiguous
+# blocks of array indices, i.e. whole bursts of simultaneous starts.
+#
+# Give each task its own prefdir on node-local scratch. SLURM_JOB_ID is unique
+# per array task (the parent is SLURM_ARRAY_JOB_ID), so this cannot collide.
+export MATLAB_PREFDIR="${TMPDIR:-/tmp}/$USER/mlprefs/${SLURM_JOB_ID:-$$}"
+mkdir -p "$MATLAB_PREFDIR"
+trap 'rm -rf "$MATLAB_PREFDIR"' EXIT
+
 # LMOD is only initialised for shells that read .bashrc, so source it defensively.
 tc_load_matlab || exit 1
 

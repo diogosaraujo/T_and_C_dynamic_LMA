@@ -320,6 +320,18 @@ def station_series(st, gcm, scenario, plsr_root):
         "pixel_lon": float(np.mean([((k[1] + 180) % 360) - 180 for k in same]))}
 
 
+def missing_years(series, lo, hi):
+    """Years in [lo, hi] the series does not cover.
+
+    MAIN_FRAME_SLA looks the simulated year up in LMA_<ST>.mat and stops if it is
+    absent, so a dynamic arm needs EVERY year of its window -- not "enough" years.
+    Counting was the old rule (len < 20) and it let US-MtB through with 26 of 30:
+    five dyn_lma arms built, ran, and died at 2011 in job 60693242.
+    """
+    have = {y for y, _ in series}
+    return [y for y in range(lo, hi + 1) if y not in have]
+
+
 def clip(series, lo, hi):
     return [(y, v) for y, v in series if lo <= y <= hi]
 
@@ -521,9 +533,13 @@ def main(argv=None) -> int:
                 blocked.append((sid, gcm, "-", hd["error"]))
                 continue
             hist = clip(hs, *HIST_YEARS)
-            if len(hist) < 20:
+            gap = missing_years(hist, *HIST_YEARS)
+            if gap:
                 blocked.append((sid, gcm, "-",
-                                f"only {len(hist)} historical years in the projection"))
+                                f"projection covers {len(hist)}/"
+                                f"{HIST_YEARS[1]-HIST_YEARS[0]+1} historical years; "
+                                f"missing {gap[0]}"
+                                f"{'..' + str(gap[-1]) if len(gap) > 1 else ''}"))
                 continue
             if a.exclude_far and hd["pixel_km"] > a.max_pixel_km:
                 blocked.append((sid, gcm, "-", f"nearest {st['forest_type']} pixel is "
@@ -552,6 +568,18 @@ def main(argv=None) -> int:
                 if not series:
                     blocked.append((sid, gcm, scen, "empty series after clipping"))
                     continue
+                # Same rule as the historical window, and it matters more here:
+                # an 86-year run that loses its series in 2061 fails three
+                # quarters of the way through, having burned most of an hour.
+                if scen != "historical":
+                    gapf = missing_years(series, *FUT_YEARS)
+                    if gapf:
+                        blocked.append((sid, gcm, scen,
+                                        f"projection covers {len(series)}/"
+                                        f"{FUT_YEARS[1]-FUT_YEARS[0]+1} years; "
+                                        f"missing {gapf[0]}"
+                                        f"{'..' + str(gapf[-1]) if len(gapf) > 1 else ''}"))
+                        continue
                 # The forcing lives IN the run tree, at <ST>/<scenario>/<GCM>/,
                 # one level above the two arms that share it. --meteo is the
                 # legacy staging path, still consulted so a tree that has not

@@ -48,6 +48,39 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_model_run import apply_ic, mat_name, read_ic_table   # noqa: E402
+from gcm_variables import SCENARIOS                             # noqa: E402
+
+
+def lma_gap(d: Path, station: str, scenario: str):
+    """Years the dynamic arm will simulate that LMA_<ST>.mat does not carry.
+
+    MAIN_FRAME_SLA looks each simulated year up in that file and STOPS if it is
+    missing, so a short series is a mid-run failure, not a degraded result. Job
+    60693242 lost five US-MtB arms at 2011 because its projection ends in 2010.
+    Checking here costs a millisecond; discovering it 70 years into an 86-year
+    ssp arm costs the better part of an hour, times however many arms share the
+    problem.
+
+    Only the dynamic arm reads the series -- the fixed arm takes its Sl_H from
+    MOD_PARAM -- but the pair is useless with one half missing, so the caller
+    refuses both.
+    """
+    if scenario not in SCENARIOS:
+        return None                       # era5_land, or a name we do not price
+    f = d / f"LMA_{mat_name(station)}.mat"
+    if not f.is_file():
+        return f"no {f.name}"
+    try:
+        from scipy.io import loadmat
+        yrs = {int(y) for y in loadmat(f)["years"].ravel()}
+    except Exception as e:                # noqa: BLE001 -- report, never guess
+        return f"cannot read {f.name}: {e}"
+    lo, hi = SCENARIOS[scenario]
+    gap = [y for y in range(lo, hi + 1) if y not in yrs]
+    if gap:
+        return (f"LMA series covers {len(yrs)}/{hi-lo+1} years of {scenario}; "
+                f"missing {gap[0]}{'..' + str(gap[-1]) if len(gap) > 1 else ''}")
+    return None
 
 
 def parse_arm(rel: Path):
@@ -106,6 +139,11 @@ def main(argv=None) -> int:
         if not mp.is_file():
             bad.append((rel, f"no {mp.name}"))
             continue
+        if parts["arm"].startswith("dyn_lma"):
+            why = lma_gap(d, parts["station"], parts["scenario"])
+            if why:
+                bad.append((rel, why))
+                continue
         key = a.ic_key.format(**parts)
         rec = table.get((parts["station"], key))
         if rec is None:

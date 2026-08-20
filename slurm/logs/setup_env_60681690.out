@@ -1,0 +1,10 @@
+node    : hal0321.amarel.rutgers.edu
+started : 2026-08-20T05:24:54Z
+
+==> no python module configured; using /usr/bin/python3
+Python 3.9.21
+==> reusing existing venv at /home/dd1136/envs/tc-preproc
+
+finished   : 2026-08-20T05:24:54Z
+exit status: 127
+Setup did not complete -- most often a missing ~/.cdsapirc. See the log above.

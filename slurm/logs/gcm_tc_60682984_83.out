@@ -1,0 +1,14 @@
+job        : 60683081  task 83
+node       : halk0083.amarel.rutgers.edu
+cluster    : amarel   partition: main
+started    : 2026-08-20T06:48:03Z
+station    : US-GLE   scenario: historical   gcm: MPI-ESM1-2-HR   arm: spinup
+rundir     : /scratch/dd1136/T_and_C/model_run/US-GLE/historical/MPI-ESM1-2-HR/spinup
+
+matlab     : /opt/sw/packages/MATLAB/R2024a/bin/matlab  (module MATLAB/R2024a)
+matlab     : /opt/sw/packages/MATLAB/R2024a/bin/matlab
+
+
+result     : NO RES_*.mat -- the run did not finish
+finished   : 2026-08-20T09:01:47Z
+exit status: 1

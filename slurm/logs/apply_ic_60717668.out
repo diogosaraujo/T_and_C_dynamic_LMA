@@ -1,0 +1,43 @@
+job        : 60717668
+node       : hal0108.amarel.rutgers.edu
+cluster    : amarel   partition: main
+started    : 2026-08-21T04:37:56Z
+model_run  : /scratch/dd1136/T_and_C/model_run
+
+model_run    : /scratch/dd1136/T_and_C/model_run
+pattern      : */ssp*/*/*_lma
+initial state: /scratch/dd1136/T_and_C/model_run/initial_state.csv  (1386 row(s))
+key          : historical/{gcm}/{arm}
+matched      : 1840
+
+REFUSED -- 200 directory(ies) could not be patched:
+  ! US-CPk/ssp126/GFDL-ESM4/dyn_lma             LMA series covers 5/86 years of ssp126; missing 2020..2100
+  ! US-CPk/ssp126/IPSL-CM6A-LR/dyn_lma          LMA series covers 5/86 years of ssp126; missing 2020..2100
+  ! US-CPk/ssp126/MPI-ESM1-2-HR/dyn_lma         LMA series covers 5/86 years of ssp126; missing 2020..2100
+  ! US-CPk/ssp126/MRI-ESM2-0/dyn_lma            LMA series covers 5/86 years of ssp126; missing 2020..2100
+  ! US-CPk/ssp126/UKESM1-0-LL/dyn_lma           LMA series covers 5/86 years of ssp126; missing 2020..2100
+  ! US-CPk/ssp585/GFDL-ESM4/dyn_lma             LMA series covers 5/86 years of ssp585; missing 2020..2100
+  ! US-CPk/ssp585/IPSL-CM6A-LR/dyn_lma          LMA series covers 5/86 years of ssp585; missing 2020..2100
+  ! US-CPk/ssp585/MPI-ESM1-2-HR/dyn_lma         LMA series covers 5/86 years of ssp585; missing 2020..2100
+  ! US-CPk/ssp585/MRI-ESM2-0/dyn_lma            LMA series covers 5/86 years of ssp585; missing 2020..2100
+  ! US-CPk/ssp585/UKESM1-0-LL/dyn_lma           LMA series covers 5/86 years of ssp585; missing 2020..2100
+  ! US-CZ2/ssp126/GFDL-ESM4/dyn_lma             LMA series covers 6/86 years of ssp126; missing 2021..2100
+  ! US-CZ2/ssp126/IPSL-CM6A-LR/dyn_lma          LMA series covers 6/86 years of ssp126; missing 2021..2100
+  ! US-CZ2/ssp126/MPI-ESM1-2-HR/dyn_lma         LMA series covers 6/86 years of ssp126; missing 2021..2100
+  ! US-CZ2/ssp126/MRI-ESM2-0/dyn_lma            LMA series covers 6/86 years of ssp126; missing 2021..2100
+  ! US-CZ2/ssp126/UKESM1-0-LL/dyn_lma           LMA series covers 6/86 years of ssp126; missing 2021..2100
+  ! US-CZ2/ssp585/GFDL-ESM4/dyn_lma             LMA series covers 6/86 years of ssp585; missing 2021..2100
+  ! US-CZ2/ssp585/IPSL-CM6A-LR/dyn_lma          LMA series covers 6/86 years of ssp585; missing 2021..2100
+  ! US-CZ2/ssp585/MPI-ESM1-2-HR/dyn_lma         LMA series covers 6/86 years of ssp585; missing 2021..2100
+  ! US-CZ2/ssp585/MRI-ESM2-0/dyn_lma            LMA series covers 6/86 years of ssp585; missing 2021..2100
+  ! US-CZ2/ssp585/UKESM1-0-LL/dyn_lma           LMA series covers 6/86 years of ssp585; missing 2021..2100
+  ... and 180 more
+
+run list : /scratch/dd1136/T_and_C/model_run/run_list_gcm_ssp.txt  (1640 arms)
+next     : RUN_LIST=run_list_gcm_ssp.txt sbatch --array=1-1640%NN slurm/submit_gcm_tc_run.sh
+           (on Amarel add -p main; MaxSubmitPU on 'main' is 500, so chunk with OFFSET beyond that)
+
+1640/1840 arm(s) patched
+
+finished   : 2026-08-21T04:38:44Z
+exit status: 1  (1 = at least one arm was refused; read the list above)

@@ -1,0 +1,102 @@
+job        : 60717597
+node       : hal0108.amarel.rutgers.edu
+cluster    : amarel   partition: main
+started    : 2026-08-21T04:30:56Z
+model_run  : /scratch/dd1136/T_and_C/model_run
+
+model_run : /scratch/dd1136/T_and_C/model_run
+pattern   : */historical/*/*_lma
+matched   : 930
+
+NO RESULTS -- 71 run(s) never finished, so there is no state to take:
+  - US-DPP    historical/GFDL-ESM4/dyn_lma  no RES_*.mat -- the run did not finish
+  - US-DPP    historical/GFDL-ESM4/fixed_lmano RES_*.mat -- the run did not finish
+  - US-DPP    historical/IPSL-CM6A-LR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-DPP    historical/IPSL-CM6A-LR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-DPP    historical/MPI-ESM1-2-HR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-DPP    historical/MPI-ESM1-2-HR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-DPP    historical/MRI-ESM2-0/dyn_lma no RES_*.mat -- the run did not finish
+  - US-DPP    historical/MRI-ESM2-0/fixed_lmano RES_*.mat -- the run did not finish
+  - US-DPP    historical/UKESM1-0-LL/dyn_lmano RES_*.mat -- the run did not finish
+  - US-DPP    historical/UKESM1-0-LL/fixed_lmano RES_*.mat -- the run did not finish
+  - US-MtB    historical/GFDL-ESM4/dyn_lma  no RES_*.mat -- the run did not finish
+  - US-MtB    historical/IPSL-CM6A-LR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-MtB    historical/MPI-ESM1-2-HR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-MtB    historical/MRI-ESM2-0/dyn_lma no RES_*.mat -- the run did not finish
+  - US-MtB    historical/MRI-ESM2-0/fixed_lmano RES_*.mat -- the run did not finish
+  - US-MtB    historical/UKESM1-0-LL/dyn_lmano RES_*.mat -- the run did not finish
+  - US-NMj    historical/GFDL-ESM4/dyn_lma  no RES_*.mat -- the run did not finish
+  - US-NMj    historical/GFDL-ESM4/fixed_lmano RES_*.mat -- the run did not finish
+  - US-NMj    historical/IPSL-CM6A-LR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-NMj    historical/IPSL-CM6A-LR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-NMj    historical/MPI-ESM1-2-HR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-NMj    historical/MPI-ESM1-2-HR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-NMj    historical/MRI-ESM2-0/dyn_lma no RES_*.mat -- the run did not finish
+  - US-NMj    historical/MRI-ESM2-0/fixed_lmano RES_*.mat -- the run did not finish
+  - US-NMj    historical/UKESM1-0-LL/dyn_lmano RES_*.mat -- the run did not finish
+  - US-NMj    historical/UKESM1-0-LL/fixed_lmano RES_*.mat -- the run did not finish
+  - US-SHC    historical/GFDL-ESM4/dyn_lma  no RES_*.mat -- the run did not finish
+  - US-SHC    historical/IPSL-CM6A-LR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-SHC    historical/MPI-ESM1-2-HR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-SHC    historical/MRI-ESM2-0/dyn_lma no RES_*.mat -- the run did not finish
+  - US-SHC    historical/UKESM1-0-LL/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi1    historical/GFDL-ESM4/dyn_lma  no RES_*.mat -- the run did not finish
+  - US-Wi1    historical/GFDL-ESM4/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi1    historical/IPSL-CM6A-LR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi1    historical/IPSL-CM6A-LR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi1    historical/MPI-ESM1-2-HR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi1    historical/MPI-ESM1-2-HR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi1    historical/MRI-ESM2-0/dyn_lma no RES_*.mat -- the run did not finish
+  - US-Wi1    historical/MRI-ESM2-0/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi1    historical/UKESM1-0-LL/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi1    historical/UKESM1-0-LL/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi2    historical/GFDL-ESM4/dyn_lma  no RES_*.mat -- the run did not finish
+  - US-Wi2    historical/GFDL-ESM4/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi2    historical/IPSL-CM6A-LR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi2    historical/IPSL-CM6A-LR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi2    historical/MPI-ESM1-2-HR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi2    historical/MPI-ESM1-2-HR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi2    historical/MRI-ESM2-0/dyn_lma no RES_*.mat -- the run did not finish
+  - US-Wi2    historical/MRI-ESM2-0/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi2    historical/UKESM1-0-LL/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi2    historical/UKESM1-0-LL/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi4    historical/GFDL-ESM4/dyn_lma  no RES_*.mat -- the run did not finish
+  - US-Wi4    historical/GFDL-ESM4/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi4    historical/IPSL-CM6A-LR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi4    historical/IPSL-CM6A-LR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi4    historical/MPI-ESM1-2-HR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi4    historical/MPI-ESM1-2-HR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi4    historical/MRI-ESM2-0/dyn_lma no RES_*.mat -- the run did not finish
+  - US-Wi4    historical/MRI-ESM2-0/fixed_lmano RES_*.mat -- the run did not finish
+  - US-Wi4    historical/UKESM1-0-LL/dyn_lmano RES_*.mat -- the run did not finish
+  - US-Wi4    historical/UKESM1-0-LL/fixed_lmano RES_*.mat -- the run did not finish
+  - US-xSB    historical/GFDL-ESM4/dyn_lma  no RES_*.mat -- the run did not finish
+  - US-xSB    historical/GFDL-ESM4/fixed_lmano RES_*.mat -- the run did not finish
+  - US-xSB    historical/IPSL-CM6A-LR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-xSB    historical/IPSL-CM6A-LR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-xSB    historical/MPI-ESM1-2-HR/dyn_lmano RES_*.mat -- the run did not finish
+  - US-xSB    historical/MPI-ESM1-2-HR/fixed_lmano RES_*.mat -- the run did not finish
+  - US-xSB    historical/MRI-ESM2-0/dyn_lma no RES_*.mat -- the run did not finish
+  - US-xSB    historical/MRI-ESM2-0/fixed_lmano RES_*.mat -- the run did not finish
+  - US-xSB    historical/UKESM1-0-LL/dyn_lmano RES_*.mat -- the run did not finish
+  - US-xSB    historical/UKESM1-0-LL/fixed_lmano RES_*.mat -- the run did not finish
+
+station      B1 leaf    B2 sap    B4 res   LAI_H  PHE
+US-Bar           0.0     185.3     145.9    0.00    1
+US-Bar           0.0     176.2     138.7    0.00    1
+US-Bar           0.0     216.1     169.6    0.00    1
+US-Bar           0.0     203.1     159.2    0.00    1
+US-Bar           0.0     164.9     130.2    0.00    1
+US-Bar           0.0     164.0     129.8    0.00    1
+US-Bar           0.0     182.1     139.2    0.00    1
+US-Bar           0.0     175.6     134.2    0.00    1
+US-Bar           0.0     196.6     147.0    0.00    1
+US-Bar           0.0     203.8     152.0    0.00    1
+US-Blk         103.9     118.6      76.6    1.56    1
+US-Blk          98.5     116.0      72.2    1.64    1
+  ... and 847 more
+
+859/930 state(s) harvested, 1386 row(s) in /scratch/dd1136/T_and_C/model_run/initial_state.csv
+
+finished   : 2026-08-21T04:34:37Z
+exit status: 1  (1 = nothing harvested, or a state was unusable)

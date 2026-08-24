@@ -184,11 +184,24 @@ def climatology(fx: dict, dy: dict, years=None):
 
 
 def read_drought(path: Path):
-    """{(station, year): class} from a CSV with station,year,class columns."""
+    """{(station, gcm, scenario, year): class} from classify_drought.py's CSV.
+
+    Keyed on the run family, not just the station, because a GCM's dry years are
+    its own. ACCESS-CM2's driest years at US-NR1 are 2013/1984/2009 against an
+    observed 2012/2013/2002/2006 -- applying ERA5 labels to a GCM run would
+    mislabel almost every year. An era5 table carries gcm="" and
+    scenario="era5_land"; a gcm table carries both.
+    """
     out = {}
     with open(path, newline="", encoding="utf-8-sig") as fh:
-        for r in csv.DictReader(fh):
-            out[(r["station"].strip(), int(r["year"]))] = r["class"].strip()
+        rd = csv.DictReader(fh)
+        if "gcm" not in (rd.fieldnames or []):
+            raise SystemExit(f"ERROR: {path} predates the gcm/scenario columns. "
+                             f"Re-run classify_drought.py -- an old table cannot "
+                             f"say which run family its years belong to.")
+        for r in rd:
+            out[(r["station"].strip(), r["gcm"].strip(),
+                 r["scenario"].strip(), int(r["year"]))] = r["class"].strip()
     if not out:
         raise SystemExit(f"ERROR: {path} has no rows")
     return out
@@ -233,9 +246,19 @@ def main(argv=None) -> int:
                 fx, dy = read_run(fxp), read_run(dyp)
                 groups = {"all": None}
                 if dro is not None:
+                    # The pair label carries the run family: 'era5_land:arm' or
+                    # 'historical/GFDL-ESM4:arm'.
+                    scen, _, _ = label.partition(":")
+                    gcm = ""
+                    if "/" in scen:
+                        scen, _, gcm = scen.partition("/")
                     yrs = set(fx["year"].tolist())
-                    for cls in sorted({dro.get((st, y)) for y in yrs} - {None}):
-                        groups[cls] = {y for y in yrs if dro.get((st, y)) == cls}
+                    cls_of = {y: dro.get((st, gcm, scen, y)) for y in yrs}
+                    if not any(cls_of.values()):
+                        skipped.append((st, label, f"no drought labels for "
+                                                   f"({gcm or '-'}, {scen})"))
+                    for cls in sorted({c for c in cls_of.values() if c}):
+                        groups[cls] = {y for y in yrs if cls_of[y] == cls}
                 for cls, yrsel in groups.items():
                     for r in climatology(fx, dy, yrsel):
                         rows.append((st, label, cls) + r)

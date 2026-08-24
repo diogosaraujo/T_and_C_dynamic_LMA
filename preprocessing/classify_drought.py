@@ -58,6 +58,51 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from era5_predictors import (DEFAULT_ERA5_ROOT, SI_ORDER, Era5Monthly)  # noqa: E402
+from gcm_variables import GCMS, SCENARIOS, var_dir                     # noqa: E402
+
+
+def gcm_spei_file(gcm: str, scenario: str, months: int) -> Path | None:
+    """The SPEI stack for one model/scenario, found by globbing.
+
+    The variant (r1i1p1f1 vs r1i1p1f2) and grid label (gn vs gr) are not constant
+    across models, so the filename is matched rather than built -- the same
+    reasoning as gcm_variables.find_year_files. Unlike the daily variables there
+    is ONE file per model/scenario, not one per year.
+    """
+    d = var_dir(gcm, scenario, "spei")
+    if not d.is_dir():
+        return None
+    hits = sorted(d.glob(f"spei_{months}_{gcm}_{scenario}_*.nc"))
+    return hits[0] if hits else None
+
+
+def gcm_series(path: Path, sites: dict) -> dict:
+    """{station: {year: annual mean SPEI}} for every site, from ONE open file.
+
+    Opened once and looped over stations rather than the reverse: the array is
+    (time, 600, 1440) float32, so re-opening per station would re-read chunks
+    116 times over.
+
+    Longitude is stored 0..360 here, against the -180..180 the site lists use.
+    Latitude and longitude are 2-D but constant along the other axis, so the
+    first row and column are the postings.
+    """
+    from netCDF4 import Dataset, num2date
+    out = {}
+    with Dataset(str(path)) as ds:
+        t = ds.variables["time"]
+        dates = num2date(t[:], t.units, t.calendar)
+        yr = np.array([d.year for d in dates])
+        mo = np.array([d.month for d in dates])
+        la = np.asarray(ds.variables["latitude"][:, 0], dtype=float)
+        lo = np.asarray(ds.variables["longitude"][0, :], dtype=float)
+        v = ds.variables["spei"]
+        for sid, (slat, slon) in sites.items():
+            i = int(np.abs(la - slat).argmin())
+            j = int(np.abs(lo - (slon % 360.0)).argmin())
+            s = np.asarray(v[:, i, j], dtype=float)
+            out[sid] = (s, yr * 100 + mo)
+    return out
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_LISTS = [REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv",
@@ -97,6 +142,17 @@ def annual(series: np.ndarray, keys: np.ndarray, months) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--source", choices=["era5", "gcm"], default="era5",
+                    help="era5: SPEI from the ERA5-Land monthly stacks -- the "
+                         "OBSERVED climate, valid only for the era5_land runs. "
+                         "gcm: SPEI from each model's own NEX-GDDP output, which "
+                         "is what the GCM runs need, because a GCM does not "
+                         "reproduce actual weather and the observed dry years are "
+                         "not its dry years.")
+    ap.add_argument("--gcms", default=None, help="gcm source: comma-separated subset")
+    ap.add_argument("--scenarios", default=None,
+                    help="gcm source: comma-separated subset of "
+                         + ", ".join(SCENARIOS))
     ap.add_argument("--era5-root", type=Path, default=DEFAULT_ERA5_ROOT)
     ap.add_argument("--out", type=Path, required=True, help="CSV to write")
     ap.add_argument("--index", default="SPEI12_ts",
@@ -132,12 +188,6 @@ def main(argv=None) -> int:
     if not sites:
         print("ERROR: no stations", file=sys.stderr)
         return 1
-    try:
-        store = Era5Monthly(a.era5_root)
-    except RuntimeError as e:
-        print(f"ERROR: {e}", file=sys.stderr)
-        return 1
-
     cut = (f"driest {a.percentile:.0f}% per station" if a.percentile is not None
            else f"annual mean < {a.threshold}")
     print(f"index     : {a.index}"
@@ -145,29 +195,56 @@ def main(argv=None) -> int:
     print(f"criterion : {cut}")
     print(f"years     : {a.years or 'all'}\nstations  : {len(sites)}\n")
 
-    rows, skipped = [], []
-    for sid in sorted(sites):
-        lat, lon = sites[sid]
-        try:
-            ser = store.pixel_series(lat, lon)
-        except Exception as e:                                   # noqa: BLE001
-            skipped.append((sid, f"{type(e).__name__}: {e}")); continue
-        s = np.asarray(ser["si"][a.index], dtype=float)
-        if not np.isfinite(s).any():
-            skipped.append((sid, f"{a.index} is all-NaN at this pixel")); continue
+    # (station, gcm, scenario) -> {year: annual SPEI}. One entry per run family,
+    # because a GCM's dry years are its own: applying the observed labels to a
+    # GCM run would mislabel most years, since a GCM does not reproduce actual
+    # weather. US-NR1's observed driest are 2012/2013/2002/2006; ACCESS-CM2's are
+    # 2013/1984/2009.
+    rows, skipped, series = [], [], {}
 
-        yv = annual(s, ser["si_time"][a.index], months)
+    if a.source == "era5":
+        try:
+            store = Era5Monthly(a.era5_root)
+        except RuntimeError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            return 1
+        for sid in sorted(sites):
+            lat, lon = sites[sid]
+            try:
+                ser = store.pixel_series(lat, lon)
+            except Exception as e:                               # noqa: BLE001
+                skipped.append((f"{sid}", f"{type(e).__name__}: {e}")); continue
+            series[(sid, "", "era5_land")] = (
+                np.asarray(ser["si"][a.index], dtype=float),
+                np.asarray(ser["si_time"][a.index], dtype=int))
+    else:
+        acc = int("".join(c for c in a.index if c.isdigit()) or 12)
+        gcms = [g.strip() for g in a.gcms.split(",")] if a.gcms else list(GCMS)
+        scens = ([x.strip() for x in a.scenarios.split(",")] if a.scenarios
+                 else list(SCENARIOS))
+        for g in gcms:
+            for sc in scens:
+                f = gcm_spei_file(g, sc, acc)
+                if f is None:
+                    skipped.append((f"{g}/{sc}", f"no spei_{acc}_{g}_{sc}_*.nc"))
+                    continue
+                print(f"  {g:<15}{sc:<12}{f.name}", flush=True)
+                for sid, (sv, keys) in gcm_series(f, sites).items():
+                    series[(sid, g, sc)] = (sv, keys)
+
+    for (sid, g, sc), (sv, keys) in sorted(series.items()):
+        who = f"{sid} {g} {sc}".strip()
+        if not np.isfinite(sv).any():
+            skipped.append((who, f"{a.index} is all-NaN at this pixel")); continue
+        yv = annual(sv, keys, months)
         if y0 is not None:
             yv = {y: v for y, v in yv.items() if y0 <= y <= y1}
         if not yv:
-            skipped.append((sid, "no years left after filtering")); continue
-
-        if a.percentile is not None:
-            lim = float(np.percentile(list(yv.values()), a.percentile))
-        else:
-            lim = a.threshold
+            skipped.append((who, "no years left after filtering")); continue
+        lim = (float(np.percentile(list(yv.values()), a.percentile))
+               if a.percentile is not None else a.threshold)
         for y in sorted(yv):
-            rows.append((sid, y, "drought" if yv[y] <= lim else "normal",
+            rows.append((sid, g, sc, y, "drought" if yv[y] <= lim else "normal",
                          round(yv[y], 4), round(lim, 4)))
 
     if skipped:
@@ -182,15 +259,15 @@ def main(argv=None) -> int:
     a.out.parent.mkdir(parents=True, exist_ok=True)
     with open(a.out, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
-        w.writerow(["station", "year", "class", "spei", "cut"])
+        w.writerow(["station", "gcm", "scenario", "year", "class", "spei", "cut"])
         w.writerows(rows)
 
     n_st = len({r[0] for r in rows})
-    dry = [r for r in rows if r[2] == "drought"]
+    dry = [r for r in rows if r[4] == "drought"]
     per = {}
     for r in dry:
-        per[r[0]] = per.get(r[0], 0) + 1
-    none = n_st - len(per)
+        per[(r[0], r[1], r[2])] = per.get((r[0], r[1], r[2]), 0) + 1
+    none = len({(r[0], r[1], r[2]) for r in rows}) - len(per)
     print(f"{len(rows)} station-years over {n_st} stations; "
           f"{len(dry)} drought ({100*len(dry)/len(rows):.0f}%)")
     if per:

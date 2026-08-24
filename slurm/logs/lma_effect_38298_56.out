@@ -1,0 +1,25 @@
+job        : 38356  task 56
+node       : soeepyc11
+cluster    : soe   partition: SOE_main
+started    : 2026-08-24T18:03:10Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+cache      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+cache     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect
+site list : 118 stations, 101 present in model_run
+
+pairs     : 1
+
+  [1/1] US-PFq era5_land:fixed_lma_ic: ok
+
+cache now holds 52 station file(s)
+next: python analyze_lma_effect.py --report
+
+cache holds: 52 station file(s)
+
+report     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect/lma_effect_report.md
+  copy it down with:
+    scp -P 22 dd1136@soenfs1.hpc.rutgers.edu:/vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect/lma_effect_*.{md,csv} .
+finished   : 2026-08-24T18:03:20Z
+exit status: 0

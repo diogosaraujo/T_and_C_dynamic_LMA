@@ -44,6 +44,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from era5_predictors import (DEFAULT_ERA5_ROOT, DROUGHT_FILES,        # noqa: E402
                              SI_ORDER, Era5Monthly)
 
+
+def ym(key) -> str:
+    """month_axis returns year*100+month integer keys, not dates."""
+    k = int(key)
+    return f"{k // 100:04d}-{k % 100:02d}"
+
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_LISTS = [REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv",
               REPO_ROOT / "T&C" / "dynamic_lma_test" / "evergreen_ameriflux.csv"]
@@ -126,7 +133,7 @@ def main(argv=None) -> int:
             s = np.asarray(ser["si"][k], dtype=float)
             t = ser["si_time"][k]
             fin = np.isfinite(s)
-            span = f"{t[0]:%Y-%m}..{t[-1]:%Y-%m}" if len(t) else "-"
+            span = f"{ym(t[0])}..{ym(t[-1])}" if len(t) else "-"
             print(f"  {k:<11}{s.size:>6}{span:>18}"
                   f"{100*(1-fin.mean()):>6.1f}%"
                   f"{np.nanmean(s):>8.2f}{np.nanmin(s):>8.2f}{np.nanmax(s):>8.2f}")
@@ -137,7 +144,7 @@ def main(argv=None) -> int:
         # Annual means of the chosen index, and which years would be flagged.
         s = np.asarray(ser["si"][a.index], dtype=float)
         t = ser["si_time"][a.index]
-        yrs = np.array([d.year for d in t])
+        yrs = np.asarray(t, dtype=int) // 100
         rows = []
         for y in range(int(yrs.min()), int(yrs.max()) + 1):
             v = s[yrs == y]

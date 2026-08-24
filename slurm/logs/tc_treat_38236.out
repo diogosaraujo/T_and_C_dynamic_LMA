@@ -1,0 +1,1610 @@
+job        : 38236
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-24T14:37:23Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+stations  : 98   pair filter: era5_land:*_ic
+
+US-Bar  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.026499  dyn(final)=0.024352
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.85769                       6.133%
+  An_H     differs         4.26229                       2.204%
+  B_H      differs         109.087                       0.829%
+  T_H      differs       0.0327386                       3.507%
+  EIn_H    differs       0.0835168                       4.300%
+  EG       differs       0.0356049                       9.395%
+  QE       differs          42.878                       2.411%
+  H        differs         47.4003                       4.505%
+  Rn       differs          41.527                       0.890%
+  SWE      differs         4.02655                       0.294%
+  Lk       differs        0.678946                       6.340%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.13% of the fixed-arm mean.
+
+US-Blk  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.017082  dyn(final)=0.015866
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.53195                       9.796%
+  An_H     differs           11.44                       3.564%
+  B_H      differs         215.455                       0.646%
+  T_H      differs        0.138189                       4.834%
+  EIn_H    differs        0.255459                       4.909%
+  EG       differs       0.0676436                      13.202%
+  QE       differs         264.289                       3.156%
+  H        differs         133.509                       7.954%
+  Rn       differs         257.089                       0.534%
+  SWE      differs         7.67906                       2.534%
+  Lk       differs            0.01                      31.174%
+
+  OK: the arms differ. LAI_H mean |diff| = 9.80% of the fixed-arm mean.
+
+US-CPF  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.015792  dyn(final)=0.014442
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.900232                       7.767%
+  An_H     differs         2.95343                       5.444%
+  B_H      differs         80.3388                       0.803%
+  T_H      differs        0.124442                       5.310%
+  EIn_H    differs        0.184893                       6.311%
+  EG       differs       0.0775097                      15.598%
+  QE       differs         249.504                       4.214%
+  H        differs         429.607                       6.174%
+  Rn       differs          400.28                       1.577%
+  SWE      differs         29.5573                       1.637%
+  Lk       differs        0.514012                      44.909%
+
+  OK: the arms differ. LAI_H mean |diff| = 7.77% of the fixed-arm mean.
+
+US-CPk  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013538  dyn(final)=0.013004
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.845653                       8.332%
+  An_H     differs         8.54962                       8.119%
+  B_H      differs         39.9768                       0.603%
+  T_H      differs        0.191949                       6.989%
+  EIn_H    differs        0.124435                       9.608%
+  EG       differs       0.0790357                       8.286%
+  QE       differs         140.127                       5.032%
+  H        differs         260.451                       5.553%
+  Rn       differs         281.363                       1.105%
+  SWE      differs         27.3118                       3.155%
+  Lk       differs            0.01                      23.736%
+
+  OK: the arms differ. LAI_H mean |diff| = 8.33% of the fixed-arm mean.
+
+US-CRK  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013890  dyn(final)=0.012843
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.47061                       6.619%
+  An_H     differs         6.93729                       2.432%
+  B_H      differs         102.127                       0.218%
+  T_H      differs        0.154389                       2.969%
+  EIn_H    differs        0.170438                       3.219%
+  EG       differs       0.0262345                       6.629%
+  QE       differs         103.608                       2.108%
+  H        differs         95.5138                       8.393%
+  Rn       differs         10.5793                       0.301%
+  SWE      differs       0.0945558                       0.726%
+  Lk       differs         0.10569                       4.889%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.62% of the fixed-arm mean.
+
+US-CS2  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.016926  dyn(final)=0.018404
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs          1.5789                       8.028%
+  An_H     differs         10.1767                       2.262%
+  B_H      differs         110.615                       0.367%
+  T_H      differs        0.166219                       3.831%
+  EIn_H    differs           0.173                       3.229%
+  EG       differs       0.0315483                      12.033%
+  QE       differs         113.038                       2.724%
+  H        differs         217.984                       7.285%
+  Rn       differs         82.6334                       0.433%
+  SWE      differs         6.14634                       1.123%
+  Lk       differs        0.370888                      22.118%
+
+  OK: the arms differ. LAI_H mean |diff| = 8.03% of the fixed-arm mean.
+
+US-CZ2  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.015014  dyn(final)=0.014801
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         0.73199                       5.810%
+  An_H     differs         5.79851                       4.911%
+  B_H      differs         41.7115                       0.176%
+  T_H      differs        0.191139                       4.473%
+  EIn_H    differs       0.0727886                       4.258%
+  EG       differs        0.042651                       2.806%
+  QE       differs         155.776                       3.638%
+  H        differs         118.781                       2.455%
+  Rn       differs         202.015                       0.163%
+  SWE      differs          4.8002                       2.587%
+  Lk       differs            0.01                       3.760%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.81% of the fixed-arm mean.
+
+US-CZ3  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013635  dyn(final)=0.012904
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.26376                       7.862%
+  An_H     differs         8.82566                       6.321%
+  B_H      differs         101.618                       0.513%
+  T_H      differs        0.345815                       6.763%
+  EIn_H    differs        0.305579                       7.148%
+  EG       differs        0.179137                      10.120%
+  QE       differs         355.503                       6.306%
+  H        differs         350.844                       4.982%
+  Rn       differs         582.415                       1.778%
+  SWE      differs         115.239                       2.826%
+  Lk       differs            0.01                      35.814%
+
+  OK: the arms differ. LAI_H mean |diff| = 7.86% of the fixed-arm mean.
+
+US-CZ4  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.012309  dyn(final)=0.011429
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.985895                       8.079%
+  An_H     differs          3.9251                       4.818%
+  B_H      differs         100.084                       0.572%
+  T_H      differs          0.3135                       7.263%
+  EIn_H    differs         0.32261                       9.892%
+  EG       differs        0.160246                      38.413%
+  QE       differs         289.875                       8.962%
+  H        differs         448.386                       6.717%
+  Rn       differs         554.338                       3.574%
+  SWE      differs         164.057                       2.090%
+  Lk       differs         3.40979                      58.280%
+
+  OK: the arms differ. LAI_H mean |diff| = 8.08% of the fixed-arm mean.
+
+US-ChR  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.018772  dyn(final)=0.018905
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.613579                       5.247%
+  An_H     differs         1.59423                       1.267%
+  B_H      differs         82.1367                       0.396%
+  T_H      differs        0.031489                       1.942%
+  EIn_H    differs       0.0675512                       3.432%
+  EG       differs       0.0242558                       2.970%
+  QE       differs         28.4958                       1.150%
+  H        differs         26.6479                       4.300%
+  Rn       differs          67.943                       0.413%
+  SWE      differs        0.854769                       0.681%
+  Lk       differs       0.0807732                       1.693%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.25% of the fixed-arm mean.
+
+US-Cst  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.015887  dyn(final)=0.014384
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.55033                       7.134%
+  An_H     differs          9.5751                       2.265%
+  B_H      differs         56.1196                       0.251%
+  T_H      differs       0.0955384                       3.172%
+  EIn_H    differs        0.147936                       3.940%
+  EG       differs       0.0294145                      10.057%
+  QE       differs         68.1442                       1.999%
+  H        differs         41.2088                       8.565%
+  Rn       differs         15.1042                       0.376%
+  SWE      differs         1.38849                       2.300%
+  Lk       differs        0.164753                       4.318%
+
+  OK: the arms differ. LAI_H mean |diff| = 7.13% of the fixed-arm mean.
+
+US-Cwt  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.023853  dyn(final)=0.024996
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         0.81117                       5.452%
+  An_H     differs         2.69128                       1.109%
+  B_H      differs         67.8904                       0.225%
+  T_H      differs       0.0327568                       2.134%
+  EIn_H    differs        0.051945                       2.798%
+  EG       differs       0.0192797                       3.484%
+  QE       differs         24.0002                       1.146%
+  H        differs         38.4933                       4.140%
+  Rn       differs         88.1252                       0.425%
+  SWE      differs          1.2199                       0.795%
+  Lk       differs        0.279392                       1.479%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.45% of the fixed-arm mean.
+
+US-DPP
+  FAIL: no fixed_lma/dyn_lma pair found matching 'era5_land:*_ic'. Nothing was
+        compared, which is not the same as a pass -- check the run
+        tree under /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-DPP.
+
+US-Dk2  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.023572  dyn(final)=0.025395
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.666771                       3.390%
+  An_H     differs        0.205181                       0.434%
+  B_H      differs         45.1594                       0.159%
+  T_H      differs       0.0185589                       1.756%
+  EIn_H    differs       0.0845765                       1.966%
+  EG       differs       0.0416497                       2.665%
+  QE       differs         51.6567                       0.978%
+  H        differs         37.1766                       2.990%
+  Rn       differs          29.194                       0.311%
+  SWE      differs         1.29741                       0.348%
+  Lk       differs            0.01                       2.004%
+
+  OK: the arms differ. LAI_H mean |diff| = 3.39% of the fixed-arm mean.
+
+US-Dk3  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020857  dyn(final)=0.021926
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.442463                       2.250%
+  An_H     differs         3.28802                       0.650%
+  B_H      differs         32.3951                       0.056%
+  T_H      differs       0.0692273                       1.652%
+  EIn_H    differs       0.0522329                       1.003%
+  EG       differs      0.00555989                       4.862%
+  QE       differs         46.6789                       1.235%
+  H        differs         42.3117                       2.247%
+  Rn       differs         5.51838                       0.152%
+  SWE      differs         1.36431                       0.531%
+  Lk       differs       0.0445147                       3.043%
+
+  OK: the arms differ. LAI_H mean |diff| = 2.25% of the fixed-arm mean.
+
+US-Fmf  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.017473  dyn(final)=0.019722
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.01111                      13.046%
+  An_H     differs          10.937                      14.277%
+  B_H      differs         103.655                       1.538%
+  T_H      differs         0.18256                      12.095%
+  EIn_H    differs         0.12507                      12.203%
+  EG       differs       0.0464641                      21.264%
+  QE       differs         122.999                      10.438%
+  H        differs         228.225                       7.419%
+  Rn       differs         273.033                       0.635%
+  SWE      differs         12.4692                       4.688%
+  Lk       differs       0.0893724                      54.941%
+
+  OK: the arms differ. LAI_H mean |diff| = 13.05% of the fixed-arm mean.
+
+US-Fuf  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.017646  dyn(final)=0.020096
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.62653                      13.652%
+  An_H     differs         11.5597                      15.618%
+  B_H      differs         71.1165                       0.817%
+  T_H      differs        0.178917                      13.132%
+  EIn_H    differs        0.161206                      12.940%
+  EG       differs       0.0496977                      22.368%
+  QE       differs         146.344                      11.351%
+  H        differs           229.8                       7.926%
+  Rn       differs         265.355                       0.708%
+  SWE      differs         26.2426                       5.624%
+  Lk       differs        0.104717                      46.285%
+
+  OK: the arms differ. LAI_H mean |diff| = 13.65% of the fixed-arm mean.
+
+US-GBT  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.017438  dyn(final)=0.016138
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.51104                      10.313%
+  An_H     differs         9.29529                       7.349%
+  B_H      differs         170.589                       1.525%
+  T_H      differs        0.122497                       7.541%
+  EIn_H    differs        0.153806                       9.302%
+  EG       differs        0.062766                      12.992%
+  QE       differs         241.443                       4.637%
+  H        differs         544.697                       8.108%
+  Rn       differs         373.497                       1.475%
+  SWE      differs         32.3894                       2.913%
+  Lk       differs            0.01                      32.558%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.31% of the fixed-arm mean.
+
+US-GLE  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.017438  dyn(final)=0.016138
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.51174                      10.007%
+  An_H     differs         9.11182                       7.125%
+  B_H      differs         142.405                       1.283%
+  T_H      differs        0.125268                       7.308%
+  EIn_H    differs        0.153854                       8.974%
+  EG       differs       0.0628499                      12.934%
+  QE       differs         242.486                       4.539%
+  H        differs         487.406                       7.908%
+  Rn       differs         373.524                       1.519%
+  SWE      differs          31.769                       2.911%
+  Lk       differs            0.01                      30.617%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.01% of the fixed-arm mean.
+
+US-HBK  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.025225  dyn(final)=0.023724
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.18665                       5.430%
+  An_H     differs         1.47735                       1.787%
+  B_H      differs         113.782                       0.896%
+  T_H      differs       0.0150467                       3.002%
+  EIn_H    differs       0.0576683                       3.190%
+  EG       differs       0.0506044                       8.370%
+  QE       differs         34.7505                       2.122%
+  H        differs         21.4942                       4.055%
+  Rn       differs         43.7704                       0.816%
+  SWE      differs          3.0819                       0.362%
+  Lk       differs          0.3366                       5.580%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.43% of the fixed-arm mean.
+
+US-Ha1  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.023240  dyn(final)=0.021805
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.899304                       5.991%
+  An_H     differs         1.08893                       1.833%
+  B_H      differs         79.7268                       0.573%
+  T_H      differs       0.0127676                       3.561%
+  EIn_H    differs       0.0599326                       3.743%
+  EG       differs       0.0568473                      14.743%
+  QE       differs         39.0982                       4.143%
+  H        differs         63.1975                       4.937%
+  Rn       differs         87.2789                       0.931%
+  SWE      differs          2.2269                       0.618%
+  Lk       differs           0.827                      11.545%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.99% of the fixed-arm mean.
+
+US-Ha2  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019498  dyn(final)=0.019255
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.87381                       7.917%
+  An_H     differs         3.50349                       1.194%
+  B_H      differs         77.7124                       0.300%
+  T_H      differs        0.023586                       4.112%
+  EIn_H    differs          0.1096                       3.103%
+  EG       differs       0.0241879                      16.044%
+  QE       differs         70.7239                       2.798%
+  H        differs         61.9872                       5.379%
+  Rn       differs         96.9284                       1.142%
+  SWE      differs         7.25042                       1.048%
+  Lk       differs        0.866733                      24.512%
+
+  OK: the arms differ. LAI_H mean |diff| = 7.92% of the fixed-arm mean.
+
+US-Ho1  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.022716  dyn(final)=0.024272
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs          1.4984                       6.832%
+  An_H     differs         1.96075                       0.949%
+  B_H      differs         100.747                       0.371%
+  T_H      differs       0.0210558                       4.100%
+  EIn_H    differs       0.0958997                       3.333%
+  EG       differs       0.0176309                      18.647%
+  QE       differs         57.3091                       2.826%
+  H        differs         87.8029                       5.154%
+  Rn       differs         89.9538                       1.026%
+  SWE      differs         5.51056                       0.804%
+  Lk       differs         1.05987                      26.510%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.83% of the fixed-arm mean.
+
+US-Ho2  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.022716  dyn(final)=0.024272
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.54749                       6.777%
+  An_H     differs        0.844961                       0.939%
+  B_H      differs         119.655                       0.448%
+  T_H      differs       0.0296345                       4.218%
+  EIn_H    differs        0.109375                       3.305%
+  EG       differs       0.0168971                      14.834%
+  QE       differs         61.9529                       2.755%
+  H        differs         110.796                       5.099%
+  Rn       differs         79.9229                       0.984%
+  SWE      differs         3.93216                       0.964%
+  Lk       differs         2.80157                      26.558%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.78% of the fixed-arm mean.
+
+US-Ho3  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.022716  dyn(final)=0.024272
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.52548                       6.905%
+  An_H     differs        0.742787                       0.913%
+  B_H      differs         98.0638                       0.356%
+  T_H      differs         0.02537                       4.143%
+  EIn_H    differs       0.0750398                       3.356%
+  EG       differs       0.0205117                      18.065%
+  QE       differs         61.4075                       2.964%
+  H        differs         43.4661                       5.248%
+  Rn       differs         64.2476                       1.013%
+  SWE      differs         5.77281                       0.896%
+  Lk       differs           4.016                      27.755%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.91% of the fixed-arm mean.
+
+US-LPH  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.023423  dyn(final)=0.021964
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.08997                       6.399%
+  An_H     differs         1.75472                       2.392%
+  B_H      differs         105.659                       0.806%
+  T_H      differs       0.0162338                       3.377%
+  EIn_H    differs       0.0461979                       4.153%
+  EG       differs       0.0434559                      16.341%
+  QE       differs         29.8509                       4.141%
+  H        differs          30.246                       5.609%
+  Rn       differs         57.8567                       1.307%
+  SWE      differs         3.48197                       0.577%
+  Lk       differs        0.610279                      15.943%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.40% of the fixed-arm mean.
+
+US-MEF  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.012431  dyn(final)=0.011359
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.18249                      13.275%
+  An_H     differs         10.4578                       8.039%
+  B_H      differs         481.413                       3.227%
+  T_H      differs        0.195267                       8.063%
+  EIn_H    differs        0.232187                      11.500%
+  EG       differs        0.102192                      16.876%
+  QE       differs         212.963                       6.935%
+  H        differs         323.944                      13.733%
+  Rn       differs         308.213                       2.140%
+  SWE      differs         79.3458                       9.174%
+  Lk       differs            0.01                      39.460%
+
+  OK: the arms differ. LAI_H mean |diff| = 13.28% of the fixed-arm mean.
+
+US-MMS  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019646  dyn(final)=0.019753
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.47611                       8.581%
+  An_H     differs         2.62858                       2.567%
+  B_H      differs         123.405                       0.735%
+  T_H      differs       0.0395545                       3.429%
+  EIn_H    differs        0.136685                       5.066%
+  EG       differs       0.0421395                       6.684%
+  QE       differs          90.709                       1.739%
+  H        differs         64.9805                       6.421%
+  Rn       differs         77.4472                       0.524%
+  SWE      differs         2.69893                       0.957%
+  Lk       differs        0.142344                       2.920%
+
+  OK: the arms differ. LAI_H mean |diff| = 8.58% of the fixed-arm mean.
+
+US-MOz  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.014852  dyn(final)=0.015656
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.32027                      12.344%
+  An_H     differs         2.05436                       4.818%
+  B_H      differs         207.702                       1.790%
+  T_H      differs        0.045876                       4.868%
+  EIn_H    differs        0.110401                      10.494%
+  EG       differs       0.0444831                       7.150%
+  QE       differs         65.5545                       2.682%
+  H        differs         84.9973                       8.492%
+  Rn       differs         58.1184                       0.620%
+  SWE      differs         9.29935                       3.124%
+  Lk       differs        0.263821                       4.185%
+
+  OK: the arms differ. LAI_H mean |diff| = 12.34% of the fixed-arm mean.
+
+US-MRf  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.014835  dyn(final)=0.014833
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.09754                       5.770%
+  An_H     differs         2.37858                       2.072%
+  B_H      differs         112.283                       0.376%
+  T_H      differs       0.0521797                       3.000%
+  EIn_H    differs         0.11123                       2.535%
+  EG       differs       0.0312811                       4.019%
+  QE       differs           78.66                       1.865%
+  H        differs         81.6411                       1.653%
+  Rn       differs         169.462                       0.048%
+  SWE      differs           1.177                       1.194%
+  Lk       differs            0.01                       5.424%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.77% of the fixed-arm mean.
+
+US-Me1  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013411  dyn(final)=0.013281
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.491096                       5.772%
+  An_H     differs         6.38526                       5.759%
+  B_H      differs         34.3836                       0.353%
+  T_H      differs        0.121977                       5.985%
+  EIn_H    differs        0.116367                       6.871%
+  EG       differs       0.0626057                       3.867%
+  QE       differs         82.3023                       3.940%
+  H        differs         231.089                       1.910%
+  Rn       differs          307.36                       0.260%
+  SWE      differs         16.3539                       1.573%
+  Lk       differs            0.01                      11.220%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.77% of the fixed-arm mean.
+
+US-Me2  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013179  dyn(final)=0.013390
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.664902                       6.048%
+  An_H     differs         7.46008                       5.332%
+  B_H      differs         62.5734                       0.420%
+  T_H      differs        0.137394                       4.673%
+  EIn_H    differs        0.154211                       5.116%
+  EG       differs       0.0959641                       4.804%
+  QE       differs         167.092                       3.645%
+  H        differs         302.831                       2.961%
+  Rn       differs         471.233                       0.461%
+  SWE      differs          27.795                       1.610%
+  Lk       differs            0.01                      28.924%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.05% of the fixed-arm mean.
+
+US-Me4  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013179  dyn(final)=0.013390
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.637209                       5.893%
+  An_H     differs         4.91331                       5.227%
+  B_H      differs         68.8701                       0.483%
+  T_H      differs        0.107068                       3.988%
+  EIn_H    differs        0.107137                       4.937%
+  EG       differs       0.0834751                       8.775%
+  QE       differs         194.018                       4.012%
+  H        differs          292.09                       2.729%
+  Rn       differs         391.796                       0.454%
+  SWE      differs         29.0217                       1.721%
+  Lk       differs         1.25186                      13.282%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.89% of the fixed-arm mean.
+
+US-Me6  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013731  dyn(final)=0.013815
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.594493                       5.429%
+  An_H     differs         8.64921                       6.040%
+  B_H      differs         116.221                       0.818%
+  T_H      differs        0.185375                       5.713%
+  EIn_H    differs        0.162358                       5.024%
+  EG       differs        0.161321                      13.278%
+  QE       differs         137.457                       5.274%
+  H        differs         293.399                       3.521%
+  Rn       differs         350.029                       0.433%
+  SWE      differs         28.9805                       1.392%
+  Lk       differs         4.89357                      36.145%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.43% of the fixed-arm mean.
+
+US-Me7  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013179  dyn(final)=0.013390
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         0.68558                       6.044%
+  An_H     differs         7.19092                       5.346%
+  B_H      differs         68.3605                       0.447%
+  T_H      differs        0.137812                       4.743%
+  EIn_H    differs        0.177942                       5.152%
+  EG       differs       0.0770694                       5.335%
+  QE       differs         172.422                       3.575%
+  H        differs         334.695                       2.808%
+  Rn       differs         383.637                       0.350%
+  SWE      differs         21.5741                       1.403%
+  Lk       differs            0.01                      19.247%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.04% of the fixed-arm mean.
+
+US-MtB  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.018786  dyn(final)=0.021461
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.07267                      18.664%
+  An_H     differs         9.56394                      18.962%
+  B_H      differs         75.0177                       1.182%
+  T_H      differs        0.131266                      16.227%
+  EIn_H    differs        0.209588                      22.098%
+  EG       differs        0.114082                      19.544%
+  QE       differs         132.197                      11.464%
+  H        differs         224.601                       5.059%
+  Rn       differs         238.223                       0.719%
+  SWE      differs         15.6426                       8.626%
+  Lk       differs            0.01                      27.640%
+
+  OK: the arms differ. LAI_H mean |diff| = 18.66% of the fixed-arm mean.
+
+US-NC2  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.027184  dyn(final)=0.029506
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.09075                       4.656%
+  An_H     differs         4.49952                       1.142%
+  B_H      differs         130.137                       0.191%
+  T_H      differs       0.0787156                       2.612%
+  EIn_H    differs       0.0886617                       2.064%
+  EG       differs       0.0105983                      15.007%
+  QE       differs         55.6553                       1.930%
+  H        differs         48.2381                       2.675%
+  Rn       differs         48.4848                       0.614%
+  SWE      differs        0.132983                       0.479%
+  Lk       differs        0.354692                       5.126%
+
+  OK: the arms differ. LAI_H mean |diff| = 4.66% of the fixed-arm mean.
+
+US-NC3  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.027184  dyn(final)=0.029506
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.05642                       4.661%
+  An_H     differs          3.9147                       1.475%
+  B_H      differs          111.57                       0.165%
+  T_H      differs         0.11193                       3.385%
+  EIn_H    differs       0.0985566                       1.795%
+  EG       differs      0.00666673                      15.255%
+  QE       differs         75.8728                       2.497%
+  H        differs         81.5838                       3.116%
+  Rn       differs         59.7616                       0.476%
+  SWE      differs         0.11821                       0.417%
+  Lk       differs        0.878718                       6.091%
+
+  OK: the arms differ. LAI_H mean |diff| = 4.66% of the fixed-arm mean.
+
+US-NC5  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020957  dyn(final)=0.021956
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.483576                       2.301%
+  An_H     differs         1.32641                       0.631%
+  B_H      differs         30.5562                       0.054%
+  T_H      differs       0.0719852                       1.258%
+  EIn_H    differs       0.0492417                       1.131%
+  EG       differs       0.0088832                       5.202%
+  QE       differs         48.7498                       0.871%
+  H        differs         41.0258                       2.013%
+  Rn       differs         15.6663                       0.245%
+  SWE      differs         3.14574                       0.652%
+  Lk       differs       0.0563267                       2.215%
+
+  OK: the arms differ. LAI_H mean |diff| = 2.30% of the fixed-arm mean.
+
+US-NMj
+  FAIL: no fixed_lma/dyn_lma pair found matching 'era5_land:*_ic'. Nothing was
+        compared, which is not the same as a pass -- check the run
+        tree under /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-NMj.
+
+US-NR1  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.012479  dyn(final)=0.012186
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.41843                      12.276%
+  An_H     differs         8.55812                       7.565%
+  B_H      differs         333.032                       2.854%
+  T_H      differs        0.190684                       7.712%
+  EIn_H    differs        0.239588                      11.940%
+  EG       differs         0.07165                      10.246%
+  QE       differs         178.427                       6.033%
+  H        differs         318.076                       8.765%
+  Rn       differs         316.397                       1.817%
+  SWE      differs         85.5542                       9.510%
+  Lk       differs        0.679104                      36.291%
+
+  OK: the arms differ. LAI_H mean |diff| = 12.28% of the fixed-arm mean.
+
+US-Oho  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.024520  dyn(final)=0.024707
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.51568                      10.151%
+  An_H     differs         7.30237                       3.001%
+  B_H      differs         128.193                       0.764%
+  T_H      differs        0.178185                       5.121%
+  EIn_H    differs        0.169687                       5.333%
+  EG       differs       0.0551962                      10.997%
+  QE       differs         120.035                       4.086%
+  H        differs         104.065                       9.146%
+  Rn       differs         37.9548                       0.898%
+  SWE      differs         3.00886                       0.876%
+  Lk       differs        0.645579                      10.457%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.15% of the fixed-arm mean.
+
+US-PFL  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020765  dyn(final)=0.022595
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.14274                      11.309%
+  An_H     differs         2.05824                       3.549%
+  B_H      differs         171.362                       1.246%
+  T_H      differs       0.0359647                       4.299%
+  EIn_H    differs        0.166518                       5.750%
+  EG       differs        0.105482                      12.450%
+  QE       differs         87.8418                       3.821%
+  H        differs         86.9278                       6.885%
+  Rn       differs         50.5482                       0.865%
+  SWE      differs         2.98272                       1.012%
+  Lk       differs         1.11352                      25.317%
+
+  OK: the arms differ. LAI_H mean |diff| = 11.31% of the fixed-arm mean.
+
+US-PFb  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019881  dyn(final)=0.020705
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.12743                       4.907%
+  An_H     differs         2.82343                       1.141%
+  B_H      differs         54.8536                       0.203%
+  T_H      differs       0.0508668                       2.183%
+  EIn_H    differs        0.124834                       1.971%
+  EG       differs       0.0289843                       5.938%
+  QE       differs         67.5631                       1.505%
+  H        differs         69.1859                       3.577%
+  Rn       differs         70.0231                       0.232%
+  SWE      differs         6.18184                       0.476%
+  Lk       differs         6.99152                      20.947%
+
+  OK: the arms differ. LAI_H mean |diff| = 4.91% of the fixed-arm mean.
+
+US-PFc  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020765  dyn(final)=0.022595
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.18349                      11.417%
+  An_H     differs         5.31671                       3.638%
+  B_H      differs         178.264                       1.286%
+  T_H      differs       0.0490792                       4.462%
+  EIn_H    differs        0.121295                       5.930%
+  EG       differs        0.068106                       9.524%
+  QE       differs         59.3948                       3.435%
+  H        differs          63.517                       6.626%
+  Rn       differs         43.2952                       0.652%
+  SWE      differs         3.69043                       0.973%
+  Lk       differs        0.590089                      10.523%
+
+  OK: the arms differ. LAI_H mean |diff| = 11.42% of the fixed-arm mean.
+
+US-PFg  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019881  dyn(final)=0.020705
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.13211                       4.912%
+  An_H     differs          4.2551                       1.156%
+  B_H      differs           45.75                       0.195%
+  T_H      differs        0.115418                       2.276%
+  EIn_H    differs        0.125884                       1.915%
+  EG       differs       0.0196295                       5.737%
+  QE       differs         77.9046                       1.441%
+  H        differs         171.787                       3.657%
+  Rn       differs         74.9537                       0.222%
+  SWE      differs         5.10992                       0.455%
+  Lk       differs        0.340213                       9.250%
+
+  OK: the arms differ. LAI_H mean |diff| = 4.91% of the fixed-arm mean.
+
+US-PFh  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019881  dyn(final)=0.020705
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs          1.1298                       4.892%
+  An_H     differs         2.68859                       1.111%
+  B_H      differs         51.4348                       0.206%
+  T_H      differs        0.180568                       2.292%
+  EIn_H    differs        0.126872                       1.899%
+  EG       differs       0.0336775                       6.686%
+  QE       differs         121.834                       1.606%
+  H        differs         110.089                       3.816%
+  Rn       differs         77.8749                       0.253%
+  SWE      differs         6.19011                       0.455%
+  Lk       differs        0.390256                      16.791%
+
+  OK: the arms differ. LAI_H mean |diff| = 4.89% of the fixed-arm mean.
+
+US-PFi  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020765  dyn(final)=0.022595
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.17675                      11.315%
+  An_H     differs         5.01855                       3.518%
+  B_H      differs         173.509                       1.226%
+  T_H      differs       0.0387282                       4.176%
+  EIn_H    differs          0.1462                       5.548%
+  EG       differs       0.0642176                       9.572%
+  QE       differs         68.3099                       3.215%
+  H        differs         47.1888                       6.409%
+  Rn       differs         47.1125                       0.697%
+  SWE      differs         3.09824                       0.751%
+  Lk       differs        0.359442                       9.438%
+
+  OK: the arms differ. LAI_H mean |diff| = 11.32% of the fixed-arm mean.
+
+US-PFj  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020765  dyn(final)=0.022595
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.18784                      11.414%
+  An_H     differs          5.3444                       3.534%
+  B_H      differs          150.31                       1.004%
+  T_H      differs       0.0468194                       3.988%
+  EIn_H    differs        0.170409                       5.636%
+  EG       differs       0.0655654                       9.011%
+  QE       differs         80.7562                       3.089%
+  H        differs         47.2889                       6.263%
+  Rn       differs         50.2867                       0.697%
+  SWE      differs         1.91809                       0.618%
+  Lk       differs        0.392922                       9.075%
+
+  OK: the arms differ. LAI_H mean |diff| = 11.41% of the fixed-arm mean.
+
+US-PFk  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019859  dyn(final)=0.021669
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.08232                      11.101%
+  An_H     differs         4.77173                       3.648%
+  B_H      differs         159.289                       1.134%
+  T_H      differs       0.0289325                       3.926%
+  EIn_H    differs        0.144091                       5.736%
+  EG       differs       0.0616114                       8.530%
+  QE       differs         73.1075                       3.110%
+  H        differs         46.1754                       6.203%
+  Rn       differs         80.8671                       0.710%
+  SWE      differs         2.62611                       0.603%
+  Lk       differs        0.333798                       7.553%
+
+  OK: the arms differ. LAI_H mean |diff| = 11.10% of the fixed-arm mean.
+
+US-PFm  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019247  dyn(final)=0.020692
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.88003                      10.714%
+  An_H     differs         4.05812                       3.619%
+  B_H      differs         149.153                       1.099%
+  T_H      differs       0.0311191                       3.953%
+  EIn_H    differs        0.124989                       5.616%
+  EG       differs       0.0496336                       9.169%
+  QE       differs         61.3197                       3.203%
+  H        differs          43.211                       6.130%
+  Rn       differs         65.3516                       0.716%
+  SWE      differs         2.01302                       0.679%
+  Lk       differs        0.300489                       8.742%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.71% of the fixed-arm mean.
+
+US-PFn  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020765  dyn(final)=0.022595
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.18346                      11.550%
+  An_H     differs         6.00492                       3.690%
+  B_H      differs         162.226                       1.200%
+  T_H      differs       0.0496515                       4.229%
+  EIn_H    differs        0.164049                       5.709%
+  EG       differs        0.078342                       9.861%
+  QE       differs         86.7166                       3.368%
+  H        differs         55.2207                       6.684%
+  Rn       differs         16.3461                       0.720%
+  SWE      differs         2.41929                       0.702%
+  Lk       differs        0.521581                       9.621%
+
+  OK: the arms differ. LAI_H mean |diff| = 11.55% of the fixed-arm mean.
+
+US-PFp  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019247  dyn(final)=0.020692
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.90877                      10.780%
+  An_H     differs         5.29136                       3.633%
+  B_H      differs         147.595                       1.110%
+  T_H      differs       0.0463974                       4.170%
+  EIn_H    differs        0.120587                       5.836%
+  EG       differs       0.0476381                       6.896%
+  QE       differs         64.0169                       2.250%
+  H        differs         41.1133                       5.961%
+  Rn       differs          32.864                       0.565%
+  SWE      differs          2.0051                       0.664%
+  Lk       differs        0.864755                      37.209%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.78% of the fixed-arm mean.
+
+US-PFq  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019247  dyn(final)=0.020692
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.88378                      10.634%
+  An_H     differs          1.7665                       3.550%
+  B_H      differs         156.717                       1.150%
+  T_H      differs       0.0295723                       3.974%
+  EIn_H    differs        0.135149                       5.681%
+  EG       differs       0.0820669                       8.396%
+  QE       differs         66.8554                       2.946%
+  H        differs         67.2281                       6.123%
+  Rn       differs         98.3008                       0.694%
+  SWE      differs         2.03113                       0.705%
+  Lk       differs         0.42326                      12.043%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.63% of the fixed-arm mean.
+
+US-PFs  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019247  dyn(final)=0.020692
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.88946                      10.880%
+  An_H     differs         2.07466                       3.791%
+  B_H      differs          132.52                       0.933%
+  T_H      differs       0.0261077                       4.564%
+  EIn_H    differs       0.0995594                       6.265%
+  EG       differs        0.102186                      14.057%
+  QE       differs         70.2616                       4.277%
+  H        differs         56.2864                       7.009%
+  Rn       differs         59.9803                       0.776%
+  SWE      differs         2.20488                       0.962%
+  Lk       differs         1.05264                      26.364%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.88% of the fixed-arm mean.
+
+US-PFt  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019682  dyn(final)=0.021134
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.10009                       5.010%
+  An_H     differs         1.61325                       1.142%
+  B_H      differs         63.4913                       0.180%
+  T_H      differs        0.219209                       2.360%
+  EIn_H    differs          0.1282                       1.838%
+  EG       differs       0.0385786                       7.908%
+  QE       differs         148.197                       1.640%
+  H        differs          135.06                       3.910%
+  Rn       differs         127.096                       0.248%
+  SWE      differs         4.75962                       0.497%
+  Lk       differs        0.719898                      25.381%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.01% of the fixed-arm mean.
+
+US-SB1  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020570  dyn(final)=0.021412
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.426942                       2.254%
+  An_H     differs        0.249784                       0.246%
+  B_H      differs         12.5753                       0.034%
+  T_H      differs       0.0587867                       1.085%
+  EIn_H    differs       0.0383971                       1.038%
+  EG       differs      0.00742225                       4.009%
+  QE       differs         39.8558                       0.806%
+  H        differs         48.6092                       2.301%
+  Rn       differs         68.9924                       0.305%
+  SWE      differs         1.06394                       0.603%
+  Lk       differs       0.0948007                       2.144%
+
+  OK: the arms differ. LAI_H mean |diff| = 2.25% of the fixed-arm mean.
+
+US-SHC  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013443  dyn(final)=0.012691
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.991017                       7.280%
+  An_H     differs         8.18093                       5.632%
+  B_H      differs         123.422                       0.569%
+  T_H      differs         0.37974                       4.890%
+  EIn_H    differs        0.262737                       6.416%
+  EG       differs        0.152064                      19.788%
+  QE       differs         309.191                       5.466%
+  H        differs          454.49                       4.787%
+  Rn       differs         566.793                       1.664%
+  SWE      differs         93.0991                       2.437%
+  Lk       differs        0.449493                      17.568%
+
+  OK: the arms differ. LAI_H mean |diff| = 7.28% of the fixed-arm mean.
+
+US-SP1  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.018883  dyn(final)=0.019592
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.483786                       2.352%
+  An_H     differs        0.825633                       0.303%
+  B_H      differs         28.4307                       0.067%
+  T_H      differs         0.12255                       1.659%
+  EIn_H    differs       0.0498457                       0.974%
+  EG       differs       0.0119138                       5.353%
+  QE       differs         82.6596                       1.157%
+  H        differs         67.7028                       2.210%
+  Rn       differs          9.1138                       0.263%
+  SWE      differs      0.00786581                       0.102%
+  Lk       differs        0.139266                       6.364%
+
+  OK: the arms differ. LAI_H mean |diff| = 2.35% of the fixed-arm mean.
+
+US-SP2  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.016508  dyn(final)=0.016982
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.346203                       1.853%
+  An_H     differs         1.24595                       0.373%
+  B_H      differs         19.5426                       0.062%
+  T_H      differs       0.0755582                       1.039%
+  EIn_H    differs       0.0252662                       0.873%
+  EG       differs      0.00850387                       2.904%
+  QE       differs         51.0528                       0.685%
+  H        differs         47.8122                       2.217%
+  Rn       differs         10.5424                       0.215%
+  SWE      differs      0.00657529                       0.119%
+  Lk       differs        0.091856                       4.650%
+
+  OK: the arms differ. LAI_H mean |diff| = 1.85% of the fixed-arm mean.
+
+US-SP3  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.016508  dyn(final)=0.016982
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.347101                       1.836%
+  An_H     differs         2.56531                       0.308%
+  B_H      differs         20.1237                       0.061%
+  T_H      differs       0.0975859                       1.131%
+  EIn_H    differs       0.0291577                       0.825%
+  EG       differs      0.00734236                       3.915%
+  QE       differs         65.9844                       0.735%
+  H        differs         59.3349                       1.437%
+  Rn       differs         8.36965                       0.211%
+  SWE      differs       0.0167286                       0.206%
+  Lk       differs        0.113856                       4.457%
+
+  OK: the arms differ. LAI_H mean |diff| = 1.84% of the fixed-arm mean.
+
+US-SP4  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.016508  dyn(final)=0.016982
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         0.33687                       1.904%
+  An_H     differs         1.38005                       0.331%
+  B_H      differs         21.1081                       0.061%
+  T_H      differs       0.0887706                       1.206%
+  EIn_H    differs       0.0306951                       0.830%
+  EG       differs      0.00859689                       4.786%
+  QE       differs         59.7422                       0.786%
+  H        differs         53.5956                       1.373%
+  Rn       differs         6.12964                       0.219%
+  SWE      differs       0.0119698                       0.175%
+  Lk       differs       0.0402661                       4.293%
+
+  OK: the arms differ. LAI_H mean |diff| = 1.90% of the fixed-arm mean.
+
+US-SSH  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.027439  dyn(final)=0.028543
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.02954                       5.758%
+  An_H     differs         4.39461                       1.014%
+  B_H      differs         84.5108                       0.394%
+  T_H      differs       0.0190295                       2.411%
+  EIn_H    differs        0.118338                       3.280%
+  EG       differs       0.0203685                       4.255%
+  QE       differs         71.9992                       1.461%
+  H        differs         44.3016                       3.958%
+  Rn       differs         83.4755                       0.640%
+  SWE      differs         1.74542                       0.457%
+  Lk       differs            0.01                       8.764%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.76% of the fixed-arm mean.
+
+US-Slt  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.024981  dyn(final)=0.026095
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs          1.0644                       5.234%
+  An_H     differs         1.66033                       0.966%
+  B_H      differs         35.6059                       0.143%
+  T_H      differs       0.0773352                       2.897%
+  EIn_H    differs       0.0734461                       2.742%
+  EG       differs       0.0430907                      10.628%
+  QE       differs         51.9736                       2.743%
+  H        differs         57.5714                       4.596%
+  Rn       differs         50.5891                       1.075%
+  SWE      differs         1.84243                       0.883%
+  Lk       differs        0.275273                       6.046%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.23% of the fixed-arm mean.
+
+US-TEF  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.018414  dyn(final)=0.018070
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.75671                      12.697%
+  An_H     differs         11.2469                       8.636%
+  B_H      differs         114.835                       1.026%
+  T_H      differs        0.117001                       7.584%
+  EIn_H    differs        0.174555                       8.344%
+  EG       differs       0.0612873                      15.593%
+  QE       differs         266.291                       6.403%
+  H        differs         331.844                       8.142%
+  Rn       differs         343.053                       1.338%
+  SWE      differs         36.8564                       2.451%
+  Lk       differs         1.22824                      29.181%
+
+  OK: the arms differ. LAI_H mean |diff| = 12.70% of the fixed-arm mean.
+
+US-UMB  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020094  dyn(final)=0.021858
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.33116                       9.099%
+  An_H     differs          2.1064                       3.457%
+  B_H      differs         90.0785                       0.612%
+  T_H      differs       0.0608348                       3.952%
+  EIn_H    differs        0.116641                       4.587%
+  EG       differs       0.0480857                      13.804%
+  QE       differs         69.5248                       3.548%
+  H        differs         44.7198                       5.289%
+  Rn       differs          71.132                       0.959%
+  SWE      differs          2.0429                       0.650%
+  Lk       differs        0.386443                      10.471%
+
+  OK: the arms differ. LAI_H mean |diff| = 9.10% of the fixed-arm mean.
+
+US-UMd  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020094  dyn(final)=0.021858
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs          1.3198                       8.823%
+  An_H     differs         3.32771                       3.238%
+  B_H      differs         101.504                       0.736%
+  T_H      differs       0.0812144                       4.017%
+  EIn_H    differs       0.0828091                       4.409%
+  EG       differs        0.105681                      16.054%
+  QE       differs         72.2666                       3.679%
+  H        differs         46.2603                       5.155%
+  Rn       differs         27.9182                       0.853%
+  SWE      differs         2.56973                       1.020%
+  Lk       differs        0.397678                      15.356%
+
+  OK: the arms differ. LAI_H mean |diff| = 8.82% of the fixed-arm mean.
+
+US-Vcp  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.017170  dyn(final)=0.014638
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.70107                      13.620%
+  An_H     differs         13.3474                       9.719%
+  B_H      differs          175.13                       1.418%
+  T_H      differs        0.448762                       9.120%
+  EIn_H    differs        0.208571                       8.407%
+  EG       differs       0.0674956                      20.441%
+  QE       differs         303.547                       7.082%
+  H        differs         289.957                      10.089%
+  Rn       differs          315.48                       0.909%
+  SWE      differs         41.8301                       4.845%
+  Lk       differs        0.276283                      46.859%
+
+  OK: the arms differ. LAI_H mean |diff| = 13.62% of the fixed-arm mean.
+
+US-Vcs  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.017170  dyn(final)=0.014638
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.47229                      13.765%
+  An_H     differs          14.214                       9.567%
+  B_H      differs         249.992                       1.811%
+  T_H      differs        0.496156                       9.802%
+  EIn_H    differs        0.348339                       9.018%
+  EG       differs       0.0756573                      18.547%
+  QE       differs         335.468                       7.937%
+  H        differs         316.013                      11.107%
+  Rn       differs         308.477                       1.063%
+  SWE      differs         41.8008                       4.857%
+  Lk       differs        0.473191                      47.589%
+
+  OK: the arms differ. LAI_H mean |diff| = 13.76% of the fixed-arm mean.
+
+US-WBW  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019017  dyn(final)=0.019080
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.685155                       5.242%
+  An_H     differs         1.52384                       1.249%
+  B_H      differs          81.795                       0.377%
+  T_H      differs       0.0263709                       1.996%
+  EIn_H    differs         0.07165                       3.338%
+  EG       differs       0.0325729                       3.109%
+  QE       differs         32.6352                       1.138%
+  H        differs         86.6412                       4.157%
+  Rn       differs         83.3689                       0.412%
+  SWE      differs         6.98976                       2.180%
+  Lk       differs        0.122502                       1.541%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.24% of the fixed-arm mean.
+
+US-WCr  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019247  dyn(final)=0.020692
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.86124                      10.729%
+  An_H     differs         5.27286                       3.787%
+  B_H      differs         130.036                       0.961%
+  T_H      differs       0.0485466                       4.561%
+  EIn_H    differs       0.0882453                       6.380%
+  EG       differs        0.086266                      10.483%
+  QE       differs         59.0574                       3.531%
+  H        differs         75.0695                       7.328%
+  Rn       differs         41.4779                       0.704%
+  SWE      differs         2.04564                       0.857%
+  Lk       differs        0.934741                      18.863%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.73% of the fixed-arm mean.
+
+US-Wi1
+  FAIL: no fixed_lma/dyn_lma pair found matching 'era5_land:*_ic'. Nothing was
+        compared, which is not the same as a pass -- check the run
+        tree under /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Wi1.
+
+US-Wi2
+  FAIL: no fixed_lma/dyn_lma pair found matching 'era5_land:*_ic'. Nothing was
+        compared, which is not the same as a pass -- check the run
+        tree under /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Wi2.
+
+US-Wi3  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.018113  dyn(final)=0.019187
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.67766                      10.648%
+  An_H     differs         2.16268                       4.107%
+  B_H      differs         145.307                       1.192%
+  T_H      differs       0.0341265                       4.448%
+  EIn_H    differs       0.0918642                       6.929%
+  EG       differs       0.0805962                      12.501%
+  QE       differs         55.4714                       3.971%
+  H        differs         89.9112                       5.351%
+  Rn       differs         75.3491                       0.784%
+  SWE      differs          4.0205                       1.052%
+  Lk       differs        0.540644                      10.998%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.65% of the fixed-arm mean.
+
+US-Wi4
+  FAIL: no fixed_lma/dyn_lma pair found matching 'era5_land:*_ic'. Nothing was
+        compared, which is not the same as a pass -- check the run
+        tree under /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-Wi4.
+
+US-Wrc  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.014114  dyn(final)=0.014463
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.903965                       5.325%
+  An_H     differs         5.71325                       2.576%
+  B_H      differs         107.289                       0.426%
+  T_H      differs        0.215267                       3.072%
+  EIn_H    differs        0.221892                       2.477%
+  EG       differs       0.0722767                       6.568%
+  QE       differs         202.399                       2.834%
+  H        differs         301.819                       2.472%
+  Rn       differs         485.544                       0.386%
+  SWE      differs         19.0548                       0.833%
+  Lk       differs        0.898254                       6.010%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.32% of the fixed-arm mean.
+
+US-xAB  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.016040  dyn(final)=0.016866
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.23018                       5.735%
+  An_H     differs         7.10743                       2.449%
+  B_H      differs         115.987                       0.447%
+  T_H      differs         0.21529                       2.889%
+  EIn_H    differs        0.194832                       2.177%
+  EG       differs        0.103879                       3.398%
+  QE       differs         215.879                       2.219%
+  H        differs         198.525                       2.263%
+  Rn       differs         428.912                       0.189%
+  SWE      differs         12.2894                       0.526%
+  Lk       differs         4.53329                       2.432%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.73% of the fixed-arm mean.
+
+US-xBL  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.021780  dyn(final)=0.023892
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.32924                       6.447%
+  An_H     differs         3.65862                       1.541%
+  B_H      differs         85.5163                       0.407%
+  T_H      differs       0.0275819                       2.658%
+  EIn_H    differs       0.0768525                       3.750%
+  EG       differs       0.0142057                       4.000%
+  QE       differs         46.7273                       1.524%
+  H        differs         37.1195                       5.579%
+  Rn       differs         74.4733                       0.712%
+  SWE      differs         5.19378                       1.002%
+  Lk       differs        0.151462                       4.141%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.45% of the fixed-arm mean.
+
+US-xBR  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.026499  dyn(final)=0.024352
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.22597                       5.888%
+  An_H     differs         1.53918                       1.662%
+  B_H      differs         111.692                       0.899%
+  T_H      differs       0.0157699                       2.863%
+  EIn_H    differs       0.0600107                       3.587%
+  EG       differs       0.0366574                       6.852%
+  QE       differs         32.2905                       1.844%
+  H        differs         22.3741                       3.448%
+  Rn       differs         17.1426                       0.693%
+  SWE      differs         1.52948                       0.130%
+  Lk       differs        0.806978                       5.714%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.89% of the fixed-arm mean.
+
+US-xGR  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.023658  dyn(final)=0.024516
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.744621                       5.186%
+  An_H     differs         2.33506                       1.081%
+  B_H      differs         80.8728                       0.275%
+  T_H      differs       0.0264257                       1.960%
+  EIn_H    differs       0.0635519                       2.701%
+  EG       differs       0.0271698                       3.812%
+  QE       differs         57.0305                       1.240%
+  H        differs          45.681                       4.745%
+  Rn       differs         76.9914                       0.498%
+  SWE      differs         2.81384                       1.465%
+  Lk       differs        0.257409                       2.222%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.19% of the fixed-arm mean.
+
+US-xHA  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.023240  dyn(final)=0.021805
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.911069                       6.207%
+  An_H     differs         2.58552                       2.510%
+  B_H      differs         108.014                       0.747%
+  T_H      differs       0.0166701                       3.253%
+  EIn_H    differs       0.0525177                       4.418%
+  EG       differs         0.05156                      15.816%
+  QE       differs         35.4129                       4.154%
+  H        differs         46.6803                       6.715%
+  Rn       differs         66.2809                       1.518%
+  SWE      differs         4.59292                       0.766%
+  Lk       differs        0.844145                      14.652%
+
+  OK: the arms differ. LAI_H mean |diff| = 6.21% of the fixed-arm mean.
+
+US-xJE  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.020744  dyn(final)=0.021351
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.01709                       3.537%
+  An_H     differs        0.312028                       0.309%
+  B_H      differs         39.1522                       0.081%
+  T_H      differs        0.089777                       1.774%
+  EIn_H    differs        0.097697                       0.974%
+  EG       differs       0.0104731                       8.051%
+  QE       differs         60.5003                       1.095%
+  H        differs         50.8821                       1.799%
+  Rn       differs         13.0252                       0.345%
+  SWE      differs       0.0093372                       0.208%
+  Lk       differs       0.0597146                       4.346%
+
+  OK: the arms differ. LAI_H mean |diff| = 3.54% of the fixed-arm mean.
+
+US-xLE  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.017318  dyn(final)=0.017060
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.12807                      11.588%
+  An_H     differs         2.91618                       3.203%
+  B_H      differs         148.232                       0.835%
+  T_H      differs       0.0595636                       4.483%
+  EIn_H    differs        0.124107                       6.912%
+  EG       differs       0.0236341                       5.904%
+  QE       differs         64.3461                       2.902%
+  H        differs         47.6764                      10.291%
+  Rn       differs         46.5658                       0.862%
+  SWE      differs        0.228467                       0.640%
+  Lk       differs        0.326744                       4.844%
+
+  OK: the arms differ. LAI_H mean |diff| = 11.59% of the fixed-arm mean.
+
+US-xML  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.023338  dyn(final)=0.023646
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.983991                       4.876%
+  An_H     differs         2.68227                       1.246%
+  B_H      differs         48.1136                       0.216%
+  T_H      differs       0.0179261                       1.952%
+  EIn_H    differs       0.0533322                       2.822%
+  EG       differs       0.0300943                       4.048%
+  QE       differs         20.8662                       1.423%
+  H        differs         65.6092                       4.371%
+  Rn       differs         84.3974                       0.551%
+  SWE      differs         3.16168                       0.830%
+  Lk       differs        0.564504                       4.992%
+
+  OK: the arms differ. LAI_H mean |diff| = 4.88% of the fixed-arm mean.
+
+US-xNW  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.015520  dyn(final)=0.014485
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.583548                       8.717%
+  An_H     differs         4.39095                       6.054%
+  B_H      differs         163.768                       1.486%
+  T_H      differs        0.130124                       6.013%
+  EIn_H    differs        0.198025                       8.515%
+  EG       differs        0.112741                       7.083%
+  QE       differs         213.126                       4.327%
+  H        differs         258.854                       6.644%
+  Rn       differs         360.196                       1.872%
+  SWE      differs         38.2959                       4.348%
+  Lk       differs            0.01                      20.516%
+
+  OK: the arms differ. LAI_H mean |diff| = 8.72% of the fixed-arm mean.
+
+US-xRM  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.016962  dyn(final)=0.015914
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.48986                      13.339%
+  An_H     differs          12.717                       5.475%
+  B_H      differs         394.378                       2.075%
+  T_H      differs        0.163121                       6.949%
+  EIn_H    differs        0.362869                       8.552%
+  EG       differs       0.0819556                      13.610%
+  QE       differs         266.043                       5.303%
+  H        differs         349.931                      11.337%
+  Rn       differs         311.759                       1.372%
+  SWE      differs         42.0358                       4.345%
+  Lk       differs         2.28368                      42.580%
+
+  OK: the arms differ. LAI_H mean |diff| = 13.34% of the fixed-arm mean.
+
+US-xRN  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019017  dyn(final)=0.019080
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs          0.6867                       5.237%
+  An_H     differs         1.03606                       1.218%
+  B_H      differs         83.6697                       0.375%
+  T_H      differs       0.0299351                       2.031%
+  EIn_H    differs       0.0703123                       3.311%
+  EG       differs       0.0178714                       3.283%
+  QE       differs         32.4652                       1.068%
+  H        differs         102.714                       4.096%
+  Rn       differs         90.0641                       0.415%
+  SWE      differs          7.7231                       2.246%
+  Lk       differs       0.0913615                       1.453%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.24% of the fixed-arm mean.
+
+US-xSB
+  FAIL: no fixed_lma/dyn_lma pair found matching 'era5_land:*_ic'. Nothing was
+        compared, which is not the same as a pass -- check the run
+        tree under /vol_efthymios/NFS07/dd1136/T_and_C/model_run/US-xSB.
+
+US-xSC  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.024894  dyn(final)=0.025377
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.09716                       4.634%
+  An_H     differs         1.80221                       1.277%
+  B_H      differs          52.949                       0.145%
+  T_H      differs       0.0248382                       1.881%
+  EIn_H    differs         0.07539                       2.809%
+  EG       differs       0.0251411                       3.954%
+  QE       differs         29.7316                       1.447%
+  H        differs         36.8152                       4.346%
+  Rn       differs          87.902                       0.586%
+  SWE      differs         2.68996                       0.686%
+  Lk       differs        0.411752                       4.257%
+
+  OK: the arms differ. LAI_H mean |diff| = 4.63% of the fixed-arm mean.
+
+US-xSE  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.025500  dyn(final)=0.024594
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         2.19269                       9.428%
+  An_H     differs          6.7793                       2.154%
+  B_H      differs         82.0667                       0.277%
+  T_H      differs        0.032735                       4.429%
+  EIn_H    differs        0.135723                       5.204%
+  EG       differs       0.0420964                       6.501%
+  QE       differs         62.3913                       3.191%
+  H        differs         50.0855                       7.622%
+  Rn       differs         75.7172                       0.861%
+  SWE      differs         1.95823                       0.479%
+  Lk       differs        0.226818                       4.214%
+
+  OK: the arms differ. LAI_H mean |diff| = 9.43% of the fixed-arm mean.
+
+US-xSP  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.015014  dyn(final)=0.014801
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.755544                       5.883%
+  An_H     differs         5.69477                       4.988%
+  B_H      differs         46.7896                       0.183%
+  T_H      differs        0.183622                       4.374%
+  EIn_H    differs        0.113189                       4.439%
+  EG       differs       0.0349449                       2.649%
+  QE       differs         123.746                       3.563%
+  H        differs         112.798                       2.499%
+  Rn       differs         310.244                       0.197%
+  SWE      differs          5.3586                       2.638%
+  Lk       differs            0.01                       4.258%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.88% of the fixed-arm mean.
+
+US-xST  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019626  dyn(final)=0.021262
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.73376                      10.756%
+  An_H     differs         6.67801                       3.487%
+  B_H      differs         147.729                       1.029%
+  T_H      differs       0.0447761                       4.484%
+  EIn_H    differs        0.116364                       6.345%
+  EG       differs       0.0776979                      10.001%
+  QE       differs         76.9689                       3.682%
+  H        differs         219.363                       7.251%
+  Rn       differs         62.6376                       0.589%
+  SWE      differs         1.95817                       1.153%
+  Lk       differs        0.183897                       6.667%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.76% of the fixed-arm mean.
+
+US-xTA  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.015140  dyn(final)=0.015505
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.318813                       1.773%
+  An_H     differs         2.57714                       0.506%
+  B_H      differs         16.4444                       0.068%
+  T_H      differs       0.0319138                       0.792%
+  EIn_H    differs       0.0371803                       0.969%
+  EG       differs      0.00645372                       2.262%
+  QE       differs         21.1371                       0.576%
+  H        differs         16.8563                       2.091%
+  Rn       differs          6.1799                       0.130%
+  SWE      differs        0.457905                       0.572%
+  Lk       differs       0.0513912                       1.085%
+
+  OK: the arms differ. LAI_H mean |diff| = 1.77% of the fixed-arm mean.
+
+US-xTE  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.013370  dyn(final)=0.012547
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.25157                       8.006%
+  An_H     differs         10.6738                       4.035%
+  B_H      differs         164.966                       0.532%
+  T_H      differs        0.419959                       6.313%
+  EIn_H    differs        0.297658                       5.658%
+  EG       differs        0.209434                      12.671%
+  QE       differs         403.423                       5.934%
+  H        differs         366.674                       5.925%
+  Rn       differs         578.804                       2.534%
+  SWE      differs         126.455                       2.282%
+  Lk       differs            0.01                      24.663%
+
+  OK: the arms differ. LAI_H mean |diff| = 8.01% of the fixed-arm mean.
+
+US-xTR  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.019626  dyn(final)=0.021262
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         1.73378                      10.813%
+  An_H     differs         4.92239                       3.457%
+  B_H      differs         149.909                       0.980%
+  T_H      differs       0.0251424                       4.054%
+  EIn_H    differs        0.101115                       5.853%
+  EG       differs       0.0509147                       8.402%
+  QE       differs         59.8597                       3.012%
+  H        differs         73.5517                       6.671%
+  Rn       differs         59.8338                       0.634%
+  SWE      differs         1.61365                       0.724%
+  Lk       differs        0.290916                       7.115%
+
+  OK: the arms differ. LAI_H mean |diff| = 10.81% of the fixed-arm mean.
+
+US-xUK  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.016932  dyn(final)=0.017589
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs         3.14488                      17.555%
+  An_H     differs         6.96047                       6.588%
+  B_H      differs         289.167                       2.358%
+  T_H      differs       0.0900038                       7.397%
+  EIn_H    differs        0.193595                      11.970%
+  EG       differs       0.0840483                       9.848%
+  QE       differs         96.6155                       2.982%
+  H        differs         118.185                      13.460%
+  Rn       differs         85.8349                       0.666%
+  SWE      differs         15.5108                       3.843%
+  Lk       differs            0.01                      10.528%
+
+  OK: the arms differ. LAI_H mean |diff| = 17.55% of the fixed-arm mean.
+
+US-xWR  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.014114  dyn(final)=0.014463
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.890077                       5.385%
+  An_H     differs         5.91749                       2.648%
+  B_H      differs         109.719                       0.433%
+  T_H      differs        0.273197                       3.203%
+  EIn_H    differs        0.441272                       2.911%
+  EG       differs        0.120837                       8.915%
+  QE       differs         281.608                       3.228%
+  H        differs         287.602                       2.816%
+  Rn       differs         552.271                       0.749%
+  SWE      differs         23.8695                       0.781%
+  Lk       differs         2.65514                       7.242%
+
+  OK: the arms differ. LAI_H mean |diff| = 5.39% of the fixed-arm mean.
+
+US-xYE  era5_land:fixed_lma_ic
+  Sl_H  fixed=0.016754  dyn(final)=0.016140
+  variable verdict       max|diff|   mean|diff| as % of |fixed|
+  LAI_H    differs        0.798178                       7.116%
+  An_H     differs         5.30381                       5.146%
+  B_H      differs         98.4083                       0.917%
+  T_H      differs        0.196284                       4.420%
+  EIn_H    differs        0.321784                       5.415%
+  EG       differs        0.103923                      12.415%
+  QE       differs         239.862                       4.034%
+  H        differs         273.164                       5.786%
+  Rn       differs         417.681                       1.236%
+  SWE      differs         35.3463                       1.150%
+  Lk       differs        0.832096                      26.169%
+
+  OK: the arms differ. LAI_H mean |diff| = 7.12% of the fixed-arm mean.
+
+============================================================
+92 arm pair(s) checked across 98 station(s)
+6 failing check(s) -- a pair whose arms are identical, or a
+station with no pair to compare. Do not analyse these runs.
+
+finished   : 2026-08-24T14:39:59Z
+exit status: 1  (1 = at least one station has NO treatment effect)

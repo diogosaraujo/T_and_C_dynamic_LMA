@@ -1,0 +1,249 @@
+job        : 38235
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-24T14:37:07Z
+
+REGISTRY (era5_predictors.DROUGHT_FILES)
+  SPEI12_ts  Global_SPEI12.mat     var=R_SI  latlon  start=1980-12   OK
+  SPEI3_ts   Global_SPEI_3.mat     var=spei  lonlat  start=1980-03   OK
+  SPEI6_ts   Global_SPEI_6.mat     var=spei  lonlat  start=1980-06   OK
+  SPI12_ts   Global_SPI12.mat      var=R_SI  latlon  start=1980-12   OK
+  SPI3_ts    Global_SPI3.mat       var=R_SI  latlon  start=1980-03   OK
+  SPI6_ts    Global_SPI6.mat       var=R_SI  latlon  start=1980-06   OK
+
+======================================================================
+US-Blo  (evergreen)  lat 38.8953  lon -120.6328
+  nearest posting: lat 38.9000  lon -120.6000   (indices lat=512, lon=595)
+  index           n              span   NaN%    mean     min     max
+  SPEI12_ts     505  1980-12..2022-12   0.0%    0.00   -2.23    2.23
+  SPEI3_ts      514  1980-03..2022-12   0.0%    0.00   -2.23    2.23
+  SPEI6_ts      511  1980-06..2022-12   0.0%    0.00   -2.23    2.23
+  SPI12_ts      505  1980-12..2022-12   0.0%    0.00   -2.23    2.23
+  SPI3_ts       514  1980-03..2022-12   0.0%    0.00   -2.23    2.23
+  SPI6_ts       511  1980-06..2022-12   0.0%    0.00   -2.23    2.23
+
+  SPEI12_ts: 43 years, 5 below -1.0 (12%)
+  driest: 2021 (-1.95), 2014 (-1.71), 2008 (-1.15), 2013 (-1.07), 2022 (-1.06), 2007 (-0.98)
+    1980   +0.77  ( 1 months)
+    1981   +0.12  (12 months)
+    1982   +1.23  (12 months)
+    1983   +1.88  (12 months)
+    1984   +0.94  (12 months)
+    1985   +0.14  (12 months)
+    1986   +0.80  (12 months)
+    1987   -0.19  (12 months)
+    1988   -0.56  (12 months)
+    1989   +0.24  (12 months)
+    1990   +0.38  (12 months)
+    1991   -0.01  (12 months)
+    1992   -0.12  (12 months)
+    1993   +0.96  (12 months)
+    1994   -0.25  (12 months)
+    1995   +1.00  (12 months)
+    1996   +0.65  (12 months)
+    1997   +0.25  (12 months)
+    1998   +1.51  (12 months)
+    1999   +1.07  (12 months)
+    2000   +0.01  (12 months)
+    2001   -0.54  (12 months)
+    2002   -0.60  (12 months)
+    2003   -0.49  (12 months)
+    2004   -0.82  (12 months)
+    2005   +0.13  (12 months)
+    2006   +0.74  (12 months)
+    2007   -0.98  (12 months)
+    2008   -1.15  (12 months)  <-- drought
+    2009   -0.91  (12 months)
+    2010   +0.36  (12 months)
+    2011   +1.14  (12 months)
+    2012   -0.43  (12 months)
+    2013   -1.07  (12 months)  <-- drought
+    2014   -1.71  (12 months)  <-- drought
+    2015   -0.83  (12 months)
+    2016   +0.20  (12 months)
+    2017   +1.00  (12 months)
+    2018   -0.57  (12 months)
+    2019   +0.20  (12 months)
+    2020   -0.77  (12 months)
+    2021   -1.95  (12 months)  <-- drought
+    2022   -1.06  (12 months)  <-- drought
+
+======================================================================
+US-Ha2  (evergreen)  lat 42.5393  lon -72.1779
+  nearest posting: lat 42.5000  lon -72.2000   (indices lat=476, lon=1079)
+  index           n              span   NaN%    mean     min     max
+  SPEI12_ts     505  1980-12..2022-12   0.0%    0.00   -2.23    2.23
+  SPEI3_ts      514  1980-03..2022-12   0.0%    0.00   -2.23    2.23
+  SPEI6_ts      511  1980-06..2022-12   0.0%    0.00   -2.23    2.23
+  SPI12_ts      505  1980-12..2022-12   0.0%    0.00   -2.23    2.23
+  SPI3_ts       514  1980-03..2022-12   0.0%    0.00   -2.23    2.23
+  SPI6_ts       511  1980-06..2022-12   0.0%    0.00   -2.23    2.23
+
+  SPEI12_ts: 43 years, 4 below -1.0 (9%)
+  driest: 2016 (-1.78), 1999 (-1.26), 1980 (-1.13), 2002 (-1.06), 1981 (-0.84), 1995 (-0.78)
+    1980   -1.13  ( 1 months)  <-- drought
+    1981   -0.84  (12 months)
+    1982   +0.12  (12 months)
+    1983   +0.26  (12 months)
+    1984   +0.91  (12 months)
+    1985   -0.43  (12 months)
+    1986   +0.87  (12 months)
+    1987   +1.02  (12 months)
+    1988   -0.08  (12 months)
+    1989   +0.20  (12 months)
+    1990   +1.00  (12 months)
+    1991   -0.46  (12 months)
+    1992   -0.46  (12 months)
+    1993   +0.03  (12 months)
+    1994   -0.12  (12 months)
+    1995   -0.78  (12 months)
+    1996   +0.15  (12 months)
+    1997   +0.24  (12 months)
+    1998   +0.09  (12 months)
+    1999   -1.26  (12 months)  <-- drought
+    2000   -0.16  (12 months)
+    2001   +0.06  (12 months)
+    2002   -1.06  (12 months)  <-- drought
+    2003   +1.08  (12 months)
+    2004   +0.98  (12 months)
+    2005   +0.68  (12 months)
+    2006   +0.36  (12 months)
+    2007   -0.03  (12 months)
+    2008   -0.44  (12 months)
+    2009   +1.04  (12 months)
+    2010   +0.37  (12 months)
+    2011   +0.09  (12 months)
+    2012   -0.32  (12 months)
+    2013   -0.26  (12 months)
+    2014   -0.11  (12 months)
+    2015   -0.57  (12 months)
+    2016   -1.78  (12 months)  <-- drought
+    2017   -0.62  (12 months)
+    2018   +0.59  (12 months)
+    2019   +1.10  (12 months)
+    2020   -0.74  (12 months)
+    2021   -0.53  (12 months)
+    2022   -0.09  (12 months)
+
+======================================================================
+US-Me2  (evergreen)  lat 44.4526  lon -121.5589
+  nearest posting: lat 44.5000  lon -121.6000   (indices lat=456, lon=585)
+  index           n              span   NaN%    mean     min     max
+  SPEI12_ts     505  1980-12..2022-12   0.0%    0.00   -2.23    2.23
+  SPEI3_ts      514  1980-03..2022-12   0.0%    0.00   -2.23    2.23
+  SPEI6_ts      511  1980-06..2022-12   0.0%    0.00   -2.23    2.23
+  SPI12_ts      505  1980-12..2022-12   0.0%    0.00   -2.23    2.23
+  SPI3_ts       514  1980-03..2022-12   0.0%    0.00   -2.23    2.23
+  SPI6_ts       511  1980-06..2022-12   0.0%    0.00   -2.23    2.23
+
+  SPEI12_ts: 43 years, 4 below -1.0 (9%)
+  driest: 2021 (-1.83), 2015 (-1.39), 2016 (-1.34), 2018 (-1.30), 1992 (-1.00), 2003 (-1.00)
+    1980   +1.13  ( 1 months)
+    1981   +0.37  (12 months)
+    1982   +1.37  (12 months)
+    1983   +1.87  (12 months)
+    1984   +1.37  (12 months)
+    1985   +0.33  (12 months)
+    1986   +0.20  (12 months)
+    1987   -0.55  (12 months)
+    1988   -0.54  (12 months)
+    1989   +0.03  (12 months)
+    1990   -0.22  (12 months)
+    1991   -0.28  (12 months)
+    1992   -1.00  (12 months)
+    1993   +0.71  (12 months)
+    1994   -0.35  (12 months)
+    1995   +0.23  (12 months)
+    1996   +0.84  (12 months)
+    1997   +0.96  (12 months)
+    1998   +1.10  (12 months)
+    1999   +1.22  (12 months)
+    2000   +0.30  (12 months)
+    2001   -0.33  (12 months)
+    2002   +0.01  (12 months)
+    2003   -1.00  (12 months)
+    2004   -0.36  (12 months)
+    2005   +0.13  (12 months)
+    2006   +0.09  (12 months)
+    2007   -0.76  (12 months)
+    2008   +0.14  (12 months)
+    2009   -0.24  (12 months)
+    2010   +0.26  (12 months)
+    2011   +1.34  (12 months)
+    2012   +0.37  (12 months)
+    2013   -0.40  (12 months)
+    2014   -0.37  (12 months)
+    2015   -1.39  (12 months)  <-- drought
+    2016   -1.34  (12 months)  <-- drought
+    2017   +0.24  (12 months)
+    2018   -1.30  (12 months)  <-- drought
+    2019   -0.42  (12 months)
+    2020   -0.70  (12 months)
+    2021   -1.83  (12 months)  <-- drought
+    2022   -0.17  (12 months)
+
+======================================================================
+US-NR1  (evergreen)  lat 40.0329  lon -105.5470
+  nearest posting: lat 40.0000  lon -105.5000   (indices lat=501, lon=746)
+  index           n              span   NaN%    mean     min     max
+  SPEI12_ts     505  1980-12..2022-12   0.0%    0.00   -2.23    2.23
+  SPEI3_ts      514  1980-03..2022-12   0.0%    0.00   -2.23    2.23
+  SPEI6_ts      511  1980-06..2022-12   0.0%    0.00   -2.23    2.23
+  SPI12_ts      505  1980-12..2022-12   0.0%    0.00   -2.23    2.23
+  SPI3_ts       514  1980-03..2022-12   0.0%    0.00   -2.23    2.23
+  SPI6_ts       511  1980-06..2022-12   0.0%    0.00   -2.23    2.23
+
+  SPEI12_ts: 43 years, 5 below -1.0 (12%)
+  driest: 2012 (-1.90), 2013 (-1.54), 2002 (-1.33), 2006 (-1.27), 2021 (-1.17), 2011 (-0.79)
+    1980   -0.12  ( 1 months)
+    1981   -0.23  (12 months)
+    1982   +0.97  (12 months)
+    1983   +1.50  (12 months)
+    1984   +1.88  (12 months)
+    1985   +1.35  (12 months)
+    1986   +0.76  (12 months)
+    1987   +1.87  (12 months)
+    1988   +0.76  (12 months)
+    1989   +0.30  (12 months)
+    1990   +0.51  (12 months)
+    1991   +0.93  (12 months)
+    1992   +1.12  (12 months)
+    1993   +0.89  (12 months)
+    1994   +0.40  (12 months)
+    1995   +0.24  (12 months)
+    1996   -0.04  (12 months)
+    1997   +0.47  (12 months)
+    1998   +0.42  (12 months)
+    1999   -0.01  (12 months)
+    2000   -0.62  (12 months)
+    2001   -0.73  (12 months)
+    2002   -1.33  (12 months)  <-- drought
+    2003   -0.66  (12 months)
+    2004   -0.09  (12 months)
+    2005   +0.15  (12 months)
+    2006   -1.27  (12 months)  <-- drought
+    2007   -0.35  (12 months)
+    2008   -0.74  (12 months)
+    2009   -0.57  (12 months)
+    2010   +0.36  (12 months)
+    2011   -0.79  (12 months)
+    2012   -1.90  (12 months)  <-- drought
+    2013   -1.54  (12 months)  <-- drought
+    2014   -0.27  (12 months)
+    2015   +0.16  (12 months)
+    2016   -0.36  (12 months)
+    2017   -0.70  (12 months)
+    2018   -0.61  (12 months)
+    2019   +0.17  (12 months)
+    2020   -0.60  (12 months)
+    2021   -1.17  (12 months)  <-- drought
+    2022   -0.64  (12 months)
+
+======================================================================
+Sanity: 2012 should be dry across the Midwest and Front Range; 2002 and
+2012 in Colorado; 2002/2007/2012 in the Southwest. If the driest years
+look nothing like that, the pixel lookup is landing in the wrong place
+and no amount of thresholding will fix it.
+
+finished   : 2026-08-24T14:37:13Z
+exit status: 0  (1 = a stack is missing, or a station read all-NaN)

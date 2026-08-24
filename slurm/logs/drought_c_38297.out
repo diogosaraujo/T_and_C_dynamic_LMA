@@ -1,0 +1,21 @@
+job        : 38297
+node       : soeepyc09
+cluster    : soe   partition: SOE_main
+started    : 2026-08-24T17:48:26Z
+
+index     : SPEI12_ts   all months
+criterion : annual mean < -1.0
+years     : 1985-2020
+stations  : 118
+
+SKIPPED -- 2 station(s):
+  ! US-HB2    SPEI12_ts is all-NaN at this pixel
+  ! US-HB3    SPEI12_ts is all-NaN at this pixel
+
+4176 station-years over 116 stations; 548 drought (13%)
+drought years per station: min 2  median 4  max 7
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/input_data/drought_years.csv
+
+finished   : 2026-08-24T17:48:44Z
+exit status: 1  (1 = a station was skipped; read the list above)

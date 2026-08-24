@@ -1,0 +1,6 @@
+job        : 38154
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-23T23:25:10Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+

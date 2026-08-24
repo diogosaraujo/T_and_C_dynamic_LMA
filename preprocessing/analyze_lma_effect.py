@@ -674,7 +674,18 @@ def main(argv=None) -> int:
         for label, fx, dy in find_pairs(MODEL_RUN, st, a.pair):
             jobs.append((st, label, fx, dy))
     if not jobs:
-        print(f"no pair matched {a.pair!r} -- nothing to do", file=sys.stderr)
+        # An array over stations is wider than the set that has pairs: only 92 of
+        # the 101 present have era5_land _ic arms. A slot with nothing to do is
+        # NORMAL and exits 0, the same convention submit_tc_run.sh uses for an
+        # array wider than its run list -- nine expected failures per sweep would
+        # bury the one that matters. An explicit --station/--all that matches
+        # nothing is still an error, because there the caller asserted it existed.
+        msg = f"no pair matched {a.pair!r}"
+        if a.index is not None:
+            print(f"{msg} for {targets[0] if targets else 'this slot'}"
+                  f" -- nothing to do")
+            return 0
+        print(f"{msg} -- nothing to do", file=sys.stderr)
         return 1
     print(f"pairs     : {len(jobs)}")
     print()

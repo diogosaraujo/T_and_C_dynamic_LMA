@@ -1,0 +1,20 @@
+job        : 38203
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+started    : 2026-08-24T01:36:39Z
+
+REGISTRY (era5_predictors.DROUGHT_FILES)
+  SPEI12_ts  Global_SPEI12.mat     var=R_SI  latlon  start=1980-12   OK
+  SPEI3_ts   Global_SPEI_3.mat     var=spei  lonlat  start=1980-03   OK
+  SPEI6_ts   Global_SPEI_6.mat     var=spei  lonlat  start=1980-06   OK
+  SPI12_ts   Global_SPI12.mat      var=R_SI  latlon  start=1980-12   OK
+  SPI3_ts    Global_SPI3.mat       var=R_SI  latlon  start=1980-03   OK
+  SPI6_ts    Global_SPI6.mat       var=R_SI  latlon  start=1980-06   OK
+
+======================================================================
+US-Blo  (evergreen)  lat 38.8953  lon -120.6328
+  nearest posting: lat 38.9000  lon -120.6000   (indices lat=512, lon=595)
+  index           n              span   NaN%    mean     min     max
+
+finished   : 2026-08-24T01:36:43Z
+exit status: 1  (1 = a stack is missing, or a station read all-NaN)

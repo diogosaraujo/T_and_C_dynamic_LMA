@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/inspect_drought.py", line 167, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/inspect_drought.py", line 129, in main
+    span = f"{t[0]:%Y-%m}..{t[-1]:%Y-%m}" if len(t) else "-"
+             ^^^^^^^^^^^^
+ValueError: Invalid format specifier '%Y-%m' for object of type 'int'

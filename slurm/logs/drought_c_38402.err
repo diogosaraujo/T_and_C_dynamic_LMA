@@ -1,0 +1,5 @@
+usage: classify_drought.py [-h] [--era5-root ERA5_ROOT] --out OUT
+                           [--index INDEX] [--months MONTHS]
+                           [--threshold THRESHOLD] [--percentile PERCENTILE]
+                           [--years YEARS] [--stations STATIONS]
+classify_drought.py: error: unrecognized arguments: --source gcm

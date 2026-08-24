@@ -1,0 +1,8 @@
+job        : 38402
+node       : soeepyc11
+cluster    : soe   partition: SOE_main
+started    : 2026-08-24T19:08:02Z
+
+
+finished   : 2026-08-24T19:08:05Z
+exit status: 2  (1 = a station was skipped; read the list above)

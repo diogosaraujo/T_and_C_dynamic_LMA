@@ -1,0 +1,1 @@
+ERROR: /vol_efthymios/NFS07/dd1136/T_and_C/input_data/drought_years.csv predates the gcm/scenario columns. Re-run classify_drought.py -- an old table cannot say which run family its years belong to.

@@ -51,12 +51,16 @@ from __future__ import annotations
 
 import argparse
 import csv
+import fnmatch
 import json
 import os
 import sys
 from pathlib import Path
 
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from check_treatment_effect import find_pairs   # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
@@ -70,12 +74,22 @@ F_C = 0.5                       # LMA is dry mass; 0.5 converts to gC
 GROW = [5, 6, 7, 8, 9]          # growing-season months for the energy diagnostics
 
 # Fluxes carried through to the report. Order is the order they appear.
-FLUXES = ["GPP", "NPP", "ANPP", "LAI_mean", "LAI_max", "ET", "T", "EG", "EIn",
-          "Lk", "QE", "H", "Rn", "Bowen", "Tfrac", "WUE"]
+FLUXES = ["GPP", "NPP", "ANPP", "LAI_mean", "LAI_max", "LeafOn", "LeafOff",
+          "SeasonLen", "ET", "T", "EG", "EIn", "Lk", "Runoff", "SM_mean",
+          "SM_min", "SWE_max", "Psi_l_min", "QE", "H", "Rn",
+          "QE_gs", "H_gs", "Rn_gs", "Bowen", "Tfrac", "WUE",
+          # Forcing. Identical between arms, so zero as a difference -- carried
+          # because a drought composite is uninterpretable without knowing how
+          # dry the years were.
+          "Pr", "Ta", "VPD"]
 UNITS = {"GPP": "gC/m2/yr", "NPP": "gC/m2/yr", "ANPP": "gC/m2/yr",
          "LAI_mean": "-", "LAI_max": "-", "ET": "mm/yr", "T": "mm/yr",
          "EG": "mm/yr", "EIn": "mm/yr", "Lk": "mm/yr", "QE": "W/m2",
-         "H": "W/m2", "Rn": "W/m2", "Bowen": "-", "Tfrac": "-", "WUE": "gC/mm"}
+         "H": "W/m2", "Rn": "W/m2", "Bowen": "-", "Tfrac": "-", "WUE": "gC/mm",
+         "LeafOn": "doy", "LeafOff": "doy", "SeasonLen": "days",
+         "Runoff": "mm/yr", "SM_mean": "-", "SM_min": "-", "SWE_max": "mm",
+         "Psi_l_min": "MPa", "QE_gs": "W/m2", "H_gs": "W/m2", "Rn_gs": "W/m2",
+         "Pr": "mm/yr", "Ta": "degC", "VPD": "Pa"}
 
 
 # --------------------------------------------------------------- site metadata
@@ -108,7 +122,7 @@ def annual_from_res(path: Path) -> dict:
     import h5py
     HOURLY = ["QE", "H", "Rn", "G", "T_H", "T_L", "EG", "EIn_H", "EIn_L", "EIn_urb",
               "EIn_rock", "ESN", "ESN_In", "EICE", "ELitter", "Lk", "Rh", "Rd",
-              "Pr", "Ds", "Ta"]
+              "Pr", "Ds", "Ta", "SWE", "Psi_l_H"]
     DAILY = ["LAI_H", "NPP_H", "RA_H", "ANPP_H"]
     with h5py.File(path, "r") as f:
         dm = np.asarray(f["Datam"][()], dtype=float)
@@ -118,6 +132,22 @@ def annual_from_res(path: Path) -> dict:
         d = {k: _read(f, k) for k in DAILY if k in f}
         # 'f' is infiltration; guard the name clash with the file handle
         infil = _read(f, "f") if "f" in f else None
+        # Soil moisture is (timesteps, layers) -- tens of MB, and the only array
+        # here that is 2-D. Reduce it to a thickness-weighted column mean so the
+        # graded mesh (10 mm at the top, 200 mm at the bottom) does not let the
+        # thin surface layers dominate an unweighted average.
+        theta = None
+        if "O" in f:
+            O = np.asarray(f["O"][()], dtype=float)
+            if O.ndim == 2:
+                if O.shape[0] < O.shape[1]:      # h5py hands back (layers, time)
+                    O = O.T
+                w = np.ones(O.shape[1])
+                if "Zs" in f:
+                    zs = np.asarray(f["Zs"][()], dtype=float).ravel()
+                    if zs.size == O.shape[1] + 1:
+                        w = np.diff(zs)
+                theta = (O * w).sum(axis=1) / w.sum()
     missing = [k for k in HOURLY + DAILY if k not in h and k not in d]
     n = len(h["QE"])
     yr_h, mo_h = dm[0][:n].astype(int), dm[1][:n].astype(int)
@@ -153,6 +183,22 @@ def annual_from_res(path: Path) -> dict:
     o["QE"] = M(h["QE"]); o["H"] = M(h["H"]); o["Rn"] = M(h["Rn"]); o["G"] = M(h["G"])
     o["Ta"] = M(h["Ta"]); o["VPD"] = M(h["Ds"])
     o["QE_gs"] = M(h["QE"], day); o["H_gs"] = M(h["H"], day); o["Rn_gs"] = M(h["Rn"], day)
+    # TOTAL runoff, never its two components. Rh (Horton, infiltration excess)
+    # and Rd (Dunne, saturation excess) are the two mechanisms by which the same
+    # water leaves, and the solver mis-attributes a timestep between them -- Rd
+    # spikes, Rh goes NaN -- while the TOTAL is conserved (CK1 sits at machine
+    # precision). Part of Rd even arrives from Cryosuction_stabilizer, a
+    # numerical routine. The sum is trustworthy; the split is not.
+    if "Rh" in h and "Rd" in h:
+        o["Runoff"] = S(np.nan_to_num(h["Rh"]) + np.nan_to_num(h["Rd"]))
+    if theta is not None:
+        o["SM_mean"] = M(theta)
+        o["SM_min"] = [float(np.nanmin(theta[kh[y]])) for y in years]
+    if "SWE" in h:
+        o["SWE_max"] = [float(np.nanmax(h["SWE"][kh[y]])) for y in years]
+    if "Psi_l_H" in h:
+        # Most negative leaf water potential: how hard the plant had to pull.
+        o["Psi_l_min"] = [float(np.nanmin(h["Psi_l_H"][kh[y]])) for y in years]
     o["GPP"] = [float(np.nansum(GPP_d[kd[y]])) for y in years]
     o["NPP"] = [float(np.nansum(d["NPP_H"][kd[y]])) for y in years]
     o["ANPP"] = [float(np.nansum(d["ANPP_H"][kd[y]])) for y in years]
@@ -166,6 +212,25 @@ def annual_from_res(path: Path) -> dict:
     o["Bowen"] = list(np.where(bq != 0, bh / np.where(bq == 0, np.nan, bq), np.nan))
     o["Tfrac"] = list(np.array(o["T"]) / np.array(o["ET"]))
     o["WUE"] = list(np.array(o["GPP"]) / np.array(o["ET"]))
+    # Phenology. The mechanism is phenological -- LMA acts through leaf area --
+    # so a shift in WHEN the canopy is on is a different and stronger claim than
+    # a change in how much of it there is. Thresholded at 20% of each year's own
+    # LAI range, which is meaningless for an evergreen canopy whose LAI never
+    # collapses; read these for deciduous sites and ignore them elsewhere.
+    lo, hi, sl = [], [], []
+    for y in years:
+        v = d["LAI_H"][kd[y]]
+        if v.size < 300 or not np.isfinite(v).any():
+            lo.append(float("nan")); hi.append(float("nan")); sl.append(float("nan"))
+            continue
+        thr = np.nanmin(v) + 0.2 * (np.nanmax(v) - np.nanmin(v))
+        on = np.flatnonzero(v > thr)
+        if on.size == 0:
+            lo.append(float("nan")); hi.append(float("nan")); sl.append(float("nan"))
+            continue
+        lo.append(float(on[0] + 1)); hi.append(float(on[-1] + 1))
+        sl.append(float(on[-1] - on[0] + 1))
+    o["LeafOn"], o["LeafOff"], o["SeasonLen"] = lo, hi, sl
     return o
 
 
@@ -185,20 +250,35 @@ def lma_series(d: Path, station: str):
             return (_read(f, "years").astype(int), _read(f, "LMA"))
 
 
-def extract(station: str, meta: dict, force: bool = False) -> str:
-    out = CACHE / f"{station}.json"
+def slug(label: str) -> str:
+    """A pair label as a filename. 'ssp585/GFDL-ESM4:dyn_lma' -> ...__dyn_lma."""
+    return label.replace("/", "-").replace(":", "__")
+
+
+def extract(station: str, label: str, fx: Path | None, dy: Path | None,
+            meta: dict, force: bool = False) -> str:
+    """Reduce one ARM PAIR to annual series and cache it.
+
+    Keyed by (station, pair label). The old version hardcoded
+    <station>/era5_land/<arm>, which meant it could only ever see the
+    PRE-SPIN-UP ERA5 runs: not the fixed_lma_ic/dyn_lma_ic restarts that
+    replaced them, and no GCM result at all. That is the same blind spot
+    check_treatment_effect.py had in jobs 37691/37692, where it reported "the
+    treatment is live" having never opened the 30 GCM arms it was submitted to
+    vet. Pairs come from find_pairs, so both tree layouts are handled in one
+    place rather than assumed here.
+    """
+    out = CACHE / f"{station}__{slug(label)}.json"
     if out.is_file() and not force:
         return "cached"
-    rec = {"station": station, **meta, "arms": {}}
-    for arm in ARMS:
-        d = MODEL_RUN / station / "era5_land" / arm
-        res = d / f"RES_{station.replace('-', '_')}.mat"
-        if not res.is_file():
+    rec = {"station": station, "key": label, **meta, "arms": {}}
+    for arm, res in (("fixed_lma", fx), ("dyn_lma", dy)):
+        if res is None or not Path(res).is_file():
             rec["arms"][arm] = None
             continue
-        rec["arms"][arm] = annual_from_res(res)
-        rec["arms"][arm]["res_mtime"] = res.stat().st_mtime
-    ly, lv = lma_series(MODEL_RUN / station / "era5_land" / "dyn_lma", station)
+        rec["arms"][arm] = annual_from_res(Path(res))
+        rec["arms"][arm]["res_mtime"] = Path(res).stat().st_mtime
+    ly, lv = lma_series(Path(dy).parent, station) if dy else (None, None)
     if ly is not None:
         rec["lma_years"] = [int(x) for x in ly]
         rec["lma"] = [float(x) for x in lv]
@@ -305,10 +385,12 @@ def group_stat(rows, key, metric):
     return v
 
 
-def report(out_dir: Path):
+def report(out_dir: Path, pair: str | None = None):
     recs = []
     for p in sorted(CACHE.glob("*.json")):
         r = json.loads(p.read_text(encoding="utf-8"))
+        if pair and not fnmatch.fnmatch(r.get("key", "era5_land:fixed_lma"), pair):
+            continue
         if r.get("status") != "ok":
             recs.append(r); continue
         r["flux"] = flux_metrics(r)
@@ -550,6 +632,10 @@ def main(argv=None) -> int:
     ap.add_argument("--cache", type=Path, default=None)
     ap.add_argument("--out", type=Path, default=None, help="where the report is written")
     ap.add_argument("--force", action="store_true", help="re-extract even if cached")
+    ap.add_argument("--pair", default=None, metavar="GLOB",
+                    help="which arm pairs, e.g. 'era5_land:*_ic' or "
+                         "'historical/*:*'. Default is every pair, which is ~16 "
+                         "per station. --report honours the same filter.")
     a = ap.parse_args(argv)
 
     global MODEL_RUN, CACHE
@@ -566,7 +652,7 @@ def main(argv=None) -> int:
     print(f"site list : {len(sites)} stations, {len(have)} present in model_run\n")
 
     if a.report:
-        return report(out_dir)
+        return report(out_dir, a.pair)
 
     if a.index is not None:
         if a.index < 1 or a.index > len(have):
@@ -581,16 +667,26 @@ def main(argv=None) -> int:
         ap.error("give --station / --index / --all, or --report")
 
     rc = 0
-    for i, s in enumerate(targets, 1):
-        if s not in sites:
-            print(f"  {s}: not in the site lists -- skipped"); continue
+    jobs = []
+    for st in targets:
+        if st not in sites:
+            print(f"  {st}: not in the site lists -- skipped"); continue
+        for label, fx, dy in find_pairs(MODEL_RUN, st, a.pair):
+            jobs.append((st, label, fx, dy))
+    if not jobs:
+        print(f"no pair matched {a.pair!r} -- nothing to do", file=sys.stderr)
+        return 1
+    print(f"pairs     : {len(jobs)}")
+    print()
+    for i, (st, label, fx, dy) in enumerate(jobs, 1):
         try:
-            st = extract(s, sites[s], force=a.force)
+            stt = extract(st, label, fx, dy, sites[st], force=a.force)
         except Exception as e:                                   # noqa: BLE001
-            print(f"  [{i}/{len(targets)}] {s}: FAILED -- {type(e).__name__}: {e}")
+            print(f"  [{i}/{len(jobs)}] {st} {label}: FAILED -- "
+                  f"{type(e).__name__}: {e}", flush=True)
             rc = 1
             continue
-        print(f"  [{i}/{len(targets)}] {s}: {st}", flush=True)
+        print(f"  [{i}/{len(jobs)}] {st} {label}: {stt}", flush=True)
     print(f"\ncache now holds {len(list(CACHE.glob('*.json')))} station file(s)")
     print("next: python analyze_lma_effect.py --report")
     return rc

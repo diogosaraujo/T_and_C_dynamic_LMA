@@ -14,7 +14,27 @@
 ## those, which means the 60 GB read happens once and every later re-analysis --
 ## a new metric, a different grouping -- is seconds rather than hours.
 ##
-## The array form is over STATIONS, not arms; each task reads both arms. A range
+## SCOPE. Every arm PAIR is extracted, not one per station -- <ST>/era5_land and
+## <ST>/<scenario>/<GCM>, ~16 per fully-run station. The old version hardcoded
+## <ST>/era5_land/<arm>, so it could only ever see the PRE-SPIN-UP ERA5 runs:
+## not the fixed_lma_ic/dyn_lma_ic restarts that replaced them, and no GCM result
+## at all. --pair narrows it:
+##
+##     sbatch --array=1-101%8 slurm/submit_lma_effect.sh --pair 'era5_land:*_ic'
+##     sbatch --array=1-101%8 slurm/submit_lma_effect.sh --pair 'historical/*:*'
+##     sbatch slurm/submit_lma_effect.sh --report --pair 'era5_land:*_ic'
+##
+## Start with the ERA5 restarts: those are the runs a tower comparison can use,
+## because a GCM does not reproduce actual weather and its runs are comparable to
+## observations only climatologically.
+##
+## SIZING. Annual SUMS need every timestep, so unlike the treatment check this
+## cannot be strided -- the whole array has to be read. The array form is the
+## lever instead, and the JSON cache makes it resumable: a task that dies leaves
+## the pairs it finished behind.
+##
+## The array form is over STATIONS, not arms; each task reads every pair of one
+## station. A range
 ## wider than the station list is fine, extra tasks exit 0. Throttle with %N: the
 ## per-user limit is ~15 concurrent jobs, and these are I/O bound on beegfs, so
 ## %8 is plenty -- more just queues behind itself at the filesystem.
@@ -34,7 +54,7 @@
 #SBATCH --mem=16G
 #SBATCH -p SOE_main
 #SBATCH -J lma_effect
-#SBATCH -t 04:00:00
+#SBATCH -t 08:00:00
 #SBATCH -o slurm/logs/lma_effect_%A_%a.out
 #SBATCH -e slurm/logs/lma_effect_%A_%a.err
 

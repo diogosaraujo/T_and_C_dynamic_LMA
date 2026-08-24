@@ -19,6 +19,17 @@
 ##
 ## Exits 1 if any PAIR's arms are identical, or if a named station has no pair at
 ## all -- finding nothing is not a pass.
+##
+## SIZING. A whole-tree run is ~1400 pairs, each opening two RES files and
+## reading 11 series: hundreds of GB of I/O. Job 38154 died at a 30-minute wall
+## clock having flushed nothing, which is why the limit is now 8 h and python
+## runs unbuffered (-u) so a kill still leaves the pairs already checked.
+##
+## --stride 24 samples the hourly arrays daily and cuts the I/O 24-fold, which is
+## the difference between a run that finishes and one that does not. It cannot
+## produce a false "differs": a sampled difference is a real difference.
+##
+##     sbatch slurm/submit_check_treatment.sh --all --stride 24
 
 #SBATCH -N 1
 #SBATCH --ntasks=1
@@ -26,7 +37,7 @@
 #SBATCH --mem=16G
 #SBATCH -p SOE_main
 #SBATCH -J tc_treat
-#SBATCH -t 00:30:00
+#SBATCH -t 08:00:00
 #SBATCH -o slurm/logs/tc_treat_%j.out
 #SBATCH -e slurm/logs/tc_treat_%j.err
 
@@ -49,7 +60,7 @@ echo
 source "$TC_VENV/bin/activate"
 
 cd "$REPO_ROOT/preprocessing"
-python check_treatment_effect.py --root "$MODEL_RUN" "$@"
+python -u check_treatment_effect.py --root "$MODEL_RUN" "$@"
 status=$?
 
 echo

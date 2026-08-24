@@ -51,6 +51,32 @@ MODEL_RUN = Path(os.environ.get(
 VARS = ["LAI_H", "An_H", "B_H", "T_H", "EIn_H", "EG", "QE", "H", "Rn", "SWE", "Lk"]
 
 
+def take(dset, stride: int):
+    """Read a dataset, optionally every Nth element, WITHOUT materialising it all.
+
+    The slice happens at the HDF5 level, so a stride of 24 moves a
+    twenty-fourth of the bytes. That matters: --all now walks ~1400 pairs, each
+    opening two RES files and reading 11 series, and job 38154 hit its wall
+    clock having flushed nothing.
+
+    MATLAB stores an hourly series as (N,1), which h5py presents as (1,N), so
+    the stride goes on the LAST axis.
+
+    Subsampling is safe in the direction that matters. If the sample differs the
+    arrays certainly differ, so "differs" is never wrong. The only error it can
+    introduce is calling two arrays IDENTICAL when they differ outside the
+    sample -- which reports a treatment failure that is not real, i.e. it fails
+    loudly rather than hiding a problem.
+    """
+    if stride <= 1:
+        return np.asarray(dset[()], dtype=float)
+    if dset.ndim == 1:
+        return np.asarray(dset[::stride], dtype=float)
+    if dset.ndim == 2 and dset.shape[0] == 1:
+        return np.asarray(dset[:, ::stride], dtype=float)
+    return np.asarray(dset[()], dtype=float)[..., ::stride]
+
+
 def one_res(d: Path) -> Path | None:
     """The single RES_*.mat in an arm directory, or None if absent/ambiguous."""
     hits = sorted(d.glob("RES_*.mat"))
@@ -82,7 +108,8 @@ def find_pairs(root: Path, station: str, pattern: str | None = None):
     return out
 
 
-def compare_pair(station: str, label: str, fx: Path | None, dy: Path | None) -> int:
+def compare_pair(station: str, label: str, fx: Path | None, dy: Path | None,
+                 stride: int = 1) -> int:
     import h5py
     if fx is None or dy is None:
         missing = " and ".join(n for n, p in (("fixed_lma", fx), ("dyn_lma", dy))
@@ -96,11 +123,11 @@ def compare_pair(station: str, label: str, fx: Path | None, dy: Path | None) -> 
         print(f"\n{station}  {label}")
         print(f"  Sl_H  fixed={sl_a:.6f}  dyn(final)={sl_b:.6f}")
 
-        rows, identical = [], []
+        rows, identical, lai_rel = [], [], float("nan")
         for k in VARS:
             if k not in a or k not in b:
                 continue
-            x, y = np.array(a[k]), np.array(b[k])
+            x, y = take(a[k], stride), take(b[k], stride)
             if x.shape != y.shape:
                 rows.append((k, "shape mismatch", "", ""))
                 continue
@@ -109,8 +136,11 @@ def compare_pair(station: str, label: str, fx: Path | None, dy: Path | None) -> 
                 identical.append(k)
             d = np.abs(x - y)
             denom = np.nanmean(np.abs(x)) or 1.0
+            rel = 100 * np.nanmean(d) / denom
+            if k == "LAI_H":
+                lai_rel = rel        # keep it; re-reading cost three full passes
             rows.append((k, "IDENTICAL" if same else "differs",
-                         f"{np.nanmax(d):.6g}", f"{100*np.nanmean(d)/denom:.3f}%"))
+                         f"{np.nanmax(d):.6g}", f"{rel:.3f}%"))
 
         print(f"  {'variable':<8} {'verdict':<10} {'max|diff|':>12} {'mean|diff| as % of |fixed|':>28}")
         for k, verdict, mx, pc in rows:
@@ -123,8 +153,10 @@ def compare_pair(station: str, label: str, fx: Path | None, dy: Path | None) -> 
                   "        MAIN_FRAME_SLA refreshes VegH_Param_Dyn.Sl inside the loop and\n"
                   "        that model_run/Code is not a stale copy.")
             return 1
-        print(f"\n  OK: the arms differ. LAI_H mean |diff| = "
-              f"{100*np.nanmean(np.abs(np.array(a['LAI_H'])-np.array(b['LAI_H'])))/(np.nanmean(np.abs(np.array(a['LAI_H']))) or 1):.2f}% "
+        # lai_rel was computed in the loop above. Recomputing it here read LAI_H
+        # three more times per pair -- across ~1400 pairs that is most of a
+        # wall-clock limit spent re-reading a number already in hand.
+        print(f"\n  OK: the arms differ. LAI_H mean |diff| = {lai_rel:.2f}% "
               f"of the fixed-arm mean.")
         if identical:
             print(f"  note: still identical for {identical} -- expected only if that\n"
@@ -132,7 +164,8 @@ def compare_pair(station: str, label: str, fx: Path | None, dy: Path | None) -> 
     return 0
 
 
-def compare(root: Path, station: str, pattern: str | None = None) -> tuple[int, int]:
+def compare(root: Path, station: str, pattern: str | None = None,
+            stride: int = 1) -> tuple[int, int]:
     """(failures, pairs checked) for one station."""
     pairs = find_pairs(root, station, pattern)
     if not pairs:
@@ -141,7 +174,7 @@ def compare(root: Path, station: str, pattern: str | None = None) -> tuple[int, 
               f"        compared, which is not the same as a pass -- check the run\n"
               f"        tree under {root / station}.")
         return 1, 0
-    return sum(compare_pair(station, *p) for p in pairs), len(pairs)
+    return sum(compare_pair(station, *p, stride) for p in pairs), len(pairs)
 
 
 def main(argv=None) -> int:
@@ -151,6 +184,12 @@ def main(argv=None) -> int:
     ap.add_argument("--root", type=Path, default=MODEL_RUN)
     ap.add_argument("--all", action="store_true",
                     help="every station under the model_run root")
+    ap.add_argument("--stride", type=int, default=1, metavar="N",
+                    help="compare every Nth timestep instead of all of them. "
+                         "--stride 24 is daily sampling of the hourly arrays and "
+                         "cuts the I/O 24-fold, which is what makes a whole-tree "
+                         "run finish. Safe: a sampled difference is still a real "
+                         "difference.")
     ap.add_argument("--pair", metavar="GLOB",
                     help="only pairs whose label matches, e.g. 'era5_land' or "
                          "'ssp585/*'. The full tree is 16 pairs per station.")
@@ -170,7 +209,7 @@ def main(argv=None) -> int:
 
     bad = npairs = 0
     for s in stations:
-        f, n = compare(a.root, s, a.pair)
+        f, n = compare(a.root, s, a.pair, a.stride)
         bad, npairs = bad + f, npairs + n
     print(f"\n{'=' * 60}")
     print(f"{npairs} arm pair(s) checked across {len(stations)} station(s)")

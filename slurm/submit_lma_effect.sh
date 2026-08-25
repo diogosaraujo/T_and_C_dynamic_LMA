@@ -71,6 +71,7 @@ mkdir -p "$REPO_ROOT/slurm/logs" "$CACHE"
 echo "job        : ${SLURM_JOB_ID:-interactive}${SLURM_ARRAY_TASK_ID:+  task $SLURM_ARRAY_TASK_ID}"
 echo "node       : $(hostname)"
 tc_check_partition
+tc_check_args "$@" || exit 1
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "model_run  : $MODEL_RUN$([ -d "$MODEL_RUN" ] || echo '   <-- NOT FOUND')"
 echo "cache      : $CACHE"

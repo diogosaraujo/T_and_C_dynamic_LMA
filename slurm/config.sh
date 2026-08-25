@@ -99,6 +99,36 @@ tc_load_matlab() {
     return 1
 }
 
+# Catch the most common submission mistake on this project: passing
+# "$TC_INPUT_DATA/foo.csv" from a shell that never sourced this file. sbatch
+# expands the argument at SUBMIT time, so an unset variable collapses to nothing
+# and the job receives the literal "/foo.csv". Sourcing config.sh inside the job
+# is too late -- the argument is already ruined. Job 38558 died three seconds in
+# on "/drought_years.csv", the sixth submission lost to this.
+#
+# Nothing this project reads sits at the filesystem root, so an absolute path
+# only one level below "/" is that mistake and nothing else. Say so and stop;
+# guessing the intended prefix would be exactly the silent fallback we do not
+# want in these runs.
+tc_check_args() {
+    local bad=0 a
+    for a in "$@"; do
+        case "$a" in
+            /*/*|/) ;;                      # a real path, or root itself
+            /*)
+                echo "ERROR: argument '$a' is a bare root path -- the fingerprint of" >&2
+                echo "       an unset \$TC_INPUT_DATA or \$MODEL_RUN in the shell that" >&2
+                echo "       ran sbatch." >&2
+                bad=1 ;;
+        esac
+    done
+    [ "$bad" -eq 0 ] && return 0
+    echo "       Fix: 'source slurm/config.sh' before sbatch, or pass the path in full." >&2
+    echo "         TC_INPUT_DATA = $TC_INPUT_DATA" >&2
+    echo "         MODEL_RUN     = $MODEL_RUN" >&2
+    return 1
+}
+
 # Warn when the partition the job landed on does not match the detected cluster,
 # which almost always means a forgotten "-p" on an Amarel submission.
 tc_check_partition() {

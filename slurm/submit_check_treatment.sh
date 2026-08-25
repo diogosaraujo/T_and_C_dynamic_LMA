@@ -52,6 +52,7 @@ mkdir -p "$REPO_ROOT/slurm/logs"
 echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
 tc_check_partition
+tc_check_args "$@" || exit 1
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "model_run  : $MODEL_RUN"
 echo

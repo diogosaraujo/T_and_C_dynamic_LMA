@@ -40,12 +40,45 @@ the interannual signal, so the report scores:
                anti-correlated -> LMA opposes the climate signal and damps it.
 
 It also scores the LMA INPUT itself, because a flux response is only meaningful
-if the input carries signal. At US-Ha2 the series is statistically white (no
-trend, lag-1 autocorrelation -0.02, year-to-year jumps matching pure noise), and
-a canopy whose needles persist 3-7 years cannot physically do that. Where
-jump_ratio ~ 1 and trend_r2 ~ 0, the flux response is the model faithfully
-tracking retrieval noise, and the variance-based numbers should not be read as
-ecology. The sensitivity slopes stay valid.
+if the input carries signal.
+
+IS THE LMA SERIES SIGNAL OR NOISE? Mostly signal. This paragraph used to say the
+opposite, on the strength of one station, and the fleet says otherwise.
+
+  * A WHITE SERIES IS NOT A NOISY ONE when the driver is white. Detrended lag-1
+    autocorrelation is ~0.00 fleet-wide and jump_ratio ~0.93, which reads as
+    "indistinguishable from white noise" -- but interannual SPEI is itself close
+    to temporally uncorrelated, so a series faithfully tracking annual drought
+    INHERITS that whiteness. The statistic was right; the inference from it was
+    not, and it is the mistake this paragraph previously made.
+  * IT TRACKS DROUGHT. Correlating each station's annual LMA against SPEI gives
+    a mean r of -0.445 over 92 stations, negative at 91% of them and |r| > 0.3
+    at 87%. Noise correlates with nothing. The sign is the physically expected
+    one: dry years, tougher and denser leaves.
+    CAVEAT: SPEI is one of the PLSR's own 146 predictors, so part of that
+    correlation is by construction. It proves the series is a structured
+    function of climate rather than retrieval noise; whether the drought
+    response is EARNED is answered by the PLSR's out-of-sample temporal Q2,
+    carried as PLSR_TemporalQ2 in the site lists.
+  * THE TREND IS SIGNAL, AND IT IS SPATIALLY COHERENT. 11-14% of LMA variance
+    sits in a linear trend, and neighbouring stations agree on its sign while
+    distant ones do not -- the three Sierra Nevada sites all run -5 to -7% over
+    the record while the two Southern Rockies sites run +14 to +20%. Five
+    independent retrieval artefacts do not organise themselves by ecoregion.
+  * JUMP RATIOS BELOW 1 MEAN PERSISTENCE, which is what a canopy should show:
+    US-ChR 0.76, US-CPk 0.82, US-Bar 0.83 all step less than white noise would.
+
+WHERE IT IS STILL NOISE, AND FOR WHOM. 33 of 92 stations do meet both noise
+criteria (jump_ratio > 0.9 and trend_r2 < 0.1), and they are disproportionately
+EVERGREEN -- 25 of 53 evergreen against 8 of 39 deciduous. That is backwards
+from the physics, since needles persisting 3-7 years should make evergreen
+canopy-mean LMA smoother, so it is telling you the RETRIEVAL is noisier for
+evergreen rather than that evergreen LMA is erratic. Stratify by forest type
+before reading variance-based numbers, and treat the evergreen variance results
+with more caution than the deciduous ones.
+
+The sensitivity slopes stay valid everywhere regardless: SLA is a prescribed
+model input, not a measured predictor, so there is no regression dilution.
 """
 from __future__ import annotations
 

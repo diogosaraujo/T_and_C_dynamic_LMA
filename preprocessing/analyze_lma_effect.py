@@ -55,12 +55,19 @@ opposite, on the strength of one station, and the fleet says otherwise.
     a mean r of -0.445 over 92 stations, negative at 91% of them and |r| > 0.3
     at 87%. Noise correlates with nothing. The sign is the physically expected
     one: dry years, tougher and denser leaves.
-    CAVEAT: SPEI is one of the PLSR's own 146 predictors, so part of that
-    correlation is by construction. It proves the series is a structured
-    function of climate rather than retrieval noise; whether the drought
-    response is EARNED is answered by the PLSR's out-of-sample temporal Q2,
-    carried as PLSR_TemporalQ2 in the site lists.
-  * THE TREND IS SIGNAL, AND IT IS SPATIALLY COHERENT. 11-14% of LMA variance
+    CAVEAT, AND IT BOUNDS THE CLAIM: SPEI is one of the PLSR's own 146
+    predictors, so part of that correlation is by construction. The
+    out-of-sample answer is the PLSR's temporal Q2 (PLSR_TemporalQ2 in the
+    site lists), and it is ~0.10 for both forest types -- evergreen 0.099
+    over 17 ecoregion fits, deciduous 0.107 over 11. Positive, so the skill
+    is real rather than worse-than-the-mean, but only about a tenth of
+    interannual LMA variance is predictable on held-out years. r = -0.445
+    means SPEI accounts for ~20% of the series in-sample; roughly half of
+    that survives cross-validation. So the INTERANNUAL anomalies are weakly
+    earned and should not be read as measured ecology.
+  * THE TREND IS SIGNAL, AND IT IS SPATIALLY COHERENT -- and unlike the
+    interannual part, Q2 says nothing against it, because Q2 scores
+    year-to-year prediction. 11-14% of LMA variance
     sits in a linear trend, and neighbouring stations agree on its sign while
     distant ones do not -- the three Sierra Nevada sites all run -5 to -7% over
     the record while the two Southern Rockies sites run +14 to +20%. Five

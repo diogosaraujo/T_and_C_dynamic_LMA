@@ -249,8 +249,11 @@ def main(argv=None) -> int:
 
     if skipped:
         print(f"SKIPPED -- {len(skipped)} station(s):")
-        for sid, why in skipped:
-            print(f"  ! {sid:<10}{why}")
+        for who, why in skipped:
+            # who is "<sid> <gcm> <scenario>", up to ~30 chars -- a :<10 field
+            # left "US-HB2  era5_land" butted straight against the reason. The
+            # trailing two spaces keep them apart however long the name runs.
+            print(f"  ! {who:<28}  {why}")
         print()
     if not rows:
         print("ERROR: nothing classified", file=sys.stderr)

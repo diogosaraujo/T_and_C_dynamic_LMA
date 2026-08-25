@@ -96,18 +96,33 @@ def read_run(path: Path) -> dict:
         nd = flat("LAI_H").size
         if nh < 24 or nd < 1:
             raise Unusable(f"{nh} hourly and {nd} daily steps")
-        # The daily arrays run one step per day; Datam is hourly. Take every
-        # 24th hourly timestamp as that day's date.
-        yr, mo, da = (dm[i][:nh][::24][:nd].astype(int) for i in range(3))
-        if yr.size != nd:
-            raise Unusable(f"{yr.size} dates for {nd} daily values")
+        # The daily arrays run one step per day; Datam is hourly, so every 24th
+        # hourly timestamp is that day's date. T&C's daily arrays are ONE STEP
+        # LONGER than the hourly record supports -- 13150 values against 13149
+        # dated days on a 1985-2020 run -- which analyze_lma_effect.py also
+        # handles ("daily array runs one step past the hours"). Demanding exact
+        # equality here made all 92 pairs fail in job 38485.
+        #
+        # Tolerate that one step and nothing more: a larger gap is a truncated
+        # or mismatched run and must still fail loudly.
+        yr, mo, da = (dm[i][:nh][::24].astype(int) for i in range(3))
+        ndates = yr.size
+        if not 0 <= nd - ndates <= 1:
+            raise Unusable(f"{ndates} dated days against {nd} daily values")
+        # Trim to the dates rather than padding them. analyze_lma_effect pads,
+        # repeating the last year so its annual sums keep every value; here a
+        # padded day would land as a duplicate sample on one day of year, and an
+        # invented date is worse than a dropped one at 1 in 13149. Both scripts
+        # take daily index k to be hourly day k.
+        nd = min(nd, ndates)
+        yr, mo, da = yr[:nd], mo[:nd], da[:nd]
 
         out = {"year": yr, "mo": mo, "da": da}
         for k in DAILY_MEAN + DAILY_SUM:
             v = flat(k)
-            if v.size != nd:
-                raise Unusable(f"'{k}' has {v.size} days, LAI_H has {nd}")
-            out[k] = v
+            if v.size < nd:
+                raise Unusable(f"'{k}' has {v.size} days, short of the {nd} dated")
+            out[k] = v[:nd]
         # Hourly -> daily. Trim to whole days so the reshape is exact.
         nfull = (nh // 24) if (nh // 24) <= nd else nd
         for k in HOURLY_SUM + HOURLY_MEAN:

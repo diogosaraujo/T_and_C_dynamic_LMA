@@ -1,0 +1,9 @@
+job        : 38558
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+started    : 2026-08-25T17:32:41Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+
+finished   : 2026-08-25T17:32:44Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

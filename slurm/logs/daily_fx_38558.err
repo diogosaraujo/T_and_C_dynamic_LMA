@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/analyze_daily_effect.py", line 311, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/analyze_daily_effect.py", line 229, in main
+    dro = read_drought(a.drought) if a.drought else None
+          ~~~~~~~~~~~~^^^^^^^^^^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/analyze_daily_effect.py", line 196, in read_drought
+    with open(path, newline="", encoding="utf-8-sig") as fh:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/drought_years.csv'

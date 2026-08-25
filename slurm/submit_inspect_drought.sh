@@ -45,7 +45,7 @@ echo
 source "$TC_VENV/bin/activate" || { echo "ERROR: venv $TC_VENV missing" >&2; exit 1; }
 cd "$REPO_ROOT/preprocessing" || exit 1
 
-python inspect_drought.py "$@"
+python -u inspect_drought.py "$@"
 rc=$?
 
 echo

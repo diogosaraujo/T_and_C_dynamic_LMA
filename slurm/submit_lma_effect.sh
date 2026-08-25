@@ -101,7 +101,7 @@ elif [ "$have_selector" -eq 0 ]; then
     set -- "$@" --all
 fi
 
-python analyze_lma_effect.py --model-run "$MODEL_RUN" --cache "$CACHE" "$@"
+python -u analyze_lma_effect.py --model-run "$MODEL_RUN" --cache "$CACHE" "$@"
 status=$?
 
 echo

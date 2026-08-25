@@ -56,7 +56,7 @@ echo
 source "$TC_VENV/bin/activate" || { echo "ERROR: venv $TC_VENV missing" >&2; exit 1; }
 cd "$REPO_ROOT/preprocessing" || exit 1
 
-python analyze_daily_effect.py --root "$MODEL_RUN" "$@"
+python -u analyze_daily_effect.py --root "$MODEL_RUN" "$@"
 rc=$?
 
 echo

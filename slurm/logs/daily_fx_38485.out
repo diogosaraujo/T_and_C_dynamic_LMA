@@ -1,0 +1,36 @@
+job        : 38485
+node       : soeepyc15
+cluster    : soe   partition: SOE_main
+started    : 2026-08-25T02:29:49Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+pair      : era5_land:*_ic
+stations  : 98   drought classes from drought_years.csv
+
+SKIPPED -- 92 pair(s):
+  ! US-Bar    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-Blk    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-CPF    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-CPk    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-CRK    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-CS2    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-CZ2    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-CZ3    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-CZ4    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-ChR    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-Cst    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-Cwt    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-Dk2    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-Dk3    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-Fmf    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-Fuf    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-GBT    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-GLE    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-HBK    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ! US-Ha1    era5_land:fixed_lma_ic      13149 dates for 13150 daily values
+  ... and 72 more
+
+
+finished   : 2026-08-25T02:30:25Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

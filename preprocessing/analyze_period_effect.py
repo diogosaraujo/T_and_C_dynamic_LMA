@@ -71,6 +71,11 @@ def period_keys(year: np.ndarray, mo: np.ndarray, freq: str):
     """(period label per day, year per day) for the requested frequency."""
     if freq == "monthly":
         return mo.astype(int), year.astype(int)
+    if freq == "annual":
+        # Calendar year. The drought label for an annual step is SPEI-12 at the
+        # end of the WATER year (September), which is a property of the label,
+        # not of the aggregation -- the fluxes are still summed Jan-Dec.
+        return np.full(mo.size, "ANN"), year.astype(int)
     # DJF belongs to the year of its January: December rolls forward.
     lab = np.array([SEASON_OF[int(m)] for m in mo])
     yy = np.where(mo == 12, year + 1, year).astype(int)
@@ -113,8 +118,9 @@ def periods(fx: dict, dy: dict, freq: str):
     # Sort periods in CALENDAR order, not lexicographic -- str() would file
     # month 10 between 1 and 2, which makes the CSV tedious to read.
     order = ({m: m for m in range(1, 13)} if freq == "monthly" else
+             {"ANN": 1} if freq == "annual" else
              {"DJF": 1, "MAM": 2, "JJA": 3, "SON": 4})
-    combos = sorted({(int(y), p if freq == "seasonal" else int(p))
+    combos = sorted({(int(y), int(p) if freq == "monthly" else str(p))
                      for y, p in zip(yy, lab)},
                     key=lambda t: (t[0], order[t[1]]))
     for var in REPORT:
@@ -163,7 +169,8 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--root", type=Path, required=True)
-    ap.add_argument("--freq", choices=["monthly", "seasonal"], default="monthly")
+    ap.add_argument("--freq", choices=["monthly", "seasonal", "annual"],
+                    default="monthly")
     ap.add_argument("--pair", default=None,
                     help="glob over '<scenario>/<gcm>:<arm>', e.g. 'era5_land:*_ic'")
     ap.add_argument("--stations", default=None, help="comma-separated subset")
@@ -227,9 +234,9 @@ def main(argv=None) -> int:
     # Summary: the treatment's size in each period, averaged over stations and
     # years. Read it as "when in the year", with the year-to-year detail left in
     # the file rather than collapsed here.
-    print(f"{'variable':<9}" + "".join(f"{p:>9}" for p in
-          (range(1, 13) if a.freq == "monthly" else ["DJF", "MAM", "JJA", "SON"])))
-    per_list = list(range(1, 13)) if a.freq == "monthly" else ["DJF", "MAM", "JJA", "SON"]
+    per_list = (list(range(1, 13)) if a.freq == "monthly" else
+                ["ANN"] if a.freq == "annual" else ["DJF", "MAM", "JJA", "SON"])
+    print(f"{'variable':<9}" + "".join(f"{p:>9}" for p in per_list))
     for var in REPORT:
         # rel_ann (r[9]), and a MEDIAN across stations and years. The mean is
         # not robust -- one pathological station turns a fleet doing ~1.2% into

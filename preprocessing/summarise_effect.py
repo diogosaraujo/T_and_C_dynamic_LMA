@@ -64,9 +64,19 @@ RATIOS = ["Tfrac", "Bowen", "WUE"]
 
 DATASETS = [("era5", "ERA5-Land"), ("historical", "GCM historical"),
             ("ssp126", "SSP1-2.6"), ("ssp585", "SSP5-8.5")]
-FREQS = ["daily", "monthly", "seasonal", "annual"]
+# Daily is deliberately NOT summarised. Those tables are day-of-year
+# CLIMATOLOGIES: every value is already a multi-year mean, so a "drought" class
+# built from ~4.8 years cancels less noise than an "all" class built from ~36
+# and the contrast is not like for like. Monthly, seasonal and annual keep one
+# row per period per year, which is what these summaries need.
+FREQS = ["monthly", "seasonal", "annual"]
 
 SEASON_ORDER = {"DJF": 1, "MAM": 2, "JJA": 3, "SON": 4}
+
+# A period whose fixed-arm value is below this fraction of the station's record
+# mean is excluded from the relative measure: the ratio there is not a change,
+# it is a division by nothing.
+TINY_DEN_FRAC = 0.01
 
 
 def table_path(root: Path, ds: str, freq: str) -> Path:
@@ -117,7 +127,8 @@ def load(path: Path, freq: str) -> tuple[pd.DataFrame | None, str]:
         return None, ("STALE: no rel_ann_pct column -- predates the fix that "
                       "made the relative measure meaningful; regenerate it")
     period_col = "doy" if freq == "daily" else "period"
-    need = {"station", "key", "variable", "diff", "rel_ann_pct", period_col}
+    need = {"station", "key", "variable", "diff", "rel_pct", "rel_ann_pct",
+            "fixed", "dyn", period_col}
     miss = need - cols
     if miss:
         return None, f"missing column(s): {', '.join(sorted(miss))}"
@@ -128,6 +139,23 @@ def load(path: Path, freq: str) -> tuple[pd.DataFrame | None, str]:
                      dtype={"station": "category", "variable": "category",
                             "key": "category"})
     df = df.rename(columns={period_col: "period"})
+    # THE DENOMINATOR IS THE FIXED ARM'S OWN VALUE FOR THAT PERIOD (rel_pct),
+    # which is what "how much did dynamic LMA change this flux" actually means.
+    # rel_ann divides by the record mean instead, and so understates the change
+    # in a low period and overstates it in a high one -- it answers a different
+    # question and is kept only as a secondary column.
+    #
+    # The cost is a denominator that can approach zero: 14.8% of station-months
+    # have monthly GPP below 1% of that station's record mean, almost all
+    # deciduous winters, and the untamed tail reaches 279037% for GPP and 17.7
+    # million % for EG. Those rows are excluded and counted. The MEDIANS this
+    # script reports would survive them anyway -- a median ignores a tail -- but
+    # a number that cannot be defended should not be in the pool at all.
+    scale = (df.groupby(["station", "variable"], observed=True)["fixed"]
+               .transform(lambda x: np.mean(np.abs(x))))
+    df["tiny_den"] = df["fixed"].abs() < TINY_DEN_FRAC * scale
+    df["rel"] = df["rel_pct"].where(~df["tiny_den"])
+    df["rel"] = df["rel"].replace([np.inf, -np.inf], np.nan)
     if "class" not in df.columns:
         df["class"] = "all"
     # The GCM key is "<scenario>/<gcm>:<arm>"; the drought labels are per GCM.
@@ -160,10 +188,24 @@ def per_station(df: pd.DataFrame) -> pd.DataFrame:
         extra = df[df["class"].astype(str).isin(("drought", "normal"))]
         stacked = pd.concat([base, extra], ignore_index=True) if len(extra) else base
     g = stacked.groupby(["station", "variable", "class"], observed=True)
-    out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
-                signed_rel=("rel_ann_pct", "median"),
+    out = g.agg(abs_rel=("rel", lambda s: np.nanmedian(np.abs(s))),
+                signed_rel=("rel", "median"),
+                abs_rel_ann=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
                 signed_diff=("diff", "median"),
-                n=("rel_ann_pct", "size")).reset_index()
+                mean_fixed=("fixed", "mean"),
+                mean_dyn=("dyn", "mean"),
+                dropped=("tiny_den", "mean"),
+                n=("rel", "size")).reset_index()
+    # The MEAN SHIFT: how far the dynamic arm's long-run mean sits from the
+    # fixed arm's. Distinct from the median of the per-period changes, and the
+    # distinction matters -- historical and ERA5 share a mean by construction
+    # while the SSP arms do not, because the projected LMA trends away from the
+    # historical baseline it was referenced to.
+    with np.errstate(divide="ignore", invalid="ignore"):
+        out["mean_shift_pct"] = np.where(
+            out["mean_fixed"].abs() > 0,
+            100 * (out["mean_dyn"] - out["mean_fixed"]) / out["mean_fixed"].abs(),
+            np.nan)
     return out.dropna(subset=["abs_rel"])
 
 
@@ -191,7 +233,7 @@ def seasonality(df: pd.DataFrame, freq: str) -> pd.DataFrame:
     # drought/normal and there is no "all" class, which left the monthly
     # seasonality section silently EMPTY in the first run.
     d = df[df["class"].astype(str) == "all"] if         "all" in set(df["class"].astype(str)) else df
-    g = (d.groupby(["variable", "period"], observed=True)["rel_ann_pct"]
+    g = (d.groupby(["variable", "period"], observed=True)["rel"]
           .apply(lambda s: np.nanmedian(np.abs(s))).reset_index(name="abs_rel"))
     if g.empty:
         return g
@@ -236,11 +278,15 @@ def main(argv=None) -> int:
     sites = read_sites()
     freqs = [f.strip() for f in a.freqs.split(",") if f.strip()]
     L = ["# Fixed vs dynamic LMA — summary of effect tables", "",
-         "Sizes are the **median across stations** of `rel_ann_pct`, the "
-         "difference as a percentage of that variable's own mean magnitude over "
-         "the record. Median because one pathological station otherwise sets the "
-         "number; `rel_ann` because `rel_pct` divides by a denominator that "
-         "vanishes out of season.", ""]
+         "Percentages are **`100 x (dyn - fixed) / |fixed|` for that same "
+         "period**, aggregated as a median over periods within a station and "
+         "then a median across stations. Medians throughout, because one "
+         "pathological station otherwise sets the whole number.", "",
+         f"Periods whose fixed-arm value falls below {TINY_DEN_FRAC:.0%} of the "
+         "station's record mean are excluded: there the ratio is a division by "
+         "nothing rather than a change. The share dropped is reported per "
+         "table. Day-of-year climatologies are not summarised here at all -- "
+         "see the note in the source.", ""]
     tidy, skipped, found = [], [], []
 
     for freq in freqs:
@@ -289,6 +335,35 @@ def main(argv=None) -> int:
                 L.append(f"| {var} | " + " | ".join(cells) + " |")
         L += ["", "Each cell: median |effect|, then the signed median and the "
                   "share of stations agreeing on that sign.", ""]
+
+        # -- mean shift, the thing a median of per-period changes cannot show
+        L += ["### Long-run mean shift (dynamic minus fixed)", "",
+              "Median across stations of `100 x (mean(dyn) - mean(fixed)) / "
+              "|mean(fixed)|`. Near zero means the two arms share a long-run "
+              "mean and the treatment only redistributes; a non-zero value "
+              "means dynamic LMA moves the mean itself.", ""]
+        head2 = ["variable"] + [lab for lab, _, _ in blocks]
+        L += ["| " + " | ".join(head2) + " |",
+              "|" + "|".join(["---"] * len(head2)) + "|"]
+        for var in FLUXES:
+            cells = []
+            for lab, _, ps in blocks:
+                g = ps[(ps["class"] == "all") & (ps["variable"].astype(str) == var)]
+                v = np.nanmedian(g["mean_shift_pct"]) if len(g) else np.nan
+                cells.append("—" if not np.isfinite(v) else f"{v:+.2f}%")
+            if any(c != "—" for c in cells):
+                L.append(f"| {var} | " + " | ".join(cells) + " |")
+        L += [""]
+
+        # -- how much was excluded by the denominator guard
+        drops = []
+        for lab, _, ps in blocks:
+            g = ps[ps["class"] == "all"]
+            if len(g):
+                drops.append(f"{lab} {100*np.nanmean(g['dropped']):.1f}%")
+        if drops:
+            L += ["Rows excluded by the small-denominator guard: "
+                  + "; ".join(drops) + ".", ""]
 
         # -- seasonality
         L += ["### Where in the year the effect peaks", ""]

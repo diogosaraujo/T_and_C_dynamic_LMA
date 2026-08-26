@@ -148,7 +148,13 @@ def _pick(header, cands):
 
 def _fluxnet_file(root: Path, sid: str, res: str):
     """The <res> (MM/YY) FLUXNET csv for one site, wherever the unpack put it."""
-    pats = [f"**/*{sid}*FLUXNET*{res}*.csv", f"**/*{sid}*_{res}_*.csv"]
+    # MUST match FLUXMET specifically. The archive holds three files per
+    # resolution -- BIFVARINFO, ERA5 and FLUXMET -- and a glob of
+    # "*FLUXNET*MM*.csv" matches all three, with sorted() then picking
+    # BIFVARINFO alphabetically. FLUXMET carries the fluxes; ERA5 is the
+    # product's own downscaled meteorology, which is not an observation.
+    pats = [f"**/*{sid}*FLUXNET_FLUXMET_{res}_*.csv",
+            f"**/*{sid}*FLUXMET*{res}*.csv"]
     for pat in pats:
         hits = sorted(Path(root).glob(pat))
         if hits:
@@ -231,6 +237,14 @@ def read_tower(root: Path, freq: str, sites, gpp: str = "NT",
                 rec = {"GPP": g, "QE": le, "H": h,
                        "ET": le * W_TO_MM_D if np.isfinite(le) else np.nan}
                 if freq == "annual":
+                    # THE YY FILE SUMS CARBON BUT AVERAGES ENERGY. Measured on
+                    # US-HBK: annual GPP 1918.64 against a monthly mean of
+                    # 5.267, and 1918.64/365 = 5.26 -- so YY GPP is gC/m2/YEAR
+                    # while YY LE stays a mean W/m2 (50.4, against 50.5
+                    # monthly). Left alone this put the annual GPP row 365x
+                    # above the model and the RMSE would have been meaningless.
+                    nd = 366 if (year % 4 == 0 and (year % 100 or not year % 400)) else 365
+                    rec["GPP"] = rec["GPP"] / nd if np.isfinite(rec["GPP"]) else np.nan
                     for var, v in rec.items():
                         if np.isfinite(v):
                             out[(sid, year, "ANN", var)] = v

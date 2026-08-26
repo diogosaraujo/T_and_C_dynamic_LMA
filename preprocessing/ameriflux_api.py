@@ -43,12 +43,17 @@ DATA_PRODUCT_FLUXNET = "FLUXNET"
 # confirmed to have a FLUXNET product. The download endpoint will not build an
 # archive without knowing which variant to package.
 #
-# SUBSET is the default because it carries exactly what the tower comparison
-# needs -- GPP_NT_VUT_REF, GPP_DT_VUT_REF, LE_F_MDS, H_F_MDS, NEE_VUT_REF --
-# at a fraction of FULLSET's size. FULLSET adds the percentile ensembles and
-# every intermediate, which we would not read.
-DATA_VARIANTS = ["SUBSET", "FULLSET"]
-DEFAULT_DATA_VARIANT = "SUBSET"
+# FULLSET IS THE DEFAULT BECAUSE SUBSET RETURNS NOTHING. Tested 2026-08-26
+# against US-HBK with identical credentials: SUBSET gave
+# "number_of_sites_downloaded": 0 while FULLSET returned an 89.1 MB archive.
+# A BASE-BADM control on the same site and credentials succeeded, which is what
+# narrowed it from "our request is malformed" to "this variant is not published
+# for AmeriFlux-FLUXNET sites". SUBSET is left selectable in case that changes.
+#
+# FULLSET is ~89 MB per site, so roughly 7.7 GB across our 86 sites -- large,
+# but it is the only variant that exists.
+DATA_VARIANTS = ["FULLSET", "SUBSET"]
+DEFAULT_DATA_VARIANT = "FULLSET"
 
 # FLUXNET IS CCBY4.0 ONLY. Requesting it for a LEGACY site returns nothing, so the
 # station list must be filtered rather than split. Checked 2026-08-26 against

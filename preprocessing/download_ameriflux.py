@@ -39,6 +39,8 @@ from pathlib import Path
 from ameriflux_api import (
     DATA_PRODUCT,
     DATA_PRODUCT_FLUXNET,
+    DATA_VARIANTS,
+    DEFAULT_DATA_VARIANT,
     DEFAULT_DESCRIPTION,
     DEFAULT_INTENDED_USE,
     ENDPOINTS,
@@ -250,8 +252,11 @@ def extract_urls(response) -> list[str]:
     """Pull download URLs out of the response without assuming one exact shape."""
     urls: list[str] = []
     payload = response.get("data_urls") if isinstance(response, dict) else None
-    if payload is None and isinstance(response, dict):
-        for key in ("data_url", "urls", "download_urls"):
+    if not payload and isinstance(response, dict):
+        # "manifest" is one of the three keys FLUXNET responses carry, and it
+        # was never inspected -- an empty data_urls with a populated manifest
+        # would have looked identical to a total failure.
+        for key in ("manifest", "data_url", "urls", "download_urls"):
             if key in response:
                 payload = response[key]
                 break
@@ -312,7 +317,12 @@ def download_for_policy(policy: str, sids: list[str], out_dir: Path,
         "description": args.description,
         "is_test": "true" if args.is_test else "",
     }
-    log(f"  requesting {len(sids)} site(s) under {policy} ...")
+    # Only FLUXNET takes a variant. Sending it for BASE-BADM risks the service
+    # rejecting an otherwise-good request, so it is added conditionally.
+    if args.product == DATA_PRODUCT_FLUXNET:
+        payload["data_variant"] = args.variant
+    log(f"  requesting {len(sids)} site(s) under {policy}"
+        f"{' / ' + args.variant if args.product == DATA_PRODUCT_FLUXNET else ''} ...")
     response = post_json(ENDPOINTS["data_download"], payload)
 
     urls = extract_urls(response)
@@ -357,6 +367,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--site-list", type=Path, action="append", default=None,
                    help="station CSV (repeatable); defaults to the deciduous + evergreen lists")
     p.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    p.add_argument("--variant", default=DEFAULT_DATA_VARIANT,
+                   choices=DATA_VARIANTS,
+                   help="FLUXNET only. SUBSET carries GPP_NT/DT_VUT_REF, "
+                        "LE_F_MDS and H_F_MDS, which is everything the tower "
+                        "comparison reads; FULLSET adds percentile ensembles.")
     p.add_argument("--product", default=DATA_PRODUCT,
                    choices=[DATA_PRODUCT, DATA_PRODUCT_FLUXNET],
                    help="BASE-BADM is the raw tower record; FLUXNET is the "
@@ -412,6 +427,8 @@ def main(argv: list[str] | None = None) -> int:
             log("[dry-run] payload (credentials omitted):")
             log(json.dumps({
                 "data_product": args.product,
+                **({"data_variant": args.variant}
+                   if args.product == DATA_PRODUCT_FLUXNET else {}),
                 "data_policy": "<per-site: CCBY4.0 or LEGACY>",
                 "site_ids": sorted(ids),
                 "intended_use": args.intended_use,

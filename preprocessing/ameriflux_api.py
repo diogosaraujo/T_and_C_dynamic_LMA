@@ -37,6 +37,19 @@ DATA_PRODUCT = "BASE-BADM"
 # derived quantity and only exists in this product.
 DATA_PRODUCT_FLUXNET = "FLUXNET"
 
+# FLUXNET REQUIRES A VARIANT; BASE-BADM DOES NOT. This is what job 39563 was
+# missing: all four batches came back with a well-formed response whose
+# data_urls list was empty, even though every one of the 86 sites requested was
+# confirmed to have a FLUXNET product. The download endpoint will not build an
+# archive without knowing which variant to package.
+#
+# SUBSET is the default because it carries exactly what the tower comparison
+# needs -- GPP_NT_VUT_REF, GPP_DT_VUT_REF, LE_F_MDS, H_F_MDS, NEE_VUT_REF --
+# at a fraction of FULLSET's size. FULLSET adds the percentile ensembles and
+# every intermediate, which we would not read.
+DATA_VARIANTS = ["SUBSET", "FULLSET"]
+DEFAULT_DATA_VARIANT = "SUBSET"
+
 # FLUXNET IS CCBY4.0 ONLY. Requesting it for a LEGACY site returns nothing, so the
 # station list must be filtered rather than split. Checked 2026-08-26 against
 # ENDPOINTS["site_ccby4"]: 109 of our 118 stations qualify; US-Blk, US-CZ2, US-CZ3,

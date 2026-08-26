@@ -307,28 +307,41 @@ def unpack(archive: Path, dest: Path) -> list[dict]:
 
 def download_for_policy(policy: str, sids: list[str], out_dir: Path,
                         args) -> tuple[list[Path], list[str]]:
-    payload = {
-        "user_id": args.user_id,
-        "user_email": args.user_email,
-        "data_product": args.product,
+    # FIELD ORDER MATCHES amerifluxr's amf_download_fluxnet EXACTLY. That client
+    # hand-builds the JSON string in this order, and while a conforming parser
+    # should not care, job 39607 came back with zero sites and no error message
+    # at all -- so every avoidable difference from the reference client is worth
+    # removing before blaming the service.
+    payload = {"user_id": args.user_id, "user_email": args.user_email,
+               "data_product": args.product}
+    if args.product == DATA_PRODUCT_FLUXNET:
+        payload["data_variant"] = args.variant     # BASE-BADM takes no variant
+    payload.update({
         "data_policy": policy,
         "site_ids": sids,
         "intended_use": args.intended_use,
         "description": args.description,
         "is_test": "true" if args.is_test else "",
-    }
-    # Only FLUXNET takes a variant. Sending it for BASE-BADM risks the service
-    # rejecting an otherwise-good request, so it is added conditionally.
-    if args.product == DATA_PRODUCT_FLUXNET:
-        payload["data_variant"] = args.variant
+    })
     log(f"  requesting {len(sids)} site(s) under {policy}"
         f"{' / ' + args.variant if args.product == DATA_PRODUCT_FLUXNET else ''} ...")
     response = post_json(ENDPOINTS["data_download"], payload)
 
     urls = extract_urls(response)
     if not urls:
-        log(f"  ! no download URLs returned for {policy}. Response keys: "
-            f"{sorted(response) if isinstance(response, dict) else type(response).__name__}")
+        # Print the WHOLE reply, not just its keys. Job 39607's log said only
+        # "Response keys: [data_urls, manifest, pi_contact_emails]", which is
+        # true and useless -- the body turned out to say
+        # "number_of_sites_downloaded": 0 with no reason given, and that could
+        # only be seen by fetching the saved file afterwards.
+        def _indent(obj):
+            return "\n".join("      " + ln for ln in
+                             json.dumps(obj, indent=2)[:1500].splitlines())
+
+        log(f"  ! no download URLs returned for {policy}. Full response:")
+        log(_indent(response))
+        log("    payload sent (credentials redacted):")
+        log(_indent(dict(payload, user_id="<redacted>", user_email="<redacted>")))
         (out_dir / f"_response_{policy.replace('.', '')}.json").write_text(
             json.dumps(response, indent=2), encoding="utf-8")
         return [], [f"{policy}: no download URLs returned"]

@@ -29,14 +29,25 @@ dyn - fixed. Long format because the downstream questions -- group by PFT, by
 ecoregion, by drought class -- are all group-bys, and a wide table would need
 reshaping for every one of them.
 
-TWO RELATIVE COLUMNS, AND rel_pct IS THE TRAP. rel_pct divides by that same
-day's |fixed|, which vanishes out of season: job 38604 reported ground
-evaporation at a "32348190% peak" on doy 43, i.e. a February denominator near
-zero. Use rel_ann_pct, which divides by the fixed arm's mean magnitude over the
-whole record -- a percentage of a typical day, finite year-round and comparable
-across variables and stations. rel_pct is still the more natural reading near
-peak season, where the denominator is healthy; it is kept for that, and the
-printed summary uses rel_ann_pct.
+TWO RELATIVE COLUMNS, AND WHICH ONE IS VALID DEPENDS ON THE VARIABLE.
+
+  FLUXES (LAI_H, GPP, NPP, ET, T, EG, EIn, Lk, QE, H, Rn) -> read rel_ann_pct.
+  These are extensive and go to zero out of season, so rel_pct's same-day
+  denominator explodes: job 38604 reported ground evaporation at a "32348190%
+  peak" on doy 43, which is a February EG of ~1e-9 mm/d underneath, not an
+  effect. rel_ann_pct divides by the fixed arm's mean magnitude over the whole
+  record -- a percentage of a typical day, finite year-round.
+
+  RATIOS (Tfrac, Bowen, WUE) -> read rel_pct, the opposite way round. They are
+  intensive and dimensionless, so an annual mean magnitude is meaningless: a
+  winter Bowen near 160 sits beside a summer 0.7 and swamps the scale. Their
+  denominator is healthy because climatology() rebuilds them from aggregated
+  fluxes rather than averaging daily ratios.
+
+Measured on a clean +2% change in H with QE untouched: rel_pct returns 2.000%
+on every day of the year while rel_ann_pct returns 0.017% in summer and 3.967%
+in winter. The printed summary picks the right column per variable and names
+which one it used.
 
 DAY OF YEAR, ACROSS THREE CALENDARS. The GCM forcing is mapped onto real dates by
 build_gcm_meteo.real_dates before it ever reaches T&C, so every run carries real
@@ -78,6 +89,10 @@ HOURLY_SUM = ["T_H", "T_L", "EG", "EIn_H", "EIn_L", "EIn_urb", "EIn_rock",
 HOURLY_MEAN = ["QE", "H", "Rn", "G", "Ta", "Ds"]
 # What actually gets reported. Ordered by distance from the mechanism: LAI is the
 # mediator, everything else is downstream of it.
+# Ratios, and the two fluxes each is built from. Kept out of the per-day
+# averaging path in climatology() -- see the note there.
+RATIOS = {"Tfrac": ("T", "ET"), "Bowen": ("H", "QE"), "WUE": ("GPP", "ET")}
+
 REPORT = ["LAI_H", "GPP", "NPP", "ET", "T", "EG", "EIn", "Lk",
           "QE", "H", "Rn", "Tfrac", "Bowen", "WUE"]
 
@@ -191,7 +206,44 @@ def climatology(fx: dict, dy: dict, years=None):
            derive({k: v[:n] for k, v in dy.items() if k != "year"})
     doy, yr = doy[keep], fx["year"][:n][keep]
     rows = []
+
+    # RATIOS ARE REBUILT FROM THE AGGREGATED FLUXES, NOT AVERAGED.
+    # derive() forms Bowen, Tfrac and WUE per DAY, and averaging a daily ratio
+    # across years is not the ratio of the averages. Out of season the
+    # denominator flux is near zero, single days reach Bowen ~ 160 against a
+    # summer 0.7, and those days dominate any mean they enter -- including the
+    # annual scale rel_ann divides by. Tested: on a clean +2% change in H, the
+    # mean-of-ratios route reports the true summer effect as 0.017% while
+    # ratio-of-means recovers 2.00% exactly.
+    #
+    # So per day of year, sum the components first and divide once. That is the
+    # quantity anyone means by "the Bowen ratio on day j" anyway.
+    for var, (num, den) in RATIOS.items():
+        if not all(k in F and k in D for k in (num, den)):
+            continue
+        fn, fd = np.asarray(F[num])[keep], np.asarray(F[den])[keep]
+        dn, dd = np.asarray(D[num])[keep], np.asarray(D[den])[keep]
+        per_doy = {}
+        for j in range(1, 366):
+            m = doy == j
+            if not m.any():
+                continue
+            fdm, ddm = np.nansum(fd[m]), np.nansum(dd[m])
+            if not (abs(fdm) > 1e-9 and abs(ddm) > 1e-9):
+                continue                      # no denominator flux on this day
+            per_doy[j] = (np.nansum(fn[m]) / fdm, np.nansum(dn[m]) / ddm,
+                          int(np.unique(yr[m]).size))
+        if not per_doy:
+            continue
+        scale = float(np.mean([abs(f) for f, _, _ in per_doy.values()]))
+        for j, (f, v, ny) in sorted(per_doy.items()):
+            rel = 100.0 * (v - f) / abs(f) if abs(f) > 1e-12 else np.nan
+            rel_ann = (100.0 * (v - f) / scale if scale > 1e-12 else np.nan)
+            rows.append((j, var, f, v, v - f, rel, rel_ann, ny))
+
     for var in REPORT:
+        if var in RATIOS:
+            continue                          # handled above
         if var not in F or var not in D:
             continue
         f_all, d_all = np.asarray(F[var])[keep], np.asarray(D[var])[keep]
@@ -367,19 +419,29 @@ def main(argv=None) -> int:
     # is where the treatment bites hardest rather than where the denominator
     # happened to be smallest.
     print(f"{'variable':<9}{'mean |rel|':>11}{'peak |rel|':>11}{'peak doy':>10}"
-          f"   (% of the variable's own annual mean)")
+          f"   basis")
     for var in REPORT:
+        # WHICH COLUMN IS TRUSTWORTHY DEPENDS ON THE VARIABLE.
+        # A flux is extensive and vanishes out of season, so its same-day
+        # denominator explodes -- read rel_ann, the percentage of a typical day.
+        # A ratio is intensive and, now that it is built from aggregated fluxes,
+        # has a healthy denominator year-round -- but its annual mean magnitude
+        # is meaningless, because winter Bowen values of ~160 sit alongside a
+        # summer 0.7. Tested on a clean +2% change in H: rel_pct gives 2.000%
+        # every day, rel_ann gives 0.017% in summer and 3.967% in winter.
+        col, basis = ((8, "% of same day") if var in RATIOS else
+                      (9, "% of annual mean"))
         sel = [r for r in rows if r[4] == var and r[2] == "all"
-               and np.isfinite(r[9])]
+               and np.isfinite(r[col])]
         if not sel:
             continue
         by_doy = {}
         for r in sel:
-            by_doy.setdefault(r[3], []).append(abs(r[9]))
+            by_doy.setdefault(r[3], []).append(abs(r[col]))
         means = {d: float(np.mean(v)) for d, v in by_doy.items()}
         peak = max(means, key=means.get)
         print(f"{var:<9}{np.mean(list(means.values())):>10.2f}%"
-              f"{means[peak]:>10.2f}%{peak:>10}")
+              f"{means[peak]:>10.2f}%{peak:>10}   {basis}")
 
     print(f"\n{npairs} pair(s), {len(rows)} row(s) -> {out}")
     return 1 if skipped else 0

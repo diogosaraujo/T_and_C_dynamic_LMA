@@ -254,9 +254,27 @@ freezing thresholds), interception. Initial soil moisture/SWE/temperatures = spi
 - **Python:** `ml Python/3.13.7` or `Python/3.14.6`, or shared conda at
   `/opt/apps/miniconda3` (`conda activate` / `conda activate py3146`). Preprocessing uses
   a venv at `~/envs/tc-preproc` built by `slurm/setup_env.sh`.
-- **Partitions:** `SOE_main` (new Epyc) / `SOE_legacy` (older Xeon) for general CPU — no
-  `--account` needed. `SOE_nyg` + `--account=nyg` in the SOE docs belongs to the
-  GPU-owning group, not us. Interactive: `srun -p SOE_main --cpus-per-task=4 --mem=24G --pty bash`.
+- **Partitions — ⚠️ the earlier note here was costing us days of queue time.**
+  `SOE_main` is only **12 nodes** and is routinely 100% allocated with multi-day
+  jobs from other groups queued behind it (2026-08-26: a wall of 3-day jobs with a
+  planned start two days out). Two much better targets exist:
+  - **`SOE_efthymios` + `--account=efthymios`** — our group's own node
+    (`soemilan03`, 1 node, infinite time), normally **idle**. Use it for single
+    jobs. One node, so do not fan an array out onto it.
+  - **`SOE_legacy`** (older Xeon, the `*` default) — **38 idle nodes**, 14-day
+    limit. Slower per core, but for anything that fans out, 38 idle beats 12
+    busy. This is the partition for job arrays and the analysis fleet.
+
+  `--account` DOES matter. `sshare` shows two associations: `basic`
+  (QOS `nodelim6`, RawUsage 1.9M, **FairShare 0.068** — drained by our own fleet
+  runs) and `efthymios` (QOS `normal`, RawUsage 10.6k, **FairShare 0.821**).
+  Jobs default to `basic`, so **always pass `-A efthymios`**. Neither association
+  restricts partitions. `SOE_nyg` + `--account=nyg` really does belong to the
+  GPU-owning group, not us.
+
+  Interactive: `srun -p SOE_legacy -A efthymios --cpus-per-task=4 --mem=24G --pty bash`.
+  `sinfo -o "%.20P %.6a %.12l %.6D %.6t %N"` before submitting anything large —
+  which partition is idle changes week to week.
 - ✅ **Compute nodes CAN reach the CDS** (verified 2026-08-04 on `soeepyc16` via `srun`:
   a real ERA5-Land retrieval succeeded). So download jobs can be submitted normally —
   no proxy, no login-node workaround needed.

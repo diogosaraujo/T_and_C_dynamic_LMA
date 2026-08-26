@@ -565,6 +565,14 @@ def main(argv: list[str] | None = None) -> int:
         "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "script": Path(__file__).name,
         "data_product": args.product,
+        # Record the variant too. Job 39607 returned zero sites and the
+        # provenance could not say whether data_variant had been sent, which
+        # made the run undiagnosable after the fact.
+        "data_variant": (args.variant if args.product == DATA_PRODUCT_FLUXNET
+                         else None),
+        "is_test_note": ("is_test=true may suppress archive generation server "
+                         "side; job 39563 had is_test=false and also returned "
+                         "zero, so it is not the sole cause"),
         "intended_use": args.intended_use,
         "description": args.description,
         "is_test": bool(args.is_test),

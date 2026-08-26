@@ -1,0 +1,21 @@
+{
+  "US-HBK": {
+    "SITE_ID": "US-HBK",
+    "SITE_NAME": "Hubbard Brook Experimental Forest",
+    "COUNTRY": "USA",
+    "STATE": "NH",
+    "GRP_LOCATION": {
+      "LOCATION_LAT": "43.9397",
+      "LOCATION_LONG": "-71.7181",
+      "LOCATION_ELEV": "367"
+    },
+    "IGBP": "DBF",
+    "GRP_CLIM_AVG": {
+      "CLIMATE_KOEPPEN": "Dfb",
+      "MAT": "6",
+      "MAP": "1400"
+    },
+    "TOWER_BEGAN": "2016",
+    "URL_AMERIFLUX": "https://ameriflux.lbl.gov/sites/siteinfo/US-HBK"
+  }
+}

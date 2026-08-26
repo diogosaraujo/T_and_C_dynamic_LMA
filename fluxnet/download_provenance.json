@@ -1,0 +1,19 @@
+{
+  "created_utc": "2026-08-26T19:41:09+00:00",
+  "script": "download_ameriflux.py",
+  "data_product": "FLUXNET",
+  "intended_use": "Research - Land model/Earth system model",
+  "description": "Driving and validating the Tethys-Chloris (T&C) ecohydrological model at forested AmeriFlux sites across CONUS ecoregions, to test how remote-sensing-derived dynamic leaf mass per area (LMA) alters simulated water, energy and carbon fluxes relative to a fixed-LMA baseline.",
+  "is_test": true,
+  "requested_stations": [
+    "US-HBK"
+  ],
+  "stations_with_data": [],
+  "site_metadata_found": [
+    "US-HBK"
+  ],
+  "policies": {
+    "US-HBK": "CCBY4.0"
+  },
+  "citation": "Cite the individual site DOIs and the AmeriFlux data policy: https://ameriflux.lbl.gov/data/data-policy/"
+}

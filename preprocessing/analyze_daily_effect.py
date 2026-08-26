@@ -223,16 +223,33 @@ def climatology(fx: dict, dy: dict, years=None):
             continue
         fn, fd = np.asarray(F[num])[keep], np.asarray(F[den])[keep]
         dn, dd = np.asarray(D[num])[keep], np.asarray(D[den])[keep]
-        per_doy = {}
+        sums = {}
         for j in range(1, 366):
             m = doy == j
             if not m.any():
                 continue
-            fdm, ddm = np.nansum(fd[m]), np.nansum(dd[m])
-            if not (abs(fdm) > 1e-9 and abs(ddm) > 1e-9):
-                continue                      # no denominator flux on this day
-            per_doy[j] = (np.nansum(fn[m]) / fdm, np.nansum(dn[m]) / ddm,
-                          int(np.unique(yr[m]).size))
+            sums[j] = (np.nansum(fn[m]), np.nansum(fd[m]),
+                       np.nansum(dn[m]), np.nansum(dd[m]),
+                       int(np.unique(yr[m]).size))
+        if not sums:
+            continue
+        # AN ABSOLUTE FLOOR ON THE DENOMINATOR IS NOT ENOUGH. The first version
+        # used 1e-9, which a midwinter ET summed over 30 years clears easily
+        # while T/ET stays a ratio of two near-zero numbers. Job 38622 still
+        # reported Tfrac peaking at 1695.78% on doy 362, and Bowen at 885.78%
+        # on doy 17 -- every ratio's peak sat in deep winter again.
+        #
+        # Require instead that the day carry at least 1% of a typical day's
+        # denominator flux. A Bowen ratio on a day with essentially no latent
+        # heat, or a transpiration fraction under snow, is not a small number --
+        # it is undefined, and the honest thing is to leave the day out rather
+        # than publish a ratio of noise.
+        floor = 0.01 * float(np.mean([abs(s[1]) for s in sums.values()]))
+        per_doy = {}
+        for j, (fnum, fden, dnum, dden, ny) in sums.items():
+            if abs(fden) < floor or abs(dden) < floor:
+                continue
+            per_doy[j] = (fnum / fden, dnum / dden, ny)
         if not per_doy:
             continue
         scale = float(np.mean([abs(f) for f, _, _ in per_doy.values()]))

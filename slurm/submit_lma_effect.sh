@@ -108,11 +108,14 @@ status=$?
 
 echo
 echo "cache holds: $(ls -1 "$CACHE"/*.json 2>/dev/null | wc -l) station file(s)"
-if [ -f "$CACHE/lma_effect_report.md" ]; then
+# The report and its CSVs go to $TC_RESULTS now; only the per-station JSON
+# cache stays under $CACHE. Pointing this line at $CACHE was left over from
+# before that split and sent job 38667 to a report that was not there.
+if [ -f "$TC_RESULTS/lma_effect_report.md" ]; then
     echo
-    echo "report     : $CACHE/lma_effect_report.md"
+    echo "report     : $TC_RESULTS/lma_effect_report.md"
     echo "  copy it down with:"
-    echo "    scp -P 22 $USER@soenfs1.hpc.rutgers.edu:$CACHE/lma_effect_*.{md,csv} ."
+    echo "    scp -P 22 $USER@soenfs1.hpc.rutgers.edu:$TC_RESULTS/lma_effect_*.{md,csv} ."
 fi
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "exit status: $status"

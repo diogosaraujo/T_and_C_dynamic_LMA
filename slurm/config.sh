@@ -61,9 +61,16 @@ fi
 
 TC_INPUT_DATA="${TC_INPUT_DATA:-$TC_ROOT_DEFAULT/input_data}"
 MODEL_RUN="${MODEL_RUN:-$(dirname "$TC_INPUT_DATA")/model_run}"
+# Analysis products -- the daily and annual effect tables and the drought-year
+# labels. A sibling of model_run, not a child of input_data: these are OUTPUTS
+# summarising the runs, and filing them under "input" would misdescribe them.
+# They also cannot live in the repo -- era5_daily.csv alone is 108 MB, past
+# GitHub's 100 MB hard limit, and the GCM version covers 15x as many pairs.
+TC_RESULTS="${TC_RESULTS:-$(dirname "$MODEL_RUN")/result_summary}"
 TC_VENV="${TC_VENV:-$HOME/envs/tc-preproc}"
 
 export TC_CLUSTER TC_INPUT_DATA TC_VENV PARTITION PYTHON_MODULE MODEL_RUN
+export TC_RESULTS
 export MATLAB_MODULES MAX_ARRAY_CHUNK
 
 # ------------------------------------------------------------------ LMOD helper

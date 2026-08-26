@@ -101,6 +101,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_treatment_effect import find_pairs   # noqa: E402
+from results_dir import NoResultsDir, resolve_out, results_root  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INPUT_ROOT = Path(os.environ.get("TC_INPUT_DATA",
@@ -683,7 +684,18 @@ def main(argv=None) -> int:
         MODEL_RUN = a.model_run
     if a.cache:
         CACHE = a.cache
-    out_dir = a.out or CACHE
+    # The annual tables and report go to $TC_RESULTS with the daily and drought
+    # products. CACHE keeps only the per-station JSONs, which are a cache of the
+    # RES files rather than a result. Note --report READS from this directory,
+    # so the pre-spin-up lma_effect_*.csv still sitting in CACHE are no longer
+    # picked up -- which is the separation we wanted anyway, old runs left where
+    # they are and new ones written somewhere they cannot be confused with them.
+    try:
+        out_dir = resolve_out(a.out, create=False) if a.out else results_root()
+        out_dir.mkdir(parents=True, exist_ok=True)
+    except NoResultsDir as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
 
     sites = site_table()
     have = sorted(s for s in sites if (MODEL_RUN / s).is_dir())

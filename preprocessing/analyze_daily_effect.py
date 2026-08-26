@@ -54,6 +54,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_treatment_effect import find_pairs                    # noqa: E402
+from results_dir import NoResultsDir, resolve_out                # noqa: E402
 
 # Cumulative days before each month, non-leap. DOY = CUM[month-1] + day.
 CUM = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
@@ -240,8 +241,25 @@ def main(argv=None) -> int:
     if not a.root.is_dir():
         print(f"ERROR: model_run root not found: {a.root}", file=sys.stderr)
         return 1
-    out = a.out or (a.root / "daily_effect.csv")
-    dro = read_drought(a.drought) if a.drought else None
+    # A bare "--out era5_daily.csv" used to land in the working directory, i.e.
+    # preprocessing/, putting a 108 MB table inside the repo. Relative names now
+    # resolve under $TC_RESULTS; absolute ones are honoured as given.
+    try:
+        out = resolve_out(a.out or "daily_effect.csv")
+        # --drought is an INPUT, but it comes from classify_drought.py, which
+        # writes to the same place -- so a bare name resolves there too. Do not
+        # create anything for it; a missing label file must be reported, not
+        # papered over with an empty directory.
+        dro_path = resolve_out(a.drought, create=False) if a.drought else None
+    except NoResultsDir as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
+    if dro_path is not None and not dro_path.is_file():
+        print(f"ERROR: drought labels not found: {dro_path}\n"
+              f"       Generate them with slurm/submit_classify_drought.sh.",
+              file=sys.stderr)
+        return 1
+    dro = read_drought(dro_path) if dro_path else None
 
     stations = ([s.strip() for s in a.stations.split(",")] if a.stations else
                 sorted(p.name for p in a.root.iterdir()

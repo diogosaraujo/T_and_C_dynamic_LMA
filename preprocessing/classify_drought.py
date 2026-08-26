@@ -59,6 +59,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from era5_predictors import (DEFAULT_ERA5_ROOT, SI_ORDER, Era5Monthly)  # noqa: E402
 from gcm_variables import GCMS, SCENARIOS, var_dir                     # noqa: E402
+from results_dir import NoResultsDir, resolve_out                      # noqa: E402
 
 
 def gcm_spei_file(gcm: str, scenario: str, months: int) -> Path | None:
@@ -259,7 +260,12 @@ def main(argv=None) -> int:
         print("ERROR: nothing classified", file=sys.stderr)
         return 1
 
-    a.out.parent.mkdir(parents=True, exist_ok=True)
+    # Relative names go to $TC_RESULTS alongside the daily and annual tables.
+    try:
+        a.out = resolve_out(a.out)
+    except NoResultsDir as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
     with open(a.out, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow(["station", "gcm", "scenario", "year", "class", "spei", "cut"])

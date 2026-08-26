@@ -1,7 +1,12 @@
 #!/bin/bash
 ## Label each station-year drought or normal, from SPEI.
 ##
-##     sbatch slurm/submit_classify_drought.sh --out $TC_INPUT_DATA/drought_years.csv
+##     sbatch slurm/submit_classify_drought.sh --out drought_years.csv
+##     sbatch slurm/submit_classify_drought.sh --source gcm --out drought_years_gcm.csv
+##
+## A bare --out name lands in $TC_RESULTS (<TC_ROOT>/result_summary), beside the
+## daily and annual tables, which is also where submit_daily_effect.sh --drought
+## looks for it. Absolute paths are honoured as given.
 ##     sbatch slurm/submit_classify_drought.sh --out ... --months 5,6,7,8,9
 ##     sbatch slurm/submit_classify_drought.sh --out ... --percentile 20
 ##
@@ -51,6 +56,8 @@ echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
 tc_check_partition
 tc_check_args "$@" || exit 1
+mkdir -p "$TC_RESULTS" || { echo "ERROR: cannot create $TC_RESULTS" >&2; exit 1; }
+echo "results    : $TC_RESULTS"
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo
 

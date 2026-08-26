@@ -1,20 +1,19 @@
 #!/bin/bash
 ## Seasonal signature of the LMA treatment: dyn - fixed by day of year.
 ##
-## Give --out and --drought FULL paths under $TC_INPUT_DATA. A bare filename is
-## written relative to preprocessing/, i.e. inside the repo, and the table is
-## 108 MB -- "git add -A" then hands GitHub a file past its 100 MB hard limit
-## and the push is declined outright. Source slurm/config.sh first so
-## $TC_INPUT_DATA is actually set; unset, it expands to nothing and the job dies
-## on a bare root path (tc_check_args now catches that).
+## Output goes to $TC_RESULTS -- <TC_ROOT>/result_summary, a sibling of
+## model_run -- and a bare --out filename resolves there automatically. It used
+## to resolve against the working directory, i.e. preprocessing/, which put a
+## 108 MB table inside the repo; "git add -A" swept it into a commit and GitHub
+## declined the push at its 100 MB hard limit.
 ##
-##     source slurm/config.sh
 ##     sbatch slurm/submit_daily_effect.sh --pair 'era5_land:*_ic' \
-##         --out "$TC_INPUT_DATA/era5_daily.csv" \
-##         --drought "$TC_INPUT_DATA/drought_years.csv"
+##         --out era5_daily.csv --drought drought_years.csv
 ##     sbatch slurm/submit_daily_effect.sh --pair 'historical/*:*' \
-##         --out "$TC_INPUT_DATA/hist_daily.csv" \
-##         --drought "$TC_INPUT_DATA/drought_years_gcm.csv"
+##         --out hist_daily.csv --drought drought_years_gcm.csv
+##
+## --drought is an INPUT and is read from $TC_RESULTS too, since that is where
+## submit_classify_drought.sh writes it. Pass an absolute path to override.
 ##
 ## Complements analyze_lma_effect.py rather than replacing it. That one reduces
 ## each run to ANNUAL series, which is right for the fleet-wide headline and the
@@ -57,6 +56,8 @@ echo "job        : ${SLURM_JOB_ID:-interactive}"
 echo "node       : $(hostname)"
 tc_check_partition
 tc_check_args "$@" || exit 1
+mkdir -p "$TC_RESULTS" || { echo "ERROR: cannot create $TC_RESULTS" >&2; exit 1; }
+echo "results    : $TC_RESULTS"
 echo "started    : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "model_run  : $MODEL_RUN$([ -d "$MODEL_RUN" ] || echo '   <-- NOT FOUND')"
 echo

@@ -1,0 +1,32 @@
+job        : 38863
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+out_dir    : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-26T15:47:22Z
+
+stations       : 2
+product        : FLUXNET
+output         : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+intended use   : Research - Land model/Earth system model
+test download  : True
+
+fetching public site metadata ...
+  + site metadata for 2/2 station(s)
+  CCBY4.0: 2 site(s)
+
+  requesting 2 site(s) under CCBY4.0 ...
+  ! no download URLs returned for CCBY4.0. Response keys: ['data_urls', 'manifest', 'pi_contact_emails']
+
+
+stations with downloaded data: 0/2
+no data returned for: ['US-HBK', 'US-Ha2']
+  (a site may have no shared BASE data, or a different data policy)
+manifest: /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet/files_manifest.csv
+
+1 archive(s) could NOT be downloaded:
+  - CCBY4.0: no download URLs returned
+
+Re-run the same command -- archives already downloaded are skipped.
+
+finished   : 2026-08-26T15:47:24Z
+exit status: 1

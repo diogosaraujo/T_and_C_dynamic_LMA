@@ -1,0 +1,45 @@
+job        : 38620
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T05:38:32Z
+
+index     : SPEI12_ts   all months
+criterion : annual mean < -1.0
+years     : all
+stations  : 118
+
+  GFDL-ESM4      historical  spei_12_GFDL-ESM4_historical_r1i1p1f1_gr1_1980-2014.nc
+  GFDL-ESM4      ssp126      spei_12_GFDL-ESM4_ssp126_r1i1p1f1_gr1_2015-2100.nc
+  GFDL-ESM4      ssp585      spei_12_GFDL-ESM4_ssp585_r1i1p1f1_gr1_2015-2100.nc
+  IPSL-CM6A-LR   historical  spei_12_IPSL-CM6A-LR_historical_r1i1p1f1_gr_1980-2014.nc
+  IPSL-CM6A-LR   ssp126      spei_12_IPSL-CM6A-LR_ssp126_r1i1p1f1_gr_2015-2100.nc
+  IPSL-CM6A-LR   ssp585      spei_12_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_2015-2100.nc
+  MPI-ESM1-2-HR  historical  spei_12_MPI-ESM1-2-HR_historical_r1i1p1f1_gn_1980-2014.nc
+  MPI-ESM1-2-HR  ssp126      spei_12_MPI-ESM1-2-HR_ssp126_r1i1p1f1_gn_2015-2100.nc
+  MPI-ESM1-2-HR  ssp585      spei_12_MPI-ESM1-2-HR_ssp585_r1i1p1f1_gn_2015-2100.nc
+  MRI-ESM2-0     historical  spei_12_MRI-ESM2-0_historical_r1i1p1f1_gn_1980-2014.nc
+  MRI-ESM2-0     ssp126      spei_12_MRI-ESM2-0_ssp126_r1i1p1f1_gn_2015-2100.nc
+  MRI-ESM2-0     ssp585      spei_12_MRI-ESM2-0_ssp585_r1i1p1f1_gn_2015-2100.nc
+  UKESM1-0-LL    historical  spei_12_UKESM1-0-LL_historical_r1i1p1f2_gn_1980-2014.nc
+  UKESM1-0-LL    ssp126      spei_12_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2015-2100.nc
+  UKESM1-0-LL    ssp585      spei_12_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2015-2100.nc
+SHORT YEARS DROPPED -- 1770 station-year(s), year(s) 1980, 2015
+  - US-Bar GFDL-ESM4 historical   1980: 1 of 12 months
+  - US-Bar GFDL-ESM4 ssp126       2015: 1 of 12 months
+  - US-Bar GFDL-ESM4 ssp585       2015: 1 of 12 months
+  - US-Bar IPSL-CM6A-LR historical  1980: 1 of 12 months
+  - US-Bar IPSL-CM6A-LR ssp126    2015: 1 of 12 months
+  - US-Bar IPSL-CM6A-LR ssp585    2015: 1 of 12 months
+  ... and 1764 more
+
+120360 station-years over 118 stations; 23896 drought (20%)
+drought years per station: min 1  median 9  max 69   -- 2 station(s) with NONE
+  A station contributing no drought years drops out of the composite entirely.
+  --percentile 20 guarantees every station contributes, at the cost of
+  'drought' meaning something different at each.
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/drought_years_gcm.csv
+
+finished   : 2026-08-26T05:45:19Z
+exit status: 0  (1 = a station was skipped; read the list above)

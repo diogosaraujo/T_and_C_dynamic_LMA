@@ -1,0 +1,31 @@
+job        : 38621
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T05:42:47Z
+
+index     : SPEI12_ts   all months
+criterion : annual mean < -1.0
+years     : all
+stations  : 118
+
+SHORT YEARS DROPPED -- 116 station-year(s), year(s) 1980
+  - US-Bar  era5_land             1980: 1 of 12 months
+  - US-Blk  era5_land             1980: 1 of 12 months
+  - US-Blo  era5_land             1980: 1 of 12 months
+  - US-CPF  era5_land             1980: 1 of 12 months
+  - US-CPk  era5_land             1980: 1 of 12 months
+  - US-CRK  era5_land             1980: 1 of 12 months
+  ... and 110 more
+
+SKIPPED -- 2 station(s):
+  ! US-HB2  era5_land             SPEI12_ts is all-NaN at this pixel
+  ! US-HB3  era5_land             SPEI12_ts is all-NaN at this pixel
+
+4872 station-years over 116 stations; 626 drought (13%)
+drought years per station: min 3  median 5  max 8
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/drought_years.csv
+
+finished   : 2026-08-26T05:42:50Z
+exit status: 1  (1 = a station was skipped; read the list above)

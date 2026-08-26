@@ -1,0 +1,2 @@
+ERROR: drought labels not found: /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/drought_years.csv
+       Generate them with slurm/submit_classify_drought.sh.

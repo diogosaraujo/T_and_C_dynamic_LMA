@@ -93,6 +93,7 @@ import argparse
 import csv
 import fnmatch
 import json
+import re
 import os
 import sys
 from pathlib import Path
@@ -426,7 +427,22 @@ def group_stat(rows, key, metric):
     return v
 
 
+def _pair_tag(pair: str | None) -> str:
+    """A filename-safe stem for a --pair glob, so reports do not overwrite.
+
+    Four --report runs differing only in --pair wrote the same three filenames
+    (jobs 39559-39562, seventeen seconds apart) and clobbered each other: the
+    surviving report could not even be identified, because the filename carried
+    no trace of which pair produced it. The tag goes into every output name.
+    """
+    if not pair:
+        return "all"
+    t = re.sub(r"[^A-Za-z0-9]+", "_", pair).strip("_")
+    return t or "all"
+
+
 def report(out_dir: Path, pair: str | None = None):
+    tag = _pair_tag(pair)
     recs = []
     for p in sorted(CACHE.glob("*.json")):
         r = json.loads(p.read_text(encoding="utf-8"))
@@ -604,10 +620,10 @@ def report(out_dir: Path, pair: str | None = None):
       "model–observation error, and bias is identical by construction.\n")
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "lma_effect_report.md").write_text("\n".join(L), encoding="utf-8")
+    (out_dir / f"lma_effect_{tag}_report.md").write_text("\n".join(L), encoding="utf-8")
 
     # ---- machine-readable companions
-    with open(out_dir / "lma_effect_metrics.csv", "w", newline="", encoding="utf-8") as fh:
+    with open(out_dir / f"lma_effect_{tag}_metrics.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         cols = ["fixed_mean", "dyn_mean", "diff_pct", "diff_sd_pct", "diff_max_abs_pct",
                 "r_sla", "sd_fixed", "sd_dyn", "var_ratio", "r_clim", "slope", "slope_r"]
@@ -622,7 +638,7 @@ def report(out_dir: Path, pair: str | None = None):
                             r["flux"]["n_years"], k, UNITS.get(k, "")]
                            + [f"{m[c]:.6g}" if isinstance(m.get(c), float)
                               and np.isfinite(m[c]) else m.get(c, "") for c in cols])
-    with open(out_dir / "lma_effect_input_quality.csv", "w", newline="", encoding="utf-8") as fh:
+    with open(out_dir / f"lma_effect_{tag}_input_quality.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         keys = ["n", "lma_mean", "lma_sd", "lma_cv", "sla_mean", "sla_cv",
                 "trend_pct_record", "trend_r2", "detrended_cv", "lag1_ac",
@@ -632,7 +648,7 @@ def report(out_dir: Path, pair: str | None = None):
             i = r.get("input", {})
             w.writerow([r["station"], r["forest_type"], r["eco_name"]]
                        + [i.get(k, "") for k in keys])
-    with open(out_dir / "lma_effect_annual.csv", "w", newline="", encoding="utf-8") as fh:
+    with open(out_dir / f"lma_effect_{tag}_annual.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow(["StationID", "ForestType", "year", "flux", "fixed", "dynamic",
                     "diff", "LMA", "SLA"])
@@ -653,10 +669,10 @@ def report(out_dir: Path, pair: str | None = None):
                                 "" if L_ is None else f"{L_:.4f}",
                                 "" if L_ is None else f"{1/(L_*F_C):.6f}"])
 
-    print(f"\nreport  -> {out_dir/'lma_effect_report.md'}")
-    print(f"metrics -> {out_dir/'lma_effect_metrics.csv'}")
-    print(f"input   -> {out_dir/'lma_effect_input_quality.csv'}")
-    print(f"annual  -> {out_dir/'lma_effect_annual.csv'}")
+    print(f"\nreport  -> {out_dir/f'lma_effect_{tag}_report.md'}")
+    print(f"metrics -> {out_dir/f'lma_effect_{tag}_metrics.csv'}")
+    print(f"input   -> {out_dir/f'lma_effect_{tag}_input_quality.csv'}")
+    print(f"annual  -> {out_dir/f'lma_effect_{tag}_annual.csv'}")
     print(f"\n{len(ok)} stations assessed, {len(bad)} not")
     return 0 if ok else 1
 

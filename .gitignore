@@ -24,6 +24,7 @@ RES_*.mat
 # one push declined at GitHub's 100 MB hard limit; this directory sits inside the
 # repo by request, so the ignore rule is what keeps that from happening again.
 /preprocessing/fluxnet/
+/fluxnet/          # same thing pulled down to the repo root
 
 # Python
 __pycache__/

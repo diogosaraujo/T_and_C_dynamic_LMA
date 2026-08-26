@@ -10,3 +10,46 @@ freq      : seasonal
 pair      : historical/*:*
 stations  : 98
 
+SKIPPED -- 40 pair(s):
+  ! US-DPP    historical/GFDL-ESM4:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    historical/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    historical/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    historical/MRI-ESM2-0:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    historical/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/GFDL-ESM4:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/MRI-ESM2-0:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/GFDL-ESM4:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/MRI-ESM2-0:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/GFDL-ESM4:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/MRI-ESM2-0:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ... and 20 more
+
+variable       DJF      MAM      JJA      SON
+LAI_H        5.69%    9.69%    6.43%    5.74%
+GPP        358.59%    7.32%    3.60%    3.58%
+NPP          8.91%   11.34%    9.74%   12.33%
+ET           1.65%    2.20%    2.19%    2.58%
+T            7.86%    5.70%    2.70%    3.47%
+EG        1573.62%  238.88%    7.73%    6.22%
+EIn         65.26%   34.10%    5.29%    5.09%
+Lk       996412.17%10350365.00%1955120.74%674396.97%
+QE           1.37%    2.10%    2.19%    2.52%
+H           13.69%    1.43%    1.67%    1.93%
+Rn           4.91%    0.38%    0.14%    0.22%
+Tfrac       12.77%    4.14%    0.57%    0.94%
+Bowen       66.40%    7.24%    8.15%   10.24%
+WUE        231.73%    6.01%    2.45%    2.86%
+
+425 pair(s), 719950 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/gcm_seasonal_historical.csv
+
+finished   : 2026-08-26T16:04:15Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

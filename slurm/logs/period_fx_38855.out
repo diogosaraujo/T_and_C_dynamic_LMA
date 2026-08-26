@@ -10,3 +10,46 @@ freq      : monthly
 pair      : ssp585/*:*
 stations  : 98
 
+SKIPPED -- 50 pair(s):
+  ! US-CPk    ssp585/GFDL-ESM4:fixed_lma  TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CPk    ssp585/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CPk    ssp585/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CPk    ssp585/MRI-ESM2-0:fixed_lma TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CPk    ssp585/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp585/GFDL-ESM4:fixed_lma  TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp585/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp585/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp585/MRI-ESM2-0:fixed_lma TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp585/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp585/GFDL-ESM4:fixed_lma  TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp585/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp585/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp585/MRI-ESM2-0:fixed_lma TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp585/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp585/GFDL-ESM4:fixed_lma  TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp585/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp585/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp585/MRI-ESM2-0:fixed_lma TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp585/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ... and 30 more
+
+variable         1        2        3        4        5        6        7        8        9       10       11       12
+LAI_H       16.43%   11.02%   14.24%   19.42%   14.64%   14.24%   24.83%   17.06%   16.26%   18.44%   32.69%  124.47%
+GPP        223.07%  114.06%   34.68%   24.92%  135.56%   80.92%  684.21%  211.21%  364.28% 2442.06%  117.94%  455.15%
+NPP         10.97%   16.18%   32.32%18978950.83%32931815.21%40958683.71%31717595.37%20363073.21%4130559.61%10024359.71%   31.94%   42.32%
+ET           4.20%    4.41%    4.74%    4.52%    4.69%   32.95%    5.49%    8.58%    6.50%    6.35%    4.82%    4.00%
+T        244616.57%   26.59%   11.94%   13.77%    9.14%    8.77%   11.00%   11.73%   11.82%   18.87%   20.59% 2194.19%
+EG       3990852.11%71561569.65%3625952.02%   15.68%   21.22%   69.87%  223.88%  141.30%  111.90%   26.28%  152.04%   48.19%
+EIn         51.02%   29.65%   75.23%  477.59%  624.20%  137.48%  260.55%   45.94%  460.35%  524.10%  284.54% 2899.26%
+Lk       130747869716.52%94574155272.62%32920243498.09%27825956043.29%23816564745.62%42124282127.77%79270690060.20%189137089163.38%205261937681.51%243363167624.29%195475921754.61%152253525065.81%
+QE           3.73%    3.97%    4.51%    4.42%    4.67%   32.99%    5.49%    8.57%    6.50%    6.35%    4.59%    3.67%
+H           21.00%   12.10%    6.34%    2.80%    2.92%    4.35%    5.77%    6.43%    5.45%    6.51%   34.92%   44.18%
+Rn           7.96%    2.82%    1.19%    0.84%    0.69%    0.63%    0.66%    0.70%    0.72%    0.81%    3.69%    5.16%
+Tfrac    110401.66%   30.02%    9.70%   11.54%    5.83%    4.17%    5.45%    4.31%    4.69%    6.78%   20.88% 5375.60%
+Bowen      104.23%   40.82%   25.46%   26.42%   26.69%   23.00%   25.46%   30.49%   28.68%   27.47%   47.84%   81.37%
+WUE        201.57%   67.97%   21.46%   15.62%   26.48%   23.39%   90.29%   79.50%   83.31%  201.32%   72.20%  294.82%
+
+410 pair(s), 5923173 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/gcm_monthly_ssp585.csv
+
+finished   : 2026-08-26T16:28:02Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

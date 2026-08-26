@@ -10,3 +10,46 @@ freq      : seasonal
 pair      : ssp126/*:*
 stations  : 98
 
+SKIPPED -- 50 pair(s):
+  ! US-CPk    ssp126/GFDL-ESM4:fixed_lma  TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CPk    ssp126/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CPk    ssp126/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CPk    ssp126/MRI-ESM2-0:fixed_lma TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CPk    ssp126/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp126/GFDL-ESM4:fixed_lma  TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp126/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp126/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp126/MRI-ESM2-0:fixed_lma TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-CZ2    ssp126/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp126/GFDL-ESM4:fixed_lma  TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp126/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp126/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp126/MRI-ESM2-0:fixed_lma TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    ssp126/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp126/GFDL-ESM4:fixed_lma  TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp126/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp126/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp126/MRI-ESM2-0:fixed_lma TypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    ssp126/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ... and 30 more
+
+variable       DJF      MAM      JJA      SON
+LAI_H       46.75%   14.82%   12.71%   14.96%
+GPP        133.90%   10.38%    6.81%    8.64%
+NPP         13.78%  151.94%2001902.61%  163.11%
+ET           3.07%    3.53%    3.61%    4.13%
+T          685.91%    8.46%    6.09%    7.93%
+EG       246463.38%   12.05%   21.63%   19.05%
+EIn       2140.62%  209.56% 2366.12%  692.24%
+Lk       38143032845.03%14298888153.84%27179793668.33%87981553679.80%
+QE           2.74%    3.41%    3.60%    4.09%
+H           15.37%    2.09%    3.58%    4.11%
+Rn           4.03%    0.73%    0.57%    0.72%
+Tfrac     2398.55%    6.38%    3.36%    4.67%
+Bowen       58.21%   20.92%   20.46%   25.39%
+WUE        203.08%    8.90%    5.90%    8.01%
+
+410 pair(s), 1980294 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/gcm_seasonal_ssp126.csv
+
+finished   : 2026-08-26T16:27:15Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

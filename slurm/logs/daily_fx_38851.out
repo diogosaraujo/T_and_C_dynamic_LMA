@@ -9,3 +9,46 @@ model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
 pair      : ssp585/*:*
 stations  : 98   drought classes from drought_years_gcm.csv
 
+SKIPPED -- 50 pair(s):
+  ! US-CPk    ssp585/GFDL-ESM4:fixed_lma  one arm has no RES
+  ! US-CPk    ssp585/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-CPk    ssp585/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-CPk    ssp585/MRI-ESM2-0:fixed_lma one arm has no RES
+  ! US-CPk    ssp585/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-CZ2    ssp585/GFDL-ESM4:fixed_lma  one arm has no RES
+  ! US-CZ2    ssp585/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-CZ2    ssp585/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-CZ2    ssp585/MRI-ESM2-0:fixed_lma one arm has no RES
+  ! US-CZ2    ssp585/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-DPP    ssp585/GFDL-ESM4:fixed_lma  one arm has no RES
+  ! US-DPP    ssp585/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-DPP    ssp585/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-DPP    ssp585/MRI-ESM2-0:fixed_lma one arm has no RES
+  ! US-DPP    ssp585/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-NMj    ssp585/GFDL-ESM4:fixed_lma  one arm has no RES
+  ! US-NMj    ssp585/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-NMj    ssp585/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-NMj    ssp585/MRI-ESM2-0:fixed_lma one arm has no RES
+  ! US-NMj    ssp585/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ... and 30 more
+
+variable  mean |rel| peak |rel|  peak doy   basis
+LAI_H          7.64%     13.09%       223   % of annual mean
+GPP            4.12%      8.83%       157   % of annual mean
+NPP            4.43%      9.41%       156   % of annual mean
+ET             2.82%      5.96%       193   % of annual mean
+T              4.52%      9.92%       194   % of annual mean
+EG            11.49%     20.67%       163   % of annual mean
+EIn            6.01%     11.95%       195   % of annual mean
+Lk            15.83%     28.30%       176   % of annual mean
+QE             2.79%      5.92%       192   % of annual mean
+H              2.39%      4.86%       183   % of annual mean
+Rn             0.54%      0.78%       130   % of annual mean
+Tfrac         10.97%    364.24%        31   % of same day
+Bowen         26.92%    688.74%         9   % of same day
+WUE            6.94%     37.11%        32   % of same day
+
+410 pair(s), 6271658 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/gcm_daily_ssp585.csv
+
+finished   : 2026-08-26T16:28:08Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

@@ -10,3 +10,46 @@ freq      : monthly
 pair      : historical/*:*
 stations  : 98
 
+SKIPPED -- 40 pair(s):
+  ! US-DPP    historical/GFDL-ESM4:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    historical/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    historical/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    historical/MRI-ESM2-0:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-DPP    historical/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/GFDL-ESM4:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/MRI-ESM2-0:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-MtB    historical/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/GFDL-ESM4:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/MRI-ESM2-0:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-NMj    historical/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/GFDL-ESM4:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/IPSL-CM6A-LR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/MPI-ESM1-2-HR:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/MRI-ESM2-0:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ! US-SHC    historical/UKESM1-0-LL:fixed_lmaTypeError: expected str, bytes or os.PathLike object, not NoneType
+  ... and 20 more
+
+variable         1        2        3        4        5        6        7        8        9       10       11       12
+LAI_H        5.66%    5.75%    7.14%    9.59%    9.72%    6.66%    6.50%    6.27%    5.96%    5.69%    5.55%    5.85%
+GPP       2604.25%  168.45%   24.62%    6.74%    7.51%   26.94%   15.86%   19.17%   16.40%    8.15%   11.48%  654.68%
+NPP          7.06%    8.19%    9.51%    6.69%   16.48%    8.58%    8.72%   33.37%   16.45%   15.11%   66.01%   15.13%
+ET           2.25%    2.17%    2.88%    3.12%    2.43%    2.71%    4.66%    3.68%    3.77%    5.33%    2.29%    1.87%
+T           60.40%   94.32%    7.54%    6.76%    5.68%    3.58%    5.27%    4.34%    4.64%    6.28%    4.35%   10.98%
+EG       125539811.27%62201736.86%661517.83%    6.70%  240.88%   11.12%  328.45%  227.27%   17.65%    6.86%   34.30%   25.17%
+EIn         15.11%   20.31%   30.50%   25.14%   34.38%    6.69%    5.82%    5.03%    4.64%    6.32%   11.72%   58.12%
+Lk       112825418.30%122426743.39%1600977.47%18260517.01%29907602.98%3167793.53%3946492.25%2843880.41%879280.80%1193139.70%40004119.04%1907517.03%
+QE           1.83%    1.83%    2.64%    3.02%    2.43%    2.72%    4.66%    3.68%    3.77%    5.28%    2.02%    1.57%
+H            9.69%   13.74%    8.26%    4.10%    2.80%    1.59%    2.03%    2.06%    2.03%    2.08%   14.81%   13.87%
+Rn           4.77%    2.87%    1.07%    0.55%    0.31%    0.17%    0.14%    0.14%    0.15%    0.24%    3.39%    4.69%
+Tfrac       87.85%   88.90%    8.23%    5.23%    3.99%    1.01%    0.55%    0.52%    0.63%    1.07%    2.51%   13.54%
+Bowen       38.53%   41.85%   14.87%    9.41%    4.43%    5.47%    8.13%    9.13%   11.04%   10.72%   22.90%   35.43%
+WUE       2007.25%  278.65%   26.03%    5.47%    5.99%   11.78%    6.05%    9.60%    9.13%    5.21%   11.45%  541.66%
+
+425 pair(s), 2141916 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/gcm_monthly_historical.csv
+
+finished   : 2026-08-26T16:04:24Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

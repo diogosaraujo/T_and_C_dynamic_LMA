@@ -1,0 +1,21 @@
+job        : 38626  task 101
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T06:19:55Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+cache      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+cache     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect
+site list : 118 stations, 101 present in model_run
+
+no pair matched 'historical/*:*' for US-xYE -- nothing to do
+
+cache holds: 723 station file(s)
+
+report     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect/lma_effect_report.md
+  copy it down with:
+    scp -P 22 dd1136@soenfs1.hpc.rutgers.edu:/vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect/lma_effect_*.{md,csv} .
+finished   : 2026-08-26T06:19:59Z
+exit status: 0

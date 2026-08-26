@@ -1,0 +1,42 @@
+job        : 38671  task 4
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T06:06:57Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+cache      : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+cache     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect
+site list : 118 stations, 101 present in model_run
+
+pairs     : 17
+
+  [1/17] US-CPk era5_land:fixed_lma: ok
+  [2/17] US-CPk era5_land:fixed_lma_ic: cached
+  [3/17] US-CPk historical/GFDL-ESM4:fixed_lma: cached
+  [4/17] US-CPk historical/IPSL-CM6A-LR:fixed_lma: cached
+  [5/17] US-CPk historical/MPI-ESM1-2-HR:fixed_lma: cached
+  [6/17] US-CPk historical/MRI-ESM2-0:fixed_lma: cached
+  [7/17] US-CPk historical/UKESM1-0-LL:fixed_lma: cached
+  [8/17] US-CPk ssp126/GFDL-ESM4:fixed_lma: incomplete
+  [9/17] US-CPk ssp126/IPSL-CM6A-LR:fixed_lma: incomplete
+  [10/17] US-CPk ssp126/MPI-ESM1-2-HR:fixed_lma: incomplete
+  [11/17] US-CPk ssp126/MRI-ESM2-0:fixed_lma: incomplete
+  [12/17] US-CPk ssp126/UKESM1-0-LL:fixed_lma: incomplete
+  [13/17] US-CPk ssp585/GFDL-ESM4:fixed_lma: incomplete
+  [14/17] US-CPk ssp585/IPSL-CM6A-LR:fixed_lma: incomplete
+  [15/17] US-CPk ssp585/MPI-ESM1-2-HR:fixed_lma: incomplete
+  [16/17] US-CPk ssp585/MRI-ESM2-0:fixed_lma: incomplete
+  [17/17] US-CPk ssp585/UKESM1-0-LL:fixed_lma: incomplete
+
+cache now holds 294 station file(s)
+next: python analyze_lma_effect.py --report
+
+cache holds: 295 station file(s)
+
+report     : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect/lma_effect_report.md
+  copy it down with:
+    scp -P 22 dd1136@soenfs1.hpc.rutgers.edu:/vol_efthymios/NFS07/dd1136/T_and_C/input_data/lma_effect/lma_effect_*.{md,csv} .
+finished   : 2026-08-26T06:07:30Z
+exit status: 0

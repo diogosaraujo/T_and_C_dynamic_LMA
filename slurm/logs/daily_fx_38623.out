@@ -1,0 +1,54 @@
+job        : 38623
+node       : soeepyc07
+cluster    : soe   partition: SOE_main
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T06:03:32Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+pair      : historical/*:*
+stations  : 98   drought classes from drought_years_gcm.csv
+
+SKIPPED -- 40 pair(s):
+  ! US-DPP    historical/GFDL-ESM4:fixed_lmaone arm has no RES
+  ! US-DPP    historical/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-DPP    historical/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-DPP    historical/MRI-ESM2-0:fixed_lmaone arm has no RES
+  ! US-DPP    historical/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-MtB    historical/GFDL-ESM4:fixed_lmaone arm has no RES
+  ! US-MtB    historical/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-MtB    historical/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-MtB    historical/MRI-ESM2-0:fixed_lmaone arm has no RES
+  ! US-MtB    historical/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-NMj    historical/GFDL-ESM4:fixed_lmaone arm has no RES
+  ! US-NMj    historical/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-NMj    historical/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-NMj    historical/MRI-ESM2-0:fixed_lmaone arm has no RES
+  ! US-NMj    historical/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-SHC    historical/GFDL-ESM4:fixed_lmaone arm has no RES
+  ! US-SHC    historical/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-SHC    historical/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-SHC    historical/MRI-ESM2-0:fixed_lmaone arm has no RES
+  ! US-SHC    historical/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ... and 20 more
+
+variable  mean |rel| peak |rel|  peak doy   basis
+LAI_H          0.66%      1.47%       220   % of annual mean
+GPP            0.70%      2.38%       220   % of annual mean
+NPP            0.83%      2.91%       220   % of annual mean
+ET             0.64%      1.64%       220   % of annual mean
+T              0.70%      2.50%       220   % of annual mean
+EG             1.96%      5.67%       107   % of annual mean
+EIn            1.71%      3.92%       220   % of annual mean
+Lk             7.80%    118.09%       140   % of annual mean
+QE             0.65%      1.65%       220   % of annual mean
+H              0.49%      0.95%        99   % of annual mean
+Rn             0.14%      0.43%        87   % of annual mean
+Tfrac          2.43%     73.74%       358   % of same day
+Bowen          5.01%    247.81%       356   % of same day
+WUE            1.90%     12.17%        27   % of same day
+
+425 pair(s), 6511246 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/gcm_daily_historical.csv
+
+finished   : 2026-08-26T06:44:56Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

@@ -1,0 +1,47 @@
+job        : 39563
+node       : soemilan03
+cluster    : soe   partition: SOE_efthymios
+out_dir    : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-26T19:15:06Z
+
+stations       : 118
+product        : FLUXNET
+output         : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+intended use   : Research - Land model/Earth system model
+test download  : False
+
+fetching public site metadata ...
+  + site metadata for 118/118 station(s)
+  ! 23 site(s) have no FLUXNET product (ONEFlux has not processed them); skipping: US-Blo, US-CPF, US-CPk, US-CS7, US-DPP, US-GBT, US-HB5, US-HB6, US-Ha2, US-JFM, US-JFP, US-Me4, US-NMj, US-PFs, US-SB1, US-SP2, US-SP3, US-SP4, US-Sx2, US-TEF, US-Vcs, US-Wi2, US-Wrc
+  ! 9 site(s) have no FLUXNET product (ONEFlux has not processed them); skipping: US-Blk, US-CZ2, US-CZ3, US-CZ4, US-LPH, US-MRf, US-NR2, US-SB3, US-WBW
+  CCBY4.0: 86 site(s)
+
+  [CCBY4.0 batch 1/4]
+  requesting 25 site(s) under CCBY4.0 ...
+  ! no download URLs returned for CCBY4.0. Response keys: ['data_urls', 'manifest', 'pi_contact_emails']
+  [CCBY4.0 batch 2/4]
+  requesting 25 site(s) under CCBY4.0 ...
+  ! no download URLs returned for CCBY4.0. Response keys: ['data_urls', 'manifest', 'pi_contact_emails']
+  [CCBY4.0 batch 3/4]
+  requesting 25 site(s) under CCBY4.0 ...
+  ! no download URLs returned for CCBY4.0. Response keys: ['data_urls', 'manifest', 'pi_contact_emails']
+  [CCBY4.0 batch 4/4]
+  requesting 11 site(s) under CCBY4.0 ...
+  ! no download URLs returned for CCBY4.0. Response keys: ['data_urls', 'manifest', 'pi_contact_emails']
+
+
+stations with downloaded data: 0/118
+no data returned for: ['US-Bar', 'US-Blk', 'US-Blo', 'US-CPF', 'US-CPk', 'US-CRK', 'US-CS2', 'US-CS7', 'US-CZ2', 'US-CZ3', 'US-CZ4', 'US-ChR', 'US-Cst', 'US-Cwt', 'US-DPP', 'US-Dk2', 'US-Dk3', 'US-Fmf', 'US-Fuf', 'US-GBT', 'US-GLE', 'US-HB2', 'US-HB3', 'US-HB5', 'US-HB6', 'US-HBK', 'US-Ha1', 'US-Ha2', 'US-Ho1', 'US-Ho2', 'US-Ho3', 'US-JFM', 'US-JFP', 'US-KS1', 'US-LPH', 'US-MEF', 'US-MMS', 'US-MOz', 'US-MRf', 'US-Me1', 'US-Me2', 'US-Me3', 'US-Me4', 'US-Me5', 'US-Me6', 'US-Me7', 'US-MtB', 'US-NC1', 'US-NC2', 'US-NC3', 'US-NC5', 'US-NMj', 'US-NR1', 'US-NR2', 'US-Oho', 'US-PFL', 'US-PFb', 'US-PFc', 'US-PFg', 'US-PFh', 'US-PFi', 'US-PFj', 'US-PFk', 'US-PFm', 'US-PFn', 'US-PFp', 'US-PFq', 'US-PFs', 'US-PFt', 'US-SB1', 'US-SB3', 'US-SHC', 'US-SP1', 'US-SP2', 'US-SP3', 'US-SP4', 'US-SSH', 'US-Slt', 'US-Sx2', 'US-TEF', 'US-UMB', 'US-UMd', 'US-Vcm', 'US-Vcp', 'US-Vcs', 'US-WBW', 'US-WCr', 'US-Wi0', 'US-Wi1', 'US-Wi2', 'US-Wi3', 'US-Wi4', 'US-Wi5', 'US-Wi8', 'US-Wi9', 'US-Wrc', 'US-xAB', 'US-xBL', 'US-xBR', 'US-xGR', 'US-xHA', 'US-xJE', 'US-xLE', 'US-xML', 'US-xNW', 'US-xRM', 'US-xRN', 'US-xSB', 'US-xSC', 'US-xSE', 'US-xSP', 'US-xST', 'US-xTA', 'US-xTE', 'US-xTR', 'US-xUK', 'US-xWR', 'US-xYE']
+  (a site may have no shared BASE data, or a different data policy)
+manifest: /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet/files_manifest.csv
+
+4 archive(s) could NOT be downloaded:
+  - CCBY4.0: no download URLs returned
+  - CCBY4.0: no download URLs returned
+  - CCBY4.0: no download URLs returned
+  - CCBY4.0: no download URLs returned
+
+Re-run the same command -- archives already downloaded are skipped.
+
+finished   : 2026-08-26T19:15:09Z
+exit status: 1

@@ -128,15 +128,27 @@ def read_sites(wanted=None) -> dict:
 
 
 def annual(series: np.ndarray, keys: np.ndarray, months) -> dict:
-    """{year: mean SPEI} over the requested months. keys are year*100+month."""
+    """{year: (mean SPEI, n months used)}. keys are year*100+month.
+
+    The COUNT is returned, not just the mean, because an N-month SPEI has no
+    value for the first N-1 months and the published stacks are TRIMMED rather
+    than padded: spei_12_..._1980-2014.nc holds 409 months, 420 - 11, and starts
+    1980-12-16. So the first year of any stack is one month long.
+
+    Historically that is harmless -- the 1985-2014 window drops 1980 anyway --
+    but the SSP stacks run 2015-2100 and the SSP window IS 2015-2100, so 2015
+    would otherwise be labelled from a single December while every other year
+    used twelve. The caller enforces a minimum and reports what it dropped.
+    """
     k = np.asarray(keys, dtype=int)
     yr, mo = k // 100, k % 100
     sel = np.isin(mo, months) if months else np.ones(k.size, bool)
     out = {}
     for y in np.unique(yr[sel]):
         v = series[sel & (yr == y)]
-        if np.isfinite(v).any():
-            out[int(y)] = float(np.nanmean(v))
+        n = int(np.isfinite(v).sum())
+        if n:
+            out[int(y)] = (float(np.nanmean(v)), n)
     return out
 
 
@@ -201,7 +213,7 @@ def main(argv=None) -> int:
     # GCM run would mislabel most years, since a GCM does not reproduce actual
     # weather. US-NR1's observed driest are 2012/2013/2002/2006; ACCESS-CM2's are
     # 2013/1984/2009.
-    rows, skipped, series = [], [], {}
+    rows, skipped, dropped, series = [], [], [], {}
 
     if a.source == "era5":
         try:
@@ -237,9 +249,18 @@ def main(argv=None) -> int:
         who = f"{sid} {g} {sc}".strip()
         if not np.isfinite(sv).any():
             skipped.append((who, f"{a.index} is all-NaN at this pixel")); continue
-        yv = annual(sv, keys, months)
+        yc = annual(sv, keys, months)
         if y0 is not None:
-            yv = {y: v for y, v in yv.items() if y0 <= y <= y1}
+            yc = {y: v for y, v in yc.items() if y0 <= y <= y1}
+        # Require the full set of requested months. A year built from fewer is
+        # not comparable to one built from twelve, and the threshold and the
+        # percentile cut are both taken over these values -- a short year would
+        # move the cut for every other year at the station.
+        need = len(months) if months else 12
+        short = {y: n for y, (_, n) in yc.items() if n < need}
+        yv = {y: m for y, (m, n) in yc.items() if n >= need}
+        for y, n in sorted(short.items()):
+            dropped.append((who, y, n, need))
         if not yv:
             skipped.append((who, "no years left after filtering")); continue
         lim = (float(np.percentile(list(yv.values()), a.percentile))
@@ -248,6 +269,19 @@ def main(argv=None) -> int:
             rows.append((sid, g, sc, y, "drought" if yv[y] <= lim else "normal",
                          round(yv[y], 4), round(lim, 4)))
 
+    if dropped:
+        # Not an error: the first year of every stack is short by construction,
+        # because an N-month SPEI has no value for the first N-1 months. Said
+        # out loud so a missing year is never a mystery later.
+        yrs = sorted({y for _, y, _, _ in dropped})
+        print(f"SHORT YEARS DROPPED -- {len(dropped)} station-year(s), "
+              f"year(s) {', '.join(str(y) for y in yrs[:6])}"
+              f"{' ...' if len(yrs) > 6 else ''}")
+        for who, y, n, need in dropped[:6]:
+            print(f"  - {who:<28}  {y}: {n} of {need} months")
+        if len(dropped) > 6:
+            print(f"  ... and {len(dropped) - 6} more")
+        print()
     if skipped:
         print(f"SKIPPED -- {len(skipped)} station(s):")
         for who, why in skipped:

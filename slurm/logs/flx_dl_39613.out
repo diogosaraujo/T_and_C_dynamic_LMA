@@ -1,0 +1,295 @@
+job        : 39613
+node       : soemilan03
+cluster    : soe   partition: SOE_efthymios
+out_dir    : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-26T20:25:07Z
+
+stations       : 118
+product        : FLUXNET
+output         : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+intended use   : Research - Land model/Earth system model
+test download  : False
+
+fetching public site metadata ...
+  + site metadata for 118/118 station(s)
+  ! 23 site(s) have no FLUXNET product (ONEFlux has not processed them); skipping: US-Blo, US-CPF, US-CPk, US-CS7, US-DPP, US-GBT, US-HB5, US-HB6, US-Ha2, US-JFM, US-JFP, US-Me4, US-NMj, US-PFs, US-SB1, US-SP2, US-SP3, US-SP4, US-Sx2, US-TEF, US-Vcs, US-Wi2, US-Wrc
+  ! 9 site(s) have no FLUXNET product (ONEFlux has not processed them); skipping: US-Blk, US-CZ2, US-CZ3, US-CZ4, US-LPH, US-MRf, US-NR2, US-SB3, US-WBW
+  CCBY4.0: 86 site(s)
+
+  [CCBY4.0 batch 1/4]
+  requesting 25 site(s) under CCBY4.0 / FULLSET ...
+  > AMF_US-Bar_FLUXNET_2004-2023_v1.3_r1.zip
+  + AMF_US-Bar_FLUXNET_2004-2023_v1.3_r1.zip (193.2 MB)
+  > AMF_US-ChR_FLUXNET_2006-2019_v1.3_r1.zip
+  + AMF_US-ChR_FLUXNET_2006-2019_v1.3_r1.zip (152.6 MB)
+  > AMF_US-CRK_FLUXNET_2022-2025_v1.3_r1.zip
+  + AMF_US-CRK_FLUXNET_2022-2025_v1.3_r1.zip (50.9 MB)
+  > AMF_US-CS2_FLUXNET_2018-2022_v1.3_r1.zip
+  + AMF_US-CS2_FLUXNET_2018-2022_v1.3_r1.zip (44.5 MB)
+  > AMF_US-Cst_FLUXNET_2013-2017_v1.3_r1.zip
+  + AMF_US-Cst_FLUXNET_2013-2017_v1.3_r1.zip (57.1 MB)
+  > AMF_US-Cwt_FLUXNET_2011-2024_v1.3_r1.zip
+  + AMF_US-Cwt_FLUXNET_2011-2024_v1.3_r1.zip (43.8 MB)
+  > AMF_US-Dk2_FLUXNET_2001-2008_v1.3_r1.zip
+  + AMF_US-Dk2_FLUXNET_2001-2008_v1.3_r1.zip (86.6 MB)
+  > AMF_US-Dk3_FLUXNET_2001-2008_v1.3_r1.zip
+  + AMF_US-Dk3_FLUXNET_2001-2008_v1.3_r1.zip (86.3 MB)
+  > AMF_US-Fmf_FLUXNET_2005-2010_v1.3_r1.zip
+  + AMF_US-Fmf_FLUXNET_2005-2010_v1.3_r1.zip (68.8 MB)
+  > AMF_US-Fuf_FLUXNET_2005-2010_v1.3_r1.zip
+  + AMF_US-Fuf_FLUXNET_2005-2010_v1.3_r1.zip (68.1 MB)
+  > AMF_US-GLE_FLUXNET_2005-2020_v1.3_r1.zip
+  + AMF_US-GLE_FLUXNET_2005-2020_v1.3_r1.zip (176.2 MB)
+  > AMF_US-Ha1_FLUXNET_1991-2025_v1.3_r1.zip
+  + AMF_US-Ha1_FLUXNET_1991-2025_v1.3_r1.zip (163.6 MB)
+  > AMF_US-HB2_FLUXNET_2018-2024_v1.3_r1.zip
+  + AMF_US-HB2_FLUXNET_2018-2024_v1.3_r1.zip (82.2 MB)
+  > AMF_US-HB3_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-HB3_FLUXNET_2019-2024_v1.3_r1.zip (75.2 MB)
+  > AMF_US-HBK_FLUXNET_2016-2024_v1.3_r1.zip
+  + AMF_US-HBK_FLUXNET_2016-2024_v1.3_r1.zip (89.1 MB)
+  > AMF_US-Ho1_FLUXNET_FULLSET_1996-2023_3-6.zip
+  + AMF_US-Ho1_FLUXNET_FULLSET_1996-2023_3-6.zip (149.8 MB)
+  > AMF_US-Ho2_FLUXNET_1999-2025_v1.3_r1.zip
+  + AMF_US-Ho2_FLUXNET_1999-2025_v1.3_r1.zip (157.0 MB)
+  > AMF_US-Ho3_FLUXNET_2003-2021_v1.3_r1.zip
+  + AMF_US-Ho3_FLUXNET_2003-2021_v1.3_r1.zip (89.0 MB)
+  > AMF_US-KS1_FLUXNET_2002-2003_v1.3_r1.zip
+  + AMF_US-KS1_FLUXNET_2002-2003_v1.3_r1.zip (24.8 MB)
+  > AMF_US-Me1_FLUXNET_2004-2005_v1.3_r1.zip
+  + AMF_US-Me1_FLUXNET_2004-2005_v1.3_r1.zip (23.2 MB)
+  > AMF_US-Me2_FLUXNET_FULLSET_2002-2022_4-6.zip
+  + AMF_US-Me2_FLUXNET_FULLSET_2002-2022_4-6.zip (208.4 MB)
+  > AMF_US-Me3_FLUXNET_2004-2009_v1.3_r1.zip
+  + AMF_US-Me3_FLUXNET_2004-2009_v1.3_r1.zip (61.5 MB)
+  > AMF_US-MEF_FLUXNET_2024-2025_v1.3_r1.zip
+  + AMF_US-MEF_FLUXNET_2024-2025_v1.3_r1.zip (31.5 MB)
+  > AMF_US-MMS_FLUXNET_1999-2023_v1.3_r1.zip
+  + AMF_US-MMS_FLUXNET_1999-2023_v1.3_r1.zip (126.6 MB)
+  > AMF_US-MOz_FLUXNET_2004-2021_v1.3_r1.zip
+  + AMF_US-MOz_FLUXNET_2004-2021_v1.3_r1.zip (182.4 MB)
+  [CCBY4.0 batch 2/4]
+  requesting 25 site(s) under CCBY4.0 / FULLSET ...
+  > AMF_US-Me5_FLUXNET_2000-2002_v1.3_r1.zip
+  + AMF_US-Me5_FLUXNET_2000-2002_v1.3_r1.zip (39.7 MB)
+  > AMF_US-Me6_FLUXNET_2010-2025_v1.3_r1.zip
+  + AMF_US-Me6_FLUXNET_2010-2025_v1.3_r1.zip (161.3 MB)
+  > AMF_US-Me7_FLUXNET_2022-2023_v1.3_r1.zip
+  + AMF_US-Me7_FLUXNET_2022-2023_v1.3_r1.zip (26.6 MB)
+  > AMF_US-MtB_FLUXNET_2009-2024_v1.3_r1.zip
+  + AMF_US-MtB_FLUXNET_2009-2024_v1.3_r1.zip (121.6 MB)
+  > AMF_US-NC1_FLUXNET_2005-2012_v1.3_r1.zip
+  + AMF_US-NC1_FLUXNET_2005-2012_v1.3_r1.zip (93.4 MB)
+  > AMF_US-NC2_FLUXNET_2005-2025_v1.3_r1.zip
+  + AMF_US-NC2_FLUXNET_2005-2025_v1.3_r1.zip (203.7 MB)
+  > AMF_US-NC3_FLUXNET_2013-2021_v1.3_r1.zip
+  + AMF_US-NC3_FLUXNET_2013-2021_v1.3_r1.zip (90.0 MB)
+  > AMF_US-NC5_FLUXNET_2025-2025_v1.3_r1.zip
+  + AMF_US-NC5_FLUXNET_2025-2025_v1.3_r1.zip (22.3 MB)
+  > AMF_US-NR1_FLUXNET_1998-2025_v1.3_r1.zip
+  + AMF_US-NR1_FLUXNET_1998-2025_v1.3_r1.zip (164.5 MB)
+  > AMF_US-Oho_FLUXNET_2004-2013_v1.3_r1.zip
+  + AMF_US-Oho_FLUXNET_2004-2013_v1.3_r1.zip (111.7 MB)
+  > AMF_US-PFb_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFb_FLUXNET_2019-2019_v1.3_r1.zip (20.9 MB)
+  > AMF_US-PFc_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFc_FLUXNET_2019-2019_v1.3_r1.zip (20.0 MB)
+  > AMF_US-PFg_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFg_FLUXNET_2019-2019_v1.3_r1.zip (20.1 MB)
+  > AMF_US-PFh_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFh_FLUXNET_2019-2019_v1.3_r1.zip (20.6 MB)
+  > AMF_US-PFi_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFi_FLUXNET_2019-2019_v1.3_r1.zip (20.5 MB)
+  > AMF_US-PFj_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFj_FLUXNET_2019-2019_v1.3_r1.zip (20.7 MB)
+  > AMF_US-PFk_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFk_FLUXNET_2019-2019_v1.3_r1.zip (20.7 MB)
+  > AMF_US-PFL_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFL_FLUXNET_2019-2019_v1.3_r1.zip (20.9 MB)
+  > AMF_US-PFm_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFm_FLUXNET_2019-2019_v1.3_r1.zip (21.0 MB)
+  > AMF_US-PFn_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFn_FLUXNET_2019-2019_v1.3_r1.zip (21.0 MB)
+  > AMF_US-PFp_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFp_FLUXNET_2019-2019_v1.3_r1.zip (20.6 MB)
+  > AMF_US-PFq_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFq_FLUXNET_2019-2019_v1.3_r1.zip (21.0 MB)
+  > AMF_US-PFt_FLUXNET_2019-2019_v1.3_r1.zip
+  + AMF_US-PFt_FLUXNET_2019-2019_v1.3_r1.zip (20.9 MB)
+  > AMF_US-SHC_FLUXNET_2017-2020_v1.3_r1.zip
+  + AMF_US-SHC_FLUXNET_2017-2020_v1.3_r1.zip (50.2 MB)
+  > AMF_US-SP1_FLUXNET_2000-2020_v1.3_r1.zip
+  + AMF_US-SP1_FLUXNET_2000-2020_v1.3_r1.zip (190.2 MB)
+  [CCBY4.0 batch 3/4]
+  requesting 25 site(s) under CCBY4.0 / FULLSET ...
+  > AMF_US-Slt_FLUXNET_2005-2022_v1.3_r1.zip
+  + AMF_US-Slt_FLUXNET_2005-2022_v1.3_r1.zip (173.4 MB)
+  > AMF_US-SSH_FLUXNET_2016-2021_v1.3_r1.zip
+  + AMF_US-SSH_FLUXNET_2016-2021_v1.3_r1.zip (62.7 MB)
+  > AMF_US-UMB_FLUXNET_FULLSET_2007-2021_3-5.zip
+  + AMF_US-UMB_FLUXNET_FULLSET_2007-2021_3-5.zip (151.5 MB)
+  > AMF_US-UMd_FLUXNET_2007-2025_v1.3_r1.zip
+  + AMF_US-UMd_FLUXNET_2007-2025_v1.3_r1.zip (187.7 MB)
+  > AMF_US-Vcm_FLUXNET_2007-2025_v1.3_r1.zip
+  + AMF_US-Vcm_FLUXNET_2007-2025_v1.3_r1.zip (144.6 MB)
+  > AMF_US-Vcp_FLUXNET_2007-2025_v1.3_r1.zip
+  + AMF_US-Vcp_FLUXNET_2007-2025_v1.3_r1.zip (177.5 MB)
+  > AMF_US-WCr_FLUXNET_1999-2025_v1.3_r1.zip
+  + AMF_US-WCr_FLUXNET_1999-2025_v1.3_r1.zip (175.9 MB)
+  > AMF_US-Wi0_FLUXNET_FULLSET_2002-2002_5-7.zip
+  + AMF_US-Wi0_FLUXNET_FULLSET_2002-2002_5-7.zip (22.5 MB)
+  > AMF_US-Wi1_FLUXNET_FULLSET_2003-2003_5-7.zip
+  + AMF_US-Wi1_FLUXNET_FULLSET_2003-2003_5-7.zip (22.5 MB)
+  > AMF_US-Wi3_FLUXNET_FULLSET_2002-2004_5-7.zip
+  + AMF_US-Wi3_FLUXNET_FULLSET_2002-2004_5-7.zip (34.4 MB)
+  > AMF_US-Wi4_FLUXNET_FULLSET_2002-2005_5-7.zip
+  + AMF_US-Wi4_FLUXNET_FULLSET_2002-2005_5-7.zip (47.1 MB)
+  > AMF_US-Wi5_FLUXNET_FULLSET_2004-2004_5-7.zip
+  + AMF_US-Wi5_FLUXNET_FULLSET_2004-2004_5-7.zip (21.3 MB)
+  > AMF_US-Wi8_FLUXNET_FULLSET_2002-2002_5-7.zip
+  + AMF_US-Wi8_FLUXNET_FULLSET_2002-2002_5-7.zip (22.4 MB)
+  > AMF_US-Wi9_FLUXNET_FULLSET_2004-2005_5-7.zip
+  + AMF_US-Wi9_FLUXNET_FULLSET_2004-2005_5-7.zip (26.3 MB)
+  > AMF_US-xAB_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xAB_FLUXNET_2019-2024_v1.3_r1.zip (61.3 MB)
+  > AMF_US-xBL_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xBL_FLUXNET_2019-2024_v1.3_r1.zip (73.1 MB)
+  > AMF_US-xBR_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xBR_FLUXNET_2019-2024_v1.3_r1.zip (77.7 MB)
+  > AMF_US-xGR_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xGR_FLUXNET_2019-2024_v1.3_r1.zip (71.9 MB)
+  > AMF_US-xHA_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xHA_FLUXNET_2019-2024_v1.3_r1.zip (74.5 MB)
+  > AMF_US-xJE_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xJE_FLUXNET_2019-2024_v1.3_r1.zip (75.5 MB)
+  > AMF_US-xLE_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xLE_FLUXNET_2019-2024_v1.3_r1.zip (51.7 MB)
+  > AMF_US-xML_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xML_FLUXNET_2019-2024_v1.3_r1.zip (71.9 MB)
+  > AMF_US-xNW_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xNW_FLUXNET_2019-2024_v1.3_r1.zip (70.1 MB)
+  > AMF_US-xRM_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xRM_FLUXNET_2019-2024_v1.3_r1.zip (75.8 MB)
+  > AMF_US-xRN_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xRN_FLUXNET_2019-2024_v1.3_r1.zip (59.4 MB)
+  [CCBY4.0 batch 4/4]
+  requesting 11 site(s) under CCBY4.0 / FULLSET ...
+  > AMF_US-xSB_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xSB_FLUXNET_2019-2024_v1.3_r1.zip (72.5 MB)
+  > AMF_US-xSC_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xSC_FLUXNET_2019-2024_v1.3_r1.zip (64.4 MB)
+  > AMF_US-xSE_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xSE_FLUXNET_2019-2024_v1.3_r1.zip (74.4 MB)
+  > AMF_US-xSP_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xSP_FLUXNET_2019-2024_v1.3_r1.zip (59.2 MB)
+  > AMF_US-xST_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xST_FLUXNET_2019-2024_v1.3_r1.zip (75.4 MB)
+  > AMF_US-xTA_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xTA_FLUXNET_2019-2024_v1.3_r1.zip (70.2 MB)
+  > AMF_US-xTE_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xTE_FLUXNET_2019-2024_v1.3_r1.zip (57.1 MB)
+  > AMF_US-xTR_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xTR_FLUXNET_2019-2024_v1.3_r1.zip (77.7 MB)
+  > AMF_US-xUK_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xUK_FLUXNET_2019-2024_v1.3_r1.zip (70.1 MB)
+  > AMF_US-xWR_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xWR_FLUXNET_2019-2024_v1.3_r1.zip (75.7 MB)
+  > AMF_US-xYE_FLUXNET_2019-2024_v1.3_r1.zip
+  + AMF_US-xYE_FLUXNET_2019-2024_v1.3_r1.zip (70.6 MB)
+
+  + AMF_US-Bar_FLUXNET_2004-2023_v1.3_r1.zip -> US-Bar/ (18 files: badm, doc, other)
+  + AMF_US-ChR_FLUXNET_2006-2019_v1.3_r1.zip -> US-ChR/ (18 files: badm, doc, other)
+  + AMF_US-CRK_FLUXNET_2022-2025_v1.3_r1.zip -> US-CRK/ (18 files: badm, doc, other)
+  + AMF_US-CS2_FLUXNET_2018-2022_v1.3_r1.zip -> US-CS2/ (18 files: badm, doc, other)
+  + AMF_US-Cst_FLUXNET_2013-2017_v1.3_r1.zip -> US-Cst/ (18 files: badm, doc, other)
+  + AMF_US-Cwt_FLUXNET_2011-2024_v1.3_r1.zip -> US-Cwt/ (18 files: badm, doc, other)
+  + AMF_US-Dk2_FLUXNET_2001-2008_v1.3_r1.zip -> US-Dk2/ (18 files: badm, doc, other)
+  + AMF_US-Dk3_FLUXNET_2001-2008_v1.3_r1.zip -> US-Dk3/ (18 files: badm, doc, other)
+  + AMF_US-Fmf_FLUXNET_2005-2010_v1.3_r1.zip -> US-Fmf/ (18 files: badm, doc, other)
+  + AMF_US-Fuf_FLUXNET_2005-2010_v1.3_r1.zip -> US-Fuf/ (18 files: badm, doc, other)
+  + AMF_US-GLE_FLUXNET_2005-2020_v1.3_r1.zip -> US-GLE/ (18 files: badm, doc, other)
+  + AMF_US-Ha1_FLUXNET_1991-2025_v1.3_r1.zip -> US-Ha1/ (18 files: badm, doc, other)
+  + AMF_US-HB2_FLUXNET_2018-2024_v1.3_r1.zip -> US-HB2/ (18 files: badm, doc, other)
+  + AMF_US-HB3_FLUXNET_2019-2024_v1.3_r1.zip -> US-HB3/ (18 files: badm, doc, other)
+  + AMF_US-HBK_FLUXNET_2016-2024_v1.3_r1.zip -> US-HBK/ (18 files: badm, doc, other)
+  + AMF_US-Ho1_FLUXNET_FULLSET_1996-2023_3-6.zip -> US-Ho1/ (12 files: other)
+  + AMF_US-Ho2_FLUXNET_1999-2025_v1.3_r1.zip -> US-Ho2/ (18 files: badm, doc, other)
+  + AMF_US-Ho3_FLUXNET_2003-2021_v1.3_r1.zip -> US-Ho3/ (18 files: badm, doc, other)
+  + AMF_US-KS1_FLUXNET_2002-2003_v1.3_r1.zip -> US-KS1/ (18 files: badm, doc, other)
+  + AMF_US-Me1_FLUXNET_2004-2005_v1.3_r1.zip -> US-Me1/ (18 files: badm, doc, other)
+  + AMF_US-Me2_FLUXNET_FULLSET_2002-2022_4-6.zip -> US-Me2/ (12 files: other)
+  + AMF_US-Me3_FLUXNET_2004-2009_v1.3_r1.zip -> US-Me3/ (18 files: badm, doc, other)
+  + AMF_US-MEF_FLUXNET_2024-2025_v1.3_r1.zip -> US-MEF/ (18 files: badm, doc, other)
+  + AMF_US-MMS_FLUXNET_1999-2023_v1.3_r1.zip -> US-MMS/ (18 files: badm, doc, other)
+  + AMF_US-MOz_FLUXNET_2004-2021_v1.3_r1.zip -> US-MOz/ (18 files: badm, doc, other)
+  + AMF_US-Me5_FLUXNET_2000-2002_v1.3_r1.zip -> US-Me5/ (18 files: badm, doc, other)
+  + AMF_US-Me6_FLUXNET_2010-2025_v1.3_r1.zip -> US-Me6/ (18 files: badm, doc, other)
+  + AMF_US-Me7_FLUXNET_2022-2023_v1.3_r1.zip -> US-Me7/ (18 files: badm, doc, other)
+  + AMF_US-MtB_FLUXNET_2009-2024_v1.3_r1.zip -> US-MtB/ (18 files: badm, doc, other)
+  + AMF_US-NC1_FLUXNET_2005-2012_v1.3_r1.zip -> US-NC1/ (18 files: badm, doc, other)
+  + AMF_US-NC2_FLUXNET_2005-2025_v1.3_r1.zip -> US-NC2/ (18 files: badm, doc, other)
+  + AMF_US-NC3_FLUXNET_2013-2021_v1.3_r1.zip -> US-NC3/ (18 files: badm, doc, other)
+  + AMF_US-NC5_FLUXNET_2025-2025_v1.3_r1.zip -> US-NC5/ (18 files: badm, doc, other)
+  + AMF_US-NR1_FLUXNET_1998-2025_v1.3_r1.zip -> US-NR1/ (18 files: badm, doc, other)
+  + AMF_US-Oho_FLUXNET_2004-2013_v1.3_r1.zip -> US-Oho/ (18 files: badm, doc, other)
+  + AMF_US-PFb_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFb/ (18 files: badm, doc, other)
+  + AMF_US-PFc_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFc/ (18 files: badm, doc, other)
+  + AMF_US-PFg_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFg/ (18 files: badm, doc, other)
+  + AMF_US-PFh_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFh/ (18 files: badm, doc, other)
+  + AMF_US-PFi_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFi/ (18 files: badm, doc, other)
+  + AMF_US-PFj_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFj/ (18 files: badm, doc, other)
+  + AMF_US-PFk_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFk/ (18 files: badm, doc, other)
+  + AMF_US-PFL_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFL/ (18 files: badm, doc, other)
+  + AMF_US-PFm_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFm/ (18 files: badm, doc, other)
+  + AMF_US-PFn_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFn/ (18 files: badm, doc, other)
+  + AMF_US-PFp_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFp/ (18 files: badm, doc, other)
+  + AMF_US-PFq_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFq/ (18 files: badm, doc, other)
+  + AMF_US-PFt_FLUXNET_2019-2019_v1.3_r1.zip -> US-PFt/ (18 files: badm, doc, other)
+  + AMF_US-SHC_FLUXNET_2017-2020_v1.3_r1.zip -> US-SHC/ (18 files: badm, doc, other)
+  + AMF_US-SP1_FLUXNET_2000-2020_v1.3_r1.zip -> US-SP1/ (18 files: badm, doc, other)
+  + AMF_US-Slt_FLUXNET_2005-2022_v1.3_r1.zip -> US-Slt/ (18 files: badm, doc, other)
+  + AMF_US-SSH_FLUXNET_2016-2021_v1.3_r1.zip -> US-SSH/ (18 files: badm, doc, other)
+  + AMF_US-UMB_FLUXNET_FULLSET_2007-2021_3-5.zip -> US-UMB/ (12 files: other)
+  + AMF_US-UMd_FLUXNET_2007-2025_v1.3_r1.zip -> US-UMd/ (18 files: badm, doc, other)
+  + AMF_US-Vcm_FLUXNET_2007-2025_v1.3_r1.zip -> US-Vcm/ (18 files: badm, doc, other)
+  + AMF_US-Vcp_FLUXNET_2007-2025_v1.3_r1.zip -> US-Vcp/ (18 files: badm, doc, other)
+  + AMF_US-WCr_FLUXNET_1999-2025_v1.3_r1.zip -> US-WCr/ (18 files: badm, doc, other)
+  + AMF_US-Wi0_FLUXNET_FULLSET_2002-2002_5-7.zip -> US-Wi0/ (12 files: other)
+  + AMF_US-Wi1_FLUXNET_FULLSET_2003-2003_5-7.zip -> US-Wi1/ (12 files: other)
+  + AMF_US-Wi3_FLUXNET_FULLSET_2002-2004_5-7.zip -> US-Wi3/ (12 files: other)
+  + AMF_US-Wi4_FLUXNET_FULLSET_2002-2005_5-7.zip -> US-Wi4/ (12 files: other)
+  + AMF_US-Wi5_FLUXNET_FULLSET_2004-2004_5-7.zip -> US-Wi5/ (12 files: other)
+  + AMF_US-Wi8_FLUXNET_FULLSET_2002-2002_5-7.zip -> US-Wi8/ (12 files: other)
+  + AMF_US-Wi9_FLUXNET_FULLSET_2004-2005_5-7.zip -> US-Wi9/ (12 files: other)
+  + AMF_US-xAB_FLUXNET_2019-2024_v1.3_r1.zip -> US-xAB/ (18 files: badm, doc, other)
+  + AMF_US-xBL_FLUXNET_2019-2024_v1.3_r1.zip -> US-xBL/ (18 files: badm, doc, other)
+  + AMF_US-xBR_FLUXNET_2019-2024_v1.3_r1.zip -> US-xBR/ (18 files: badm, doc, other)
+  + AMF_US-xGR_FLUXNET_2019-2024_v1.3_r1.zip -> US-xGR/ (18 files: badm, doc, other)
+  + AMF_US-xHA_FLUXNET_2019-2024_v1.3_r1.zip -> US-xHA/ (18 files: badm, doc, other)
+  + AMF_US-xJE_FLUXNET_2019-2024_v1.3_r1.zip -> US-xJE/ (18 files: badm, doc, other)
+  + AMF_US-xLE_FLUXNET_2019-2024_v1.3_r1.zip -> US-xLE/ (18 files: badm, doc, other)
+  + AMF_US-xML_FLUXNET_2019-2024_v1.3_r1.zip -> US-xML/ (18 files: badm, doc, other)
+  + AMF_US-xNW_FLUXNET_2019-2024_v1.3_r1.zip -> US-xNW/ (18 files: badm, doc, other)
+  + AMF_US-xRM_FLUXNET_2019-2024_v1.3_r1.zip -> US-xRM/ (18 files: badm, doc, other)
+  + AMF_US-xRN_FLUXNET_2019-2024_v1.3_r1.zip -> US-xRN/ (18 files: badm, doc, other)
+  + AMF_US-xSB_FLUXNET_2019-2024_v1.3_r1.zip -> US-xSB/ (18 files: badm, doc, other)
+  + AMF_US-xSC_FLUXNET_2019-2024_v1.3_r1.zip -> US-xSC/ (18 files: badm, doc, other)
+  + AMF_US-xSE_FLUXNET_2019-2024_v1.3_r1.zip -> US-xSE/ (18 files: badm, doc, other)
+  + AMF_US-xSP_FLUXNET_2019-2024_v1.3_r1.zip -> US-xSP/ (18 files: badm, doc, other)
+  + AMF_US-xST_FLUXNET_2019-2024_v1.3_r1.zip -> US-xST/ (18 files: badm, doc, other)
+  + AMF_US-xTA_FLUXNET_2019-2024_v1.3_r1.zip -> US-xTA/ (18 files: badm, doc, other)
+  + AMF_US-xTE_FLUXNET_2019-2024_v1.3_r1.zip -> US-xTE/ (18 files: badm, doc, other)
+  + AMF_US-xTR_FLUXNET_2019-2024_v1.3_r1.zip -> US-xTR/ (18 files: badm, doc, other)
+  + AMF_US-xUK_FLUXNET_2019-2024_v1.3_r1.zip -> US-xUK/ (18 files: badm, doc, other)
+  + AMF_US-xWR_FLUXNET_2019-2024_v1.3_r1.zip -> US-xWR/ (18 files: badm, doc, other)
+  + AMF_US-xYE_FLUXNET_2019-2024_v1.3_r1.zip -> US-xYE/ (18 files: badm, doc, other)
+
+stations with downloaded data: 86/118
+no data returned for: ['US-Blk', 'US-Blo', 'US-CPF', 'US-CPk', 'US-CS7', 'US-CZ2', 'US-CZ3', 'US-CZ4', 'US-DPP', 'US-GBT', 'US-HB5', 'US-HB6', 'US-Ha2', 'US-JFM', 'US-JFP', 'US-LPH', 'US-MRf', 'US-Me4', 'US-NMj', 'US-NR2', 'US-PFs', 'US-SB1', 'US-SB3', 'US-SP2', 'US-SP3', 'US-SP4', 'US-Sx2', 'US-TEF', 'US-Vcs', 'US-WBW', 'US-Wi2', 'US-Wrc']
+  (a site may have no shared BASE data, or a different data policy)
+manifest: /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet/files_manifest.csv
+
+Next: python inspect_ameriflux_badm.py
+
+finished   : 2026-08-26T20:36:04Z
+exit status: 0

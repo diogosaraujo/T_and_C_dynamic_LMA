@@ -43,7 +43,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import drought_labels as DL                                      # noqa: E402
-from results_dir import NoResultsDir, resolve_out                # noqa: E402
+from results_dir import NoResultsDir, resolve_figure            # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SITE_LISTS = [REPO_ROOT / "T&C" / "dynamic_lma_test" / "deciduous_ameriflux.csv",
@@ -122,35 +122,150 @@ def read_model(path: Path, freq: str) -> dict:
 
 
 # ------------------------------------------------------------------ tower side
-def read_tower(root: Path, freq: str, sites) -> dict:
+# FLUXNET (ONEFlux) column names. Each entry is the ordered list of candidates
+# tried, so a site missing the preferred name falls back to a documented
+# alternative rather than to silence. Verified names are confirmed once a real
+# archive lands; until then a file that matches none of these is reported with
+# the columns it DOES have, which is the only useful thing to say.
+TOWER_COLS = {
+    "GPP_NT": ["GPP_NT_VUT_REF", "GPP_NT_VUT_MEAN", "GPP_NT_CUT_REF"],
+    "GPP_DT": ["GPP_DT_VUT_REF", "GPP_DT_VUT_MEAN", "GPP_DT_CUT_REF"],
+    "LE":     ["LE_F_MDS", "LE_CORR", "LE"],
+    "H":      ["H_F_MDS", "H_CORR", "H"],
+}
+# Quality flags, where present: ONEFlux uses 0 = measured, 1 = good gap-fill.
+QC_OF = {"LE": "LE_F_MDS_QC", "H": "H_F_MDS_QC",
+         "GPP_NT": "NEE_VUT_REF_QC", "GPP_DT": "NEE_VUT_REF_QC"}
+FLUXNET_NA = {-9999.0, -9999}
+
+
+def _pick(header, cands):
+    for c in cands:
+        if c in header:
+            return c
+    return None
+
+
+def _fluxnet_file(root: Path, sid: str, res: str):
+    """The <res> (MM/YY) FLUXNET csv for one site, wherever the unpack put it."""
+    pats = [f"**/*{sid}*FLUXNET*{res}*.csv", f"**/*{sid}*_{res}_*.csv"]
+    for pat in pats:
+        hits = sorted(Path(root).glob(pat))
+        if hits:
+            return hits[0]
+    return None
+
+
+def read_tower(root: Path, freq: str, sites, gpp: str = "NT",
+               max_qc: float = 1.0) -> dict:
     """{(station, year, period, var): observed} as per-day intensities.
 
-    ONEFLUX COLUMN NAMES ARE ASSUMED, NOT YET VERIFIED. The FLUXNET download has
-    not succeeded at the time of writing (job 38863 returned no URLs), so these
-    are the documented standard names rather than names read off a real file:
-
-        GPP_NT_VUT_REF / GPP_DT_VUT_REF   gC m-2 d-1   (two partitionings)
-        LE_F_MDS                          W m-2
-        H_F_MDS                           W m-2
-
     GPP IS NOT A MEASUREMENT. Eddy covariance measures net exchange; GPP is
-    partitioned from it, by nighttime extrapolation (NT) or a daytime
-    light-response fit (DT), and the two disagree. --gpp selects which, and the
-    honest reading is to run both and treat their spread as the observational
-    uncertainty.
+    partitioned from it by nighttime extrapolation (NT) or a daytime
+    light-response fit (DT), and the two disagree. --gpp picks one; running both
+    and reading their spread as the observational uncertainty is the honest use.
 
-    ET is derived from LE, so the ET and LE rows share one measurement and differ
-    only in which MODEL pathway they test -- ET comes from T&C's water balance,
-    QE from its energy balance.
+    ET IS LE. The tower has one latent-heat measurement, converted here with
+    LE*86400/LAMBDA. The ET and LE rows therefore share an observation and differ
+    only in which MODEL pathway they test -- ET from T&C's water balance, QE from
+    its energy balance -- which makes the pair an internal consistency check.
 
-    Anything missing raises rather than returning a gap, so a station never
-    enters an RMSE on partial data.
+    MONTHLY AND ANNUAL COME FROM THE ARCHIVE'S OWN MM AND YY FILES rather than
+    from aggregating half-hourly data: ONEFlux applies its gap-filling and
+    u*-filtering before aggregating, and re-deriving them here would silently
+    use a different method than the GPP partitioning already assumes. SEASONS
+    are built from MM, since no seasonal file exists -- a season needs all three
+    of its months present or it is dropped.
     """
-    raise Missing(
-        "tower reader not wired up: no FLUXNET archive exists yet.\n"
-        "  Run slurm/submit_fluxnet_download.sh first, then this function must be\n"
-        "  finished against a real file -- the column names above are the\n"
-        "  documented ONEFlux ones and have not been checked against data.")
+    res = {"monthly": "MM", "seasonal": "MM", "annual": "YY"}[freq]
+    key = f"GPP_{gpp}"
+    out, missing = {}, []
+    monthly: dict = defaultdict(dict)
+
+    for sid in sorted(sites):
+        path = _fluxnet_file(root, sid, res)
+        if path is None:
+            missing.append(f"{sid}: no {res} file")
+            continue
+        with path.open(newline="", encoding="utf-8-sig") as fh:
+            rd = csv.DictReader(fh)
+            header = set(rd.fieldnames or [])
+            tstamp = _pick(header, ["TIMESTAMP", "TIMESTAMP_START"])
+            cols = {k: _pick(header, v) for k, v in TOWER_COLS.items()}
+            if tstamp is None or cols.get(key) is None or cols["LE"] is None:
+                missing.append(
+                    f"{sid}: {path.name} has no usable "
+                    f"{'timestamp' if tstamp is None else key if not cols.get(key) else 'LE'} "
+                    f"column; saw {sorted(header)[:12]}")
+                continue
+            for r in rd:
+                ts = (r.get(tstamp) or "").strip()
+                if not ts:
+                    continue
+                try:
+                    year = int(ts[:4])
+                    month = int(ts[4:6]) if len(ts) >= 6 else None
+                except ValueError:
+                    continue
+
+                def val(name):
+                    c = cols.get(name)
+                    if not c:
+                        return np.nan
+                    try:
+                        v = float(r[c])
+                    except (TypeError, ValueError, KeyError):
+                        return np.nan
+                    if v in FLUXNET_NA or v <= -9990:
+                        return np.nan
+                    qc = QC_OF.get(name)
+                    if qc and qc in header:
+                        try:
+                            if float(r[qc]) > max_qc:
+                                return np.nan
+                        except (TypeError, ValueError):
+                            pass
+                    return v
+
+                g, le, h = val(key), val("LE"), val("H")
+                rec = {"GPP": g, "QE": le, "H": h,
+                       "ET": le * W_TO_MM_D if np.isfinite(le) else np.nan}
+                if freq == "annual":
+                    for var, v in rec.items():
+                        if np.isfinite(v):
+                            out[(sid, year, "ANN", var)] = v
+                elif month:
+                    monthly[(sid, year, month)] = rec
+
+    if freq == "monthly":
+        for (sid, year, month), rec in monthly.items():
+            for var, v in rec.items():
+                if np.isfinite(v):
+                    out[(sid, year, month, var)] = v
+    elif freq == "seasonal":
+        # DJF is filed under the year of its January, matching the flux table.
+        want = {"DJF": [(-1, 12), (0, 1), (0, 2)], "MAM": [(0, 3), (0, 4), (0, 5)],
+                "JJA": [(0, 6), (0, 7), (0, 8)], "SON": [(0, 9), (0, 10), (0, 11)]}
+        years = {y for _, y, _ in monthly}
+        for sid in sorted(sites):
+            for year in sorted(years):
+                for season, months in want.items():
+                    recs = [monthly.get((sid, year + dy, m)) for dy, m in months]
+                    if any(r is None for r in recs):
+                        continue          # a partial season is not a season
+                    for var in ("GPP", "QE", "H", "ET"):
+                        vs = [r[var] for r in recs if np.isfinite(r[var])]
+                        if len(vs) == 3:
+                            out[(sid, year, season, var)] = float(np.mean(vs))
+
+    if not out:
+        head = ["no tower data could be read."] + missing[:10]
+        if len(missing) > 10:
+            head.append(f"... and {len(missing) - 10} more")
+        raise Missing("\n  ".join(head))
+    if missing:
+        print(f"  tower: {len(missing)} station(s) unusable, e.g. {missing[0]}")
+    return out
 
 
 # ------------------------------------------------------------------ skill score
@@ -296,11 +411,12 @@ def main(argv=None) -> int:
 
     w, h = (float(v) for v in a.figsize.lower().split("x"))
     try:
-        out_dir = resolve_out(a.out or "figures", create=False)
+        # $TC_FIGURES, a sibling of model_run -- figures are their own product,
+        # regenerated freely and never wanted in the repo.
+        out_dir = resolve_figure(a.out or ".")
     except NoResultsDir as e:
         print(f"ERROR: {e}", file=sys.stderr)
         return 1
-    out_dir.mkdir(parents=True, exist_ok=True)
 
     sites = read_sites()
     steps = ([("annual", "annual", ["ANN"]), ("monthly", "monthly", None)] +
@@ -315,7 +431,7 @@ def main(argv=None) -> int:
             if keep is not None:
                 model = {k: v for k, v in model.items() if k[2] in keep}
             spei = DL.station_spei({s: (v[0], v[1]) for s, v in sites.items()}, freq)
-            tower = read_tower(a.tower_dir, freq, sites)
+            tower = read_tower(a.tower_dir, freq, sites, a.gpp)
         except (Missing, DL.NoLabel) as e:
             print(f"ERROR [{name}]: {e}", file=sys.stderr)
             return 1

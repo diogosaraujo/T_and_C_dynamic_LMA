@@ -197,6 +197,14 @@ def main(argv=None) -> int:
     rows, skipped, npairs = [], [], 0
     for st in stations:
         for label, fxp, dyp in find_pairs(a.root, st, a.pair):
+            # find_pairs yields None for an arm with no RES. Passing that to
+            # read_run gave a bare "TypeError: expected str, bytes or
+            # os.PathLike object, not NoneType" in job 38872 -- true, but it
+            # names neither the cause nor the station. analyze_daily_effect
+            # already guards this; say the same thing here.
+            if fxp is None or dyp is None:
+                skipped.append((st, label, "one arm has no RES"))
+                continue
             try:
                 fx, dy = read_run(fxp), read_run(dyp)
                 got = periods(fx, dy, a.freq)

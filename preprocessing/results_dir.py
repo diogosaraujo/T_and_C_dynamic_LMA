@@ -52,3 +52,33 @@ def resolve_out(out: Path | str, *, create: bool = True) -> Path:
     if create:
         p.parent.mkdir(parents=True, exist_ok=True)
     return p
+
+
+def figures_root() -> Path:
+    """$TC_FIGURES -- rendered figures, a sibling of model_run.
+
+    Separate from $TC_RESULTS because a figure is a different product from the
+    table behind it: regenerated freely, copied down on its own, and never
+    wanted in the repo. Same refusal as results_root -- an unset variable means
+    the shell never sourced slurm/config.sh, and writing PNGs into whatever
+    directory the job started in is how they end up committed.
+    """
+    root = os.environ.get("TC_FIGURES", "").strip()
+    if not root:
+        raise NoResultsDir(
+            "$TC_FIGURES is not set, so figures have nowhere to go.\n"
+            "  Run 'source slurm/config.sh' before sbatch, or pass an absolute "
+            "--out.\n"
+            "  Refusing to write into the working directory."
+        )
+    return Path(root)
+
+
+def resolve_figure(out: Path | str, *, create: bool = True) -> Path:
+    """Absolute path for a figure output; relative names go under $TC_FIGURES."""
+    p = Path(out)
+    if not p.is_absolute():
+        p = figures_root() / p
+    if create:
+        p.mkdir(parents=True, exist_ok=True)
+    return p

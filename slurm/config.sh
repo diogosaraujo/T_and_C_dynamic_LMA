@@ -67,10 +67,16 @@ MODEL_RUN="${MODEL_RUN:-$(dirname "$TC_INPUT_DATA")/model_run}"
 # They also cannot live in the repo -- era5_daily.csv alone is 108 MB, past
 # GitHub's 100 MB hard limit, and the GCM version covers 15x as many pairs.
 TC_RESULTS="${TC_RESULTS:-$(dirname "$MODEL_RUN")/result_summary}"
+# Rendered figures, a sibling of model_run and result_summary rather than a
+# child of either. They are a separate product from the tables that feed them:
+# regenerated freely, browsed and copied down on their own, and never wanted in
+# the repo -- a directory of PNGs is exactly the kind of thing that quietly
+# accumulates past GitHub's file limits.
+TC_FIGURES="${TC_FIGURES:-$(dirname "$MODEL_RUN")/figures}"
 TC_VENV="${TC_VENV:-$HOME/envs/tc-preproc}"
 
 export TC_CLUSTER TC_INPUT_DATA TC_VENV PARTITION PYTHON_MODULE MODEL_RUN
-export TC_RESULTS
+export TC_RESULTS TC_FIGURES
 export MATLAB_MODULES MAX_ARRAY_CHUNK
 
 # ------------------------------------------------------------------ LMOD helper

@@ -244,6 +244,7 @@ def climatology(fx: dict, dy: dict, years=None):
             continue
         floor = 0.01 * float(np.nanmean(np.abs(f_den)))
         ok = (np.abs(f_den) >= floor) & (np.abs(d_den) >= floor)
+        per_doy = {}
         for j in range(1, 366):
             m = (doy == j) & ok
             if not m.any():
@@ -252,16 +253,29 @@ def climatology(fx: dict, dy: dict, years=None):
             if not (np.isfinite(fj).any() and np.isfinite(dj).any()):
                 continue
             f, v = np.nanmean(fj), np.nanmean(dj)
-            if not (np.isfinite(f) and np.isfinite(v)):
-                continue
+            if np.isfinite(f) and np.isfinite(v):
+                per_doy[j] = (f, v, int(np.unique(yr[m]).size))
+        if not per_doy:
+            continue
+        # THE FLOOR ABOVE IS NOT SUFFICIENT, and job 38848 proved it: Tfrac still
+        # peaked at 1684% on doy 362. The floor guards the DENOMINATOR flux, but
+        # Tfrac and WUE blow up because their NUMERATOR vanishes. In deep winter
+        # ET = 0.3 mm/d clears any denominator floor comfortably while T = 0.002
+        # makes Tfrac itself 0.007, and rel_pct then divides by that near-zero
+        # RATIO.
+        #
+        # So ratios get rel_ann after all, scaled by the ratio's own mean
+        # magnitude over the year. An earlier note here argued the opposite;
+        # that was measured before the sample-level floor existed, on a Bowen
+        # whose winter values reached 160 and wrecked the scale. With collapsed
+        # samples already gone the scale is well behaved, and rel_ann is the
+        # only relative measure whose denominator cannot vanish -- which is the
+        # property that matters. rel_pct stays in the CSV for reading in season.
+        scale = float(np.mean([abs(f) for f, _, _ in per_doy.values()]))
+        for j, (f, v, ny) in sorted(per_doy.items()):
             rel = 100.0 * (v - f) / abs(f) if abs(f) > 1e-12 else np.nan
-            # rel_ann is deliberately NOT computed for a ratio. Dividing a
-            # dimensionless ratio by its own annual mean magnitude is
-            # meaningless -- a winter Bowen of 160 beside a summer 0.7 makes
-            # that scale describe nothing -- and it reported a true +2% summer
-            # effect as 0.017%. Left empty so it cannot be read by mistake.
-            rows.append((j, var, f, v, v - f, rel, np.nan,
-                         int(np.unique(yr[m]).size)))
+            rel_ann = 100.0 * (v - f) / scale if scale > 1e-12 else np.nan
+            rows.append((j, var, f, v, v - f, rel, rel_ann, ny))
 
     for var in REPORT:
         if var in RATIOS:
@@ -440,30 +454,29 @@ def main(argv=None) -> int:
     # numbers are percentages of a typical day for that variable, so "peak doy"
     # is where the treatment bites hardest rather than where the denominator
     # happened to be smallest.
-    print(f"{'variable':<9}{'mean |rel|':>11}{'peak |rel|':>11}{'peak doy':>10}"
-          f"   basis")
+    print(f"{'variable':<9}{'med |rel|':>11}{'peak |rel|':>11}{'peak doy':>10}"
+          f"   (% of the variable's own annual mean)")
     for var in REPORT:
-        # WHICH COLUMN IS TRUSTWORTHY DEPENDS ON THE VARIABLE.
-        # A flux is extensive and vanishes out of season, so its same-day
-        # denominator explodes -- read rel_ann, the percentage of a typical day.
-        # A ratio is intensive and, now that it is built from aggregated fluxes,
-        # has a healthy denominator year-round -- but its annual mean magnitude
-        # is meaningless, because winter Bowen values of ~160 sit alongside a
-        # summer 0.7. Tested on a clean +2% change in H: rel_pct gives 2.000%
-        # every day, rel_ann gives 0.017% in summer and 3.967% in winter.
-        col, basis = ((8, "% of same day") if var in RATIOS else
-                      (9, "% of annual mean"))
+        # rel_ann for EVERY variable, ratios included. It is the only relative
+        # measure whose denominator cannot vanish, and that is the property that
+        # decides this -- rel_pct is fine to read in season but cannot be
+        # summarised across a whole year without a winter day setting the number.
+        #
+        # MEDIAN across stations, not mean. The mean is not robust: with 92
+        # stations, one pathological site turns a fleet that is really doing
+        # ~1.2% into a printed 129.54%. That, as much as the denominator, is why
+        # earlier summaries read as they did.
         sel = [r for r in rows if r[4] == var and r[2] == "all"
-               and np.isfinite(r[col])]
+               and np.isfinite(r[9])]
         if not sel:
             continue
         by_doy = {}
         for r in sel:
-            by_doy.setdefault(r[3], []).append(abs(r[col]))
-        means = {d: float(np.mean(v)) for d, v in by_doy.items()}
-        peak = max(means, key=means.get)
-        print(f"{var:<9}{np.mean(list(means.values())):>10.2f}%"
-              f"{means[peak]:>10.2f}%{peak:>10}   {basis}")
+            by_doy.setdefault(r[3], []).append(abs(r[9]))
+        med = {d: float(np.median(v)) for d, v in by_doy.items()}
+        peak = max(med, key=med.get)
+        print(f"{var:<9}{np.median(list(med.values())):>10.2f}%"
+              f"{med[peak]:>10.2f}%{peak:>10}")
 
     print(f"\n{npairs} pair(s), {len(rows)} row(s) -> {out}")
     return 1 if skipped else 0

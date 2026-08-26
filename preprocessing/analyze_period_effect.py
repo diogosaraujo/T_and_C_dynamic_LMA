@@ -13,9 +13,16 @@ table from 1.4M rows to ~50M, and roughly 15x that across the GCMs. A month is
 short enough to resolve the seasonal cycle and the onset of a drought, and it
 divides the file by ~30.
 
-    station,key,year,period,variable,fixed,dyn,diff,rel_pct,n_days
+    station,key,year,period,variable,fixed,dyn,diff,rel_pct,rel_ann_pct,n_days
 
 'period' is 1-12 for --freq monthly, or DJF/MAM/JJA/SON for --freq seasonal.
+
+READ rel_ann_pct, NOT rel_pct. rel_pct divides by that same period's own value,
+which vanishes out of season: job 38852 printed Lk at 50465967% in February and
+EG at 10421% in January, both winter denominators rather than effects.
+rel_ann_pct divides by the variable's mean magnitude over the whole record, so
+its denominator cannot vanish. rel_pct is kept for reading in season, where it
+is the more natural quantity.
 
 NO DROUGHT ARGUMENT, DELIBERATELY. The year is in the output, so drought labels
 join on (station, gcm, scenario, year) after the fact. Baking the classes in
@@ -70,6 +77,29 @@ def period_keys(year: np.ndarray, mo: np.ndarray, freq: str):
     return lab, yy
 
 
+def _emit(var: str, got: list) -> list:
+    """Rows for one variable, with BOTH relative measures.
+
+    rel_pct divides by the same period's own value and explodes wherever that
+    value is near zero -- job 38852 printed Lk at 50465967% in February and EG
+    at 10421% in January, which are winter denominators, not effects. rel_ann
+    divides by the variable's mean magnitude over the whole record, so it cannot
+    vanish, and it is what the summary reads.
+
+    This is the same trap analyze_daily_effect.py had; writing a new script and
+    reaching for (v-f)/|f| again is how it came back.
+    """
+    if not got:
+        return []
+    scale = float(np.mean([abs(f) for _, _, f, _, _ in got]))
+    out = []
+    for y, p, f, v, n in got:
+        rel = 100.0 * (v - f) / abs(f) if abs(f) > 1e-12 else np.nan
+        rel_ann = 100.0 * (v - f) / scale if scale > 1e-12 else np.nan
+        out.append((y, p, var, f, v, v - f, rel, rel_ann, n))
+    return out
+
+
 def periods(fx: dict, dy: dict, freq: str):
     """Rows of (year, period, variable, fixed, dyn, diff, rel_pct, n)."""
     n = min(fx["LAI_H"].size, dy["LAI_H"].size)
@@ -94,6 +124,7 @@ def periods(fx: dict, dy: dict, freq: str):
             continue
         fa, da_ = np.asarray(F[var], float), np.asarray(D[var], float)
         agg = np.nansum if var in PERIOD_SUM else np.nanmean
+        got = []
         for y, p in combos:
             m = (yy == y) & (lab == p)
             if not m.any() or not np.isfinite(fa[m]).any():
@@ -101,8 +132,8 @@ def periods(fx: dict, dy: dict, freq: str):
             f, v = float(agg(fa[m])), float(agg(da_[m]))
             if not (np.isfinite(f) and np.isfinite(v)):
                 continue
-            rel = 100.0 * (v - f) / abs(f) if abs(f) > 1e-12 else np.nan
-            rows.append((y, p, var, f, v, v - f, rel, int(m.sum())))
+            got.append((y, p, f, v, int(m.sum())))
+        rows.extend(_emit(var, got))
 
     for var, (_, den) in RATIOS.items():
         if var not in F or var not in D or den not in F or den not in D:
@@ -113,6 +144,7 @@ def periods(fx: dict, dy: dict, freq: str):
             continue
         floor = 0.01 * float(np.nanmean(np.abs(f_den)))
         ok = (np.abs(f_den) >= floor) & (np.abs(d_den) >= floor)
+        got = []
         for y, p in combos:
             m = (yy == y) & (lab == p) & ok
             if not m.any():
@@ -122,8 +154,8 @@ def periods(fx: dict, dy: dict, freq: str):
             f, v = float(np.nanmean(f_r[m])), float(np.nanmean(d_r[m]))
             if not (np.isfinite(f) and np.isfinite(v)):
                 continue
-            rel = 100.0 * (v - f) / abs(f) if abs(f) > 1e-12 else np.nan
-            rows.append((y, p, var, f, v, v - f, rel, int(m.sum())))
+            got.append((y, p, f, v, int(m.sum())))
+        rows.extend(_emit(var, got))
     return rows
 
 
@@ -184,11 +216,13 @@ def main(argv=None) -> int:
     with open(out, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow(["station", "key", "year", "period", "variable",
-                    "fixed", "dyn", "diff", "rel_pct", "n_days"])
+                    "fixed", "dyn", "diff", "rel_pct", "rel_ann_pct",
+                    "n_days"])
         for r in rows:
             w.writerow([r[0], r[1], r[2], r[3], r[4],
                         f"{r[5]:.6g}", f"{r[6]:.6g}", f"{r[7]:.6g}",
-                        "" if not np.isfinite(r[8]) else f"{r[8]:.3f}", r[9]])
+                        "" if not np.isfinite(r[8]) else f"{r[8]:.3f}",
+                        "" if not np.isfinite(r[9]) else f"{r[9]:.3f}", r[10]])
 
     # Summary: the treatment's size in each period, averaged over stations and
     # years. Read it as "when in the year", with the year-to-year detail left in
@@ -197,13 +231,16 @@ def main(argv=None) -> int:
           (range(1, 13) if a.freq == "monthly" else ["DJF", "MAM", "JJA", "SON"])))
     per_list = list(range(1, 13)) if a.freq == "monthly" else ["DJF", "MAM", "JJA", "SON"]
     for var in REPORT:
-        sel = [r for r in rows if r[4] == var and np.isfinite(r[8])]
+        # rel_ann (r[9]), and a MEDIAN across stations and years. The mean is
+        # not robust -- one pathological station turns a fleet doing ~1.2% into
+        # a printed 129.54%.
+        sel = [r for r in rows if r[4] == var and np.isfinite(r[9])]
         if not sel:
             continue
         by = {}
         for r in sel:
-            by.setdefault(r[3], []).append(abs(r[8]))
-        cells = "".join(f"{np.mean(by[p]):>8.2f}%" if p in by else f"{'-':>9}"
+            by.setdefault(r[3], []).append(abs(r[9]))
+        cells = "".join(f"{np.median(by[p]):>8.2f}%" if p in by else f"{'-':>9}"
                         for p in per_list)
         print(f"{var:<9}{cells}")
 

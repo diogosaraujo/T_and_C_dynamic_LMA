@@ -219,44 +219,49 @@ def climatology(fx: dict, dy: dict, years=None):
     # So per day of year, sum the components first and divide once. That is the
     # quantity anyone means by "the Bowen ratio on day j" anyway.
     for var, (num, den) in RATIOS.items():
-        if not all(k in F and k in D for k in (num, den)):
+        if var not in F or var not in D or den not in F or den not in D:
             continue
-        fn, fd = np.asarray(F[num])[keep], np.asarray(F[den])[keep]
-        dn, dd = np.asarray(D[num])[keep], np.asarray(D[den])[keep]
-        sums = {}
+        # KEEP THE ORIGINAL DEFINITION: the mean across years of that calendar
+        # day's ratio. An earlier version rebuilt these as sum(num)/sum(den),
+        # which fixed the winter blow-up but changed the answer everywhere else
+        # -- on a healthy summer day with 10-25% interannual scatter the two
+        # definitions differ by 1-4%, so a winter-only problem was being paid
+        # for with a bias on every day of the year.
+        #
+        # The blow-up is a SAMPLE problem, not a definition problem. One
+        # snowed-out year with QE = 0.01 injects H/QE = 800 into the mean and
+        # drags 30 good years with it: mean-of-ratios 226.99 against a
+        # ratio-of-sums 0.88 on the same winter day. So drop that one YEAR-DAY
+        # and average the survivors.
+        #
+        # The floor is 1% of the fixed arm's typical daily denominator flux. It
+        # removes only collapsed samples, so in-season days keep all their years
+        # and no whole day of year disappears at a snowy station the way a
+        # per-day floor made it.
+        f_r, d_r = np.asarray(F[var])[keep], np.asarray(D[var])[keep]
+        f_den, d_den = np.asarray(F[den])[keep], np.asarray(D[den])[keep]
+        if not np.isfinite(f_den).any():
+            continue
+        floor = 0.01 * float(np.nanmean(np.abs(f_den)))
+        ok = (np.abs(f_den) >= floor) & (np.abs(d_den) >= floor)
         for j in range(1, 366):
-            m = doy == j
+            m = (doy == j) & ok
             if not m.any():
                 continue
-            sums[j] = (np.nansum(fn[m]), np.nansum(fd[m]),
-                       np.nansum(dn[m]), np.nansum(dd[m]),
-                       int(np.unique(yr[m]).size))
-        if not sums:
-            continue
-        # AN ABSOLUTE FLOOR ON THE DENOMINATOR IS NOT ENOUGH. The first version
-        # used 1e-9, which a midwinter ET summed over 30 years clears easily
-        # while T/ET stays a ratio of two near-zero numbers. Job 38622 still
-        # reported Tfrac peaking at 1695.78% on doy 362, and Bowen at 885.78%
-        # on doy 17 -- every ratio's peak sat in deep winter again.
-        #
-        # Require instead that the day carry at least 1% of a typical day's
-        # denominator flux. A Bowen ratio on a day with essentially no latent
-        # heat, or a transpiration fraction under snow, is not a small number --
-        # it is undefined, and the honest thing is to leave the day out rather
-        # than publish a ratio of noise.
-        floor = 0.01 * float(np.mean([abs(s[1]) for s in sums.values()]))
-        per_doy = {}
-        for j, (fnum, fden, dnum, dden, ny) in sums.items():
-            if abs(fden) < floor or abs(dden) < floor:
+            fj, dj = f_r[m], d_r[m]
+            if not (np.isfinite(fj).any() and np.isfinite(dj).any()):
                 continue
-            per_doy[j] = (fnum / fden, dnum / dden, ny)
-        if not per_doy:
-            continue
-        scale = float(np.mean([abs(f) for f, _, _ in per_doy.values()]))
-        for j, (f, v, ny) in sorted(per_doy.items()):
+            f, v = np.nanmean(fj), np.nanmean(dj)
+            if not (np.isfinite(f) and np.isfinite(v)):
+                continue
             rel = 100.0 * (v - f) / abs(f) if abs(f) > 1e-12 else np.nan
-            rel_ann = (100.0 * (v - f) / scale if scale > 1e-12 else np.nan)
-            rows.append((j, var, f, v, v - f, rel, rel_ann, ny))
+            # rel_ann is deliberately NOT computed for a ratio. Dividing a
+            # dimensionless ratio by its own annual mean magnitude is
+            # meaningless -- a winter Bowen of 160 beside a summer 0.7 makes
+            # that scale describe nothing -- and it reported a true +2% summer
+            # effect as 0.017%. Left empty so it cannot be read by mistake.
+            rows.append((j, var, f, v, v - f, rel, np.nan,
+                         int(np.unique(yr[m]).size)))
 
     for var in REPORT:
         if var in RATIOS:

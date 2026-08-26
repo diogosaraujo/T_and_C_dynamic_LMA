@@ -1,0 +1,2 @@
+ERROR: AMF_USER_ID and AMF_USER_EMAIL must be exported before sbatch.
+       SLURM copies the submitting environment; it cannot prompt here.

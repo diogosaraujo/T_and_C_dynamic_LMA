@@ -1,0 +1,4 @@
+usage: analyze_daily_effect.py [-h] --root ROOT [--pair PAIR]
+                               [--stations STATIONS] [--out OUT]
+                               [--drought DROUGHT]
+analyze_daily_effect.py: error: unrecognized arguments: ...

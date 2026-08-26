@@ -1,0 +1,10 @@
+job        : 39558
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T19:02:06Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+
+finished   : 2026-08-26T19:02:07Z
+exit status: 2  (1 = at least one pair was skipped; read the list above)

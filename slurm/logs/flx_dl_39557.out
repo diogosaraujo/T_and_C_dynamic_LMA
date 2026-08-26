@@ -1,0 +1,6 @@
+job        : 39557
+node       : soemilan03
+cluster    : soe   partition: SOE_efthymios
+out_dir    : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-26T19:02:06Z
+

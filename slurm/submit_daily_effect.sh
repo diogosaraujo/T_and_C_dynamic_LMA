@@ -1,9 +1,20 @@
 #!/bin/bash
 ## Seasonal signature of the LMA treatment: dyn - fixed by day of year.
 ##
-##     sbatch slurm/submit_daily_effect.sh --pair 'era5_land:*_ic'
-##     sbatch slurm/submit_daily_effect.sh --pair 'historical/*:*' --out hist_daily.csv
-##     sbatch slurm/submit_daily_effect.sh --pair 'era5_land:*_ic' --drought drought_years.csv
+## Give --out and --drought FULL paths under $TC_INPUT_DATA. A bare filename is
+## written relative to preprocessing/, i.e. inside the repo, and the table is
+## 108 MB -- "git add -A" then hands GitHub a file past its 100 MB hard limit
+## and the push is declined outright. Source slurm/config.sh first so
+## $TC_INPUT_DATA is actually set; unset, it expands to nothing and the job dies
+## on a bare root path (tc_check_args now catches that).
+##
+##     source slurm/config.sh
+##     sbatch slurm/submit_daily_effect.sh --pair 'era5_land:*_ic' \
+##         --out "$TC_INPUT_DATA/era5_daily.csv" \
+##         --drought "$TC_INPUT_DATA/drought_years.csv"
+##     sbatch slurm/submit_daily_effect.sh --pair 'historical/*:*' \
+##         --out "$TC_INPUT_DATA/hist_daily.csv" \
+##         --drought "$TC_INPUT_DATA/drought_years_gcm.csv"
 ##
 ## Complements analyze_lma_effect.py rather than replacing it. That one reduces
 ## each run to ANNUAL series, which is right for the fleet-wide headline and the

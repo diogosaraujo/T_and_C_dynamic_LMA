@@ -29,3 +29,16 @@ scipy>=1.10
 # shapely and pyproj for one point-in-polygon test. The Albers projection is
 # implemented from the shapefile's own .prj and validated against control stations.
 pyshp>=2.3
+
+# Analysis and figures. pandas does the group-bys in summarise_effect.py over
+# tables of several million rows; matplotlib renders the skill maps and Taylor
+# diagrams. Their absence is what killed jobs 39623-39625, which had already
+# read every model table, every FLUXNET archive and the SPEI stacks before
+# dying on "import matplotlib" at the plotting call.
+#
+# pyproj gives the figures CONUS Albers without pulling in cartopy; geopandas is
+# optional and only used for the --basemap outline, so it is deliberately NOT
+# listed -- the maps draw without it.
+pandas>=2.0
+matplotlib>=3.7
+pyproj>=3.5

@@ -304,27 +304,53 @@ def main(argv=None) -> int:
         L += [""]
 
         # -- drought contrast
+        # DROUGHT AGAINST NORMAL, NOT AGAINST "ALL" -- and never at daily
+        # resolution. The daily tables are CLIMATOLOGIES: the "all" class
+        # averages ~36 years and the "drought" class ~4.8, and averaging fewer
+        # years cancels less year-to-year noise, so |effect| comes out larger in
+        # the drought composite whether or not drought has anything to do with
+        # it. That inflation is severe -- the first version of this report put
+        # GPP at a 11.9x drought ratio, while the same contrast computed
+        # monthly, where no cross-year averaging happens, gives 1.18x.
+        #
+        # Monthly, seasonal and annual keep one row per period per year, so
+        # drought and normal are built the same way and the comparison is fair.
         rows = []
-        for lab, _, ps in blocks:
-            cls = set(ps["class"].unique())
-            if "drought" not in cls:
-                continue
-            a_ = fleet(ps, "all").set_index("variable")
-            d_ = fleet(ps, "drought").set_index("variable")
-            for var in FLUXES:
-                if var in a_.index and var in d_.index:
-                    rows.append({"dataset": lab, "variable": var,
-                                 "all": a_.loc[var, "median_abs_pct"],
-                                 "drought": d_.loc[var, "median_abs_pct"],
-                                 "ratio": (d_.loc[var, "median_abs_pct"] /
-                                           a_.loc[var, "median_abs_pct"]
-                                           if a_.loc[var, "median_abs_pct"] else np.nan)})
+        if freq == "daily":
+            L += ["### Drought years", "",
+                  "**Not reported at daily resolution.** These tables are "
+                  "climatologies: the *all* class averages ~36 years and "
+                  "*drought* ~4.8, and a shorter average cancels less "
+                  "year-to-year noise, which inflates the drought effect for "
+                  "reasons unrelated to drought. Read the monthly, seasonal and "
+                  "annual sections instead, where every row is one period of "
+                  "one year and the two classes are built alike.", ""]
+        else:
+            for lab, _, ps in blocks:
+                cls = set(ps["class"].astype(str).unique())
+                if not {"drought", "normal"} <= cls:
+                    continue
+                n_ = fleet(ps, "normal").set_index("variable")
+                d_ = fleet(ps, "drought").set_index("variable")
+                for var in FLUXES:
+                    if var in n_.index and var in d_.index:
+                        base = n_.loc[var, "median_abs_pct"]
+                        rows.append({"dataset": lab, "variable": var,
+                                     "normal": base,
+                                     "drought": d_.loc[var, "median_abs_pct"],
+                                     "ratio": (d_.loc[var, "median_abs_pct"] / base
+                                               if base else np.nan),
+                                     "n_dry": int(d_.loc[var, "stations"])})
         if rows:
             r = pd.DataFrame(rows).sort_values("ratio", ascending=False).head(12)
-            L += ["### Drought years against all years", "",
-                  "Ratio > 1 means the treatment bites harder in dry years.", ""]
-            L += fmt_table(r, ["dataset", "variable", "all", "drought", "ratio"],
-                           ["dataset", "variable", "all %", "drought %", "ratio"])
+            L += ["### Drought years against normal years", "",
+                  "Like for like: both classes are built from single "
+                  "period-years, so the two are directly comparable. Ratio > 1 "
+                  "means the treatment bites harder in dry years.", ""]
+            L += fmt_table(r, ["dataset", "variable", "normal", "drought",
+                               "ratio", "n_dry"],
+                           ["dataset", "variable", "normal %", "drought %",
+                            "ratio", "stations"])
             L += [""]
 
         # -- forest type

@@ -22,12 +22,21 @@ WHAT IT WRITES
 
 Long format, one row per (station, key, doy, variable):
 
-    station,key,doy,variable,fixed,dyn,diff,rel,n_years[,drought]
+    station,key,class,doy,variable,fixed,dyn,diff,rel_pct,rel_ann_pct,n_years
 
-'fixed' and 'dyn' are the multi-year mean for that day of year, 'diff' is
-dyn - fixed, and 'rel' is diff as a percentage of |fixed|. Long format because
-the downstream questions -- group by PFT, by ecoregion, by drought class -- are
-all group-bys, and a wide table would need reshaping for every one of them.
+'fixed' and 'dyn' are the multi-year mean for that day of year and 'diff' is
+dyn - fixed. Long format because the downstream questions -- group by PFT, by
+ecoregion, by drought class -- are all group-bys, and a wide table would need
+reshaping for every one of them.
+
+TWO RELATIVE COLUMNS, AND rel_pct IS THE TRAP. rel_pct divides by that same
+day's |fixed|, which vanishes out of season: job 38604 reported ground
+evaporation at a "32348190% peak" on doy 43, i.e. a February denominator near
+zero. Use rel_ann_pct, which divides by the fixed arm's mean magnitude over the
+whole record -- a percentage of a typical day, finite year-round and comparable
+across variables and stations. rel_pct is still the more natural reading near
+peak season, where the denominator is healthy; it is kept for that, and the
+printed summary uses rel_ann_pct.
 
 DAY OF YEAR, ACROSS THREE CALENDARS. The GCM forcing is mapped onto real dates by
 build_gcm_meteo.real_dates before it ever reaches T&C, so every run carries real
@@ -186,16 +195,45 @@ def climatology(fx: dict, dy: dict, years=None):
         if var not in F or var not in D:
             continue
         f_all, d_all = np.asarray(F[var])[keep], np.asarray(D[var])[keep]
+        # Dividing by the SAME DAY's fixed-arm value explodes wherever that
+        # value is near zero, which for a seasonal flux is most of winter. Job
+        # 38604 reported ground evaporation at "89817% mean, 32348190% peak",
+        # peaking on doy 43 -- that is a February EG of ~1e-9 mm/d in the
+        # denominator, not an effect. Every variable whose peak landed in
+        # midwinter (T 362, EIn 351, Lk 342, Rn 333, Tfrac 8, WUE 24) was
+        # reporting the same artefact, while the ones that stayed physical
+        # peaked at leaf-out (LAI 108, GPP 109, ET 99, QE 113).
+        #
+        # So also normalise by a denominator that does not vanish: the fixed
+        # arm's mean magnitude across the whole record. rel_ann is then "this
+        # day's difference as a percentage of a typical day", comparable across
+        # variables and stations, and finite whenever the variable is not
+        # identically zero. rel_pct is kept because it is the right measure
+        # where the denominator is healthy -- near peak season -- but it is the
+        # one to distrust, and the summary no longer uses it.
+        if not np.isfinite(f_all).any():
+            continue
+        scale = float(np.nanmean(np.abs(f_all)))
         for j in range(1, 366):
             m = doy == j
             if not m.any():
                 continue
-            f = np.nanmean(f_all[m])
-            v = np.nanmean(d_all[m])
+            # Check for any finite value BEFORE averaging. nanmean over an
+            # all-NaN day is what raised the "Mean of empty slice" warnings in
+            # job 38604's stderr; the result was discarded a line later anyway,
+            # so this skips the day instead of computing a NaN noisily.
+            fj, dj = f_all[m], d_all[m]
+            if not (np.isfinite(fj).any() and np.isfinite(dj).any()):
+                continue
+            f = np.nanmean(fj)
+            v = np.nanmean(dj)
             if not (np.isfinite(f) and np.isfinite(v)):
                 continue
             rel = 100.0 * (v - f) / abs(f) if abs(f) > 1e-12 else np.nan
-            rows.append((j, var, f, v, v - f, rel, int(np.unique(yr[m]).size)))
+            rel_ann = (100.0 * (v - f) / scale
+                       if np.isfinite(scale) and scale > 1e-12 else np.nan)
+            rows.append((j, var, f, v, v - f, rel, rel_ann,
+                         int(np.unique(yr[m]).size)))
     return rows
 
 
@@ -315,22 +353,29 @@ def main(argv=None) -> int:
     with open(out, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow(["station", "key", "class", "doy", "variable",
-                    "fixed", "dyn", "diff", "rel_pct", "n_years"])
+                    "fixed", "dyn", "diff", "rel_pct", "rel_ann_pct",
+                    "n_years"])
         for r in rows:
             w.writerow([r[0], r[1], r[2], r[3], r[4],
                         f"{r[5]:.6g}", f"{r[6]:.6g}", f"{r[7]:.6g}",
-                        "" if not np.isfinite(r[8]) else f"{r[8]:.3f}", r[9]])
+                        "" if not np.isfinite(r[8]) else f"{r[8]:.3f}",
+                        "" if not np.isfinite(r[9]) else f"{r[9]:.3f}", r[10]])
 
-    # A one-screen summary: which variables move, and when in the year.
-    print(f"{'variable':<9}{'mean |rel|':>11}{'peak |rel|':>11}{'peak doy':>10}")
+    # A one-screen summary: which variables move, and when in the year. Read off
+    # rel_ann (r[9]), not rel_pct (r[8]) -- see the note in climatology(). The
+    # numbers are percentages of a typical day for that variable, so "peak doy"
+    # is where the treatment bites hardest rather than where the denominator
+    # happened to be smallest.
+    print(f"{'variable':<9}{'mean |rel|':>11}{'peak |rel|':>11}{'peak doy':>10}"
+          f"   (% of the variable's own annual mean)")
     for var in REPORT:
         sel = [r for r in rows if r[4] == var and r[2] == "all"
-               and np.isfinite(r[8])]
+               and np.isfinite(r[9])]
         if not sel:
             continue
         by_doy = {}
         for r in sel:
-            by_doy.setdefault(r[3], []).append(abs(r[8]))
+            by_doy.setdefault(r[3], []).append(abs(r[9]))
         means = {d: float(np.mean(v)) for d, v in by_doy.items()}
         peak = max(means, key=means.get)
         print(f"{var:<9}{np.mean(list(means.values())):>10.2f}%"

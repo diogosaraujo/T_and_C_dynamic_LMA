@@ -17,6 +17,11 @@ ENDPOINTS = {
     "sitemap": f"{BASE}/site_display/AmeriFlux",
     "site_ccby4": f"{BASE}/site_availability/AmeriFlux/BIF/CCBY4.0",
     "data_year": f"{BASE}/data_availability/AmeriFlux",
+    # Which sites actually HAVE a FLUXNET product. Discovered 2026-08-26 while
+    # diagnosing job 38863: site_availability/AmeriFlux lists the real product
+    # names -- BASE-BADM, BIF, FLUXNET -- and FLUXNET exists under CCBY4.0 only,
+    # for 407 sites against BASE-BADM's 514. 86 of our 118 stations are in it.
+    "site_fluxnet": f"{BASE}/site_availability/AmeriFlux/FLUXNET/CCBY4.0",
     "variables": f"{BASE}/fp_var?limits=True",
     # Requires an AmeriFlux account (user_id + user_email in the POST body).
     "data_download": f"{BASE}/data_download",

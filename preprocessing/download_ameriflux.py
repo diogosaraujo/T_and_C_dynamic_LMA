@@ -445,6 +445,37 @@ def main(argv: list[str] | None = None) -> int:
         by_policy.setdefault(pol, []).append(sid)
 
     if args.product == DATA_PRODUCT_FLUXNET:
+        # ASK WHICH SITES ACTUALLY HAVE THE PRODUCT, FIRST.
+        # Job 38863 requested US-HBK and US-Ha2 together and got back a
+        # well-formed response with an EMPTY data_urls list -- no error, no
+        # explanation. US-HBK has a FLUXNET product and US-Ha2 does not, and the
+        # service returned nothing for the whole batch rather than serving the
+        # one it could. So one unprocessed site silently costs every site in the
+        # request.
+        #
+        # Policy is not the filter here: all of these are CCBY4.0. ONEFlux has
+        # simply not processed every site. 86 of our 118 stations are in this
+        # list.
+        try:
+            avail = {s[0] if isinstance(s, (list, tuple)) else s
+                     for s in get_json(ENDPOINTS["site_fluxnet"])}
+        except Exception as exc:                              # noqa: BLE001
+            log(f"ERROR: cannot read FLUXNET site availability: {exc}")
+            log("       Refusing to request blind -- one unprocessed site "
+                "empties the whole batch.")
+            return 1
+        for pol in list(by_policy):
+            keep = [s for s in by_policy[pol] if s in avail]
+            gone = sorted(set(by_policy[pol]) - set(keep))
+            if gone:
+                log(f"  ! {len(gone)} site(s) have no FLUXNET product "
+                    f"(ONEFlux has not processed them); skipping: "
+                    f"{', '.join(gone)}")
+            if keep:
+                by_policy[pol] = keep
+            else:
+                by_policy.pop(pol)
+
         # FLUXNET exists only under CCBY4.0. Requesting it for a LEGACY site returns
         # nothing at all, which would look like a network problem rather than a policy
         # one, so drop those sites here and NAME them. Checked 2026-08-26: 9 of our 118

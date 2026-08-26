@@ -8,14 +8,18 @@
 ## NEE it would be a test against a net flux that includes soil respiration,
 ## which is a much weaker check on a mechanism acting through leaf area.
 ##
-## CCBY4.0 ONLY. Requesting FLUXNET for a LEGACY site returns nothing, so the
-## downloader drops those sites and names them. Checked 2026-08-26 against the
-## public site_availability endpoint: 109 of our 118 stations qualify. The nine
-## that do not -- US-Blk, US-CZ2, US-CZ3, US-CZ4, US-LPH, US-MRf, US-NR2,
-## US-SB3, US-WBW -- keep their BASE record; only partitioned GPP is missing.
-## Policy eligibility is necessary but not sufficient: a CCBY4.0 site still only
-## has a FLUXNET product if ONEFlux processed it, and there is no working
-## availability endpoint to pre-check that, so read the per-site report below.
+## TWO FILTERS, BOTH NECESSARY. FLUXNET is CCBY4.0-only, so LEGACY sites are
+## dropped first -- 109 of our 118 qualify. Then ONEFlux must actually have
+## PROCESSED the site, which is a smaller set again: the service lists 407 sites
+## with a FLUXNET product against 514 with BASE-BADM, and 86 of our 118 are in
+## it. Both filters run before the request and both name what they drop.
+##
+## The second filter is not optional. Job 38863 asked for US-HBK and US-Ha2
+## together and got back a well-formed response with an EMPTY url list -- no
+## error at all. US-HBK has a FLUXNET product, US-Ha2 does not, and the service
+## returned nothing for the WHOLE BATCH rather than serving the one it could.
+## One unprocessed site silently costs every site in the request, which is why
+## the availability list is fetched first and a failure to read it aborts.
 ##
 ## Credentials must be exported BEFORE sbatch -- SLURM copies the submitting
 ## environment into the job, which is how they reach the compute node without

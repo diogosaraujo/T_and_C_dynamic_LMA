@@ -1,0 +1,31 @@
+job        : 38865
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T16:39:54Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+pair      : era5_land:*_ic
+stations  : 98   drought classes from drought_years.csv
+
+variable   med |rel| peak |rel|  peak doy   (% of the variable's own annual mean)
+LAI_H          0.70%      1.60%       246
+GPP            0.22%      1.08%       239
+NPP            0.25%      1.48%       239
+ET             0.35%      1.01%       220
+T              0.36%      1.45%       233
+EG             0.70%      2.87%       111
+EIn            0.70%      2.89%       179
+Lk             1.07%      6.41%       127
+QE             0.34%      1.04%       220
+H              0.38%      1.00%       235
+Rn             0.04%      0.20%       100
+Tfrac          0.23%      0.62%       318
+Bowen          0.96%      2.73%        88
+WUE            0.41%      1.47%       314
+
+92 pair(s), 1410331 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/era5_daily.csv
+
+finished   : 2026-08-26T16:48:58Z
+exit status: 0  (1 = at least one pair was skipped; read the list above)

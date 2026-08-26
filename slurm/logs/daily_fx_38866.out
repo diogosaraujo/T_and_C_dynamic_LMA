@@ -1,0 +1,54 @@
+job        : 38866
+node       : soeepyc05
+cluster    : soe   partition: SOE_main
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T16:39:54Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+pair      : historical/*:*
+stations  : 98   drought classes from drought_years_gcm.csv
+
+SKIPPED -- 40 pair(s):
+  ! US-DPP    historical/GFDL-ESM4:fixed_lmaone arm has no RES
+  ! US-DPP    historical/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-DPP    historical/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-DPP    historical/MRI-ESM2-0:fixed_lmaone arm has no RES
+  ! US-DPP    historical/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-MtB    historical/GFDL-ESM4:fixed_lmaone arm has no RES
+  ! US-MtB    historical/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-MtB    historical/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-MtB    historical/MRI-ESM2-0:fixed_lmaone arm has no RES
+  ! US-MtB    historical/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-NMj    historical/GFDL-ESM4:fixed_lmaone arm has no RES
+  ! US-NMj    historical/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-NMj    historical/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-NMj    historical/MRI-ESM2-0:fixed_lmaone arm has no RES
+  ! US-NMj    historical/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-SHC    historical/GFDL-ESM4:fixed_lmaone arm has no RES
+  ! US-SHC    historical/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-SHC    historical/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-SHC    historical/MRI-ESM2-0:fixed_lmaone arm has no RES
+  ! US-SHC    historical/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ... and 20 more
+
+variable   med |rel| peak |rel|  peak doy   (% of the variable's own annual mean)
+LAI_H          0.33%      0.82%       220
+GPP            0.13%      0.44%       233
+NPP            0.14%      0.49%       233
+ET             0.28%      0.50%       237
+T              0.23%      0.84%       220
+EG             0.55%      2.36%       101
+EIn            0.83%      2.06%       165
+Lk             1.02%      3.56%       146
+QE             0.28%      0.50%       237
+H              0.23%      0.43%       106
+Rn             0.03%      0.12%        92
+Tfrac          0.17%      0.54%       329
+Bowen          0.82%      2.46%        73
+WUE            0.28%      1.14%       321
+
+425 pair(s), 6510188 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/gcm_daily_historical.csv
+
+finished   : 2026-08-26T17:05:25Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

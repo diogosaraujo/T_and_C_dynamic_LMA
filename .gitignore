@@ -18,6 +18,13 @@ RES_*.mat
 # re-downloadable with preprocessing/download_ameriflux.py.
 /ameriflux/
 
+# AmeriFlux FLUXNET (ONEFlux) archives -- the only product carrying partitioned
+# GPP, fetched by slurm/submit_fluxnet_download.sh. Tens of MB per site across
+# ~109 sites, and every byte is re-downloadable. A 108 MB file has already had
+# one push declined at GitHub's 100 MB hard limit; this directory sits inside the
+# repo by request, so the ignore rule is what keeps that from happening again.
+/preprocessing/fluxnet/
+
 # Python
 __pycache__/
 *.py[cod]

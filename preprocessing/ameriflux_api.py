@@ -22,9 +22,25 @@ ENDPOINTS = {
     "data_download": f"{BASE}/data_download",
 }
 
-# Only BASE-BADM is supported by the service for AmeriFlux sites; it bundles the BASE
-# measurement files and that site's BADM metadata in one archive.
+# BASE-BADM bundles the BASE measurement files and that site's BADM metadata in one
+# archive. It is the half-hourly (or hourly) tower record as the site team submits it.
 DATA_PRODUCT = "BASE-BADM"
+
+# The ONEFlux-processed product, matching amerifluxr's amf_download_fluxnet(). This is
+# what carries PARTITIONED carbon: BASE has FC (net CO2 flux) and no GPP column at all,
+# verified against AMF_US-Ha2_BASE_HH_16-5.csv -- zero GPP or RECO fields. GPP is a
+# derived quantity and only exists in this product.
+DATA_PRODUCT_FLUXNET = "FLUXNET"
+
+# FLUXNET IS CCBY4.0 ONLY. Requesting it for a LEGACY site returns nothing, so the
+# station list must be filtered rather than split. Checked 2026-08-26 against
+# ENDPOINTS["site_ccby4"]: 109 of our 118 stations qualify; US-Blk, US-CZ2, US-CZ3,
+# US-CZ4, US-LPH, US-MRf, US-NR2, US-SB3 and US-WBW are LEGACY and cannot supply it.
+#
+# Policy eligibility is necessary, NOT sufficient -- a CCBY4.0 site still only has a
+# FLUXNET product if ONEFlux has processed it. There is no working availability
+# endpoint to pre-check that (data_availability/AmeriFlux now 404s), so the request
+# itself is the test and any site that comes back empty must be reported by name.
 
 # Sites are shared under one of two policies; requesting the wrong one returns nothing
 # for that site, so the station list is split by policy before requesting.

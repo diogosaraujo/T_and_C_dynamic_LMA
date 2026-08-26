@@ -38,6 +38,7 @@ from pathlib import Path
 
 from ameriflux_api import (
     DATA_PRODUCT,
+    DATA_PRODUCT_FLUXNET,
     DEFAULT_DESCRIPTION,
     DEFAULT_INTENDED_USE,
     ENDPOINTS,
@@ -304,7 +305,7 @@ def download_for_policy(policy: str, sids: list[str], out_dir: Path,
     payload = {
         "user_id": args.user_id,
         "user_email": args.user_email,
-        "data_product": DATA_PRODUCT,
+        "data_product": args.product,
         "data_policy": policy,
         "site_ids": sids,
         "intended_use": args.intended_use,
@@ -356,6 +357,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--site-list", type=Path, action="append", default=None,
                    help="station CSV (repeatable); defaults to the deciduous + evergreen lists")
     p.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    p.add_argument("--product", default=DATA_PRODUCT,
+                   choices=[DATA_PRODUCT, DATA_PRODUCT_FLUXNET],
+                   help="BASE-BADM is the raw tower record; FLUXNET is the "
+                        "ONEFlux product and the ONLY one carrying "
+                        "partitioned GPP/RECO. FLUXNET is CCBY4.0-only.")
     p.add_argument("--stations", default=None,
                    help="comma-separated StationIDs — use this for test runs")
     p.add_argument("--user-id", default=os.environ.get("AMF_USER_ID"))
@@ -393,7 +399,7 @@ def main(argv: list[str] | None = None) -> int:
             log(f"  ! {miss} is not in the site lists")
 
     log(f"stations       : {len(stations)}")
-    log(f"product        : {DATA_PRODUCT}")
+    log(f"product        : {args.product}")
     log(f"output         : {args.out}")
     log(f"intended use   : {args.intended_use}")
     log(f"test download  : {bool(args.is_test)}")
@@ -405,7 +411,7 @@ def main(argv: list[str] | None = None) -> int:
             log("[dry-run] would POST to " + ENDPOINTS["data_download"])
             log("[dry-run] payload (credentials omitted):")
             log(json.dumps({
-                "data_product": DATA_PRODUCT,
+                "data_product": args.product,
                 "data_policy": "<per-site: CCBY4.0 or LEGACY>",
                 "site_ids": sorted(ids),
                 "intended_use": args.intended_use,
@@ -437,6 +443,19 @@ def main(argv: list[str] | None = None) -> int:
     by_policy: dict[str, list[str]] = {}
     for sid, pol in policies.items():
         by_policy.setdefault(pol, []).append(sid)
+
+    if args.product == DATA_PRODUCT_FLUXNET:
+        # FLUXNET exists only under CCBY4.0. Requesting it for a LEGACY site returns
+        # nothing at all, which would look like a network problem rather than a policy
+        # one, so drop those sites here and NAME them. Checked 2026-08-26: 9 of our 118
+        # are LEGACY. They keep their BASE record; only partitioned GPP is unavailable.
+        dropped = sorted(by_policy.pop(POLICY_LEGACY, []))
+        if dropped:
+            log(f"  ! {len(dropped)} site(s) are {POLICY_LEGACY} and have no FLUXNET "
+                f"product; skipping: {', '.join(dropped)}")
+        if not by_policy:
+            log("ERROR: no CCBY4.0 site left to request.")
+            return 1
 
     if args.bif_only:
         # "AA-Flx" is the service's pseudo-site for every AmeriFlux site with data; it
@@ -497,7 +516,7 @@ def main(argv: list[str] | None = None) -> int:
     (args.out / "download_provenance.json").write_text(json.dumps({
         "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "script": Path(__file__).name,
-        "data_product": DATA_PRODUCT,
+        "data_product": args.product,
         "intended_use": args.intended_use,
         "description": args.description,
         "is_test": bool(args.is_test),

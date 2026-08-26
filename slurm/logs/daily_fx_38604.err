@@ -1,0 +1,4 @@
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/analyze_daily_effect.py:192: RuntimeWarning: Mean of empty slice
+  f = np.nanmean(f_all[m])
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/analyze_daily_effect.py:193: RuntimeWarning: Mean of empty slice
+  v = np.nanmean(d_all[m])

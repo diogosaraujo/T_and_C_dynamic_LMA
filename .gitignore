@@ -24,7 +24,11 @@ RES_*.mat
 # one push declined at GitHub's 100 MB hard limit; this directory sits inside the
 # repo by request, so the ignore rule is what keeps that from happening again.
 /preprocessing/fluxnet/
-/fluxnet/          # same thing pulled down to the repo root
+# The same archives pulled down to the repo root. NOTE: a trailing "#" does not
+# start a comment in .gitignore -- only a leading one does -- so putting this
+# note on the pattern line made the pattern the literal string "/fluxnet/ # ..."
+# and it matched nothing.
+/fluxnet/
 
 # Python
 __pycache__/

@@ -1,0 +1,12 @@
+job        : 39621
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-26T21:18:06Z
+
+read 16 table(s); skipped 0
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/effect_summary.md
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/effect_summary_per_station.csv
+
+finished   : 2026-08-26T21:23:18Z
+exit status: 0  (1 = a table was skipped; read the list above)

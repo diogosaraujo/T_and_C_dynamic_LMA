@@ -1,0 +1,13 @@
+job        : 39624
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-26T21:21:06Z
+
+  tower: 42 station(s) unusable, e.g. US-Blk: no YY file
+  annual: stations per row {'GPP': 17, 'ET': 22, 'QE': 22, 'H': 22}; 33 negative correlation(s) -- axes extended
+
+finished   : 2026-08-26T21:21:33Z
+exit status: 1

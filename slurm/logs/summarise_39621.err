@@ -1,0 +1,26 @@
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/summarise_effect.py:163: RuntimeWarning: All-NaN slice encountered
+  out = g.agg(abs_rel=("rel_ann_pct", lambda s: np.nanmedian(np.abs(s))),

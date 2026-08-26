@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_taylor.py", line 272, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_taylor.py", line 265, in main
+    make_figure(tables, sites, f"Taylor diagram, {name} steps", png, (w, h),
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                a.min_n)
+                ^^^^^^^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_taylor.py", line 151, in make_figure
+    import matplotlib
+ModuleNotFoundError: No module named 'matplotlib'

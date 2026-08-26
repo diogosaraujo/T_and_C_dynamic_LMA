@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_skill_maps.py", line 464, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_skill_maps.py", line 457, in main
+    make_figure(table, sites, f"Skill score, {name} steps", png,
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                a.basemap, a.linthresh, a.vmax, (w, h))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_skill_maps.py", line 334, in make_figure
+    import matplotlib
+ModuleNotFoundError: No module named 'matplotlib'

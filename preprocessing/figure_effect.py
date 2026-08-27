@@ -32,6 +32,9 @@ Datasets:
   gcm         3 panels (historical / ssp126 / ssp585), all GCMs pooled
   gcmmedian   3 panels, median across GCMs per station first
   gcmrows     GCM x scenario grid, one row per GCM
+
+sens_LMA ignores those four and produces ONE figure:
+ERA5-Land | GCM historical | GCM ssp126 | GCM ssp585.
 """
 from __future__ import annotations
 
@@ -262,6 +265,36 @@ def fig_grid(d, metric, out_png, figsize):
     plt.close(fig)
 
 
+def fig_lma(d, out_png, figsize):
+    """sens_LMA on its own: ERA5-Land, then the three GCM scenarios.
+
+    This metric gets one figure rather than the four framings the others get.
+    There is no fixed-arm counterpart to difference against, so 'gcm_median'
+    and 'gcm_by_model' would be re-cuts of a single quantity rather than
+    comparisons, and the ERA5 panel belongs beside the scenarios instead of
+    in a figure of its own.
+    """
+    import matplotlib.pyplot as plt
+    xlabel, title = METRICS["sens_LMA"]
+    era5 = d[d["dataset"] == "era5"]
+    gcm = d[d["dataset"] != "era5"]
+    cols = [("ERA5-Land", era5)]
+    for sc in SCEN:
+        sub = gcm[gcm["scenario"] == sc]
+        if not sub.empty:
+            cols.append((f"GCM {sc}", sub))
+    if len(cols) == 1 and era5.empty:
+        raise Missing("sens_LMA: neither ERA5 nor GCM rows present")
+    fig, axes = plt.subplots(1, len(cols), figsize=figsize, sharex=True,
+                             sharey=True, constrained_layout=True)
+    axes = np.atleast_1d(axes)
+    for ax, (name, sub) in zip(axes, cols):
+        panel(ax, sub)
+        ax.set_title(name, fontsize=9)
+    _finish(fig, axes, xlabel, title, out_png)
+    plt.close(fig)
+
+
 def gcm_median(d: pd.DataFrame) -> pd.DataFrame:
     """Median across GCMs, per station / scenario / variable."""
     g = (d.groupby(["scenario", "station", "pft", "variable"], observed=True)
@@ -280,6 +313,7 @@ def main(argv=None) -> int:
     ap.add_argument("--single-size", default="6.5x5.5")
     ap.add_argument("--scen-size", default="9.5x5.5")
     ap.add_argument("--grid-size", default="9.5x13")
+    ap.add_argument("--lma-size", default="11x5.5")
     a = ap.parse_args(argv)
 
     import matplotlib
@@ -326,6 +360,13 @@ def main(argv=None) -> int:
         era5 = d[d["dataset"] == "era5"]
         gcm = d[d["dataset"] != "era5"]
         print(f"{metric:<12} era5 {len(era5):>7} rows   gcm {len(gcm):>8} rows")
+        if metric == "sens_LMA":
+            png = out_dir / "effect_sens_LMA.png"
+            try:
+                fig_lma(d, png, dims(a.lma_size))
+            except Missing as e:
+                failures.append(f"sens_LMA: {e}"); print(f"  SKIP: {e}")
+            continue
         jobs = []
         if "era5" in sets:
             jobs.append(("era5", lambda p, dd=era5: fig_single(

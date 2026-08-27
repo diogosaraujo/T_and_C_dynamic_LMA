@@ -23,11 +23,14 @@ WHAT IT REPORTS, and why each is the defensible form of the question:
               leaf-out and peak season; a peak in midwinter is the signature of
               a vanishing denominator, not of ecology.
 
-  DROUGHT     effect in drought years against normal ones. Daily tables carry a
-              class column already; the others join the drought CSVs on the
-              year, so the label is the annual SPEI-12 classification applied to
-              every period inside that year -- coarser than the per-period
-              SPEI-3 the figures use, and labelled as such in the report.
+  DROUGHT     effect in drought periods against normal ones, joined from
+              drought_periods_*.csv on (station, freq, year, period) so each
+              step carries the accumulation that matches it: SPEI-12 at the
+              water-year end for a year, SPEI-3 for a month, SPEI-3 at the
+              season's last month for a season. The same definition the figures
+              use. Steps the index cannot label -- the first N-1 months of an
+              N-month accumulation -- are "unlabelled", never folded into
+              "normal".
 
   FOREST TYPE deciduous against evergreen, because the LMA retrieval is noisier
               for evergreen (25 of 53 evergreen stations meet both noise
@@ -102,19 +105,36 @@ def read_sites() -> pd.DataFrame:
 
 
 def read_drought(root: Path, ds: str) -> pd.DataFrame | None:
-    """{station, year} -> class, from whichever drought CSV covers this dataset."""
-    p = root / ("drought_years.csv" if ds == "era5" else "drought_years_gcm.csv")
+    """Per-period drought labels for one dataset, from drought_periods_*.csv.
+
+    REPLACES drought_years*.csv, which held the ANNUAL MEAN of monthly SPEI-12
+    -- an average over twelve overlapping 12-month windows, which is not a
+    quantity anyone wants and is not the definition the figures use. The new
+    table labels each step with the accumulation that matches it: SPEI-12 at the
+    water-year end for a year, SPEI-3 for a month, SPEI-3 at the season's last
+    month for a season. Verified at ACCESS-CM2/US-Bar/2000, where September
+    SPEI-12 is -0.7268 against an annual mean of -0.6143.
+
+    Returned keyed on (station, freq, year, period) -- and on gcm too for the
+    GCM runs, because a model's dry years are its own.
+    """
+    p = root / ("drought_periods_era5.csv" if ds == "era5"
+                else "drought_periods_gcm.csv")
     if not p.is_file():
         return None
     d = pd.read_csv(p)
-    if "class" not in d.columns or "year" not in d.columns:
+    need = {"station", "freq", "year", "period", "class"}
+    if not need <= set(d.columns):
         return None
     if ds == "era5":
-        d = d[d.get("scenario", "era5_land").astype(str) == "era5_land"]
-        return d[["station", "year", "class"]].drop_duplicates()
-    d = d[d.get("scenario", "").astype(str) == ds]
-    # Keyed by GCM as well: a model's dry years are its own.
-    return d[["station", "gcm", "year", "class"]].drop_duplicates()
+        keep = ["station", "freq", "year", "period", "class"]
+    else:
+        d = d[d.get("scenario", "").astype(str) == ds]
+        keep = ["station", "gcm", "freq", "year", "period", "class"]
+    d = d[keep].copy()
+    d["period"] = d["period"].astype(str)
+    d["year"] = pd.to_numeric(d["year"], errors="coerce").astype("Int64")
+    return d.drop_duplicates()
 
 
 def load(path: Path, freq: str) -> tuple[pd.DataFrame | None, str]:
@@ -139,6 +159,7 @@ def load(path: Path, freq: str) -> tuple[pd.DataFrame | None, str]:
                      dtype={"station": "category", "variable": "category",
                             "key": "category"})
     df = df.rename(columns={period_col: "period"})
+    df["freq"] = freq                      # the join matches window to step
     # THE DENOMINATOR IS THE FIXED ARM'S OWN VALUE FOR THAT PERIOD (rel_pct),
     # which is what "how much did dynamic LMA change this flux" actually means.
     # rel_ann divides by the record mean instead, and so understates the change
@@ -300,10 +321,23 @@ def main(argv=None) -> int:
             found.append(p.name)
             dro = read_drought(root, ds)
             if dro is not None and "year" in df.columns:
-                keys = ["station", "year"] + (["gcm"] if "gcm" in dro.columns
-                                              and "gcm" in df.columns else [])
-                df = df.drop(columns=["class"]).merge(dro, on=keys, how="left")
-                df["class"] = df["class"].fillna("all")
+                # Join on the PERIOD as well as the year: a July step takes
+                # July's SPEI-3, not the whole year's label. Joining on year
+                # alone was what let the coarser annual definition leak into
+                # the monthly and seasonal sections.
+                keys = ["station", "freq", "year", "period"]
+                if "gcm" in dro.columns and "gcm" in df.columns:
+                    keys.append("gcm")
+                elif "gcm" in dro.columns:
+                    dro = dro.drop(columns=["gcm"]).drop_duplicates()
+                df = df.drop(columns=["class"])
+                df["period"] = df["period"].astype(str)
+                df["year"] = pd.to_numeric(df["year"], errors="coerce").astype("Int64")
+                df = df.merge(dro, on=keys, how="left")
+                # Unlabelled is NOT normal: the first N-1 months of an N-month
+                # index have no value, so those steps must not silently join
+                # the non-drought pool.
+                df["class"] = df["class"].fillna("unlabelled")
             ps = per_station(df)
             ps.insert(0, "freq", freq); ps.insert(1, "dataset", ds)
             ps = ps.merge(sites, on="station", how="left")

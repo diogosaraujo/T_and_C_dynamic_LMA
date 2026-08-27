@@ -8,7 +8,7 @@ between the two model runs and the tower never enters.
 Five metrics, each its own figure:
 
   variability   100*(sd_dyn/sd_fixed - 1)          change in interannual SD
-  flux          median_rel_pct                     % change in the annual flux
+  flux          mean_rel_pct                       % change in the annual flux
   sens_Ta       100*(b_dyn - b_fixed)/|b_fixed|    % change in dF/dTa
   sens_SPEI12   100*(b_dyn - b_fixed)/|b_fixed|    % change in dF/dSPEI12
   sens_LMA      slope_dyn_std                      standardised dF/dLMA
@@ -21,11 +21,18 @@ flux tracks LMA when LMA is allowed to move, and the fixed arm's answer is
 "not at all" by construction rather than by measurement.
 
 POOLING. One point per station. The per-station metrics already pool years
-(sd over the annual series, median of the yearly percent changes, one
+(sd over the annual series, MEAN of the yearly percent changes, one
 regression over all years), so a violin across stations is a distribution
 over sites, not over site-years. Pooling site-years instead would let a
 36-year station outvote a 12-year one and would treat consecutive years of
 one site as independent draws.
+
+The site statistic is the mean by request; --flux-stat median switches it.
+Worth knowing which you are looking at: the mean of yearly percent changes
+is not robust here, because a year whose fixed-arm flux is near zero gives
+a huge ratio that no amount of averaging damps. Earlier in this project one
+station's summary went from 1.2% to 129.54% on exactly that. sd_ratio and
+the regression slopes are unaffected -- neither divides year by year.
 
 Datasets:
   era5        one panel
@@ -88,7 +95,8 @@ def _pct_change(new: np.ndarray, old: np.ndarray) -> np.ndarray:
     return out
 
 
-def series(M: pd.DataFrame, S: pd.DataFrame, metric: str) -> pd.DataFrame:
+def series(M: pd.DataFrame, S: pd.DataFrame, metric: str,
+           flux_stat: str = "mean") -> pd.DataFrame:
     """One row per (dataset, gcm, scenario, station, pft, variable, value)."""
     keep = ["dataset", "gcm", "scenario", "station", "pft", "variable"]
     if metric in ("variability", "flux"):
@@ -101,7 +109,11 @@ def series(M: pd.DataFrame, S: pd.DataFrame, metric: str) -> pd.DataFrame:
             d["value"] = 100.0 * (pd.to_numeric(d["sd_ratio"],
                                                 errors="coerce") - 1.0)
         else:
-            d["value"] = pd.to_numeric(d["median_rel_pct"], errors="coerce")
+            col = f"{flux_stat}_rel_pct"
+            if col not in d.columns:
+                raise Missing(f"flux: column {col!r} absent; table has "
+                              f"{[c for c in d.columns if c.endswith('rel_pct')]}")
+            d["value"] = pd.to_numeric(d[col], errors="coerce")
     else:
         if S is None:
             raise Missing("station_sensitivity.csv is required for " + metric)
@@ -314,6 +326,9 @@ def main(argv=None) -> int:
     ap.add_argument("--scen-size", default="9.5x5.5")
     ap.add_argument("--grid-size", default="9.5x13")
     ap.add_argument("--lma-size", default="11x5.5")
+    ap.add_argument("--flux-stat", default="mean",
+                    choices=["mean", "median"],
+                    help="site statistic for the flux metric")
     a = ap.parse_args(argv)
 
     import matplotlib
@@ -354,7 +369,7 @@ def main(argv=None) -> int:
     failures = []
     for metric in wanted:
         try:
-            d = series(M, S, metric)
+            d = series(M, S, metric, a.flux_stat)
         except Missing as e:
             failures.append(str(e)); print(f"SKIP {metric}: {e}"); continue
         era5 = d[d["dataset"] == "era5"]

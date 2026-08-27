@@ -5,3 +5,12 @@ results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
 figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
 started    : 2026-08-27T07:05:07Z
 
+stations: 72   variables: ['ET', 'GPP', 'H', 'LE']
+matched hours per station: median 14,880  min 0  max 238,251
+basemap : NOT FOUND -- maps will have no CONUS outline
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/hourly_skill_maps.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/hourly_taylor.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/hourly_errorbars.png
+
+finished   : 2026-08-27T07:05:23Z
+exit status: 0

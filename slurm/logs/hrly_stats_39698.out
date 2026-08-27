@@ -1,0 +1,10 @@
+job        : 39698
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-27T04:49:07Z
+
+
+finished   : 2026-08-27T04:49:09Z
+exit status: 1  (1 = a station was skipped; read the list above)

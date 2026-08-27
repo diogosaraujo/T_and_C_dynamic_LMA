@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/hourly_stats.py", line 265, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/hourly_stats.py", line 206, in main
+    tw, why = read_tower_hourly(a.tower_dir, sid, a.gpp, a.max_qc)
+              ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/hourly_stats.py", line 118, in read_tower_hourly
+    off, why = utc_offset(root, sid)
+               ~~~~~~~~~~^^^^^^^^^^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/hourly_stats.py", line 74, in utc_offset
+    for row in csv.reader(fh):
+               ~~~~~~~~~~^^^^
+  File "<frozen codecs>", line 325, in decode
+  File "/opt/apps/miniconda3/lib/python3.13/encodings/utf_8_sig.py", line 69, in _buffer_decode
+    return codecs.utf_8_decode(input, errors, final)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb5 in position 4945: invalid start byte

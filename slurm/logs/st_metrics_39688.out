@@ -16,3 +16,4 @@ labels gcm  : ok
   historical monthly    2447916 rows ->  265200 metric rows
   historical seasonal    822800 rows ->   81600 metric rows
   historical sens annual     53550 regression rows
+  historical sens monthly   642600 regression rows

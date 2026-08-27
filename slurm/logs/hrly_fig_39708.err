@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_hourly.py", line 350, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_hourly.py", line 341, in main
+    fig_maps(d, sites, out_dir / "hourly_skill_maps.png", bm, dims(a.map_size),
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+             a.linthresh, a.vmax)
+             ^^^^^^^^^^^^^^^^^^^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_hourly.py", line 119, in fig_maps
+    import geopandas as gpd
+ModuleNotFoundError: No module named 'geopandas'

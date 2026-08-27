@@ -1,0 +1,13 @@
+job        : 39708
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-27T07:37:07Z
+
+stations: 72   variables: ['ET', 'GPP', 'H', 'LE']
+matched hours per station: median 14,880  min 0  max 238,251
+basemap : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/_basemap/ne_110m_admin_1_states_provinces.shp
+
+finished   : 2026-08-27T07:37:11Z
+exit status: 1

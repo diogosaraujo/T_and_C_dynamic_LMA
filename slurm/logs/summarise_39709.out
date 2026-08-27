@@ -1,0 +1,6 @@
+job        : 39709
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-27T07:37:07Z
+

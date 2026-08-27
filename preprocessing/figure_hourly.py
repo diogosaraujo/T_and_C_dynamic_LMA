@@ -161,9 +161,14 @@ def fig_maps(d, sites, out_png, basemap, figsize, linthresh, vmax):
         ax = axes[i, 0]
         if outline is not None:
             from matplotlib.patches import Polygon as MplPoly
+            # One flat grey landmass, no state borders. The edge is drawn in the
+            # SAME grey rather than left off: with edgecolor="none" the
+            # antialiased seams between abutting states show as hairline gaps
+            # across the fill.
             for ring in outline:
-                ax.add_patch(MplPoly(ring, closed=True, facecolor="#f2f2f2",
-                                     edgecolor="0.7", linewidth=0.35, zorder=0))
+                ax.add_patch(MplPoly(ring, closed=True, facecolor="#ececec",
+                                     edgecolor="#ececec", linewidth=0.6,
+                                     zorder=0))
             # CONUS only: Alaska and Hawaii would shrink the mainland to a strip.
             ax.set_xlim(-2.4e6, 2.4e6); ax.set_ylim(2.5e5, 3.3e6)
         for mk, kind in (("o", "deciduous"), ("^", "evergreen")):

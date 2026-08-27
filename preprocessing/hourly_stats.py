@@ -157,8 +157,16 @@ def read_tower_hourly(root: Path, sid: str, gpp: str, max_qc: float,
     # HH-only glob dropped four of the longest records in the network. The
     # groupby below aggregates either one to whole hours unchanged: HH averages
     # two records per hour, HR passes one through.
-    hits0 = sorted(Path(root).glob(f"**/*{sid}*FLUXMET_HH_*.csv"))
-    hits0 += sorted(Path(root).glob(f"**/*{sid}*FLUXMET_HR_*.csv"))
+    # TWO PRODUCT GENERATIONS AND TWO RESOLUTIONS. Newer archives name the
+    # data file FLUXMET (v1.3), older ones FULLSET (the FLUXNET2015 convention,
+    # e.g. US-Ho1 at 3-6); and the step is HH at some sites, HR at others.
+    # Anything but the exact four combinations is the wrong file -- note each
+    # directory ALSO holds an ERA5_HH file, which is reanalysis, not
+    # observations, and must never be matched.
+    hits0 = []
+    for prod in ("FLUXMET", "FULLSET"):
+        for step in ("HH", "HR"):
+            hits0 += sorted(Path(root).glob(f"**/*{sid}*_{prod}_{step}_*.csv"))
     if not hits0:
         # No FLUXNET archive at all -- one of the 32 sites ONEFlux has not
         # processed. An expected absence, not a parsing failure.
@@ -284,6 +292,14 @@ def main(argv=None) -> int:
                                 "rmse", "rsr", "bias", "r")],
                              f"{ss:.6g}"])
         n0 = got[("fixed", "LE")].get("n", 0)
+        if n0 == 0:
+            # Say WHY there is no overlap instead of printing a bare zero: the
+            # model runs 1985-2020 and some tower records start after it ends.
+            mk = arms["fixed"]["key"]
+            skipped.append(
+                f"{sid}: zero overlap -- model {mk.min()//1000000}-"
+                f"{mk.max()//1000000}, tower {tw['key'].min()//1000000}-"
+                f"{tw['key'].max()//1000000}")
         src = tw.get("offset_source", "?")
         n_src[src] = n_src.get(src, 0) + 1
         print(f"  {sid:<9}{pft:<10} n={n0:>7} matched hours   "

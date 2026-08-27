@@ -276,12 +276,16 @@ def fig_taylor(d, out_png, figsize):
         allsd += w[["sdr_fixed", "sdr_dyn"]].to_numpy(float).ravel().tolist()
     allr = np.array([x for x in allr if np.isfinite(x)])
     allsd = np.array([x for x in allsd if np.isfinite(x)])
+    # The angular extent stays global so every panel is the same shape; only
+    # the radius adapts per panel.
     half = bool(allr.size and allr.min() < 0)
-    # ONE STATION WAS STRETCHING THE AXIS. A single GPP site with a huge
-    # sd(model)/sd(tower) pushed smax out and squashed everyone else into the
-    # origin, in both arms. Scale to the 95th percentile and let the outliers
-    # fall outside, counted and reported rather than silently accommodated.
-    smax = float(np.clip(np.nanpercentile(allsd, 95) * 1.15, 1.6, 2.5))
+
+    # ONE radius for all four panels, big enough to enclose every finite
+    # point. Per-panel radii were tried and rejected: with equal aspect the
+    # panels then take different physical sizes and the grid fills with white
+    # space. Shared also keeps the four directly comparable.
+    fin = allsd[np.isfinite(allsd)]
+    smax = float(max(fin.max() * 1.08, 1.6)) if fin.size else 1.6
 
     # 2x2 panels with the legend across the BOTTOM. Stacked in one column the
     # quarter-circles were tall and thin, wasting most of the page width; square
@@ -291,30 +295,31 @@ def fig_taylor(d, out_png, figsize):
     fig = plt.figure(figsize=figsize, constrained_layout=True)
     gs = fig.add_gridspec(nrow + 1, ncol,
                           height_ratios=[1] * nrow + [0.34])
-    off = 0
     for i, (label, var) in enumerate(ROWS):
         r, c = divmod(i, ncol)
         ax = fig.add_subplot(gs[r, c])
+        w = wide(d, var)
         T.draw_axes(ax, smax, half, xlabel=(r == nrow - 1))
         th = np.linspace(0, 2 * np.pi, 400)
-        for rms in (0.5, 1.0, 1.5):
+        for rms in np.arange(0.5, smax + 1e-9, 0.5):
             xc, yc = 1 + rms * np.cos(th), rms * np.sin(th)
             keep = (yc >= 0) & (np.hypot(xc, yc) <= smax)
             if not keep.any():
                 continue
-            k = int(np.argmax(keep & (yc > 0.15)))
-            if keep[k]:
+            # Label only where the arc is genuinely inside the panel. argmax on
+            # an all-False mask returns 0, which parked labels out in the
+            # margin; require a real candidate and stay in the drawn quadrant.
+            cand = keep & (yc > 0.15) & (xc >= (-smax if half else 0.0))
+            if cand.any():
+                k = int(np.argmax(cand))
                 ax.text(xc[k], yc[k], f"{rms:g}", fontsize=5.5, color="#2166ac",
                         ha="center", va="bottom")
-        w = wide(d, var)
         for kind, mk, base in (("deciduous", "o", C_DEC), ("evergreen", "^", C_EVE)):
             sub = w[w.pft == kind]
             for arm, fc in (("fixed", base), ("dyn", "none")):
                 r = sub[f"r_{arm}"].to_numpy(float)
                 sd = sub[f"sdr_{arm}"].to_numpy(float)
                 m = np.isfinite(r) & np.isfinite(sd)
-                off += int((sd[m] > smax).sum())
-                m &= sd <= smax
                 if not m.any():
                     continue
                 t = np.arccos(np.clip(r[m], -1, 1))
@@ -336,9 +341,6 @@ def fig_taylor(d, out_png, figsize):
     axk.legend(handles=handles, loc="center", frameon=False, fontsize=7,
                ncol=2, handletextpad=.5, borderaxespad=0,
                columnspacing=1.0, labelspacing=.5)
-    if off:
-        axk.text(.5, .02, f"{off} point(s) beyond the axis", ha="center",
-                 va="bottom", fontsize=6, color="0.45", transform=axk.transAxes)
     fig.savefig(out_png, dpi=200, bbox_inches="tight")
     plt.close(fig)
 

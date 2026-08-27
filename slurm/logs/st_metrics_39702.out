@@ -23,3 +23,16 @@ labels gcm  : ok
   ssp126     seasonal   2263194 rows ->   78720 metric rows
   ssp126     sens annual     51660 regression rows
   ssp126     sens monthly   619794 regression rows
+  ssp126     sens seasonal  206640 regression rows
+  ssp585     annual      564160 rows ->   19680 metric rows
+  ssp585     monthly    6769413 rows ->  255632 metric rows
+  ssp585     seasonal   2263200 rows ->   78512 metric rows
+  ssp585     sens annual     51660 regression rows
+  ssp585     sens monthly   619374 regression rows
+  ssp585     sens seasonal  206094 regression rows
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/station_metrics.csv  (1101712 rows)
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/station_sensitivity.csv  (2731260 rows)
+
+finished   : 2026-08-27T07:02:01Z
+exit status: 0  (1 = an input was missing; read the list above)

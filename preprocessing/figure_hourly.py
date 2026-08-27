@@ -76,6 +76,38 @@ def get_basemap(explicit, cache_dir: Path):
     return shp if shp.exists() else None
 
 
+def read_conus(shp: Path):
+    """CONUS state rings in Albers metres, via pyshp and pyproj."""
+    import shapefile
+    from pyproj import Transformer
+    tr = Transformer.from_crs("EPSG:4326", "EPSG:5070", always_xy=True)
+    sf = shapefile.Reader(str(shp))
+    flds = [f[0] for f in sf.fields[1:]]
+    def col(rec, *names):
+        for n in names:
+            if n in flds:
+                return str(rec[flds.index(n)])
+        return ""
+    rings = []
+    for sr in sf.shapeRecords():
+        who = col(sr.record, "admin", "sov_a3", "iso_a2")
+        if not any(k in who for k in ("United States", "USA", "US")):
+            continue
+        # Skip Alaska and Hawaii: in frame they shrink the mainland to a strip.
+        nm = col(sr.record, "name", "gn_name")
+        if nm in ("Alaska", "Hawaii"):
+            continue
+        pts, parts = sr.shape.points, list(sr.shape.parts) + [len(sr.shape.points)]
+        for a, b in zip(parts[:-1], parts[1:]):
+            lon = [p[0] for p in pts[a:b]]
+            lat = [p[1] for p in pts[a:b]]
+            if len(lon) < 3:
+                continue
+            x, y = tr.transform(lon, lat)
+            rings.append(list(zip(x, y)))
+    return rings or None
+
+
 def load(path: Path) -> pd.DataFrame:
     d = pd.read_csv(path)
     need = {"station", "pft", "variable", "arm", "n", "rsr", "skill_score", "r",
@@ -114,19 +146,12 @@ def fig_maps(d, sites, out_png, basemap, figsize, linthresh, vmax):
         "ss_puor", ["#7f3b08", "#e08214", "#fee0b6", "#ffffff",
                     "#d8daeb", "#8073ac", "#2d004b"])
     norm = SymLogNorm(linthresh=linthresh, vmin=-vmax, vmax=vmax, base=10)
-    outline = None
-    if basemap is not None:
-        import geopandas as gpd
-        g = gpd.read_file(basemap)
-        # NOT "col": that name is used below for the histogram colour, and the
-        # leftover loop value reached set_title as a colour ("admin is not a
-        # valid value for color").
-        for _c in ("admin", "iso_a2", "sov_a3"):
-            if _c in g.columns:
-                g = g[g[_c].astype(str).str.contains("United States|^US$|USA",
-                                                     regex=True, na=False)]
-                break
-        outline = g.to_crs("EPSG:5070")
+    # PYSHP + PYPROJ, NOT GEOPANDAS. Job 39708 died on
+    # "No module named 'geopandas'": it was deliberately left out of
+    # requirements when the outline was optional, and then the outline became
+    # core. pyshp and pyproj are already in the venv and do the whole job --
+    # geopandas would drag in a stack for one polygon read.
+    outline = read_conus(basemap) if basemap is not None else None
 
     fig, axes = plt.subplots(len(ROWS), 3, figsize=figsize,
                              constrained_layout=True,
@@ -135,8 +160,10 @@ def fig_maps(d, sites, out_png, basemap, figsize, linthresh, vmax):
         w = wide(d, var)
         ax = axes[i, 0]
         if outline is not None:
-            outline.plot(ax=ax, facecolor="#f2f2f2", edgecolor="0.7",
-                         linewidth=0.35, zorder=0)
+            from matplotlib.patches import Polygon as MplPoly
+            for ring in outline:
+                ax.add_patch(MplPoly(ring, closed=True, facecolor="#f2f2f2",
+                                     edgecolor="0.7", linewidth=0.35, zorder=0))
             # CONUS only: Alaska and Hawaii would shrink the mainland to a strip.
             ax.set_xlim(-2.4e6, 2.4e6); ax.set_ylim(2.5e5, 3.3e6)
         for mk, kind in (("o", "deciduous"), ("^", "evergreen")):

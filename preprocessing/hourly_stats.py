@@ -190,9 +190,15 @@ def read_tower_hourly(root: Path, sid: str, gpp: str, max_qc: float,
     lst_hour = (ts.str[:4].astype(int) * 1000000 + ts.str[4:6].astype(int) * 10000
                 + ts.str[6:8].astype(int) * 100 + ts.str[8:10].astype(int))
     d["_h"] = lst_hour
+    missing = []
     for name, cands in (("GPP", TOWER_COLS[key]), ("LE", TOWER_COLS["LE"]),
                         ("H", TOWER_COLS["H"])):
         col = next((c for c in cands if c in d.columns), None)
+        # A MISSING COLUMN USED TO VANISH HERE. It became an all-NaN variable,
+        # then a NaN skill score, then a station absent from that variable's
+        # panel -- with nothing anywhere saying why. Record it and report it.
+        if col is None:
+            missing.append(f"{name}({'/'.join(cands)})")
         d[name] = np.nan if col is None else d[col]
         qc = QC_OF.get(name if name != "GPP" else key)
         if qc and qc in d.columns:
@@ -214,6 +220,7 @@ def read_tower_hourly(root: Path, sid: str, gpp: str, max_qc: float,
            "LE": g["LE"].to_numpy(float), "H": g["H"].to_numpy(float)}
     out["ET"] = out["LE"] * W_TO_MM_H
     out["offset_source"] = src
+    out["missing_cols"] = missing
     return out, None
 
 
@@ -302,8 +309,14 @@ def main(argv=None) -> int:
                 f"{tw['key'].max()//1000000}")
         src = tw.get("offset_source", "?")
         n_src[src] = n_src.get(src, 0) + 1
-        print(f"  {sid:<9}{pft:<10} n={n0:>7} matched hours   "
-              f"utc offset from {src}", flush=True)
+        # Per-variable n. LE's count used to be printed as if it were the
+        # station's, which hid variables that are present in the file but
+        # empty after QC -- GPP especially, since it is screened on NEE_QC.
+        per = "  ".join(f"{v}={got[('fixed', v)].get('n', 0):>6}"
+                        for v in ("GPP", "ET", "LE", "H"))
+        miss = tw.get("missing_cols") or []
+        print(f"  {sid:<9}{pft:<10} {per}   utc offset from {src}"
+              + (f"   NO COLUMN: {', '.join(miss)}" if miss else ""), flush=True)
 
     if not rows:
         print("ERROR: nothing computed", file=sys.stderr)

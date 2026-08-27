@@ -283,13 +283,19 @@ def fig_taylor(d, out_png, figsize):
     # fall outside, counted and reported rather than silently accommodated.
     smax = float(np.clip(np.nanpercentile(allsd, 95) * 1.15, 1.6, 2.5))
 
-    # Legend on the RIGHT, so the panels get the full height of the figure.
+    # 2x2 panels with the legend across the BOTTOM. Stacked in one column the
+    # quarter-circles were tall and thin, wasting most of the page width; square
+    # panels let each diagram use its full radius at 6.5in total width.
+    ncol = 2
+    nrow = -(-len(ROWS) // ncol)
     fig = plt.figure(figsize=figsize, constrained_layout=True)
-    gs = fig.add_gridspec(len(ROWS), 2, width_ratios=[2.5, 1])
+    gs = fig.add_gridspec(nrow + 1, ncol,
+                          height_ratios=[1] * nrow + [0.34])
     off = 0
     for i, (label, var) in enumerate(ROWS):
-        ax = fig.add_subplot(gs[i, 0])
-        T.draw_axes(ax, smax, half, xlabel=(i == len(ROWS) - 1))
+        r, c = divmod(i, ncol)
+        ax = fig.add_subplot(gs[r, c])
+        T.draw_axes(ax, smax, half, xlabel=(r == nrow - 1))
         th = np.linspace(0, 2 * np.pi, 400)
         for rms in (0.5, 1.0, 1.5):
             xc, yc = 1 + rms * np.cos(th), rms * np.sin(th)
@@ -317,8 +323,8 @@ def fig_taylor(d, out_png, figsize):
                            alpha=.85, zorder=4)
         ax.set_ylabel(label, fontsize=10)
 
-    axl = fig.add_subplot(gs[:2, 1]); _mini_legend(axl, C_DEC, C_EVE)
-    axk = fig.add_subplot(gs[2:, 1]); axk.axis("off")
+    axl = fig.add_subplot(gs[nrow, 0]); _mini_legend(axl, C_DEC, C_EVE)
+    axk = fig.add_subplot(gs[nrow, 1]); axk.axis("off")
     handles = [
         Line2D([], [], marker="o", ls="", color=C_DEC, label="deciduous, fixed LMA"),
         Line2D([], [], marker="o", ls="", mfc="none", mec=C_DEC, color="none",
@@ -327,11 +333,12 @@ def fig_taylor(d, out_png, figsize):
         Line2D([], [], marker="^", ls="", mfc="none", mec=C_EVE, color="none",
                label="evergreen, dynamic LMA"),
         Line2D([], [], marker="*", ls="", color="0.15", label="AmeriFlux Tower")]
-    axk.legend(handles=handles, loc="upper center", frameon=False, fontsize=7,
-               handletextpad=.5, borderaxespad=0)
+    axk.legend(handles=handles, loc="center", frameon=False, fontsize=7,
+               ncol=2, handletextpad=.5, borderaxespad=0,
+               columnspacing=1.0, labelspacing=.5)
     if off:
-        axk.text(.5, .06, f"{off} point(s) beyond the axis", ha="center",
-                 fontsize=6, color="0.45", transform=axk.transAxes)
+        axk.text(.5, .02, f"{off} point(s) beyond the axis", ha="center",
+                 va="bottom", fontsize=6, color="0.45", transform=axk.transAxes)
     fig.savefig(out_png, dpi=200, bbox_inches="tight")
     plt.close(fig)
 
@@ -346,7 +353,7 @@ def main(argv=None) -> int:
     ap.add_argument("--vmax", type=float, default=1.0)
     ap.add_argument("--out", type=Path, default=None)
     ap.add_argument("--map-size", default="7.5x10")
-    ap.add_argument("--taylor-size", default="5x11")
+    ap.add_argument("--taylor-size", default="6.5x8")
     a = ap.parse_args(argv)
 
     try:

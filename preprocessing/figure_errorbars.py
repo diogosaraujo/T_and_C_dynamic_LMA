@@ -9,11 +9,22 @@ the DYNAMIC arm, RMSE of the FIXED arm, and the skill score. Mean with +/-1 SD,
 with the individual stations drawn behind so the spread is visible rather than
 merely summarised: a mean that hides a bimodal fleet is worse than no mean.
 
-TWO Y-AXES, ON PURPOSE. RMSE carries the flux's units (gC/m2/d, mm/d, W/m2) and
-the skill score is dimensionless. Sharing one axis would either squash the skill
-score against zero or force the RMSEs off-scale, and it would invite the two to
-be read as comparable numbers. RMSE is on the left in its own units; SS is on the
-right, centred on zero with its own scale, and marked in a different colour.
+ONE DIMENSIONLESS AXIS. The error bars are RSR = RMSE / SD(observed), not raw
+RMSE. RMSE carries the flux's units, which forced a twin axis and left the four
+rows on incomparable scales -- an RMSE of 0.8 gC/m2/d and one of 0.8 W/m2 sat at
+the same height meaning nothing alike. RSR is unitless (both terms rescale
+together, verified exactly across three unit systems), so GPP, ET, H and LE now
+share one ruler and "which flux does dynamic LMA help most" is readable off the
+figure rather than inferred.
+
+RSR = 1 is drawn as a reference: there the model's error equals the observed
+standard deviation, i.e. no better than predicting the observed mean, which is
+NSE = 0. Moriasi et al. (2007) rate RSR <= 0.5 very good and > 0.7
+unsatisfactory; the 0.5 line is shaded.
+
+THE SKILL SCORE IS UNCHANGED BY THIS. The observed SD cancels between the arms,
+so 1 - RSR_dyn/RSR_fixed equals 1 - RMSE_dyn/RMSE_fixed identically. Only the
+bars are renormalised.
 
 WHY SS IS NOT JUST A FUNCTION OF THE TWO RMSEs HERE. It is per station -- each
 station's own 1 - RMSE_dyn/RMSE_fixed -- and the mean of a ratio is not the
@@ -43,9 +54,8 @@ from figure_skill_maps import (SEASON_FIGS, Missing, read_model,  # noqa: E402
                                read_sites, read_tower, rmse)
 from results_dir import NoResultsDir, resolve_figure             # noqa: E402
 
-# Row order as requested: GPP, ET, H, LE. Units are for the LEFT axis, which
-# really is an RMSE in those units -- unlike the skill maps, where printing them
-# would have been misleading.
+# Row order as requested: GPP, ET, H, LE. The third field is kept only for the
+# CSV, where the raw RMSE is still dimensional; the axis itself is unitless.
 ROWS = [("GPP", "GPP", "gC m$^{-2}$ d$^{-1}$"),
         ("ET",  "ET",  "mm d$^{-1}$"),
         ("H",   "H",   "W m$^{-2}$"),
@@ -55,6 +65,8 @@ COLS = [("evergreen", "all"), ("evergreen", "drought"),
         ("deciduous", "all"), ("deciduous", "drought")]
 
 C_RMSE_DYN, C_RMSE_FIX, C_SS = "#b2182b", "#4d4d4d", "#2166ac"
+# Moriasi et al. (2007) performance bands for RSR.
+RSR_VERY_GOOD, RSR_UNSATISFACTORY = 0.5, 0.7
 
 
 def per_station(model, tower, spei, var, threshold):
@@ -80,7 +92,12 @@ def per_station(model, tower, spei, var, threshold):
                 continue
             rf, rd = rmse(f[m], o[m]), rmse(d[m], o[m])
             ss = (1 - rd / rf) if rf > 0 else np.nan
-            got[sub] = (rf, rd, ss, int(m.sum()))
+            sdo = float(np.std(o[m], ddof=1)) if m.sum() > 1 else np.nan
+            # RSR = RMSE / SD(obs). Raw RMSE is kept alongside so the
+            # dimensional values remain available in the CSV.
+            rsr_f = rf / sdo if (np.isfinite(sdo) and sdo > 0) else np.nan
+            rsr_d = rd / sdo if (np.isfinite(sdo) and sdo > 0) else np.nan
+            got[sub] = (rf, rd, ss, int(m.sum()), sdo, rsr_f, rsr_d)
         if got:
             out[sid] = got
     return out
@@ -96,83 +113,68 @@ def make_figure(tables, sites, title, out_png, figsize):
                              constrained_layout=True)
     for i, (label, mvar, unit) in enumerate(ROWS):
         per = tables.get(mvar, {})
-        # ONE SCALE PER ROW, both axes. With per-panel autoscaling the four
-        # columns of a row came out on different limits -- GPP topped at 1.6 for
-        # evergreen and 1.7 for deciduous -- so comparing forest types by eye,
-        # which is the entire point of this layout, silently compared different
-        # rulers. Limits are computed across the whole row first.
-        rr, sv = [], []
+        # One scale per row. RSR and SS are both dimensionless and both O(1),
+        # so they share a single axis -- no twin spine, and the four columns of
+        # a row are directly comparable.
+        vals_all = []
         for sid, g in per.items():
-            if sid not in sites:
-                continue
-            for sub, vals in g.items():
-                rr += [vals[0], vals[1]]
-                sv.append(vals[2])
-        rr = np.array([x for x in rr if np.isfinite(x)], float)
-        sv = np.array([x for x in sv if np.isfinite(x)], float)
-        rlim = (0, float(np.nanpercentile(rr, 99) * 1.15)) if rr.size else (0, 1)
-        slim = float(max(0.05, np.nanpercentile(np.abs(sv), 95) * 1.25))             if sv.size else 0.5
+            if sid in sites:
+                for v in g.values():
+                    vals_all += [v[5], v[6], v[2]]
+        vals_all = np.array([x for x in vals_all if np.isfinite(x)], float)
+        hi = float(np.nanpercentile(vals_all, 98) * 1.15) if vals_all.size else 1.5
+        lo = float(min(-0.25, np.nanpercentile(vals_all, 2) * 1.15))             if vals_all.size else -0.25
         for j, (pft, sub) in enumerate(COLS):
             ax = axes[i, j]
-            rf, rd, ss = [], [], []
+            rsr_f, rsr_d, ss = [], [], []
             for sid, g in per.items():
                 if sid not in sites or sites[sid][2] != pft or sub not in g:
                     continue
-                a, b, c, _ = g[sub]
-                rf.append(a); rd.append(b); ss.append(c)
-            rf, rd = np.array(rf, float), np.array(rd, float)
-            ss = np.array(ss, float)
-            n = len(rf)
+                v = g[sub]
+                rsr_f.append(v[5]); rsr_d.append(v[6]); ss.append(v[2])
+            series = [(np.array(rsr_d, float), C_RMSE_DYN, "o"),
+                      (np.array(rsr_f, float), C_RMSE_FIX, "o"),
+                      (np.array(ss, float), C_SS, "D")]
+            n = int(np.isfinite(series[0][0]).sum())
 
-            axr = ax.twinx()
-            for k, (vals, col) in enumerate(((rd, C_RMSE_DYN), (rf, C_RMSE_FIX))):
-                v = vals[np.isfinite(vals)]
+            # RSR = 1: error equal to the observed SD, i.e. no better than the
+            # observed mean (NSE = 0). Below 0.5 is Moriasi's "very good".
+            ax.axhspan(lo, RSR_VERY_GOOD, color="#4daf4a", alpha=.05, zorder=0)
+            ax.axhline(1.0, color="0.55", lw=.6, ls="--", zorder=1)
+            ax.axhline(0.0, color="0.55", lw=.6, ls=":", zorder=1)
+            for k, (v, col, mk) in enumerate(series):
+                v = v[np.isfinite(v)]
                 if not v.size:
                     continue
-                ax.scatter(np.full(v.size, k) + np.random.default_rng(0)
+                ax.scatter(np.full(v.size, k) + np.random.default_rng(k)
                            .uniform(-.09, .09, v.size), v, s=5, color=col,
                            alpha=.28, edgecolor="none", zorder=2)
-                ax.errorbar([k], [v.mean()], yerr=[v.std(ddof=1) if v.size > 1 else 0],
-                            fmt="o", ms=5, color=col, capsize=3, lw=1.4, zorder=3)
-            v = ss[np.isfinite(ss)]
-            if v.size:
-                axr.scatter(np.full(v.size, 2) + np.random.default_rng(1)
-                            .uniform(-.09, .09, v.size), v, s=5, color=C_SS,
-                            alpha=.28, edgecolor="none", zorder=2)
-                axr.errorbar([2], [v.mean()],
-                             yerr=[v.std(ddof=1) if v.size > 1 else 0],
-                             fmt="D", ms=5, color=C_SS, capsize=3, lw=1.4, zorder=3)
-            axr.axhline(0, color=C_SS, lw=.5, ls=":", zorder=1)
-            ax.set_ylim(*rlim)
-            axr.set_ylim(-slim, slim)
-
+                ax.errorbar([k], [v.mean()],
+                            yerr=[v.std(ddof=1) if v.size > 1 else 0],
+                            fmt=mk, ms=5, color=col, capsize=3, lw=1.4, zorder=3)
+            ax.set_ylim(lo, hi)
             ax.set_xlim(-0.5, 2.5)
             ax.set_xticks([0, 1, 2])
-            ax.set_xticklabels(["RMSE$_{dyn}$", "RMSE$_{fix}$", "SS"]
+            ax.set_xticklabels(["RSR$_{dyn}$", "RSR$_{fix}$", "SS"]
                                if i == len(ROWS) - 1 else [], fontsize=6)
-            ax.tick_params(axis="y", labelsize=6,
-                           labelleft=(j == 0))
-            axr.tick_params(axis="y", labelsize=6, colors=C_SS)
+            ax.tick_params(axis="y", labelsize=6, labelleft=(j == 0))
             ax.text(.03, .95, f"n={n}", transform=ax.transAxes, fontsize=5.5,
                     va="top", color="0.35")
             if i == 0:
-                ax.set_title(f"{pft}\n{sub} steps", fontsize=8)
+                ax.set_title(pft + "\n" + sub + " steps", fontsize=8)
             if j == 0:
-                ax.set_ylabel(f"{label}\nRMSE ({unit})", fontsize=7)
-            if j == len(COLS) - 1:
-                axr.set_ylabel("skill score", fontsize=7, color=C_SS)
-            else:
-                axr.set_yticklabels([])
+                ax.set_ylabel(label, fontsize=9)
 
     handles = [
-        Line2D([], [], marker="o", ls="", color=C_RMSE_DYN, label="RMSE dynamic"),
-        Line2D([], [], marker="o", ls="", color=C_RMSE_FIX, label="RMSE fixed"),
-        Line2D([], [], marker="D", ls="", color=C_SS,
-               label="skill score (right axis)")]
+        Line2D([], [], marker="o", ls="", color=C_RMSE_DYN, label="RSR dynamic"),
+        Line2D([], [], marker="o", ls="", color=C_RMSE_FIX, label="RSR fixed"),
+        Line2D([], [], marker="D", ls="", color=C_SS, label="skill score"),
+        Line2D([], [], ls="--", color="0.55", label="RSR = 1 (NSE = 0)")]
     fig.legend(handles=handles, loc="lower center", ncol=3, frameon=False,
                fontsize=7, bbox_to_anchor=(0.5, -0.03))
-    fig.suptitle(f"{title}\nmean $\\pm$ 1 SD across stations; "
-                 f"points are individual stations", fontsize=9)
+    sub2 = ("RSR = RMSE/SD(obs), dimensionless; mean $\\pm$ 1 SD across "
+            "stations, points are individual stations")
+    fig.suptitle(title + chr(10) + sub2, fontsize=9)
     out_png.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_png, dpi=200, bbox_inches="tight")
     plt.close(fig)
@@ -221,6 +223,21 @@ def main(argv=None) -> int:
             nd = sum(1 for g in t.values() if "drought" in g)
             print(f"  {name:<9}{mv:<5} {len(t):>3} stations, {nd:>3} with a "
                   f"drought subset", flush=True)
+        import csv as _csv
+        csv_path = out_dir / f"errorbars_{name}.csv"
+        with csv_path.open("w", newline="", encoding="utf-8") as fh:
+            w = _csv.writer(fh)
+            w.writerow(["station", "pft", "variable", "subset", "n",
+                        "sd_obs", "rmse_fixed", "rmse_dyn",
+                        "rsr_fixed", "rsr_dyn", "skill_score"])
+            for _, mv, _u in ROWS:
+                for sid, g in sorted(tables[mv].items()):
+                    pft = sites[sid][2] if sid in sites else ""
+                    for sub, v in sorted(g.items()):
+                        w.writerow([sid, pft, mv, sub, v[3],
+                                    f"{v[4]:.6g}", f"{v[0]:.6g}", f"{v[1]:.6g}",
+                                    f"{v[5]:.6g}", f"{v[6]:.6g}", f"{v[2]:.6g}"])
+        print(f"  -> {csv_path}")
         png = out_dir / f"errorbars_{name}.png"
         make_figure(tables, sites, f"RMSE and skill score, {name} steps",
                     png, (w, h))

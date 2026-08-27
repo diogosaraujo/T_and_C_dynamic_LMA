@@ -161,10 +161,13 @@ def make_figure(tables: dict, sites: dict, title: str, out_png: Path,
         sh = [v[0] for t in tables.values() for st in t.values() for v in st.values()]
         smax = float(min(3.0, max(1.6, np.percentile(sh, 98) * 1.1)))
 
-    fig, axes = plt.subplots(len(ROWS), 2, figsize=figsize,
-                             constrained_layout=True)
+    # ONE COLUMN -- see the note in figure_skill_maps: the drought subset rests
+    # on fewer periods than the all-steps one, so a side-by-side comparison
+    # mixes a drought signal with a sample-size effect.
+    fig, axes = plt.subplots(len(ROWS), 1, figsize=figsize,
+                             constrained_layout=True, squeeze=False)
     for i, (label, mvar, unit) in enumerate(ROWS):
-        for j, cond in enumerate(("all", "drought")):
+        for j, cond in enumerate(("all",)):
             ax = axes[i, j]
             draw_axes(ax, smax, half, xlabel=(i == len(ROWS) - 1))
             got = tables.get(mvar, {})
@@ -221,7 +224,7 @@ def main(argv=None) -> int:
     ap.add_argument("--threshold", type=float, default=-1.0)
     ap.add_argument("--min-n", type=int, default=3,
                     help="mathematical floor only; a correlation needs 3 points")
-    ap.add_argument("--figsize", default="6.5x10")
+    ap.add_argument("--figsize", default="5x11")
     ap.add_argument("--out", type=Path, default=None)
     a = ap.parse_args(argv)
 

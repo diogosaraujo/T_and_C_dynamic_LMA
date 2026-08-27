@@ -61,8 +61,11 @@ ROWS = [("GPP", "GPP", "gC m$^{-2}$ d$^{-1}$"),
         ("H",   "H",   "W m$^{-2}$"),
         ("LE",  "QE",  "W m$^{-2}$")]
 
-COLS = [("evergreen", "all"), ("evergreen", "drought"),
-        ("deciduous", "all"), ("deciduous", "drought")]
+# TWO COLUMNS, one per forest type, all steps. The drought columns are gone:
+# a drought subset rests on far fewer periods than the all-steps one, so the
+# pair could be read as a drought effect when part of it is sample size.
+# Drought is still computed and written to the CSV beside these.
+COLS = [("evergreen", "all"), ("deciduous", "all")]
 
 C_RMSE_DYN, C_RMSE_FIX, C_SS = "#b2182b", "#4d4d4d", "#2166ac"
 # Moriasi et al. (2007) performance bands for RSR.

@@ -351,10 +351,14 @@ def make_figure(table: dict, sites: dict, title: str, out_png: Path,
         g = gpd.read_file(basemap)
         outline = g.to_crs("EPSG:5070").dissolve()
 
-    fig, axes = plt.subplots(len(ROWS), 2, figsize=figsize,
-                             constrained_layout=True)
+    # ONE COLUMN. The drought column is gone: a drought subset and an all-steps
+    # subset are built from different numbers of periods, and putting them side
+    # by side invited the difference to be read as a drought effect when part of
+    # it is sample size. Drought is assessed separately.
+    fig, axes = plt.subplots(len(ROWS), 1, figsize=figsize,
+                             constrained_layout=True, squeeze=False)
     for i, (label, mvar, unit) in enumerate(ROWS):
-        for j, (col, which) in enumerate((("all steps", 0), ("drought only", 1))):
+        for j, (col, which) in enumerate((("all steps", 0),)):
             ax = axes[i, j]
             if outline is not None:
                 outline.boundary.plot(ax=ax, color="0.6", linewidth=0.4)
@@ -375,6 +379,9 @@ def make_figure(table: dict, sites: dict, title: str, out_png: Path,
                 if xs:
                     ax.scatter(xs, ys, c=cs, cmap=cmap, norm=norm, marker=marker,
                                s=34, edgecolor="0.25", linewidth=0.35, zorder=3)
+            # Equal aspect, or Albers CONUS is stretched to fill the panel and
+            # the geography is quietly wrong.
+            ax.set_aspect("equal")
             ax.set_xticks([]); ax.set_yticks([])
             for sp in ax.spines.values():
                 sp.set_linewidth(0.4); sp.set_color("0.6")
@@ -420,7 +427,7 @@ def main(argv=None) -> int:
                     help="us_eco_l3 shapefile for the CONUS outline")
     ap.add_argument("--linthresh", type=float, default=0.05)
     ap.add_argument("--vmax", type=float, default=1.0)
-    ap.add_argument("--figsize", default="6.5x10",
+    ap.add_argument("--figsize", default="6.5x9",
                     help="WxH inches; portrait by default")
     ap.add_argument("--out", type=Path, default=None)
     a = ap.parse_args(argv)

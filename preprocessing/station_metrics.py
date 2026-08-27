@@ -20,14 +20,22 @@ members as five stations.
     subset in {all, drought, normal}                                      (11)
 
   station_sensitivity.csv
-    dataset,gcm,scenario,station,pft,variable,predictor,subset,n,
+    dataset,gcm,scenario,station,pft,variable,freq,period,predictor,subset,n,
     slope_fixed,slope_dyn,delta_slope,se_fixed,se_dyn,
     r2_fixed,r2_dyn,p_fixed,p_dyn,
     slope_fixed_std,slope_dyn_std,delta_slope_std,corr_ta_spei
 
-    predictor Ta       yearly flux on yearly mean air temperature         (13)
-    predictor SPEI12   on SPEI-12 at the water-year end                   (14)
+    predictor Ta       flux on that period's mean air temperature         (13)
+    predictor SPEI12   annual: SPEI-12 at the water-year end              (14)
+    predictor SPEI3    monthly: that month's SPEI-3
+                       seasonal: SPEI-3 at the season's last month
     predictor LMA      on that year's LMA -- DYNAMIC ARM ONLY             (15)
+
+    AT EVERY FREQUENCY. Each fit runs ACROSS YEARS within one period, so a
+    monthly table holds twelve separate slopes per station and variable -- July
+    GPP against July SPEI-3 across years -- and a seasonal table holds four.
+    Pooling periods before fitting would average a July sensitivity with a
+    January one and hide the seasonality the mechanism predicts.
 
 DELTA_SLOPE IS THE RESULT; the per-arm slopes are context. Both arms see
 identical forcing, so any moisture confounding inside the temperature slope --
@@ -199,30 +207,52 @@ def _ols(x: np.ndarray, y: np.ndarray) -> dict:
             "slope_std": float(b * sx / sy) if sy > 0 else np.nan}
 
 
-def sensitivity(annual: pd.DataFrame, lma: pd.DataFrame | None) -> pd.DataFrame:
-    """Yearly flux regressed on Ta, SPEI-12 and LMA, per arm, per subset."""
+def sensitivity(d: pd.DataFrame, lma: pd.DataFrame | None,
+                freq: str = "annual") -> pd.DataFrame:
+    """Flux regressed on Ta, SPEI and LMA, per arm, per subset, PER PERIOD.
+
+    AT EVERY FREQUENCY, NOT ONLY ANNUAL. For monthly the regression is that
+    month's flux against that month's SPEI-3, across years -- twelve separate
+    fits per station and variable. For seasonal it is the season's flux against
+    SPEI-3 at the season's last month, four fits. Annual is the flux against
+    SPEI-12 at the water-year end, one fit.
+
+    Each fit is therefore a genuine interannual sensitivity for that period, not
+    a pooled slope across periods: a July slope and a January slope are
+    different quantities, and averaging them before fitting would hide the
+    seasonality the mechanism predicts.
+
+    LMA is annual whatever the frequency -- one value per year -- so a monthly
+    fit asks "does July GPP respond to that year's LMA", which is a meaningful
+    question and the one the dynamic arm is built to answer.
+    """
     out = []
     idx = ["gcm", "scenario", "station"]
     # Predictors live as their own 'variable' rows; pivot them out per station.
-    pred = (annual[annual["variable"].isin(PREDICTOR_VARS)]
-            .pivot_table(index=idx + ["year"], columns="variable",
+    # Predictors are per (station, year, PERIOD): Ta for that period and the
+    # SPEI whose window matches it.
+    key_p = idx + ["year", "period"]
+    pred = (d[d["variable"].isin(PREDICTOR_VARS)]
+            .pivot_table(index=key_p, columns="variable",
                          values="fixed", aggfunc="mean").reset_index())
-    spei = (annual[["gcm", "scenario", "station", "year", "spei", "class"]]
-            .drop_duplicates())
-    pred = pred.merge(spei, on=idx + ["year"], how="left")
-    if lma is not None:
+    spei = d[key_p + ["spei", "class"]].drop_duplicates(subset=key_p)
+    pred = pred.merge(spei, on=key_p, how="left")
+    if lma is not None:                     # LMA is annual at every frequency
         pred = pred.merge(lma, on=idx + ["year"], how="left")
 
-    flux = annual[~annual["variable"].isin(PREDICTOR_VARS)]
-    for keys, g in flux.groupby(idx + ["variable"], observed=True, dropna=False):
-        rec = dict(zip(idx + ["variable"], keys))
-        j = g.merge(pred, on=idx + ["year"], how="left", suffixes=("", "_p"))
+    flux = d[~d["variable"].isin(PREDICTOR_VARS)]
+    for keys, g in flux.groupby(idx + ["variable", "period"], observed=True,
+                                dropna=False):
+        rec = dict(zip(idx + ["variable", "period"], keys))
+        rec["freq"] = freq
+        j = g.merge(pred, on=key_p, how="left", suffixes=("", "_p"))
         cls = j["class_p"] if "class_p" in j.columns else j.get("class")
         for subset in ("all", "drought", "normal"):
             s = j if subset == "all" else j[cls == subset]
             if s.empty:
                 continue
-            for name, col in (("Ta", "Ta"), ("SPEI12", "spei"), ("LMA", "LMA")):
+            spei_name = "SPEI12" if freq == "annual" else "SPEI3"
+            for name, col in (("Ta", "Ta"), (spei_name, "spei"), ("LMA", "LMA")):
                 if col not in s.columns:
                     continue
                 x = pd.to_numeric(s[col], errors="coerce").to_numpy(float)
@@ -299,7 +329,7 @@ def main(argv=None) -> int:
     all_m, all_s, skipped = [], [], []
     for ds in [x.strip() for x in a.datasets.split(",")]:
         lab = labs["era5"] if ds == "era5" else labs["gcm"]
-        annual_full = None
+        per_freq = {}
         for freq in FREQS:
             d, why = load(root, ds, freq)
             if d is None:
@@ -308,15 +338,17 @@ def main(argv=None) -> int:
             m = metrics(d)
             m["dataset"] = ds
             all_m.append(m)
-            if freq == "annual":
-                annual_full = d
+            per_freq[freq] = d
             print(f"  {ds:<11}{freq:<9}{len(d):>9} rows -> {len(m):>7} metric rows",
                   flush=True)
-        if annual_full is not None:
-            s = sensitivity(annual_full, read_lma(root, ds))
+        for freq, dd in per_freq.items():
+            s = sensitivity(dd, read_lma(root, ds), freq)
+            if s.empty:
+                continue
             s["dataset"] = ds
             all_s.append(s)
-            print(f"  {ds:<11}{'sens':<9}{len(s):>9} regression rows", flush=True)
+            print(f"  {ds:<11}{'sens ' + freq:<14}{len(s):>7} regression rows",
+                  flush=True)
 
     if not all_m:
         print("ERROR: nothing computed", file=sys.stderr)

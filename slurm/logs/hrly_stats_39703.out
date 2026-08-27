@@ -1,0 +1,95 @@
+job        : 39703
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-27T05:22:08Z
+
+  US-Bar   deciduous  n= 135412 matched hours   utc offset from longitude
+  US-CRK   evergreen  n=      0 matched hours   utc offset from longitude
+  US-CS2   evergreen  n=  14272 matched hours   utc offset from longitude
+  US-ChR   deciduous  n= 108873 matched hours   utc offset from longitude
+  US-Cst   evergreen  n=  35202 matched hours   utc offset from longitude
+  US-Dk2   deciduous  n=  66448 matched hours   utc offset from longitude
+  US-Dk3   evergreen  n=  64669 matched hours   utc offset from longitude
+  US-Fmf   evergreen  n=  44802 matched hours   utc offset from longitude
+  US-Fuf   evergreen  n=  42370 matched hours   utc offset from longitude
+  US-GLE   evergreen  n= 135987 matched hours   utc offset from longitude
+  US-HBK   deciduous  n=  30706 matched hours   utc offset from longitude
+  US-Ho2   evergreen  n= 178083 matched hours   utc offset from longitude
+  US-Ho3   evergreen  n= 116575 matched hours   utc offset from longitude
+  US-MEF   evergreen  n=      0 matched hours   utc offset from longitude
+  US-MOz   deciduous  n= 139807 matched hours   utc offset from longitude
+  US-Me1   evergreen  n=   7928 matched hours   utc offset from longitude
+  US-Me6   evergreen  n=  87379 matched hours   utc offset from longitude
+  US-Me7   evergreen  n=      0 matched hours   utc offset from longitude
+  US-MtB   evergreen  n=  85315 matched hours   utc offset from longitude
+  US-NC2   evergreen  n= 119198 matched hours   utc offset from longitude
+  US-NC3   evergreen  n=  58046 matched hours   utc offset from longitude
+  US-NC5   evergreen  n=      0 matched hours   utc offset from longitude
+  US-NR1   evergreen  n= 179092 matched hours   utc offset from longitude
+  US-Oho   deciduous  n=  80289 matched hours   utc offset from longitude
+  US-PFL   deciduous  n=   2462 matched hours   utc offset from longitude
+  US-PFb   evergreen  n=   2255 matched hours   utc offset from longitude
+  US-PFc   deciduous  n=   2394 matched hours   utc offset from longitude
+  US-PFg   evergreen  n=   1977 matched hours   utc offset from longitude
+  US-PFh   evergreen  n=   2285 matched hours   utc offset from longitude
+  US-PFi   deciduous  n=   1959 matched hours   utc offset from longitude
+  US-PFj   deciduous  n=   2386 matched hours   utc offset from longitude
+  US-PFk   deciduous  n=   2320 matched hours   utc offset from longitude
+  US-PFm   deciduous  n=   2542 matched hours   utc offset from longitude
+  US-PFn   deciduous  n=   2482 matched hours   utc offset from longitude
+  US-PFp   deciduous  n=   2532 matched hours   utc offset from longitude
+  US-PFq   deciduous  n=   2442 matched hours   utc offset from longitude
+  US-PFt   evergreen  n=   2474 matched hours   utc offset from longitude
+  US-SHC   evergreen  n=  28579 matched hours   utc offset from longitude
+  US-SP1   evergreen  n= 155207 matched hours   utc offset from longitude
+  US-SSH   deciduous  n=  32242 matched hours   utc offset from longitude
+  US-Slt   deciduous  n= 137004 matched hours   utc offset from longitude
+  US-UMd   deciduous  n= 116569 matched hours   utc offset from longitude
+  US-Vcp   evergreen  n= 113365 matched hours   utc offset from longitude
+  US-WCr   deciduous  n= 138395 matched hours   utc offset from longitude
+  US-xAB   evergreen  n=  13430 matched hours   utc offset from longitude
+  US-xBL   deciduous  n=   9852 matched hours   utc offset from longitude
+  US-xBR   deciduous  n=  15047 matched hours   utc offset from longitude
+  US-xGR   deciduous  n=  11491 matched hours   utc offset from longitude
+  US-xHA   deciduous  n=  13708 matched hours   utc offset from longitude
+  US-xJE   evergreen  n=  13981 matched hours   utc offset from longitude
+  US-xLE   deciduous  n=   6368 matched hours   utc offset from longitude
+  US-xML   deciduous  n=  15979 matched hours   utc offset from longitude
+  US-xNW   evergreen  n=   7061 matched hours   utc offset from longitude
+  US-xRM   evergreen  n=  14809 matched hours   utc offset from longitude
+  US-xRN   deciduous  n=  15746 matched hours   utc offset from longitude
+  US-xSC   deciduous  n=   9164 matched hours   utc offset from longitude
+  US-xSE   deciduous  n=  12407 matched hours   utc offset from longitude
+  US-xSP   evergreen  n=  14349 matched hours   utc offset from longitude
+  US-xST   deciduous  n=  17440 matched hours   utc offset from longitude
+  US-xTA   evergreen  n=  14934 matched hours   utc offset from longitude
+  US-xTE   evergreen  n=  13793 matched hours   utc offset from longitude
+  US-xTR   deciduous  n=  15997 matched hours   utc offset from longitude
+  US-xUK   deciduous  n=   8553 matched hours   utc offset from longitude
+  US-xWR   evergreen  n=  16594 matched hours   utc offset from longitude
+  US-xYE   evergreen  n=  11057 matched hours   utc offset from longitude
+
+520 row(s) over 65 station(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/hourly_stats.csv
+
+SKIPPED 33:
+  ! US-Blk: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CPF: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CPk: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CZ2: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CZ3: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CZ4: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Cwt: no FLUXNET archive (site has no ONEFlux product)
+  ! US-DPP: no FLUXNET archive (site has no ONEFlux product)
+  ! US-GBT: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Ha1: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Ha2: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Ho1: no FLUXNET archive (site has no ONEFlux product)
+  ! US-LPH: no FLUXNET archive (site has no ONEFlux product)
+  ! US-MMS: no FLUXNET archive (site has no ONEFlux product)
+  ! US-MRf: no FLUXNET archive (site has no ONEFlux product)
+  ... and 18 more
+
+finished   : 2026-08-27T05:28:06Z
+exit status: 1  (1 = a station was skipped; read the list above)

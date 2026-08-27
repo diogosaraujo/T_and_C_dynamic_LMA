@@ -66,6 +66,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy import stats as _st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from results_dir import NoResultsDir, resolve_out                 # noqa: E402
@@ -200,8 +201,7 @@ def _ols(x: np.ndarray, y: np.ndarray) -> dict:
     se = float(np.sqrt(ss_res / (n - 2) / sxx)) if n > 2 and sxx > 0 else np.nan
     p = np.nan
     if np.isfinite(se) and se > 0:
-        from scipy import stats
-        p = float(2 * stats.t.sf(abs(b / se), n - 2))
+        p = float(2 * _st.t.sf(abs(b / se), n - 2))
     sx, sy = np.std(xx, ddof=1), np.std(yy, ddof=1)
     return {"n": n, "slope": float(b), "se": se, "r2": r2, "p": p,
             "slope_std": float(b * sx / sy) if sy > 0 else np.nan}
@@ -240,13 +240,20 @@ def sensitivity(d: pd.DataFrame, lma: pd.DataFrame | None,
     if lma is not None:                     # LMA is annual at every frequency
         pred = pred.merge(lma, on=idx + ["year"], how="left")
 
+    # MERGE ONCE, THEN GROUP -- not a merge per group. The first version put
+    # this join inside the loop, so historical monthly ran 71,400 merges against
+    # a 153,000-row predictor table and job 39688 was still going after two
+    # hours with the two SSP scenarios, each ~3x larger, still ahead of it.
     flux = d[~d["variable"].isin(PREDICTOR_VARS)]
-    for keys, g in flux.groupby(idx + ["variable", "period"], observed=True,
+    flux = flux.merge(pred, on=key_p, how="left", suffixes=("", "_p"))
+    cls_all = (flux["class_p"] if "class_p" in flux.columns
+               else flux.get("class"))
+    flux = flux.assign(_cls=cls_all)
+    for keys, j in flux.groupby(idx + ["variable", "period"], observed=True,
                                 dropna=False):
         rec = dict(zip(idx + ["variable", "period"], keys))
         rec["freq"] = freq
-        j = g.merge(pred, on=key_p, how="left", suffixes=("", "_p"))
-        cls = j["class_p"] if "class_p" in j.columns else j.get("class")
+        cls = j["_cls"]
         for subset in ("all", "drought", "normal"):
             s = j if subset == "all" else j[cls == subset]
             if s.empty:

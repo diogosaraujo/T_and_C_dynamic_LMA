@@ -79,7 +79,13 @@ def utc_offset(root: Path, sid: str, lon: float | None = None):
     score survives it. Only the absolute RMSE and correlation suffer, which is
     why the source is written into the output rather than hidden.
     """
-    hits = sorted(Path(root).glob(f"**/*{sid}*BIF*.csv"))
+    # "*BIF*" also matches the five BIFVARINFO files, and BIFVARINFO sorts
+    # BEFORE BIF_ ("V" < "_"), so hits[0] was always the wrong file and every
+    # site fell through to the longitude fallback -- job 39703 reported
+    # "utc offset from longitude" everywhere while US-Bar's BIF held
+    # "US-Bar,4579,UTC_OFFSET,UTC_OFFSET,-5" all along. Same collision as the
+    # FLUXMET/ERA5/BIFVARINFO one in the data files.
+    hits = sorted(Path(root).glob(f"**/*{sid}*_BIF_*.csv"))
     if hits:
         # The BIF is not UTF-8 at every site: job 39698 died on byte 0xb5, a
         # micro sign in a units string. Only one row is wanted, so decode
@@ -146,7 +152,13 @@ def read_model_hourly(path: Path) -> dict:
 def read_tower_hourly(root: Path, sid: str, gpp: str, max_qc: float,
                       lon: float | None = None):
     """Tower hourly series keyed by UTC hour, or (None, reason)."""
-    hits0 = sorted(Path(root).glob(f"**/*{sid}*FLUXMET*HH*.csv"))
+    # HALF-HOURLY *OR* HOURLY. The resolution varies by site and is carried in
+    # the filename -- US-Ha1, US-MMS, US-Ho1 and US-Cwt publish HR, and a
+    # HH-only glob dropped four of the longest records in the network. The
+    # groupby below aggregates either one to whole hours unchanged: HH averages
+    # two records per hour, HR passes one through.
+    hits0 = sorted(Path(root).glob(f"**/*{sid}*FLUXMET_HH_*.csv"))
+    hits0 += sorted(Path(root).glob(f"**/*{sid}*FLUXMET_HR_*.csv"))
     if not hits0:
         # No FLUXNET archive at all -- one of the 32 sites ONEFlux has not
         # processed. An expected absence, not a parsing failure.
@@ -154,11 +166,7 @@ def read_tower_hourly(root: Path, sid: str, gpp: str, max_qc: float,
     off, src = utc_offset(root, sid, lon)
     if off is None:
         return None, f"{sid}: no UTC offset from BIF or longitude"
-    hits = sorted(Path(root).glob(f"**/*{sid}*FLUXNET_FLUXMET_HH_*.csv"))
-    if not hits:
-        hits = sorted(Path(root).glob(f"**/*{sid}*FLUXMET*HH*.csv"))
-    if not hits:
-        return None, f"{sid}: no half-hourly FLUXMET file"
+    hits = hits0
 
     import pandas as pd
     key = f"GPP_{gpp}"

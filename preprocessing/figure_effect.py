@@ -8,7 +8,7 @@ between the two model runs and the tower never enters.
 Five metrics, each its own figure:
 
   variability   100*(sd_dyn/sd_fixed - 1)          change in interannual SD
-  flux          mean_rel_pct                       % change in the annual flux
+  flux          rel_pct, one point per STATION-YEAR % change in the annual flux
   sens_Ta       100*(b_dyn - b_fixed)/|b_fixed|    % change in dF/dTa
   sens_SPEI12   100*(b_dyn - b_fixed)/|b_fixed|    % change in dF/dSPEI12
   sens_LMA      slope_dyn_std                      standardised dF/dLMA
@@ -20,19 +20,24 @@ arm's standardised slope is the honest quantity: it says how strongly the
 flux tracks LMA when LMA is allowed to move, and the fixed arm's answer is
 "not at all" by construction rather than by measurement.
 
-POOLING. One point per station. The per-station metrics already pool years
-(sd over the annual series, MEAN of the yearly percent changes, one
-regression over all years), so a violin across stations is a distribution
-over sites, not over site-years. Pooling site-years instead would let a
-36-year station outvote a 12-year one and would treat consecutive years of
-one site as independent draws.
+POOLING DIFFERS BY METRIC, because the metrics are not the same shape.
 
-The site statistic is the mean by request; --flux-stat median switches it.
-Worth knowing which you are looking at: the mean of yearly percent changes
-is not robust here, because a year whose fixed-arm flux is near zero gives
-a huge ratio that no amount of averaging damps. Earlier in this project one
-station's summary went from 1.2% to 129.54% on exactly that. sd_ratio and
-the regression slopes are unaffected -- neither divides year by year.
+  flux          one point per STATION-YEAR, straight from the annual effect
+                tables. Every station is driven by the same forcing record,
+                so they carry the same years and no site can outvote another
+                by being longer. The script checks that and says so if the
+                year counts actually differ.
+  variability   one point per STATION. An interannual SD needs the whole
+                series; there is no per-year value to pool.
+  sensitivity   one point per STATION. One regression over all years yields
+                one slope, for the same reason.
+
+--flux-pool station falls back to the per-site mean if the year counts turn
+out uneven after all. Note that the site mean is not robust: a year whose
+fixed-arm flux is near zero gives a huge ratio that averaging does not damp,
+and one station's summary went from 1.2% to 129.54% on exactly that earlier
+in this project. Pooling station-years shows those years as individual
+outliers instead of letting one of them move a site's whole point.
 
 Datasets:
   era5        one panel
@@ -54,6 +59,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from results_dir import NoResultsDir, resolve_figure, resolve_out  # noqa: E402
+from station_metrics import DATASETS, load as load_effect, read_sites  # noqa: E402
 
 # Display name -> name in the metrics tables. LE is stored as QE and LAI as
 # LAI_H; using the display names against the CSV silently matches nothing.
@@ -95,8 +101,41 @@ def _pct_change(new: np.ndarray, old: np.ndarray) -> np.ndarray:
     return out
 
 
+def flux_station_years(root: Path) -> pd.DataFrame:
+    """Per (dataset, gcm, scenario, station, pft, variable) x YEAR rel_pct."""
+    frames, missing = [], []
+    for ds in DATASETS:
+        d, why = load_effect(Path(root), ds, "annual")
+        if d is None:
+            missing.append(why); continue
+        d["dataset"] = ds
+        frames.append(d[["dataset", "gcm", "scenario", "station", "year",
+                         "variable", "rel_pct"]])
+    if not frames:
+        raise Missing("flux: no annual effect tables found -- " + "; ".join(missing))
+    if missing:
+        print("  note: " + "; ".join(missing))
+    d = pd.concat(frames, ignore_index=True)
+    d = d.merge(read_sites(), on="station", how="left")
+    if "pft" not in d.columns:
+        raise Missing("flux: the site table has no pft column")
+    d = d.rename(columns={"rel_pct": "value"})
+
+    # The claim that every station shares the forcing record is checkable, so
+    # check it rather than assume it. Uneven year counts would mean a long
+    # station carries more weight in the pooled violin than a short one.
+    yr = d.groupby(["dataset", "station"])["year"].nunique()
+    for ds, g in yr.groupby(level=0):
+        if g.nunique() > 1:
+            lo, hi = int(g.min()), int(g.max())
+            print(f"  WARNING {ds}: station year counts are uneven "
+                  f"({lo}-{hi}); pooled station-years weight the long "
+                  f"stations more. --flux-pool station avoids that.")
+    return d[["dataset", "gcm", "scenario", "station", "pft", "variable", "value"]]
+
+
 def series(M: pd.DataFrame, S: pd.DataFrame, metric: str,
-           flux_stat: str = "mean") -> pd.DataFrame:
+           flux_pool: str = "stationyear", root: Path | None = None) -> pd.DataFrame:
     """One row per (dataset, gcm, scenario, station, pft, variable, value)."""
     keep = ["dataset", "gcm", "scenario", "station", "pft", "variable"]
     if metric in ("variability", "flux"):
@@ -109,11 +148,11 @@ def series(M: pd.DataFrame, S: pd.DataFrame, metric: str,
             d["value"] = 100.0 * (pd.to_numeric(d["sd_ratio"],
                                                 errors="coerce") - 1.0)
         else:
-            col = f"{flux_stat}_rel_pct"
-            if col not in d.columns:
-                raise Missing(f"flux: column {col!r} absent; table has "
-                              f"{[c for c in d.columns if c.endswith('rel_pct')]}")
-            d["value"] = pd.to_numeric(d[col], errors="coerce")
+            if flux_pool == "stationyear":
+                return flux_station_years(root)
+            if "mean_rel_pct" not in d.columns:
+                raise Missing("flux: mean_rel_pct absent from station_metrics.csv")
+            d["value"] = pd.to_numeric(d["mean_rel_pct"], errors="coerce")
     else:
         if S is None:
             raise Missing("station_sensitivity.csv is required for " + metric)
@@ -326,9 +365,9 @@ def main(argv=None) -> int:
     ap.add_argument("--scen-size", default="9.5x5.5")
     ap.add_argument("--grid-size", default="9.5x13")
     ap.add_argument("--lma-size", default="11x5.5")
-    ap.add_argument("--flux-stat", default="mean",
-                    choices=["mean", "median"],
-                    help="site statistic for the flux metric")
+    ap.add_argument("--flux-pool", default="stationyear",
+                    choices=["stationyear", "station"],
+                    help="pool the flux metric over station-years or sites")
     a = ap.parse_args(argv)
 
     import matplotlib
@@ -369,7 +408,7 @@ def main(argv=None) -> int:
     failures = []
     for metric in wanted:
         try:
-            d = series(M, S, metric, a.flux_stat)
+            d = series(M, S, metric, a.flux_pool, root)
         except Missing as e:
             failures.append(str(e)); print(f"SKIP {metric}: {e}"); continue
         era5 = d[d["dataset"] == "era5"]

@@ -70,7 +70,11 @@ def utc_offset(root: Path, sid: str):
     hits = sorted(Path(root).glob(f"**/*{sid}*BIF*.csv"))
     if not hits:
         return None, f"{sid}: no BIF file, cannot establish the UTC offset"
-    with hits[0].open(newline="", encoding="utf-8-sig") as fh:
+    # The BIF is not UTF-8 at every site: job 39698 died on byte 0xb5, the
+    # micro sign in a units string, written in Latin-1. Only the UTC_OFFSET row
+    # is needed here, so decode leniently rather than let one stray byte in an
+    # unrelated field stop the whole fleet.
+    with hits[0].open(newline="", encoding="utf-8-sig", errors="replace") as fh:
         for row in csv.reader(fh):
             if len(row) >= 5 and row[3].strip().upper() == "UTC_OFFSET":
                 try:

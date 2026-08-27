@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_errorbars.py", line 252, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_errorbars.py", line 245, in main
+    make_figure(tables, sites, f"RMSE and skill score, {name} steps",
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                png, (w, h))
+                ^^^^^^^^^^^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/figure_errorbars.py", line 115, in make_figure
+    fig, axes = plt.subplots(len(ROWS), len(COLS), figsize=figsize,
+                ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             constrained_layout=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/matplotlib/pyplot.py", line 1886, in subplots
+    fig = figure(**fig_kw)
+  File "/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/matplotlib/pyplot.py", line 1096, in figure
+    manager = new_figure_manager(
+        num, figsize=figsize, dpi=dpi,
+        facecolor=facecolor, edgecolor=edgecolor, frameon=frameon,
+        FigureClass=FigureClass, **kwargs)
+  File "/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/matplotlib/pyplot.py", line 576, in new_figure_manager
+    return _get_backend_mod().new_figure_manager(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/matplotlib/backend_bases.py", line 3663, in new_figure_manager
+    fig = fig_cls(*args, **kwargs)
+  File "/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/matplotlib/figure.py", line 2634, in __init__
+    if not np.isfinite(figsize).all() or (np.array(figsize) < 0).any():
+           ~~~~~~~~~~~^^^^^^^^^
+TypeError: ufunc 'isfinite' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''

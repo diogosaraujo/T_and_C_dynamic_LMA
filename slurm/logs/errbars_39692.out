@@ -1,0 +1,16 @@
+job        : 39692
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-27T03:27:06Z
+
+  tower: 42 station(s) unusable, e.g. US-Blk: no YY file
+  annual   GPP    37 stations,  18 with a drought subset
+  annual   ET     45 stations,  25 with a drought subset
+  annual   H      46 stations,  25 with a drought subset
+  annual   QE     45 stations,  25 with a drought subset
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/errorbars_annual.csv
+
+finished   : 2026-08-27T03:27:34Z
+exit status: 1

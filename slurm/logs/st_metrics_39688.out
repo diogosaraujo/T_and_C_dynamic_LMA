@@ -1,0 +1,18 @@
+job        : 39688
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-27T03:09:06Z
+
+labels era5 : ok
+labels gcm  : ok
+  era5       annual       52992 rows ->    1472 metric rows
+  era5       monthly     635878 rows ->   19136 metric rows
+  era5       seasonal    213440 rows ->    5888 metric rows
+  era5       sens annual      3864 regression rows
+  era5       sens monthly    46368 regression rows
+  era5       sens seasonal   15456 regression rows
+  historical annual      204000 rows ->   20400 metric rows
+  historical monthly    2447916 rows ->  265200 metric rows
+  historical seasonal    822800 rows ->   81600 metric rows
+  historical sens annual     53550 regression rows

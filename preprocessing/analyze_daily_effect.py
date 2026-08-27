@@ -94,7 +94,7 @@ HOURLY_MEAN = ["QE", "H", "Rn", "G", "Ta", "Ds"]
 RATIOS = {"Tfrac": ("T", "ET"), "Bowen": ("H", "QE"), "WUE": ("GPP", "ET")}
 
 REPORT = ["LAI_H", "GPP", "NPP", "ET", "T", "EG", "EIn", "Lk",
-          "QE", "H", "Rn", "Tfrac", "Bowen", "WUE"]
+          "QE", "H", "Rn", "Tfrac", "Bowen", "WUE", "Ta", "Pr"]
 
 
 class Unusable(Exception):
@@ -176,6 +176,12 @@ def derive(d: dict) -> dict:
             "LAI_H": d["LAI_H"], "GPP": GPP, "NPP": d["NPP_H"],
             "ET": ET, "T": T, "EG": have("EG"), "EIn": EIn, "Lk": have("Lk"),
             "QE": have("QE"), "H": have("H"), "Rn": have("Rn"),
+            # FORCING, not model output -- identical in both arms, so diff is 0
+            # by construction. Carried anyway because the flux-sensitivity
+            # metrics regress yearly flux on yearly temperature and there is
+            # nowhere else in the pipeline that temperature reaches a table.
+            # NOTE "T" above is TRANSPIRATION; air temperature is "Ta".
+            "Ta": have("Ta"), "Pr": have("Pr"),
             "Tfrac": np.where(ET > 0, T / ET, np.nan),
             "Bowen": np.where(np.abs(have("QE")) > 1e-6, have("H") / have("QE"), np.nan),
             "WUE": np.where(ET > 0, GPP / ET, np.nan),

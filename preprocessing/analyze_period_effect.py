@@ -60,8 +60,8 @@ from results_dir import NoResultsDir, resolve_out                # noqa: E402
 # How a period value is formed from the daily series. Water and carbon fluxes
 # accumulate; state and energy are averaged, because a monthly mean W/m2 is the
 # quantity anyone plots. Matches analyze_daily_effect's daily aggregation.
-PERIOD_SUM = {"GPP", "NPP", "ET", "T", "EG", "EIn", "Lk"}
-PERIOD_MEAN = {"LAI_H", "QE", "H", "Rn"}
+PERIOD_SUM = {"GPP", "NPP", "ET", "T", "EG", "EIn", "Lk", "Pr"}
+PERIOD_MEAN = {"LAI_H", "QE", "H", "Rn", "Ta"}
 
 SEASON_OF = {12: "DJF", 1: "DJF", 2: "DJF", 3: "MAM", 4: "MAM", 5: "MAM",
              6: "JJA", 7: "JJA", 8: "JJA", 9: "SON", 10: "SON", 11: "SON"}

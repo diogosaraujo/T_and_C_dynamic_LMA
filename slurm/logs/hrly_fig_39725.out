@@ -1,0 +1,15 @@
+job        : 39725
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-27T15:07:08Z
+
+stations: 72   variables: ['ET', 'GPP', 'H', 'LE']
+matched hours per station: median 14,880  min 0  max 238,251
+basemap : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/_basemap/ne_110m_admin_1_states_provinces.shp
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/hourly_skill_maps.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/hourly_taylor.png
+
+finished   : 2026-08-27T15:07:19Z
+exit status: 0

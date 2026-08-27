@@ -1,0 +1,102 @@
+job        : 39711
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-27T08:04:08Z
+
+  US-Bar   deciduous  GPP=126827  ET=135412  LE=135412  H=142010   utc offset from BIF
+  US-CRK   evergreen  GPP=     0  ET=     0  LE=     0  H=     0   utc offset from BIF
+  US-CS2   evergreen  GPP= 14057  ET= 14272  LE= 14272  H= 14562   utc offset from BIF
+  US-ChR   deciduous  GPP=102090  ET=108873  LE=108873  H=115811   utc offset from BIF
+  US-Cst   evergreen  GPP= 33944  ET= 35202  LE= 35202  H= 35912   utc offset from BIF
+  US-Cwt   deciduous  GPP=     0  ET= 70668  LE= 70668  H= 77919   utc offset from BIF
+  US-Dk2   deciduous  GPP= 65961  ET= 66448  LE= 66448  H= 66456   utc offset from BIF
+  US-Dk3   evergreen  GPP= 63918  ET= 64669  LE= 64669  H= 64810   utc offset from BIF
+  US-Fmf   evergreen  GPP= 43452  ET= 44802  LE= 44802  H= 45534   utc offset from BIF
+  US-Fuf   evergreen  GPP= 42134  ET= 42370  LE= 42370  H= 43483   utc offset from BIF
+  US-GLE   evergreen  GPP=127736  ET=135987  LE=135987  H=137193   utc offset from BIF
+  US-HBK   deciduous  GPP= 30317  ET= 30706  LE= 30706  H= 30713   utc offset from BIF
+  US-Ha1   deciduous  GPP=218937  ET=226330  LE=226330  H=238251   utc offset from BIF
+  US-Ho1   evergreen  GPP=154854  ET=166527  LE=166527  H=175591   utc offset from longitude
+  US-Ho2   evergreen  GPP=     0  ET=178083  LE=178083  H=179101   utc offset from BIF
+  US-Ho3   evergreen  GPP=     0  ET=116575  LE=116575  H=120929   utc offset from BIF
+  US-MEF   evergreen  GPP=     0  ET=     0  LE=     0  H=     0   utc offset from BIF
+  US-MMS   deciduous  GPP=173580  ET=189566  LE=189566  H=189625   utc offset from BIF
+  US-MOz   deciduous  GPP=134624  ET=139807  LE=139807  H=140721   utc offset from BIF
+  US-Me1   evergreen  GPP=  7215  ET=  7928  LE=  7928  H=  7932   utc offset from BIF
+  US-Me2   evergreen  GPP=133631  ET=156043  LE=156043  H=157335   utc offset from longitude
+  US-Me6   evergreen  GPP= 79108  ET= 87379  LE= 87379  H= 87979   utc offset from BIF
+  US-Me7   evergreen  GPP=     0  ET=     0  LE=     0  H=     0   utc offset from BIF
+  US-MtB   evergreen  GPP= 60264  ET= 85315  LE= 85315  H= 86405   utc offset from BIF
+  US-NC2   evergreen  GPP=119867  ET=119198  LE=119198  H=126126   utc offset from BIF
+  US-NC3   evergreen  GPP= 56664  ET= 58046  LE= 58046  H= 61181   utc offset from BIF
+  US-NC5   evergreen  GPP=     0  ET=     0  LE=     0  H=     0   utc offset from BIF
+  US-NR1   evergreen  GPP=     0  ET=179092  LE=179092  H=193147   utc offset from BIF
+  US-Oho   deciduous  GPP= 79473  ET= 80289  LE= 80289  H= 81565   utc offset from BIF
+  US-PFL   deciduous  GPP=  2126  ET=  2462  LE=  2462  H=  2482   utc offset from BIF
+  US-PFb   evergreen  GPP=  2176  ET=  2255  LE=  2255  H=  2375   utc offset from BIF
+  US-PFc   deciduous  GPP=  2303  ET=  2394  LE=  2394  H=  2428   utc offset from BIF
+  US-PFg   evergreen  GPP=  1942  ET=  1977  LE=  1977  H=  1992   utc offset from BIF
+  US-PFh   evergreen  GPP=  2083  ET=  2285  LE=  2285  H=  2290   utc offset from BIF
+  US-PFi   deciduous  GPP=  1863  ET=  1959  LE=  1959  H=  1998   utc offset from BIF
+  US-PFj   deciduous  GPP=  2290  ET=  2386  LE=  2386  H=  2395   utc offset from BIF
+  US-PFk   deciduous  GPP=  2198  ET=  2320  LE=  2320  H=  2328   utc offset from BIF
+  US-PFm   deciduous  GPP=  2458  ET=  2542  LE=  2542  H=  2556   utc offset from BIF
+  US-PFn   deciduous  GPP=  2323  ET=  2482  LE=  2482  H=  2501   utc offset from BIF
+  US-PFp   deciduous  GPP=  2431  ET=  2532  LE=  2532  H=  2547   utc offset from BIF
+  US-PFq   deciduous  GPP=  2263  ET=  2442  LE=  2442  H=  2450   utc offset from BIF
+  US-PFt   evergreen  GPP=  2359  ET=  2474  LE=  2474  H=  2499   utc offset from BIF
+  US-SHC   evergreen  GPP= 27355  ET= 28579  LE= 28579  H= 28604   utc offset from BIF
+  US-SP1   evergreen  GPP=153104  ET=155207  LE=155207  H=156454   utc offset from BIF
+  US-SSH   deciduous  GPP= 30268  ET= 32242  LE= 32242  H= 32477   utc offset from BIF
+  US-Slt   deciduous  GPP=133088  ET=137004  LE=137004  H=138279   utc offset from BIF
+  US-UMB   deciduous  GPP=119754  ET=121372  LE=121372  H=116467   utc offset from longitude
+  US-UMd   deciduous  GPP=115361  ET=116569  LE=116569  H=114736   utc offset from BIF
+  US-Vcp   evergreen  GPP=110655  ET=113365  LE=113365  H=114615   utc offset from BIF
+  US-WCr   deciduous  GPP=     0  ET=138395  LE=138395  H=144757   utc offset from BIF
+  US-Wi3   deciduous  GPP= 18347  ET= 12000  LE= 12000  H= 12035   utc offset from longitude
+  US-xAB   evergreen  GPP=  7883  ET= 13430  LE= 13430  H= 13439   utc offset from BIF
+  US-xBL   deciduous  GPP=  6520  ET=  9852  LE=  9852  H=  9751   utc offset from BIF
+  US-xBR   deciduous  GPP= 13647  ET= 15047  LE= 15047  H= 15038   utc offset from BIF
+  US-xGR   deciduous  GPP=  9959  ET= 11491  LE= 11491  H= 13662   utc offset from BIF
+  US-xHA   deciduous  GPP= 11917  ET= 13708  LE= 13708  H= 13734   utc offset from BIF
+  US-xJE   evergreen  GPP= 11087  ET= 13982  LE= 13982  H= 13985   utc offset from BIF
+  US-xLE   deciduous  GPP=     0  ET=  6368  LE=  6368  H=  6356   utc offset from BIF
+  US-xML   deciduous  GPP= 12376  ET= 15979  LE= 15979  H= 15978   utc offset from BIF
+  US-xNW   evergreen  GPP=  4742  ET=  7061  LE=  7061  H=  7080   utc offset from BIF
+  US-xRM   evergreen  GPP= 13384  ET= 14809  LE= 14809  H= 14827   utc offset from BIF
+  US-xRN   deciduous  GPP=  8461  ET= 15747  LE= 15747  H= 15787   utc offset from BIF
+  US-xSC   deciduous  GPP=  1767  ET=  9164  LE=  9164  H=  9170   utc offset from BIF
+  US-xSE   deciduous  GPP= 10870  ET= 12407  LE= 12407  H= 12413   utc offset from BIF
+  US-xSP   evergreen  GPP=     0  ET= 14349  LE= 14349  H= 14330   utc offset from BIF
+  US-xST   deciduous  GPP= 16939  ET= 17440  LE= 17440  H= 17439   utc offset from BIF
+  US-xTA   evergreen  GPP= 13221  ET= 14934  LE= 14934  H= 14946   utc offset from BIF
+  US-xTE   evergreen  GPP=     0  ET= 13793  LE= 13793  H= 13814   utc offset from BIF
+  US-xTR   deciduous  GPP= 15823  ET= 15997  LE= 15997  H= 15992   utc offset from BIF
+  US-xUK   deciduous  GPP=  7240  ET=  8553  LE=  8553  H=  8569   utc offset from BIF
+  US-xWR   evergreen  GPP= 16167  ET= 16594  LE= 16594  H= 16575   utc offset from BIF
+  US-xYE   evergreen  GPP=  7816  ET= 11057  LE= 11057  H= 11056   utc offset from BIF
+
+576 row(s) over 72 station(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/hourly_stats.csv
+
+SKIPPED 30:
+  ! US-Blk: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CPF: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CPk: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CRK: zero overlap -- model 1985-2020, tower 2022-2026
+  ! US-CZ2: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CZ3: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CZ4: no FLUXNET archive (site has no ONEFlux product)
+  ! US-DPP: no FLUXNET archive (site has no ONEFlux product)
+  ! US-GBT: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Ha2: no FLUXNET archive (site has no ONEFlux product)
+  ! US-LPH: no FLUXNET archive (site has no ONEFlux product)
+  ! US-MEF: zero overlap -- model 1985-2020, tower 2024-2026
+  ! US-MRf: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Me4: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Me7: zero overlap -- model 1985-2020, tower 2022-2024
+  ... and 15 more
+
+finished   : 2026-08-27T08:11:12Z
+exit status: 1  (1 = a station was skipped; read the list above)

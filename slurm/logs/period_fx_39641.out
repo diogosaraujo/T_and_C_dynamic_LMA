@@ -1,0 +1,34 @@
+job        : 39641
+node       : soenode75
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-27T00:35:06Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+freq      : seasonal
+pair      : era5_land:*_ic
+stations  : 98
+
+variable       DJF      MAM      JJA      SON
+LAI_H        0.85%    3.44%    7.17%    6.09%
+GPP          0.09%    2.01%    3.45%    1.29%
+NPP          0.11%    2.30%    4.19%    1.50%
+ET           0.26%    1.45%    2.84%    1.17%
+T            0.10%    2.11%    4.41%    1.73%
+EG           0.15%    4.42%    6.05%    2.31%
+EIn          0.11%    2.94%    5.94%    2.77%
+Lk           0.66%    1.81%    1.47%    0.46%
+QE           0.18%    1.17%    2.88%    1.13%
+H            0.31%    1.57%    2.93%    1.14%
+Rn           0.08%    0.23%    0.24%    0.10%
+Tfrac        0.23%    1.13%    0.55%    0.69%
+Bowen        1.44%    3.70%    2.53%    2.65%
+WUE          0.37%    1.23%    0.86%    0.97%
+Ta           0.00%    0.00%    0.00%    0.00%
+Pr           0.00%    0.00%    0.00%    0.00%
+
+92 pair(s), 213440 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/era5_seasonal.csv
+
+finished   : 2026-08-27T00:45:10Z
+exit status: 0  (1 = at least one pair was skipped; read the list above)

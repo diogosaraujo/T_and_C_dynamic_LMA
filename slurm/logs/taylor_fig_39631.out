@@ -1,0 +1,29 @@
+job        : 39631
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-26T22:25:06Z
+
+  tower: 46 station(s) unusable, e.g. US-Blk: no YY file
+  annual: stations per row {'GPP': 16, 'ET': 21, 'QE': 21, 'H': 21}; 26 negative correlation(s) -- axes extended
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/taylor_annual.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  monthly: stations per row {'GPP': 42, 'ET': 48, 'QE': 48, 'H': 48}; 2 negative correlation(s) -- axes extended
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/taylor_monthly.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  DJF: stations per row {'GPP': 16, 'ET': 21, 'QE': 21, 'H': 21}; 63 negative correlation(s) -- axes extended
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/taylor_DJF.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  MAM: stations per row {'GPP': 16, 'ET': 21, 'QE': 21, 'H': 21}; 8 negative correlation(s) -- axes extended
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/taylor_MAM.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  JJA: stations per row {'GPP': 16, 'ET': 21, 'QE': 21, 'H': 21}; 12 negative correlation(s) -- axes extended
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/taylor_JJA.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  SON: stations per row {'GPP': 18, 'ET': 23, 'QE': 23, 'H': 23}; 17 negative correlation(s) -- axes extended
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/taylor_SON.png
+
+finished   : 2026-08-26T22:26:36Z
+exit status: 0

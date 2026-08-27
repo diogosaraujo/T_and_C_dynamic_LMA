@@ -1,0 +1,51 @@
+job        : 39636
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-27T00:28:06Z
+
+source    : gcm
+stations  : 118
+threshold : -1.0
+windows   : annual = SPEI-12 at September (water-year end); monthly = SPEI-3 that month; seasonal = SPEI-3 at the season's last month
+
+  GFDL-ESM4      historical  spei_12_GFDL-ESM4_historical_r1i1p1f1_gr1_1980-2014.nc
+  GFDL-ESM4      ssp126      spei_12_GFDL-ESM4_ssp126_r1i1p1f1_gr1_2015-2100.nc
+  GFDL-ESM4      ssp585      spei_12_GFDL-ESM4_ssp585_r1i1p1f1_gr1_2015-2100.nc
+  IPSL-CM6A-LR   historical  spei_12_IPSL-CM6A-LR_historical_r1i1p1f1_gr_1980-2014.nc
+  IPSL-CM6A-LR   ssp126      spei_12_IPSL-CM6A-LR_ssp126_r1i1p1f1_gr_2015-2100.nc
+  IPSL-CM6A-LR   ssp585      spei_12_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_2015-2100.nc
+  MPI-ESM1-2-HR  historical  spei_12_MPI-ESM1-2-HR_historical_r1i1p1f1_gn_1980-2014.nc
+  MPI-ESM1-2-HR  ssp126      spei_12_MPI-ESM1-2-HR_ssp126_r1i1p1f1_gn_2015-2100.nc
+  MPI-ESM1-2-HR  ssp585      spei_12_MPI-ESM1-2-HR_ssp585_r1i1p1f1_gn_2015-2100.nc
+  MRI-ESM2-0     historical  spei_12_MRI-ESM2-0_historical_r1i1p1f1_gn_1980-2014.nc
+  MRI-ESM2-0     ssp126      spei_12_MRI-ESM2-0_ssp126_r1i1p1f1_gn_2015-2100.nc
+  MRI-ESM2-0     ssp585      spei_12_MRI-ESM2-0_ssp585_r1i1p1f1_gn_2015-2100.nc
+  UKESM1-0-LL    historical  spei_12_UKESM1-0-LL_historical_r1i1p1f2_gn_1980-2014.nc
+  UKESM1-0-LL    ssp126      spei_12_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2015-2100.nc
+  UKESM1-0-LL    ssp585      spei_12_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2015-2100.nc
+  GFDL-ESM4      historical  spei_3_GFDL-ESM4_historical_r1i1p1f1_gr1_1980-2014.nc
+  GFDL-ESM4      ssp126      spei_3_GFDL-ESM4_ssp126_r1i1p1f1_gr1_2015-2100.nc
+  GFDL-ESM4      ssp585      spei_3_GFDL-ESM4_ssp585_r1i1p1f1_gr1_2015-2100.nc
+  IPSL-CM6A-LR   historical  spei_3_IPSL-CM6A-LR_historical_r1i1p1f1_gr_1980-2014.nc
+  IPSL-CM6A-LR   ssp126      spei_3_IPSL-CM6A-LR_ssp126_r1i1p1f1_gr_2015-2100.nc
+  IPSL-CM6A-LR   ssp585      spei_3_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_2015-2100.nc
+  MPI-ESM1-2-HR  historical  spei_3_MPI-ESM1-2-HR_historical_r1i1p1f1_gn_1980-2014.nc
+  MPI-ESM1-2-HR  ssp126      spei_3_MPI-ESM1-2-HR_ssp126_r1i1p1f1_gn_2015-2100.nc
+  MPI-ESM1-2-HR  ssp585      spei_3_MPI-ESM1-2-HR_ssp585_r1i1p1f1_gn_2015-2100.nc
+  MRI-ESM2-0     historical  spei_3_MRI-ESM2-0_historical_r1i1p1f1_gn_1980-2014.nc
+  MRI-ESM2-0     ssp126      spei_3_MRI-ESM2-0_ssp126_r1i1p1f1_gn_2015-2100.nc
+  MRI-ESM2-0     ssp585      spei_3_MRI-ESM2-0_ssp585_r1i1p1f1_gn_2015-2100.nc
+  UKESM1-0-LL    historical  spei_3_UKESM1-0-LL_historical_r1i1p1f2_gn_1980-2014.nc
+  UKESM1-0-LL    ssp126      spei_3_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2015-2100.nc
+  UKESM1-0-LL    ssp585      spei_3_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2015-2100.nc
+
+2069130 row(s), 451498 drought (21.8%)
+  annual      120360 rows,  22.5% drought
+  monthly    1462020 rows,  21.8% drought
+  seasonal    486750 rows,  21.8% drought
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/drought_periods_gcm.csv
+
+finished   : 2026-08-27T00:46:24Z
+exit status: 0  (1 = a station or stack was skipped; read the list)

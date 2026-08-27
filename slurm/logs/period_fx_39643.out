@@ -1,0 +1,57 @@
+job        : 39643
+node       : soenode75
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-27T00:35:06Z
+model_run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+
+model_run : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+freq      : seasonal
+pair      : ssp126/*:*
+stations  : 98
+
+SKIPPED -- 50 pair(s):
+  ! US-CPk    ssp126/GFDL-ESM4:fixed_lma  one arm has no RES
+  ! US-CPk    ssp126/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-CPk    ssp126/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-CPk    ssp126/MRI-ESM2-0:fixed_lma one arm has no RES
+  ! US-CPk    ssp126/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-CZ2    ssp126/GFDL-ESM4:fixed_lma  one arm has no RES
+  ! US-CZ2    ssp126/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-CZ2    ssp126/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-CZ2    ssp126/MRI-ESM2-0:fixed_lma one arm has no RES
+  ! US-CZ2    ssp126/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-DPP    ssp126/GFDL-ESM4:fixed_lma  one arm has no RES
+  ! US-DPP    ssp126/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-DPP    ssp126/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-DPP    ssp126/MRI-ESM2-0:fixed_lma one arm has no RES
+  ! US-DPP    ssp126/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ! US-NMj    ssp126/GFDL-ESM4:fixed_lma  one arm has no RES
+  ! US-NMj    ssp126/IPSL-CM6A-LR:fixed_lmaone arm has no RES
+  ! US-NMj    ssp126/MPI-ESM1-2-HR:fixed_lmaone arm has no RES
+  ! US-NMj    ssp126/MRI-ESM2-0:fixed_lma one arm has no RES
+  ! US-NMj    ssp126/UKESM1-0-LL:fixed_lmaone arm has no RES
+  ... and 30 more
+
+variable       DJF      MAM      JJA      SON
+LAI_H        0.94%    3.66%    8.34%    6.36%
+GPP          0.09%    2.29%    3.32%    1.06%
+NPP          0.12%    2.62%    4.20%    1.30%
+ET           0.36%    1.59%    3.07%    1.38%
+T            0.10%    2.37%    4.56%    1.87%
+EG           0.59%    5.18%    5.70%    2.08%
+EIn          0.48%    3.43%    7.06%    3.65%
+Lk           1.53%    2.26%    1.66%    0.81%
+QE           0.30%    1.54%    3.05%    1.37%
+H            0.31%    1.28%    2.39%    1.12%
+Rn           0.07%    0.16%    0.19%    0.12%
+Tfrac        0.27%    1.16%    0.45%    0.57%
+Bowen        2.80%    3.44%    1.93%    2.39%
+WUE          0.63%    1.44%    0.96%    1.39%
+Ta           0.00%    0.00%    0.00%    0.00%
+Pr           0.00%    0.00%    0.00%    0.00%
+
+410 pair(s), 2263194 row(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/gcm_seasonal_ssp126.csv
+
+finished   : 2026-08-27T01:27:22Z
+exit status: 1  (1 = at least one pair was skipped; read the list above)

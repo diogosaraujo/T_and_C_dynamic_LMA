@@ -1,0 +1,23 @@
+job        : 39629
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-26T22:25:06Z
+
+  tower: 46 station(s) unusable, e.g. US-Blk: no YY file
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/skill_annual.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/skill_monthly.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/skill_DJF.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/skill_MAM.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/skill_JJA.png
+  tower: 46 station(s) unusable, e.g. US-Blk: no MM file
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/skill_SON.png
+
+finished   : 2026-08-26T22:26:36Z
+exit status: 0

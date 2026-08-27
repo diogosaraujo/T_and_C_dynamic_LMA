@@ -1,0 +1,29 @@
+job        : 39635
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-27T00:28:06Z
+
+source    : era5
+stations  : 118
+threshold : -1.0
+windows   : annual = SPEI-12 at September (water-year end); monthly = SPEI-3 that month; seasonal = SPEI-3 at the season's last month
+
+
+84332 row(s), 13804 drought (16.4%)
+  annual        4872 rows,  16.7% drought
+  monthly      59624 rows,  16.3% drought
+  seasonal     19836 rows,  16.4% drought
+
+SKIPPED 6:
+  ! US-HB2 SPEI12_ts: all-NaN pixel
+  ! US-HB2 SPEI3_ts: all-NaN pixel
+  ! US-HB2 SPEI3_ts: all-NaN pixel
+  ! US-HB3 SPEI12_ts: all-NaN pixel
+  ! US-HB3 SPEI3_ts: all-NaN pixel
+  ! US-HB3 SPEI3_ts: all-NaN pixel
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/drought_periods_era5.csv
+
+finished   : 2026-08-27T00:28:12Z
+exit status: 1  (1 = a station or stack was skipped; read the list)

@@ -1,0 +1,16 @@
+ERROR: nothing computed
+  US-Bar: BIF has no usable UTC_OFFSET
+  US-Blk: no BIF file, cannot establish the UTC offset
+  US-CPF: no BIF file, cannot establish the UTC offset
+  US-CPk: no BIF file, cannot establish the UTC offset
+  US-CRK: BIF has no usable UTC_OFFSET
+  US-CS2: BIF has no usable UTC_OFFSET
+  US-CZ2: no BIF file, cannot establish the UTC offset
+  US-CZ3: no BIF file, cannot establish the UTC offset
+  US-CZ4: no BIF file, cannot establish the UTC offset
+  US-ChR: BIF has no usable UTC_OFFSET
+  US-Cst: BIF has no usable UTC_OFFSET
+  US-Cwt: BIF has no usable UTC_OFFSET
+  US-DPP: no BIF file, cannot establish the UTC offset
+  US-Dk2: BIF has no usable UTC_OFFSET
+  US-Dk3: BIF has no usable UTC_OFFSET

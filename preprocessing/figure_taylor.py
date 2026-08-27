@@ -190,7 +190,7 @@ def make_figure(tables: dict, sites: dict, title: str, out_png: Path,
                 ax.set_title("all steps" if cond == "all" else "drought only",
                              fontsize=9)
             if j == 0:
-                ax.set_ylabel(f"{label}\n({unit})", fontsize=8)
+                ax.set_ylabel(label, fontsize=9)
 
     handles = [
         Line2D([], [], marker="o", ls="", color="#4d4d4d", label="deciduous, fixed"),
@@ -219,8 +219,9 @@ def main(argv=None) -> int:
                     choices=["all", "annual", "monthly"] + SEASON_FIGS)
     ap.add_argument("--gpp", default="NT", choices=["NT", "DT"])
     ap.add_argument("--threshold", type=float, default=-1.0)
-    ap.add_argument("--min-n", type=int, default=6)
-    ap.add_argument("--figsize", default="6x10")
+    ap.add_argument("--min-n", type=int, default=3,
+                    help="mathematical floor only; a correlation needs 3 points")
+    ap.add_argument("--figsize", default="6.5x10")
     ap.add_argument("--out", type=Path, default=None)
     a = ap.parse_args(argv)
 

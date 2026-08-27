@@ -381,7 +381,7 @@ def make_figure(table: dict, sites: dict, title: str, out_png: Path,
             if i == 0:
                 ax.set_title(col, fontsize=9)
             if j == 0:
-                ax.set_ylabel(f"{label}\n({unit})", fontsize=8)
+                ax.set_ylabel(label, fontsize=9)
 
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
     cb = fig.colorbar(sm, ax=axes, orientation="horizontal",
@@ -412,13 +412,15 @@ def main(argv=None) -> int:
     ap.add_argument("--skill", default="murphy", choices=["murphy", "diff"])
     ap.add_argument("--gpp", default="NT", choices=["NT", "DT"])
     ap.add_argument("--threshold", type=float, default=-1.0)
-    ap.add_argument("--min-n", type=int, default=6,
-                    help="fewest overlapping steps an RMSE may rest on")
+    ap.add_argument("--min-n", type=int, default=3,
+                    help="mathematical floor only: a correlation needs 3 "
+                         "points. NOT a quality filter -- n is reported so "
+                         "filtering happens afterwards.")
     ap.add_argument("--basemap", type=Path, default=None,
                     help="us_eco_l3 shapefile for the CONUS outline")
     ap.add_argument("--linthresh", type=float, default=0.05)
     ap.add_argument("--vmax", type=float, default=1.0)
-    ap.add_argument("--figsize", default="6x10",
+    ap.add_argument("--figsize", default="6.5x10",
                     help="WxH inches; portrait by default")
     ap.add_argument("--out", type=Path, default=None)
     a = ap.parse_args(argv)

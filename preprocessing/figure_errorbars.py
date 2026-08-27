@@ -196,7 +196,7 @@ def main(argv=None) -> int:
     ap.add_argument("--out", type=Path, default=None)
     a = ap.parse_args(argv)
 
-    w, h = (float(v) for v in a.figsize.lower().split("x"))
+    fig_w, fig_h = (float(v) for v in a.figsize.lower().split("x"))
     try:
         out_dir = resolve_figure(a.out or ".")
     except NoResultsDir as e:
@@ -229,21 +229,21 @@ def main(argv=None) -> int:
         import csv as _csv
         csv_path = out_dir / f"errorbars_{name}.csv"
         with csv_path.open("w", newline="", encoding="utf-8") as fh:
-            w = _csv.writer(fh)
-            w.writerow(["station", "pft", "variable", "subset", "n",
+            wr = _csv.writer(fh)
+            wr.writerow(["station", "pft", "variable", "subset", "n",
                         "sd_obs", "rmse_fixed", "rmse_dyn",
                         "rsr_fixed", "rsr_dyn", "skill_score"])
             for _, mv, _u in ROWS:
                 for sid, g in sorted(tables[mv].items()):
                     pft = sites[sid][2] if sid in sites else ""
                     for sub, v in sorted(g.items()):
-                        w.writerow([sid, pft, mv, sub, v[3],
+                        wr.writerow([sid, pft, mv, sub, v[3],
                                     f"{v[4]:.6g}", f"{v[0]:.6g}", f"{v[1]:.6g}",
                                     f"{v[5]:.6g}", f"{v[6]:.6g}", f"{v[2]:.6g}"])
         print(f"  -> {csv_path}")
         png = out_dir / f"errorbars_{name}.png"
         make_figure(tables, sites, f"RMSE and skill score, {name} steps",
-                    png, (w, h))
+                    png, (fig_w, fig_h))
         print(f"  -> {png}")
     return 0
 

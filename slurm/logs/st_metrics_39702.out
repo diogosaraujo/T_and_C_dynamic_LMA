@@ -21,3 +21,5 @@ labels gcm  : ok
   ssp126     annual      564160 rows ->   19680 metric rows
   ssp126     monthly    6769644 rows ->  255792 metric rows
   ssp126     seasonal   2263194 rows ->   78720 metric rows
+  ssp126     sens annual     51660 regression rows
+  ssp126     sens monthly   619794 regression rows

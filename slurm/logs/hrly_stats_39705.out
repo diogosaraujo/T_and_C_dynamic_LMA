@@ -1,0 +1,102 @@
+job        : 39705
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-27T06:14:08Z
+
+  US-Bar   deciduous  n= 135412 matched hours   utc offset from BIF
+  US-CRK   evergreen  n=      0 matched hours   utc offset from BIF
+  US-CS2   evergreen  n=  14272 matched hours   utc offset from BIF
+  US-ChR   deciduous  n= 108873 matched hours   utc offset from BIF
+  US-Cst   evergreen  n=  35202 matched hours   utc offset from BIF
+  US-Cwt   deciduous  n=  70668 matched hours   utc offset from BIF
+  US-Dk2   deciduous  n=  66448 matched hours   utc offset from BIF
+  US-Dk3   evergreen  n=  64669 matched hours   utc offset from BIF
+  US-Fmf   evergreen  n=  44802 matched hours   utc offset from BIF
+  US-Fuf   evergreen  n=  42370 matched hours   utc offset from BIF
+  US-GLE   evergreen  n= 135987 matched hours   utc offset from BIF
+  US-HBK   deciduous  n=  30706 matched hours   utc offset from BIF
+  US-Ha1   deciduous  n= 226330 matched hours   utc offset from BIF
+  US-Ho1   evergreen  n= 166527 matched hours   utc offset from longitude
+  US-Ho2   evergreen  n= 178083 matched hours   utc offset from BIF
+  US-Ho3   evergreen  n= 116575 matched hours   utc offset from BIF
+  US-MEF   evergreen  n=      0 matched hours   utc offset from BIF
+  US-MMS   deciduous  n= 189566 matched hours   utc offset from BIF
+  US-MOz   deciduous  n= 139807 matched hours   utc offset from BIF
+  US-Me1   evergreen  n=   7928 matched hours   utc offset from BIF
+  US-Me2   evergreen  n= 156043 matched hours   utc offset from longitude
+  US-Me6   evergreen  n=  87379 matched hours   utc offset from BIF
+  US-Me7   evergreen  n=      0 matched hours   utc offset from BIF
+  US-MtB   evergreen  n=  85315 matched hours   utc offset from BIF
+  US-NC2   evergreen  n= 119198 matched hours   utc offset from BIF
+  US-NC3   evergreen  n=  58046 matched hours   utc offset from BIF
+  US-NC5   evergreen  n=      0 matched hours   utc offset from BIF
+  US-NR1   evergreen  n= 179092 matched hours   utc offset from BIF
+  US-Oho   deciduous  n=  80289 matched hours   utc offset from BIF
+  US-PFL   deciduous  n=   2462 matched hours   utc offset from BIF
+  US-PFb   evergreen  n=   2255 matched hours   utc offset from BIF
+  US-PFc   deciduous  n=   2394 matched hours   utc offset from BIF
+  US-PFg   evergreen  n=   1977 matched hours   utc offset from BIF
+  US-PFh   evergreen  n=   2285 matched hours   utc offset from BIF
+  US-PFi   deciduous  n=   1959 matched hours   utc offset from BIF
+  US-PFj   deciduous  n=   2386 matched hours   utc offset from BIF
+  US-PFk   deciduous  n=   2320 matched hours   utc offset from BIF
+  US-PFm   deciduous  n=   2542 matched hours   utc offset from BIF
+  US-PFn   deciduous  n=   2482 matched hours   utc offset from BIF
+  US-PFp   deciduous  n=   2532 matched hours   utc offset from BIF
+  US-PFq   deciduous  n=   2442 matched hours   utc offset from BIF
+  US-PFt   evergreen  n=   2474 matched hours   utc offset from BIF
+  US-SHC   evergreen  n=  28579 matched hours   utc offset from BIF
+  US-SP1   evergreen  n= 155207 matched hours   utc offset from BIF
+  US-SSH   deciduous  n=  32242 matched hours   utc offset from BIF
+  US-Slt   deciduous  n= 137004 matched hours   utc offset from BIF
+  US-UMB   deciduous  n= 121372 matched hours   utc offset from longitude
+  US-UMd   deciduous  n= 116569 matched hours   utc offset from BIF
+  US-Vcp   evergreen  n= 113365 matched hours   utc offset from BIF
+  US-WCr   deciduous  n= 138395 matched hours   utc offset from BIF
+  US-Wi3   deciduous  n=  12000 matched hours   utc offset from longitude
+  US-xAB   evergreen  n=  13430 matched hours   utc offset from BIF
+  US-xBL   deciduous  n=   9852 matched hours   utc offset from BIF
+  US-xBR   deciduous  n=  15047 matched hours   utc offset from BIF
+  US-xGR   deciduous  n=  11491 matched hours   utc offset from BIF
+  US-xHA   deciduous  n=  13708 matched hours   utc offset from BIF
+  US-xJE   evergreen  n=  13982 matched hours   utc offset from BIF
+  US-xLE   deciduous  n=   6368 matched hours   utc offset from BIF
+  US-xML   deciduous  n=  15979 matched hours   utc offset from BIF
+  US-xNW   evergreen  n=   7061 matched hours   utc offset from BIF
+  US-xRM   evergreen  n=  14809 matched hours   utc offset from BIF
+  US-xRN   deciduous  n=  15747 matched hours   utc offset from BIF
+  US-xSC   deciduous  n=   9164 matched hours   utc offset from BIF
+  US-xSE   deciduous  n=  12407 matched hours   utc offset from BIF
+  US-xSP   evergreen  n=  14349 matched hours   utc offset from BIF
+  US-xST   deciduous  n=  17440 matched hours   utc offset from BIF
+  US-xTA   evergreen  n=  14934 matched hours   utc offset from BIF
+  US-xTE   evergreen  n=  13793 matched hours   utc offset from BIF
+  US-xTR   deciduous  n=  15997 matched hours   utc offset from BIF
+  US-xUK   deciduous  n=   8553 matched hours   utc offset from BIF
+  US-xWR   evergreen  n=  16594 matched hours   utc offset from BIF
+  US-xYE   evergreen  n=  11057 matched hours   utc offset from BIF
+
+576 row(s) over 72 station(s) -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/hourly_stats.csv
+
+SKIPPED 30:
+  ! US-Blk: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CPF: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CPk: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CRK: zero overlap -- model 1985-2020, tower 2022-2026
+  ! US-CZ2: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CZ3: no FLUXNET archive (site has no ONEFlux product)
+  ! US-CZ4: no FLUXNET archive (site has no ONEFlux product)
+  ! US-DPP: no FLUXNET archive (site has no ONEFlux product)
+  ! US-GBT: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Ha2: no FLUXNET archive (site has no ONEFlux product)
+  ! US-LPH: no FLUXNET archive (site has no ONEFlux product)
+  ! US-MEF: zero overlap -- model 1985-2020, tower 2024-2026
+  ! US-MRf: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Me4: no FLUXNET archive (site has no ONEFlux product)
+  ! US-Me7: zero overlap -- model 1985-2020, tower 2022-2024
+  ... and 15 more
+
+finished   : 2026-08-27T06:18:05Z
+exit status: 1  (1 = a station was skipped; read the list above)

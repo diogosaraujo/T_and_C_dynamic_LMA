@@ -65,23 +65,49 @@ QC_OF = {"LE": "LE_F_MDS_QC", "H": "H_F_MDS_QC",
          "GPP_NT": "NEE_VUT_REF_QC", "GPP_DT": "NEE_VUT_REF_QC"}
 
 
-def utc_offset(root: Path, sid: str):
-    """Hours to ADD to local standard time to reach UTC, from the FLUXNET BIF."""
+def utc_offset(root: Path, sid: str, lon: float | None = None):
+    """Hours to ADD to local standard time to reach UTC.
+
+    THREE SOURCES, IN ORDER, AND THE ONE USED IS REPORTED. Job 39700 skipped
+    every station because this demanded a UTC_OFFSET row at a fixed column
+    index in the BIF. US-HBK has one; most sites apparently do not, and losing
+    the entire fleet over a missing metadata field is far worse than a possible
+    one-hour error.
+
+    The error is also benign for the headline result: an offset that is wrong by
+    an hour degrades BOTH arms identically, so the fixed-versus-dynamic skill
+    score survives it. Only the absolute RMSE and correlation suffer, which is
+    why the source is written into the output rather than hidden.
+    """
     hits = sorted(Path(root).glob(f"**/*{sid}*BIF*.csv"))
-    if not hits:
-        return None, f"{sid}: no BIF file, cannot establish the UTC offset"
-    # The BIF is not UTF-8 at every site: job 39698 died on byte 0xb5, the
-    # micro sign in a units string, written in Latin-1. Only the UTC_OFFSET row
-    # is needed here, so decode leniently rather than let one stray byte in an
-    # unrelated field stop the whole fleet.
-    with hits[0].open(newline="", encoding="utf-8-sig", errors="replace") as fh:
-        for row in csv.reader(fh):
-            if len(row) >= 5 and row[3].strip().upper() == "UTC_OFFSET":
-                try:
-                    return -float(row[4]), None   # LST = UTC + off, so UTC = LST - off
-                except ValueError:
-                    pass
-    return None, f"{sid}: BIF has no usable UTC_OFFSET"
+    if hits:
+        # The BIF is not UTF-8 at every site: job 39698 died on byte 0xb5, a
+        # micro sign in a units string. Only one row is wanted, so decode
+        # leniently. Columns are named, so find them rather than assume index 3.
+        with hits[0].open(newline="", encoding="utf-8-sig", errors="replace") as fh:
+            rd = csv.reader(fh)
+            head = next(rd, [])
+            up = [c.strip().upper() for c in head]
+            iv = up.index("VARIABLE") if "VARIABLE" in up else 3
+            idv = up.index("DATAVALUE") if "DATAVALUE" in up else 4
+            for row in rd:
+                if not row:
+                    continue
+                # Match on ANY field: the variable name has appeared in both the
+                # VARIABLE and VARIABLE_GROUP columns.
+                if not any(c.strip().upper() == "UTC_OFFSET" for c in row):
+                    continue
+                for j in (idv, len(row) - 1):
+                    if j < len(row):
+                        try:
+                            return -float(row[j]), "BIF"
+                        except ValueError:
+                            continue
+    if lon is not None and np.isfinite(lon):
+        # Standard time zones follow 15-degree bands closely enough across
+        # CONUS; boundaries are irregular, so this can be an hour out.
+        return -float(round(lon / 15.0)), "longitude"
+    return None, None
 
 
 def read_model_hourly(path: Path) -> dict:
@@ -117,11 +143,17 @@ def read_model_hourly(path: Path) -> dict:
     return out
 
 
-def read_tower_hourly(root: Path, sid: str, gpp: str, max_qc: float):
+def read_tower_hourly(root: Path, sid: str, gpp: str, max_qc: float,
+                      lon: float | None = None):
     """Tower hourly series keyed by UTC hour, or (None, reason)."""
-    off, why = utc_offset(root, sid)
+    hits0 = sorted(Path(root).glob(f"**/*{sid}*FLUXMET*HH*.csv"))
+    if not hits0:
+        # No FLUXNET archive at all -- one of the 32 sites ONEFlux has not
+        # processed. An expected absence, not a parsing failure.
+        return None, f"{sid}: no FLUXNET archive (site has no ONEFlux product)"
+    off, src = utc_offset(root, sid, lon)
     if off is None:
-        return None, why
+        return None, f"{sid}: no UTC offset from BIF or longitude"
     hits = sorted(Path(root).glob(f"**/*{sid}*FLUXNET_FLUXMET_HH_*.csv"))
     if not hits:
         hits = sorted(Path(root).glob(f"**/*{sid}*FLUXMET*HH*.csv"))
@@ -165,6 +197,7 @@ def read_tower_hourly(root: Path, sid: str, gpp: str, max_qc: float):
     out = {"key": utc, "GPP": g["GPP"].to_numpy(float),
            "LE": g["LE"].to_numpy(float), "H": g["H"].to_numpy(float)}
     out["ET"] = out["LE"] * W_TO_MM_H
+    out["offset_source"] = src
     return out, None
 
 
@@ -205,9 +238,10 @@ def main(argv=None) -> int:
             else sorted(p.name for p in a.root.iterdir()
                         if p.is_dir() and next(p.glob("**/fixed_lma*"), None)))
 
-    rows, skipped = [], []
+    rows, skipped, n_src = [], [], {}
     for sid in want:
-        tw, why = read_tower_hourly(a.tower_dir, sid, a.gpp, a.max_qc)
+        lon = sites[sid][1] if sid in sites else None
+        tw, why = read_tower_hourly(a.tower_dir, sid, a.gpp, a.max_qc, lon)
         if tw is None:
             skipped.append(why); continue
         pairs = list(find_pairs(a.root, sid, a.pair))
@@ -242,7 +276,10 @@ def main(argv=None) -> int:
                                 "rmse", "rsr", "bias", "r")],
                              f"{ss:.6g}"])
         n0 = got[("fixed", "LE")].get("n", 0)
-        print(f"  {sid:<9}{pft:<10} n={n0:>7} matched hours", flush=True)
+        src = tw.get("offset_source", "?")
+        n_src[src] = n_src.get(src, 0) + 1
+        print(f"  {sid:<9}{pft:<10} n={n0:>7} matched hours   "
+              f"utc offset from {src}", flush=True)
 
     if not rows:
         print("ERROR: nothing computed", file=sys.stderr)

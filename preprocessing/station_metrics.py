@@ -330,11 +330,30 @@ def read_lma(root: Path, ds: str) -> pd.DataFrame | None:
     if "gcm" in cols:
         out["gcm"] = d[cols["gcm"]].astype(str).fillna("")
         keys = ["gcm", "station", "year"]
+    elif ds != "era5":
+        # HARD STOP, not a note. A GCM dataset whose LMA table has no model
+        # column cannot produce per-model LMA rows, and the run would take 35
+        # minutes to finish looking healthy while silently reproducing the
+        # previous output. That happened three times. Fail in one second
+        # instead, and say exactly which command regenerates the file --
+        # analyze_lma_effect.py has an extract stage and a report stage, and
+        # only the REPORT stage writes this table.
+        raise SystemExit(
+            f"ERROR: {p.name} has no gcm column, so LMA cannot be attributed "
+            f"per model for {ds}.
+"
+            f"       Regenerate it first:
+"
+            f"         sbatch -p SOE_legacy -A efthymios "
+            f"slurm/submit_lma_effect.sh --report
+"
+            f"       then confirm:  head -1 {p}
+"
+            f"       Re-running station_metrics before that reproduces the "
+            f"previous output exactly.")
     else:
         out["gcm"] = ""
         keys = ["station", "year"]
-        print(f"  note: {p.name} has no gcm column; LMA cannot be attributed "
-              f"per model for {ds}", flush=True)
     n0 = len(out)
     out = out.drop_duplicates(keys)
     print(f"  lma {ds:<11}{n0:>8} rows -> {len(out):>8} unique on {keys}, "

@@ -3,11 +3,12 @@
 
 Four panels stacked vertically -- ERA5-Land, GCM historical, ssp126, ssp585 --
 each showing six variables as a violin with the median and interquartile range
-drawn over it, deciduous above evergreen. To the right of every variable row
-sits a small boxplot of the ABSOLUTE fluxes in that variable's own units, four
-boxes: deciduous fixed, deciduous dynamic, evergreen fixed, evergreen dynamic.
-The percent axis says how much the treatment moved the flux; the boxes say how
-big the flux was, so "5%" can be read as a quantity.
+drawn over it, deciduous above evergreen, sharing one x axis so the four are
+comparable by position.
+
+Absolute fluxes are a SEPARATE figure (--metrics absolute): six vertical
+panels, one per variable, sixteen boxes each. Attached to every variable row
+they came to 24 axes on one page and were unreadable.
 
 MEDIAN ACROSS GCMS IS TAKEN AT THE METRIC LEVEL, NEVER AT THE FLUX LEVEL.
 Each metric is computed inside one GCM first, and the median is taken across
@@ -24,10 +25,13 @@ quantity, not an average across mismatched climates.
   flux         100*(dyn-fixed)/|fixed| per station-year, then median over GCMs
   variability  100*(sd_dyn/sd_fixed - 1) per station,    then median over GCMs
 
-SYMLOG X. Linear inside --linthresh, logarithmic outside. Every value is
-plotted; nothing is clipped and nothing is counted in a footnote. The extreme
-values are real quantities from station-years where the fixed arm is near
-zero, and they belong on the axis rather than off it.
+SYMLOG X, SCALED TO THE BOXES. Linear inside --linthresh, logarithmic
+outside. The limits come from the interquartile ranges of the groups drawn,
+not from the extremes, so violin tails extend past the view and are clipped
+on purpose. Scaling to the extremes instead let a single station-year with a
+near-zero denominator set the range and compress every median onto one line.
+Every value is still computed and still shapes the box and the median; only
+the view is bounded.
 
 No station is excluded. Station-years whose denominator survives as
 near-zero after the median are COUNTED AND REPORTED, so it is visible whether
@@ -62,32 +66,43 @@ METRICS = {
 
 
 def pct_ticks(ax, linthresh, lo, hi):
-    """Decade ticks labelled as percentages, not 3.55 x 10^6.
+    """Percent tick labels, and limits taken from the IQR spread.
 
-    The default symlog formatter writes mantissa-and-exponent, which reads as
-    a measurement rather than a percent change. Decades only, each labelled
-    with a % sign, and a power of ten written as a power rather than as
-    1000000%.
+    The range comes from the boxes, not from the extremes: the whole point of
+    the figure is the middle of the distribution, and a single station-year
+    with a near-zero denominator would otherwise set the scale and compress
+    every median into a line. Violin tails are clipped by this on purpose --
+    they are still drawn, just outside the view.
+
+    Labels carry a % sign. The default symlog formatter writes
+    mantissa-and-exponent, which reads as a measurement rather than a percent
+    change; a power of ten is written as a power rather than as 1000000%.
     """
     import numpy as _np
-    from matplotlib.ticker import FuncFormatter, FixedLocator
-    top = max(abs(lo), abs(hi), linthresh * 10)
-    e = int(_np.ceil(_np.log10(top)))
-    dec = [10.0 ** k for k in range(int(_np.log10(linthresh)), e + 1)]
-    ticks = [-t for t in reversed(dec)] + [0.0] + dec
+    from matplotlib.ticker import FuncFormatter, FixedLocator, MaxNLocator
 
     def fmt(v, _pos):
         if v == 0:
             return "0"
-        a = abs(v)
-        sign = "-" if v < 0 else ""
+        a, sign = abs(v), ("-" if v < 0 else "")
         if a < 1000:
             return f"{sign}{a:g}%"
         return sign + f"$10^{{{int(round(_np.log10(a)))}}}$%"
 
-    ax.xaxis.set_major_locator(FixedLocator(ticks))
+    pad = 0.12 * (hi - lo) if hi > lo else max(abs(hi), 1.0) * 0.5
+    lo_, hi_ = lo - pad, hi + pad
+    if max(abs(lo_), abs(hi_)) <= linthresh:
+        # Inside the linear region of the symlog axis, so ordinary ticks read
+        # correctly and decade ticks would give one or two across the panel.
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=7, steps=[1, 2, 2.5, 5, 10]))
+    else:
+        e = int(_np.ceil(_np.log10(max(abs(lo_), abs(hi_)))))
+        dec = [10.0 ** k for k in range(int(_np.log10(linthresh)), e + 1)]
+        ticks = [-t for t in reversed(dec)] + [0.0] + dec
+        ax.xaxis.set_major_locator(
+            FixedLocator([t for t in ticks if lo_ <= t <= hi_]))
     ax.xaxis.set_major_formatter(FuncFormatter(fmt))
-    ax.set_xlim(-top * 1.6, top * 1.6)
+    ax.set_xlim(lo_, hi_)
 
 
 class Missing(Exception):
@@ -309,8 +324,12 @@ def build(d, metric, out_png, figsize, linthresh):
     # ONE shared x axis. Per-panel limits made the four impossible to compare:
     # the eye reads position, and the same position meant a different percent
     # in each panel.
-    lo = float(np.nanmin(d["value"])) if len(d) else -1.0
-    hi = float(np.nanmax(d["value"])) if len(d) else 1.0
+    # Limits from the QUARTILES of every group drawn, not from the extremes.
+    q = (d.groupby(["dataset", "variable", "pft"], observed=True)["value"]
+           .quantile([0.25, 0.75]))
+    q = q[np.isfinite(q)]
+    lo = float(q.min()) if len(q) else -1.0
+    hi = float(q.max()) if len(q) else 1.0
     ax0 = None
     for i, (ds, lab) in enumerate(have):
         ax = fig.add_subplot(outer[i], sharex=ax0)

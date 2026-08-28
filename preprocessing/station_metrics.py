@@ -320,9 +320,25 @@ def read_lma(root: Path, ds: str) -> pd.DataFrame | None:
     sid = cols.get("stationid") or cols.get("station")
     out = d[[sid, cols["year"], cols["lma"]]].rename(
         columns={sid: "station", cols["year"]: "year", cols["lma"]: "LMA"})
-    out = out.drop_duplicates(["station", "year"])
     out["scenario"] = ds
-    out["gcm"] = ""          # the lma_effect tables do not split by member
+    # USE THE MODEL COLUMN WHEN IT IS THERE. This used to select only
+    # station/year/LMA, deduplicate on (station, year) -- silently keeping
+    # whichever of the five GCMs happened to come first and discarding the
+    # other four -- and then hardcode gcm="". That empty string can never
+    # match a GCM run's real model name, so the join in sensitivity() found
+    # nothing and every GCM LMA regression was skipped without a word.
+    if "gcm" in cols:
+        out["gcm"] = d[cols["gcm"]].astype(str).fillna("")
+        keys = ["gcm", "station", "year"]
+    else:
+        out["gcm"] = ""
+        keys = ["station", "year"]
+        print(f"  note: {p.name} has no gcm column; LMA cannot be attributed "
+              f"per model for {ds}", flush=True)
+    n0 = len(out)
+    out = out.drop_duplicates(keys)
+    print(f"  lma {ds:<11}{n0:>8} rows -> {len(out):>8} unique on {keys}, "
+          f"{out['gcm'].nunique()} model(s)", flush=True)
     return out
 
 

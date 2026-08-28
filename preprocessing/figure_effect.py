@@ -223,9 +223,12 @@ def panel(ax, d: pd.DataFrame, note: str | None = None) -> int:
                 continue
             n_used += v.size
             if v.size > 1 and np.ptp(v) > 0:
-                pc = ax.violinplot([v], positions=[y0 + off], vert=False,
-                                   widths=0.34, showextrema=False,
-                                   showmedians=False)
+                kw = dict(positions=[y0 + off], widths=0.34,
+                          showextrema=False, showmedians=False)
+                try:        # vert= is deprecated in mpl 3.11, gone in 3.13
+                    pc = ax.violinplot([v], orientation="horizontal", **kw)
+                except TypeError:                       # mpl < 3.10
+                    pc = ax.violinplot([v], vert=False, **kw)
                 for b in pc["bodies"]:
                     b.set_facecolor(colr); b.set_alpha(0.30)
                     b.set_edgecolor(colr); b.set_linewidth(0.6)
@@ -379,7 +382,9 @@ def main(argv=None) -> int:
 
     try:
         root = a.results or resolve_out(".", create=False)
-        out_dir = a.out or resolve_figure("figures")
+        # resolve_figure already IS $TC_FIGURES; passing "figures" nested it
+        # one level deeper and wrote figures/figures/.
+        out_dir = a.out or resolve_figure(".")
     except NoResultsDir as e:
         print(f"ERROR: {e}", file=sys.stderr)
         return 1

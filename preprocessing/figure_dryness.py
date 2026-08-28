@@ -57,7 +57,13 @@ XAXIS = {
                 vline=1.0, prefix="dryness"),
     "zr95": dict(col="zr95", label="rooting depth  ZR95$_H$  (mm)",
                  note="", vline=None, prefix="rootdepth"),
+    "hc": dict(col="hc", label="canopy height  hc$_H$  (m)",
+               note="", vline=None, prefix="height"),
 }
+# MOD_PARAM name and a sanity range for each static site parameter, so a
+# value that cannot be right is caught rather than plotted.
+SITE_PARAM = {"zr95": ("ZR95_H", 50.0, 6000.0),
+              "hc": ("hc_H", 0.5, 80.0)}
 
 
 # Where the fit text sits, per dataset and variable. Defaults to top-left;
@@ -103,37 +109,48 @@ def ols(x: np.ndarray, y: np.ndarray) -> dict:
     return {"n": n, "b": float(b), "a": float(a), "r2": r2, "p": p}
 
 
-def root_depth(root: Path) -> pd.DataFrame:
-    """Station -> ZR95_H in mm, from the MOD_PARAM files the runs used.
+def site_param(root: Path, xkind: str) -> pd.DataFrame:
+    """Station -> a static MOD_PARAM value, from the files the runs used.
 
-    NOT from the fetched D95 product. T&C requires ZR95_H <= the deepest soil
-    layer or Root_Fraction_General aborts, so build_model_run caps it; the
-    fetched value and the value the model actually rooted with are different
-    numbers at any site where the cap bit. Only the second explains model
-    behaviour, so it is read back out of MOD_PARAM.
+    Read back out of MOD_PARAM rather than from the product it came from.
+    ZR95_H is capped at the deepest soil layer -- T&C aborts in
+    Root_Fraction_General otherwise -- so the fetched D95 and the depth the
+    model actually rooted with differ wherever the cap bit, and only the
+    second explains model behaviour. hc_H is taken the same way for the same
+    reason: what the run used is what matters, not what was looked up.
     """
     import os
     import re
     mr = os.environ.get("MODEL_RUN") or os.environ.get("TC_MODEL_RUN")
     if not mr or not Path(mr).is_dir():
-        raise Missing("MODEL_RUN is not set, so ZR95_H cannot be read from "
-                      "the MOD_PARAM files the runs actually used")
+        raise Missing(f"MODEL_RUN is not set, so {SITE_PARAM[xkind][0]} "
+                      f"cannot be read from the MOD_PARAM files the runs "
+                      f"actually used")
+    name, lo, hi = SITE_PARAM[xkind]
     rows = []
     for f in sorted(Path(mr).glob("*/**/MOD_PARAM_*.m")):
         st = f.parent
         while st.parent != Path(mr) and st.parent != st:
             st = st.parent
-        m = re.search(r"^\s*ZR95_H\s*=\s*\[?\s*([0-9.]+)",
+        m = re.search(rf"^\s*{name}\s*=\s*\[?\s*([0-9.]+)",
                       f.read_text(errors="replace"), re.M)
         if m:
-            rows.append({"station": st.name, "zr95": float(m.group(1))})
+            rows.append({"station": st.name, xkind: float(m.group(1))})
     if not rows:
-        raise Missing(f"no ZR95_H found in any MOD_PARAM under {mr}")
-    d = (pd.DataFrame(rows).groupby("station", as_index=False)["zr95"]
+        raise Missing(f"no {name} found in any MOD_PARAM under {mr}")
+    d = (pd.DataFrame(rows).groupby("station", as_index=False)[xkind]
            .median())
-    print(f"  ZR95_H from MOD_PARAM: {len(d)} stations, "
-          f"{d.zr95.min():.0f}-{d.zr95.max():.0f} mm, "
-          f"median {d.zr95.median():.0f}")
+    bad = int(((d[xkind] < lo) | (d[xkind] > hi)).sum())
+    print(f"  {name} from MOD_PARAM: {len(d)} stations, "
+          f"{d[xkind].min():.1f}-{d[xkind].max():.1f}, "
+          f"median {d[xkind].median():.1f}, {d[xkind].nunique()} distinct")
+    if bad:
+        print(f"  WARNING: {bad} station(s) outside the plausible range "
+              f"{lo}-{hi} for {name}", file=sys.stderr)
+    if d[xkind].nunique() < 4:
+        print(f"  WARNING: only {d[xkind].nunique()} distinct {name} values -- "
+              f"a regression across so few x positions is weak whatever its p",
+              file=sys.stderr)
     return d
 
 
@@ -159,8 +176,8 @@ def load(root: Path, xkind: str = "phi") -> pd.DataFrame:
     s = (S.groupby(["dataset", "station", "pft", "variable"],
                    as_index=False)["slope"].median())
 
-    if xkind == "zr95":
-        d = root_depth(root)
+    if xkind in SITE_PARAM:
+        d = site_param(root, xkind)
         out = s.merge(d, on="station", how="inner")   # static: no dataset key
     else:
         D = pd.read_csv(dp, low_memory=False)

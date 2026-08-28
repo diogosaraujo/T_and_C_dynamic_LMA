@@ -115,17 +115,30 @@ def era5_pet(st: pd.DataFrame, y0: int, y1: int) -> pd.DataFrame:
         # ONE READ PER LATITUDE ROW, not per station: contiguous and instant,
         # where slicing the time axis gathers scattered elements and stalls.
         strip = {r: np.asarray(d[probe, r, :], dtype=float) for r in rows}
-        score = {k: int(np.isfinite([strip[r][j]
-                                     for r, j in zip(lat_i, v)]).sum())
-                 for k, v in cand.items()}
-        best = max(score, key=score.get)
-        print(f"  longitude convention: {best}  "
-              f"(finite stations: " +
-              ", ".join(f"{k}={v}" for k, v in score.items()) + ")")
-        if score[best] == 0:
-            raise SystemExit("ERROR: no station lands on a finite ERA5 cell "
-                             "under either longitude convention")
+        # DECIDE ON THE LAND MASK, NOT ON THE STATIONS. Counting finite
+        # stations cannot separate the two conventions: a site at -105 maps to
+        # 255E (Colorado) under one and 75E (central Asia) under the other, and
+        # BOTH are land in ERA5-Land. The first version scored 116 against 118
+        # and picked the wrong one on two stations of noise, which would have
+        # sampled Asia and produced entirely plausible-looking numbers.
+        # The Atlantic at 40N is ocean, hence NaN, and that is unambiguous.
+        row40 = np.asarray(d[probe, 500, :], dtype=float)
+        fin = np.isfinite(row40)
+        frac = {"0-360": float(fin[2900:3500].mean()),      # lon -70..-10
+                "-180-180": float(fin[1100:1700].mean())}
+        best = min(frac, key=frac.get)
+        print(f"  longitude convention: {best}   (finite fraction where the "
+              f"Atlantic must be: " +
+              ", ".join(f"{k}={v:.3f}" for k, v in frac.items()) + ")")
+        if frac[best] > 0.05 or (max(frac.values()) - min(frac.values())) < 0.1:
+            raise SystemExit(
+                "ERROR: the longitude convention is not resolved -- neither "
+                "candidate puts ocean where the Atlantic is at 40N. Refusing "
+                "to sample on a guess; check the grid before rerunning.")
         lon_i = cand[best]
+        n_ok = int(np.isfinite([strip[r][j]
+                                for r, j in zip(lat_i, lon_i)]).sum())
+        print(f"  stations on finite cells: {n_ok} of {len(lat_i)}")
 
         out = []
         for r in rows:

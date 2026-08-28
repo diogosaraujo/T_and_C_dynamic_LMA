@@ -1,0 +1,32 @@
+job        : 40359
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T00:21:08Z
+
+variability  era5    1472 rows   gcm    19920 rows
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_variability_era5.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_variability_gcm.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_variability_gcm_median.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_variability_gcm_by_model.png
+flux         era5   52992 rows   gcm  1332320 rows
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_flux_era5.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_flux_gcm.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_flux_gcm_median.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_flux_gcm_by_model.png
+sens_Ta      era5    1288 rows   gcm    17430 rows
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_sens_Ta_era5.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_sens_Ta_gcm.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_sens_Ta_gcm_median.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_sens_Ta_gcm_by_model.png
+sens_SPEI12  era5    1288 rows   gcm    17430 rows
+  SKIP era5: sens_SPEI12: every variable empty after filtering
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_sens_SPEI12_gcm.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_sens_SPEI12_gcm_median.png
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_sens_SPEI12_gcm_by_model.png
+sens_LMA     era5    1288 rows   gcm    17430 rows
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/figures/effect_sens_LMA.png
+
+finished   : 2026-08-28T00:22:12Z
+exit status: 1

@@ -1,0 +1,24 @@
+job        : 40383
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-28T06:47:08Z
+
+labels era5 : ok
+labels gcm  : ok
+  historical annual      204000 rows ->   20400 metric rows
+  historical monthly    2447916 rows ->  265200 metric rows
+  labels matched 816000/822800 rows
+  historical seasonal    822800 rows ->   81600 metric rows
+  lma historical   382500 rows ->    12750 unique on ['gcm', 'station', 'year'], 5 model(s)
+  historical sens annual     53550 regression rows
+  lma historical   382500 rows ->    12750 unique on ['gcm', 'station', 'year'], 5 model(s)
+  historical sens monthly   642600 regression rows
+  lma historical   382500 rows ->    12750 unique on ['gcm', 'station', 'year'], 5 model(s)
+  historical sens seasonal  214200 regression rows
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/hist_metrics.csv  (367200 rows)
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/hist_sensitivity.csv  (910350 rows)
+
+finished   : 2026-08-28T07:27:44Z
+exit status: 0  (1 = an input was missing; read the list above)

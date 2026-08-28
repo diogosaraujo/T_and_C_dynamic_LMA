@@ -1,0 +1,3 @@
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_dryness.py:157: RuntimeWarning: Mean of empty slice
+  "pet_mm_yr": float(np.nanmean(annual))})
+  WARNING: every station falls on one side of phi = 1, which is what a unit or longitude error looks like -- check the PET conversions before using this

@@ -1,0 +1,24 @@
+job        : 40418
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T09:51:08Z
+
+stations with coordinates: 118
+
+era5: P from the annual table, 1985-2020, 92 stations
+  longitude convention: 0-360   (finite fraction where the Atlantic must be: 0-360=0.000, -180-180=0.300)
+  stations on finite cells: 116 of 118
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dryness_part_era5.csv  (92 rows)
+
+phi by dataset (median across GCMs first, then across stations):
+         count   min   25%   50%   75%   max
+dataset                                     
+era5    92.000 0.249 0.585 0.707 0.764 0.934
+
+fraction water-limited (phi > 1): 0.0%
+
+finished   : 2026-08-28T09:51:12Z
+exit status: 0

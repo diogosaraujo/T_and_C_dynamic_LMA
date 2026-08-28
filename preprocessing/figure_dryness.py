@@ -50,6 +50,25 @@ PANELS = [("era5", "ERA5-Land"), ("historical", "GCM historical"),
           ("ssp126", "GCM ssp126"), ("ssp585", "GCM ssp585")]
 
 
+# Where the fit text sits, per dataset and variable. Defaults to top-left;
+# these move it clear of the points, which run down-right in most panels.
+CORNER = {}
+for _ds, _br, _tr in (
+        ("era5",       ("GPP", "LAI", "ET", "TR", "LE"), ("H",)),
+        ("historical", ("GPP", "LAI"),                   ()),
+        ("ssp126",     ("GPP", "LAI", "TR", "ET", "LE"), ("H",)),
+        ("ssp585",     ("GPP", "LAI", "TR", "ET", "LE"), ("H",))):
+    for _v in _br:
+        CORNER[(_ds, _v)] = "br"
+    for _v in _tr:
+        CORNER[(_ds, _v)] = "tr"
+
+# x, y, ha, va and the direction successive lines stack.
+ANCHOR = {"tl": (0.02, 0.97, "left", "top", -1),
+          "tr": (0.98, 0.97, "right", "top", -1),
+          "br": (0.98, 0.03, "right", "bottom", +1)}
+
+
 class Missing(Exception):
     """A required table or column is absent. Never substituted."""
 
@@ -149,12 +168,15 @@ def build(d: pd.DataFrame, ds: str, label: str, out_png: Path, figsize):
                 star = ("***" if r["p"] < 0.001 else "**" if r["p"] < 0.01
                         else "*" if r["p"] < 0.05 else "")
                 txt.append((colr, f"b={r['b']:.3g}  R$^2$={r['r2']:.2f}"
-                                  f"  p={r['p']:.3g}{star}  n={r['n']}"))
+                                  f"{star}  n={r['n']}"))
+        x0, y0, ha, va, step = ANCHOR[CORNER.get((ds, disp), "tl")]
         for i, (colr, t) in enumerate(txt):
             # Boxed: unboxed it sat on the zero line and the points, and the
-            # numbers are the reportable part of the panel.
-            ax.text(0.02, 0.97 - 0.085 * i, t, transform=ax.transAxes,
-                    fontsize=5.6, color=colr, va="top", ha="left", zorder=6,
+            # numbers are the reportable part of the panel. Bottom-anchored
+            # text stacks upward so the two PFT lines never overlap.
+            j = (len(txt) - 1 - i) if step > 0 else i
+            ax.text(x0, y0 + step * 0.085 * j, t, transform=ax.transAxes,
+                    fontsize=5.6, color=colr, va=va, ha=ha, zorder=6,
                     bbox=dict(facecolor="white", alpha=0.78, edgecolor="none",
                               boxstyle="round,pad=0.18"))
         ax.set_title(disp, fontsize=9, loc="left", pad=2)

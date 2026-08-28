@@ -136,12 +136,28 @@ def attach_drought(d: pd.DataFrame, lab: pd.DataFrame | None) -> pd.DataFrame:
     for f in (d, L):
         f["period"] = f["period"].astype(str)
         f["year"] = pd.to_numeric(f["year"], errors="coerce").astype("Int64")
+    # The ERA5 label table writes scenario as "era5_land"; load() sets it to
+    # the dataset name, "era5". They never matched, so every ERA5 row joined
+    # to nothing: spei all NaN (no SPEI sensitivity) and class all
+    # "unlabelled" (empty drought and normal subsets). Normalise before the
+    # join rather than after.
+    L["scenario"] = L["scenario"].astype(str).replace({"era5_land": "era5"})
     keys = ["station", "freq", "year", "period", "scenario"]
     if d["gcm"].astype(str).str.len().gt(0).any():
         keys.append("gcm")
     else:
         L = L.drop(columns=["gcm"])
     out = d.merge(L, on=keys, how="left")
+    # A join that matches NOTHING is a bug, not a dataset without droughts.
+    # Silently filling "unlabelled" is what hid this for a whole run.
+    hit = int(out["class"].notna().sum())
+    if hit == 0 and len(L):
+        print(f"  ERROR: drought labels matched 0 of {len(out)} rows on "
+              f"{keys}; label scenarios={sorted(L['scenario'].unique())[:4]}, "
+              f"data scenarios={sorted(d['scenario'].astype(str).unique())[:4]}",
+              file=sys.stderr)
+    elif hit < len(out):
+        print(f"  labels matched {hit}/{len(out)} rows", flush=True)
     out["class"] = out["class"].fillna("unlabelled")
     return out
 

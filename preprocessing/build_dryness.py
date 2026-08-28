@@ -265,9 +265,39 @@ def main(argv=None) -> int:
         print(f"\n{ds}: P from the annual table, {y0}-{y1}, "
               f"{P['station'].nunique()} stations")
         if ds == "era5":
-            pet = era5_pet(st, y0, y1)
-            pet["gcm"] = ""
-            got = [("", pet)]
+            # ERA5-Land pev is NOT USABLE as PET here. ECMWF document it as an
+            # open-water (pan) evaporation that "can give unrealistic results
+            # in arid conditions due to too strong evaporation forced by dry
+            # air", and that is exactly what we measured: against NEX-GDDP PET
+            # at the same stations the ratio runs 1.2 to 7.4, smallest in
+            # humid Florida (2.7) and worst at the Arizona ponderosa sites
+            # (7.3, 10,000 mm/yr). A varying ratio rules out a unit error.
+            #
+            # phi is a property of a SITE'S CLIMATE, not of which run produced
+            # the LMA slopes, so the ERA5 panel takes its dryness from the
+            # GCM-historical period. Every panel then shares one PET product
+            # and one scale; the LMA slopes on the y axis are still ERA5's.
+            # The assumption -- historical dryness characterised from GCM
+            # rather than reanalysis climate -- is far smaller than mixing pan
+            # evaporation with reference-style PET across panels.
+            got = []
+            for g in gcms:
+                pg = gcm_pet(st, "historical", y0, y1) if False else                      gcm_pet(st, g, "historical", y0, y1)
+                if pg is None:
+                    missing.append(f"era5(via historical)/{g}: no pet files")
+                    continue
+                pg["gcm"] = ""          # ERA5 has no model dimension
+                got.append(("", pg))
+            if got:
+                # One phi per station: median over the models supplying it.
+                allp = pd.concat([p_ for _, p_ in got], ignore_index=True)
+                med = (allp.groupby("station", as_index=False)["pet_mm_yr"]
+                           .median())
+                med["gcm"] = ""
+                got = [("", med)]
+                print(f"  PET from NEX-GDDP historical (median of "
+                      f"{len(gcms)} models), mean "
+                      f"{np.nanmean(med['pet_mm_yr']):.1f} mm/yr")
         else:
             got = []
             for g in gcms:

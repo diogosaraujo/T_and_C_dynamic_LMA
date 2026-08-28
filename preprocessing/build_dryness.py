@@ -174,6 +174,7 @@ def gcm_pet(st: pd.DataFrame, gcm: str, scen: str,
         return None
 
     lat_i = lon_i = None
+    r0 = r1 = c0 = c1 = None
     tot, cnt = np.zeros(len(st)), 0
     for y, p in sorted(files.items()):
         with nc.Dataset(p) as d:
@@ -186,10 +187,22 @@ def gcm_pet(st: pd.DataFrame, gcm: str, scen: str,
                 slon = st["lon"].to_numpy(float)
                 if np.nanmax(lov) > 180.0:
                     slon = np.mod(slon, 360.0)
-                lat_i = np.abs(lav[None, :]
-                               - st["lat"].to_numpy(float)[:, None]).argmin(1)
-                lon_i = np.abs(lov[None, :] - slon[:, None]).argmin(1)
-            a = np.ma.filled(d.variables["pet"][:], np.nan).astype(float)
+                gi = np.abs(lav[None, :]
+                            - st["lat"].to_numpy(float)[:, None]).argmin(1)
+                gj = np.abs(lov[None, :] - slon[:, None]).argmin(1)
+                # BOUNDING BOX. Reading the whole global field costs 83 MB per
+                # file and 1035 files is ~86 GB to extract 92 points each. The
+                # stations span a small part of the grid, so read that window
+                # and shift the indices into it: same numbers, ~3% of the I/O.
+                pad = 2
+                r0, r1 = max(int(gi.min()) - pad, 0), int(gi.max()) + pad + 1
+                c0, c1 = max(int(gj.min()) - pad, 0), int(gj.max()) + pad + 1
+                lat_i, lon_i = gi - r0, gj - c0
+                print(f"    window rows {r0}:{r1} cols {c0}:{c1} "
+                      f"({100.0*(r1-r0)*(c1-c0)/(len(lav)*len(lov)):.1f}% "
+                      f"of the grid)", flush=True)
+            a = np.ma.filled(d.variables["pet"][:, r0:r1, c0:c1],
+                             np.nan).astype(float)
         # mm/DAY despite the "mm" label -- see the module docstring.
         yr = (a[:, lat_i, lon_i] * days_per_month(y)[:, None]).sum(axis=0)
         tot += yr

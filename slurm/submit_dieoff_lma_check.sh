@@ -49,7 +49,7 @@ echo
 source "$TC_VENV/bin/activate" || { echo "ERROR: venv $TC_VENV missing" >&2; exit 1; }
 cd "$REPO_ROOT/preprocessing" || exit 1
 
-python -u lmachk_persistence.py "$@"
+python -u dieoff_lma_check.py "$@"
 rc=$?
 echo
 echo "finished   : $(date -u +%Y-%m-%dT%H:%M:%SZ)"

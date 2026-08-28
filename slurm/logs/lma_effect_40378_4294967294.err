@@ -1,0 +1,12 @@
+/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3036: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3037: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/analyze_lma_effect.py:384: RuntimeWarning: invalid value encountered in log
+  x = np.log(sla / np.nanmean(sla))                # SLA anomaly, log space
+/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/analyze_lma_effect.py:541: RuntimeWarning: Mean of empty slice
+  A(f"| {k} | {fmt(s.mean(),2)} | {fmt(mx.mean(),2)} | {fmt(rs.mean(),2)} "
+/volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)

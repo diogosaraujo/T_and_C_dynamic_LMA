@@ -1,0 +1,12 @@
+job        : 40371
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-28T04:47:08Z
+
+labels era5 : ok
+labels gcm  : ok
+  historical annual      204000 rows ->   20400 metric rows
+  historical monthly    2447916 rows ->  265200 metric rows
+  labels matched 816000/822800 rows
+  historical seasonal    822800 rows ->   81600 metric rows

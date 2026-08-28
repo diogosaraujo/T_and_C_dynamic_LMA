@@ -73,8 +73,12 @@ def find_lma(root: Path) -> tuple[pd.DataFrame | None, list[str]]:
         g = d[[sid, yr, lma]].rename(columns={sid: "station", yr: "year",
                                               lma: "LMA"})
         g["gcm"] = d[low["gcm"]].astype(str) if "gcm" in low else ""
+        g["_has_gcm"] = "gcm" in low
         # Dataset from the filename, since that is the only place it lives.
         stem = p.stem.replace("lma_effect_", "").replace("_annual", "")
+        if stem in ("", "annual"):
+            notes.append(f"  {p.name}: no dataset in the name -- SKIPPED")
+            continue
         g["dataset"] = ("era5" if stem.startswith("era5") else stem)
         frames.append(g)
         notes.append(f"  {p.name}: {len(g)} rows -> dataset={g['dataset'].iloc[0]}")
@@ -83,7 +87,23 @@ def find_lma(root: Path) -> tuple[pd.DataFrame | None, list[str]]:
     L = pd.concat(frames, ignore_index=True)
     L["year"] = pd.to_numeric(L["year"], errors="coerce")
     L["LMA"] = pd.to_numeric(L["LMA"], errors="coerce")
-    return L.dropna(subset=["year", "LMA"]), notes
+    L = L.dropna(subset=["year", "LMA"])
+    # LMA repeats down the flux rows -- one value per station-year, restated
+    # for GPP, ET, H and the rest. Collapse to one row before joining.
+    k = ["dataset", "station", "year"]
+    nuniq = L.groupby(k)["LMA"].nunique()
+    multi = int((nuniq > 1).sum())
+    if multi:
+        # THE GCM DIMENSION IS UNLABELLED. LMA is derived from climate, so
+        # each GCM should give a different LMA for the same station-year --
+        # but these files carry no gcm column, so the values are stacked with
+        # no way to say which belongs to which model. Taking the median here
+        # would silently invent one series out of five.
+        notes.append(f"  WARNING: {multi} of {len(nuniq)} station-years have "
+                     f">1 distinct LMA and no gcm column to separate them; "
+                     f"per-GCM attribution is impossible from these files")
+    L = L.groupby(k, as_index=False)["LMA"].median()
+    return L, notes
 
 
 def main(argv=None) -> int:
@@ -142,12 +162,16 @@ def main(argv=None) -> int:
     f["below_hist"] = f["LMA"] < f["hist_min"]
     f["outside"] = f["above_hist"] | f["below_hist"]
     # How far outside, in units of the station's own historical spread.
-    span = (f["hist_max"] - f["hist_min"]).replace(0, np.nan)
+    # Guard the SPAN, not the result: a station whose historical LMA barely
+    # moved has no meaningful "spans outside", and dividing by it produced
+    # 9.3e35 in the first run.
+    span = (f["hist_max"] - f["hist_min"])
+    span = span.where(span > 0.01 * f["hist_med"].abs(), np.nan)
     f["excess"] = np.where(f["above_hist"], (f["LMA"] - f["hist_max"]) / span,
                   np.where(f["below_hist"], (f["hist_min"] - f["LMA"]) / span,
                            0.0))
 
-    key = ["dataset", "gcm", "station", "year"]
+    key = ["dataset", "station", "year"]
     ev = E[E["arm"].isin(["dynamic_only", "both"])][key].drop_duplicates()
     ev["collapse"] = True
     j = f.merge(ev, on=key, how="left")
@@ -169,9 +193,11 @@ def main(argv=None) -> int:
 
     # Lead-lag: LMA in the years before the first collapse at each station.
     onset = (E[E["arm"].isin(["dynamic_only", "both"])]
-             .groupby(["dataset", "gcm", "station"], observed=True)["year"]
+             .groupby(["dataset", "station"], observed=True)["year"]
              .min().reset_index().rename(columns={"year": "onset"}))
-    q = f.merge(onset, on=["dataset", "gcm", "station"], how="inner")
+    onset = (onset.groupby(["dataset", "station"], as_index=False)["onset"]
+                   .min())
+    q = f.merge(onset, on=["dataset", "station"], how="inner")
     q["lag"] = q["year"] - q["onset"]
     w = q[q["lag"].between(-a.lead, 2)]
     if not w.empty:

@@ -1,0 +1,28 @@
+job        : 40420
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T10:22:09Z
+
+stations with coordinates: 118
+
+era5: P from the annual table, 1985-2020, 92 stations
+    window rows 350:430 cols 942:1168 (2.1% of the grid)
+    window rows 350:430 cols 942:1168 (2.1% of the grid)
+    window rows 350:430 cols 942:1168 (2.1% of the grid)
+    window rows 350:430 cols 942:1168 (2.1% of the grid)
+    window rows 350:430 cols 942:1168 (2.1% of the grid)
+  PET from NEX-GDDP historical (median of 5 models), mean 1004.8 mm/yr
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dryness_part_era5.csv  (92 rows)
+
+phi by dataset (median across GCMs first, then across stations):
+         count   min   25%   50%   75%   max
+dataset                                     
+era5    92.000 0.340 0.838 0.968 1.168 3.862
+
+fraction water-limited (phi > 1): 45.7%
+
+finished   : 2026-08-28T10:23:21Z
+exit status: 0

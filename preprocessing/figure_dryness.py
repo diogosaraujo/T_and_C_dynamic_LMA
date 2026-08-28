@@ -132,7 +132,11 @@ def site_param(root: Path, xkind: str) -> pd.DataFrame:
         st = f.parent
         while st.parent != Path(mr) and st.parent != st:
             st = st.parent
-        m = re.search(rf"^\s*{name}\s*=\s*\[?\s*([0-9.]+)",
+        # The name may carry a MATLAB index: ZR95_H is written "ZR95_H = [800];"
+        # but canopy height is "hc_H(1,:) = [...];". Requiring "NAME =" matched
+        # the first and silently missed the second, and the run failed with
+        # "no hc_H found" against files that all contain it.
+        m = re.search(rf"^\s*{name}\s*(?:\([^)]*\))?\s*=\s*\[?\s*([0-9.]+)",
                       f.read_text(errors="replace"), re.M)
         if m:
             rows.append({"station": st.name, xkind: float(m.group(1))})

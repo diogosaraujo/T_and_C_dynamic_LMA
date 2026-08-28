@@ -65,8 +65,13 @@ GCMS = ["GFDL-ESM4", "IPSL-CM6A-LR", "MPI-ESM1-2-HR",
         "MRI-ESM2-0", "UKESM1-0-LL"]
 SCEN = {"historical": "historical", "ssp126": "ssp126", "ssp585": "ssp585"}
 NEX = Path("/vol_efthymios/NFS07/Data/CMIP6/NEXGDDP")
+# pev, NOT e. In ERA5 "e" is total (actual) evaporation and "pev" is
+# potential. Reading e_1980_2022_monthly.mat put every station below phi = 1
+# with a maximum of 0.934 -- the signature of AET/P, which the water balance
+# bounds at about 1, where PET/P has no such bound. Arizona ponderosa sites
+# cannot be energy-limited.
 ERA5_PET = Path("/vol_efthymios/NFS07/Data/ERA5_Land/monthly/"
-                "e_1980_2022_monthly.mat")
+                "pev_1980_2022_monthly.mat")
 ERA5_YEAR0 = 1980          # data_all starts at January 1980, 516 months
 # ERA5-Land 0.1 deg: 1801 latitudes from +90 descending, 3600 longitudes.
 ERA5_DLAT = 0.1

@@ -332,6 +332,9 @@ def main(argv=None) -> int:
     ap.add_argument("--results", type=Path, default=None)
     ap.add_argument("--out-prefix", default="station")
     ap.add_argument("--datasets", default=",".join(DATASETS))
+    ap.add_argument("--update", action="store_true",
+                    help="keep rows of OTHER datasets already in the output "
+                         "and replace only the ones recomputed here")
     a = ap.parse_args(argv)
     try:
         root = a.results or resolve_out(".", create=False)
@@ -379,11 +382,35 @@ def main(argv=None) -> int:
             print(f"  {w}", file=sys.stderr)
         return 1
 
+    done = [x.strip() for x in a.datasets.split(",")]
+
+    def splice(new_rows: pd.DataFrame, path: Path) -> pd.DataFrame:
+        """Replace only the recomputed datasets, keep the rest as they were.
+
+        Recomputing one dataset costs a fraction of the full run, but the
+        writer overwrote the whole file, so a targeted rerun would silently
+        delete every other dataset's rows. --update keeps them.
+        """
+        if not a.update or not path.is_file():
+            return new_rows
+        old_rows = pd.read_csv(path, low_memory=False)
+        if "dataset" not in old_rows.columns:
+            print(f"  WARNING: {path.name} has no dataset column; cannot "
+                  f"splice, writing only {done}", file=sys.stderr)
+            return new_rows
+        keep = old_rows[~old_rows["dataset"].isin(done)]
+        print(f"  {path.name}: kept {len(keep)} rows from "
+              f"{sorted(set(keep['dataset']))}, replaced "
+              f"{len(old_rows) - len(keep)} with {len(new_rows)} for {done}")
+        return pd.concat([keep, new_rows], ignore_index=True)
+
     M = pd.concat(all_m).merge(sites, on="station", how="left")
+    M = splice(M, out_m)
     M.to_csv(out_m, index=False)
     print(f"\n-> {out_m}  ({len(M)} rows)")
     if all_s:
         S = pd.concat(all_s).merge(sites, on="station", how="left")
+        S = splice(S, out_s)
         S.to_csv(out_s, index=False)
         print(f"-> {out_s}  ({len(S)} rows)")
     if skipped:

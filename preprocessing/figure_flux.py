@@ -57,7 +57,37 @@ PANELS = [("era5", "ERA5-Land"), ("historical", "GCM historical"),
 METRICS = {
     "flux": "dynamic - fixed LMA   (% of fixed-LMA annual flux)",
     "variability": "change in interannual SD   (%, dynamic vs fixed)",
+    "absolute": "mean annual flux, native units",
 }
+
+
+def pct_ticks(ax, linthresh, lo, hi):
+    """Decade ticks labelled as percentages, not 3.55 x 10^6.
+
+    The default symlog formatter writes mantissa-and-exponent, which reads as
+    a measurement rather than a percent change. Decades only, each labelled
+    with a % sign, and a power of ten written as a power rather than as
+    1000000%.
+    """
+    import numpy as _np
+    from matplotlib.ticker import FuncFormatter, FixedLocator
+    top = max(abs(lo), abs(hi), linthresh * 10)
+    e = int(_np.ceil(_np.log10(top)))
+    dec = [10.0 ** k for k in range(int(_np.log10(linthresh)), e + 1)]
+    ticks = [-t for t in reversed(dec)] + [0.0] + dec
+
+    def fmt(v, _pos):
+        if v == 0:
+            return "0"
+        a = abs(v)
+        sign = "-" if v < 0 else ""
+        if a < 1000:
+            return f"{sign}{a:g}%"
+        return sign + f"$10^{{{int(round(_np.log10(a)))}}}$%"
+
+    ax.xaxis.set_major_locator(FixedLocator(ticks))
+    ax.xaxis.set_major_formatter(FuncFormatter(fmt))
+    ax.set_xlim(-top * 1.6, top * 1.6)
 
 
 class Missing(Exception):
@@ -191,41 +221,78 @@ def draw_rows(ax, d, linthresh):
     return n
 
 
-def draw_boxes(axes, A, ds):
-    """Per variable: 4 boxes of absolute flux, native units on y."""
-    for ax, (disp, col) in zip(axes, VARS):
-        pos, cols = 0, []
-        for pft, colr in PFTS:
-            for arm in ("fixed", "dyn"):
-                v = A.loc[(A["dataset"] == ds) & (A["variable"] == col)
-                          & (A["pft"] == pft) & (A["arm"] == arm),
-                          "value"].to_numpy(float)
-                v = v[np.isfinite(v)]
-                cols.append((pos, v, colr, arm)); pos += 1
-        for x, v, colr, arm in cols:
-            if v.size == 0:
-                continue
-            bp = ax.boxplot([v], positions=[x], widths=0.62,
-                            showfliers=False, patch_artist=True,
-                            manage_ticks=False)
-            for b in bp["boxes"]:
-                b.set_facecolor(colr if arm == "fixed" else "white")
-                b.set_alpha(0.55 if arm == "fixed" else 1.0)
-                b.set_edgecolor(colr); b.set_linewidth(0.7)
-            for part in ("whiskers", "caps", "medians"):
-                for it in bp[part]:
-                    it.set_color(colr); it.set_linewidth(0.7)
-        ax.set_xlim(-0.7, 3.7)
-        ax.set_xticks([])
-        ax.tick_params(axis="y", labelsize=5.5, pad=1)
-        ax.set_ylabel(UNITS.get(disp, ""), fontsize=5.5, labelpad=1)
-        ax.grid(axis="y", color="0.92", lw=0.4)
+def build_absolute(A, out_png, figsize):
+    """Absolute fluxes: six vertical panels, sixteen boxes each.
+
+    One panel per variable so each keeps its own units on y. Within a panel,
+    four dataset groups of four boxes -- deciduous fixed, deciduous dynamic,
+    evergreen fixed, evergreen dynamic -- so the treatment pair sits side by
+    side and the scenario progression reads left to right.
+
+    This is what makes the percent figures interpretable: a 5% change is a
+    different quantity for GPP than for LAI, and only the absolute magnitude
+    says which. Expect the fixed and dynamic boxes to overlap almost
+    completely -- the station-to-station spread is far larger than the
+    treatment effect, which is the honest picture and the reason the paired
+    percent view exists at all.
+    """
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Patch
+
+    fig, axes = plt.subplots(len(VARS), 1, figsize=figsize,
+                             constrained_layout=True)
+    total = 0
+    for ax, (disp, col) in zip(np.atleast_1d(axes), VARS):
+        x, ticks, labels = 0.0, [], []
+        for ds, lab in PANELS:
+            first = x
+            for pft, colr in PFTS:
+                for arm in ("fixed", "dyn"):
+                    v = A.loc[(A["dataset"] == ds) & (A["variable"] == col)
+                              & (A["pft"] == pft) & (A["arm"] == arm),
+                              "value"].to_numpy(float)
+                    v = v[np.isfinite(v)]
+                    if v.size:
+                        total += v.size
+                        bp = ax.boxplot([v], positions=[x], widths=0.68,
+                                        showfliers=False, patch_artist=True,
+                                        manage_ticks=False)
+                        for b in bp["boxes"]:
+                            b.set_facecolor(colr if arm == "fixed" else "white")
+                            b.set_alpha(0.5 if arm == "fixed" else 1.0)
+                            b.set_edgecolor(colr); b.set_linewidth(0.8)
+                        for part in ("whiskers", "caps", "medians"):
+                            for it in bp[part]:
+                                it.set_color(colr); it.set_linewidth(0.8)
+                    x += 1.0
+            ticks.append((first + x - 1) / 2); labels.append(lab)
+            x += 0.9                      # gap between dataset groups
+        ax.set_xticks(ticks)
+        ax.set_xticklabels(labels, fontsize=7)
+        ax.set_ylabel(disp + "   " + UNITS.get(disp, ""), fontsize=7.5)
+        ax.tick_params(axis="y", labelsize=7)
+        ax.grid(axis="y", color="0.91", lw=0.5)
         ax.set_axisbelow(True)
         for sp in ("top", "right"):
             ax.spines[sp].set_visible(False)
+    if total == 0:
+        raise Missing("absolute: no finite values in any panel")
+    handles = [Patch(facecolor=c, alpha=.5, edgecolor=c, label=p)
+               for p, c in PFTS]
+    handles += [Patch(facecolor="0.55", alpha=.5, edgecolor="0.25",
+                      label="fixed LMA (filled)"),
+                Patch(facecolor="white", edgecolor="0.25",
+                      label="dynamic LMA (open)")]
+    fig.legend(handles=handles, loc="upper center", ncol=4, frameon=False,
+               fontsize=7.5, bbox_to_anchor=(0.5, 0.0))
+    fig.savefig(out_png, dpi=220, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  -> {out_png}   ({total} station values)")
 
 
-def build(d, A, metric, out_png, figsize, linthresh, boxes=True):
+def build(d, metric, out_png, figsize, linthresh):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -239,31 +306,26 @@ def build(d, A, metric, out_png, figsize, linthresh, boxes=True):
     fig = plt.figure(figsize=figsize, constrained_layout=True)
     outer = fig.add_gridspec(len(have), 1, hspace=0.06)
     total = 0
+    # ONE shared x axis. Per-panel limits made the four impossible to compare:
+    # the eye reads position, and the same position meant a different percent
+    # in each panel.
+    lo = float(np.nanmin(d["value"])) if len(d) else -1.0
+    hi = float(np.nanmax(d["value"])) if len(d) else 1.0
+    ax0 = None
     for i, (ds, lab) in enumerate(have):
-        if boxes and A is not None:
-            sub = outer[i].subgridspec(len(VARS), 2, width_ratios=[3.5, 1.0],
-                                       wspace=0.04, hspace=0.12)
-            ax = fig.add_subplot(sub[:, 0])
-            bx = [fig.add_subplot(sub[j, 1]) for j in range(len(VARS))]
-            draw_boxes(bx, A, ds)
-        else:
-            ax = fig.add_subplot(outer[i])
+        ax = fig.add_subplot(outer[i], sharex=ax0)
+        ax0 = ax0 or ax
         total += draw_rows(ax, d[d["dataset"] == ds], linthresh)
-        ax.set_title(lab, fontsize=9, loc="left", pad=3)
+        pct_ticks(ax, linthresh, lo, hi)
         if i < len(have) - 1:
-            ax.set_xlabel("")
+            ax.tick_params(labelbottom=False)
+        ax.set_title(lab, fontsize=9, loc="left", pad=3)
     if total == 0:
         raise Missing(f"{metric}: every panel empty after filtering")
     handles = [Patch(facecolor=c, alpha=.45, edgecolor=c, label=p)
                for p, c in PFTS]
-    if boxes:
-        handles += [Patch(facecolor="0.6", alpha=.55, edgecolor="0.3",
-                          label="fixed LMA (filled)"),
-                    Patch(facecolor="white", edgecolor="0.3",
-                          label="dynamic LMA (open)")]
-    fig.suptitle(METRICS[metric], fontsize=9.5, x=0.01, ha="left")
-    fig.supxlabel(METRICS[metric], fontsize=8)
-    fig.legend(handles=handles, loc="upper center", ncol=4, frameon=False,
+    fig.supxlabel(METRICS[metric], fontsize=8.5)
+    fig.legend(handles=handles, loc="upper center", ncol=2, frameon=False,
                fontsize=7, bbox_to_anchor=(0.5, 0.0))
     fig.savefig(out_png, dpi=220, bbox_inches="tight")
     plt.close(fig)
@@ -275,14 +337,13 @@ def main(argv=None) -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--results", type=Path, default=None)
     ap.add_argument("--out", type=Path, default=None)
-    ap.add_argument("--metrics", default="flux,variability")
+    ap.add_argument("--metrics", default="flux,variability,absolute")
     ap.add_argument("--size", default="6.5x9")
     ap.add_argument("--linthresh", type=float, default=100.0,
                     help="symlog: linear inside +/- this many percent")
     ap.add_argument("--near-zero", type=float, default=0.01,
                     help="denominator below this fraction of the site mean "
                          "counts as near-zero (reported, not filtered)")
-    ap.add_argument("--no-boxes", action="store_true")
     a = ap.parse_args(argv)
 
     def dims(s):
@@ -303,7 +364,6 @@ def main(argv=None) -> int:
               file=sys.stderr)
         return 1
     M = pd.read_csv(p, low_memory=False)
-    A = None if a.no_boxes else abs_values(M)
 
     failures = []
     for metric in [m.strip() for m in a.metrics.split(",") if m.strip()]:
@@ -311,14 +371,18 @@ def main(argv=None) -> int:
             print(f"ERROR: unknown metric {metric!r}", file=sys.stderr)
             return 1
         try:
+            if metric == "absolute":
+                build_absolute(abs_values(M), out_dir / "effect_absolute.png",
+                               dims(a.size))
+                continue
             if metric == "flux":
                 d, notes = flux_values(root, a.near_zero)
                 for n in notes:
                     print(n)
             else:
                 d = var_values(M)
-            build(d, A, metric, out_dir / f"effect_{metric}.png",
-                  dims(a.size), a.linthresh, boxes=not a.no_boxes)
+            build(d, metric, out_dir / f"effect_{metric}.png",
+                  dims(a.size), a.linthresh)
         except Missing as e:
             failures.append(str(e)); print(f"SKIP {metric}: {e}")
     if failures:

@@ -63,8 +63,21 @@ METRICS = {
     "spei_fixed": ("SPEI12", "slope_fixed", "dFlux/dSPEI12   fixed LMA"),
     "spei_dyn":   ("SPEI12", "slope_dyn", "dFlux/dSPEI12   dynamic LMA"),
 }
-UNITS = {"GPP": "gC m-2 yr-1", "LAI": "m2 m-2", "TR": "mm yr-1",
-         "ET": "mm yr-1", "LE": "W m-2", "H": "W m-2"}
+# Numerator: the flux's own units. These panels plot SLOPES, so the axis unit
+# is flux per unit of predictor -- the denominator below. Labelling them with
+# the bare flux unit said the panel showed a flux, which it does not.
+FLUX_UNITS = {"GPP": "gC m$^{-2}$ yr$^{-1}$", "LAI": "m$^2$ m$^{-2}$",
+              "TR": "mm yr$^{-1}$", "ET": "mm yr$^{-1}$",
+              "LE": "W m$^{-2}$", "H": "W m$^{-2}$"}
+# Denominator: the predictor's units. SPEI is a standardised index and is
+# therefore dimensionless, so "per SPEI unit" is the honest phrasing rather
+# than inventing one. LMA is dry mass per area.
+PRED_UNITS = {"Ta": " K$^{-1}$", "SPEI12": " / SPEI unit",
+              "LMA": " / (g m$^{-2}$)"}
+
+
+def yunit(disp: str, pred: str) -> str:
+    return FLUX_UNITS.get(disp, "") + PRED_UNITS.get(pred, "")
 
 
 class Missing(Exception):
@@ -162,7 +175,7 @@ def build(S, metric, out_png, figsize, clip_pct):
     for ax, (disp, vcol) in zip(axes.ravel(), VARS):
         total += panel(ax, d, vcol, pos, clip_pct)
         ax.set_title(disp, fontsize=9, loc="left")
-        ax.set_ylabel(UNITS.get(disp, ""), fontsize=7)
+        ax.set_ylabel(yunit(disp, pred), fontsize=6.5)
         ax.set_xticks(ticks)
         ax.set_xticklabels([LABELS[x] for x in DATASETS], fontsize=7)
         ax.tick_params(axis="y", labelsize=7)

@@ -1,0 +1,42 @@
+job        : 40367
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T04:02:08Z
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dieoff_persistence.csv  (388 rows)
+
+PERSISTENCE, canopy variables, by dataset and arm
+                      station_vars  med_longest_run  max_longest_run  med_duty  pct_reaching_2100  med_n_gcm
+dataset arm                                                                                                 
+ssp126  both                    36              3.0                9     1.000              100.0        4.0
+        dynamic_only            71              1.0               85     1.000               64.8        2.0
+        fixed_only              35              1.0                3     0.778               94.3        5.0
+ssp585  both                    57              4.0               15     1.000              100.0        5.0
+        dynamic_only            99              1.0               85     0.988               68.7        2.0
+        fixed_only              90              1.0                4     0.857               87.8        3.0
+
+How the collapses are shaped (canopy variables):
+  single isolated years    232  ( 59.8%)   reaching 2100:  72.0%
+  2-5 consecutive           83  ( 21.4%)   reaching 2100:  97.6%
+  6-20 consecutive          25  (  6.4%)   reaching 2100: 100.0%
+  21+ consecutive           48  ( 12.4%)   reaching 2100:  95.8%
+
+Top 12 by longest run:
+dataset station       pft variable          arm  n_gcm  n_years  first  last  longest_run  reaches_end
+ ssp585  US-NC2 evergreen    LAI_H dynamic_only      2       86   2015  2100           85         True
+ ssp585  US-NC2 evergreen        T dynamic_only      2       86   2015  2100           85         True
+ ssp126  US-MOz deciduous      GPP dynamic_only      1       85   2016  2100           85         True
+ ssp126  US-MOz deciduous    LAI_H dynamic_only      1       85   2016  2100           85         True
+ ssp126  US-MOz deciduous        T dynamic_only      1       85   2016  2100           85         True
+ ssp585  US-NC3 evergreen    LAI_H dynamic_only      2       86   2015  2100           85         True
+ ssp585  US-NC3 evergreen      GPP dynamic_only      2       86   2015  2100           85         True
+ ssp126  US-NC2 evergreen      GPP dynamic_only      2       86   2015  2100           85         True
+ ssp126  US-NC2 evergreen    LAI_H dynamic_only      2       86   2015  2100           85         True
+ ssp126  US-NC2 evergreen        T dynamic_only      2       86   2015  2100           85         True
+ ssp126  US-NC3 evergreen      GPP dynamic_only      2       86   2015  2100           85         True
+ ssp126  US-NC3 evergreen    LAI_H dynamic_only      2       86   2015  2100           85         True
+
+finished   : 2026-08-28T04:02:11Z
+exit status: 0

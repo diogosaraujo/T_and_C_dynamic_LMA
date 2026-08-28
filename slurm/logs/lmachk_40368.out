@@ -1,0 +1,29 @@
+job        : 40368
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T04:02:08Z
+
+files matching *lma*annual*.csv: lma_effect_annual.csv, lma_effect_era5_land_ic_annual.csv, lma_effect_historical_annual.csv, lma_effect_ssp126_annual.csv, lma_effect_ssp585_annual.csv
+  lma_effect_annual.csv: 1057800 rows -> dataset=annual
+  lma_effect_era5_land_ic_annual.csv: 99360 rows -> dataset=era5
+  lma_effect_historical_annual.csv: 382500 rows -> dataset=historical
+  lma_effect_ssp126_annual.csv: 1057800 rows -> dataset=ssp126
+  lma_effect_ssp585_annual.csv: 1057800 rows -> dataset=ssp585
+
+historical envelope from 481860 rows, 92 stations
+
+IS COLLAPSE-YEAR LMA OUTSIDE THE HISTORICAL RANGE?
+                  station_years  pct_outside  pct_above   med_LMA  med_excess_spans  max_excess_spans
+dataset collapse                                                                                     
+ssp126  False           1057800         7.90       5.98  106.8104               0.0      9.347973e+35
+ssp585  False           1057800        13.78       8.61  108.5510               0.0      9.347973e+35
+
+Read: if pct_outside is far higher for collapse=True, the collapses sit where the PLSR is extrapolating.
+If the two rows are similar, collapse-year LMA is ordinary and the feedback is real.
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dieoff_lma_check.csv  (2115600 rows)
+
+finished   : 2026-08-28T04:02:34Z
+exit status: 0

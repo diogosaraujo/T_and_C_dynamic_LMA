@@ -1,0 +1,22 @@
+job        : 40362
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-28T00:54:08Z
+
+labels era5 : ok
+labels gcm  : ok
+  era5       annual       52992 rows ->    4416 metric rows
+  era5       monthly     635878 rows ->   57408 metric rows
+  era5       seasonal    213440 rows ->   17664 metric rows
+  era5       sens annual     11592 regression rows
+  era5       sens monthly   139104 regression rows
+  era5       sens seasonal   46368 regression rows
+  station_metrics.csv: kept 1075216 rows from ['historical', 'ssp126', 'ssp585'], replaced 26496 with 79488 for ['era5']
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/station_metrics.csv  (1154704 rows)
+  station_sensitivity.csv: kept 2665572 rows from ['historical', 'ssp126', 'ssp585'], replaced 65688 with 197064 for ['era5']
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/station_sensitivity.csv  (2862636 rows)
+
+finished   : 2026-08-28T01:04:22Z
+exit status: 0  (1 = an input was missing; read the list above)

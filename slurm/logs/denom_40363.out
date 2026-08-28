@@ -1,0 +1,342 @@
+job        : 40363
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T02:48:08Z
+
+
+==================================================================
+era5   52,992 rows   era5_annual.csv
+==================================================================
+
+era5 / GPP   n=3312   median |rel|=1.56%   max |rel|=36.66%
+            n  med_abs_rel   p95  max_abs
+bin                                      
+25-50%      3        9.509  10.8    10.95
+50-75%     45          2.4 10.59       18
+75-125%  3230        1.538 8.901    36.66
+>125%      34        3.502 19.88    22.63
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 36.66%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 36.66%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 36.66%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 36.66%
+
+era5 / LAI   n=3312   median |rel|=5.45%   max |rel|=102.6%
+            n  med_abs_rel   p95  max_abs
+bin                                      
+25-50%      4        34.95 48.32    49.31
+50-75%     31        8.508 43.08    50.87
+75-125%  3256        5.391 21.48    102.6
+>125%      21        9.354 31.37    32.33
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 102.6%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 102.6%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 102.6%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 102.6%
+
+era5 / TR   n=3312   median |rel|=1.95%   max |rel|=37.95%
+            n  med_abs_rel    p95  max_abs
+bin                                       
+25-50%      2       0.4276 0.7396   0.7742
+50-75%     54        2.881  17.45    22.33
+75-125%  3189        1.917  9.307    37.95
+>125%      67        2.757  7.908    18.31
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 37.95%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 37.95%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 37.95%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 37.95%
+
+era5 / ET   n=3312   median |rel|=1.32%   max |rel|=16.95%
+            n  med_abs_rel   p95  max_abs
+bin                                      
+25-50%      2        2.694 3.806    3.929
+50-75%     35       0.5413 5.612    7.011
+75-125%  3259        1.328 6.071    16.95
+>125%      16        3.699 14.17    15.15
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 16.95%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 16.95%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 16.95%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 16.95%
+
+era5 / LE   n=3312   median |rel|=1.18%   max |rel|=30.72%
+            n  med_abs_rel   p95  max_abs
+bin                                      
+25-50%      2        1.604 2.505    2.605
+50-75%     47       0.5487 10.87    30.72
+75-125%  3241        1.188 5.315    16.32
+>125%      22        3.049 13.09    14.61
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 30.72%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 30.72%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 30.72%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 30.72%
+
+era5 / H   n=3312   median |rel|=1.43%   max |rel|=41.07%
+            n  med_abs_rel   p95  max_abs
+bin                                      
+25-50%      7        6.304 24.57    27.64
+50-75%     70        5.694 25.07    41.07
+75-125%  3116         1.41 7.462    25.98
+>125%     119       0.8959 6.671    10.09
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 41.07%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 41.07%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 41.07%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 41.07%
+
+==================================================================
+historical   204,000 rows   gcm_annual_historical.csv
+==================================================================
+
+historical / GPP   n=12750   median |rel|=1.22%   max |rel|=79.72%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        4        46.55 79.14    79.72
+25-50%      38        2.965 10.63    18.66
+50-75%     391        1.509 8.071       28
+75-125%  11902        1.187 7.452    37.82
+>125%      415        2.244 9.825    28.71
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 79.72%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 79.72%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 79.72%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 79.72%
+
+historical / LAI   n=12750   median |rel|=4.36%   max |rel|=80.6%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+25-50%      13        6.628 74.41     80.6
+50-75%     192        7.689  22.1    54.49
+75-125%  12324        4.266 17.96    67.36
+>125%      221        7.036 21.43     39.8
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 80.6%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 80.6%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 80.6%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 80.6%
+
+historical / TR   n=12750   median |rel|=1.44%   max |rel|=49.71%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        2        48.85 49.62    49.71
+25-50%      22        2.064 11.41    12.41
+50-75%     261        1.283 10.43    31.23
+75-125%  12254        1.423 7.504    25.79
+>125%      211        2.708 12.85    22.64
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 49.71%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 49.71%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 49.71%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 49.71%
+
+historical / ET   n=12750   median |rel|=1.06%   max |rel|=47.62%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        2        46.44  47.5    47.62
+25-50%      32        1.473 12.64    27.42
+50-75%     246         1.08 9.025    24.21
+75-125%  12263         1.05 5.225    29.31
+>125%      207         1.84 11.67    19.86
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 47.62%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 47.62%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 47.62%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 47.62%
+
+historical / LE   n=12750   median |rel|=1.02%   max |rel|=47.38%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        2        46.28 47.27    47.38
+25-50%      30        1.356 10.43    15.04
+50-75%     230         1.05 9.088    27.57
+75-125%  12288        1.008  5.04    28.59
+>125%      200        1.724 10.38    14.52
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 47.38%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 47.38%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 47.38%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 47.38%
+
+historical / H   n=12750   median |rel|=0.81%   max |rel|=26.23%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        1        26.23 26.23    26.23
+25-50%       1        6.831 6.831    6.831
+50-75%      66        3.625 14.41    23.06
+75-125%  12601       0.8135 3.759     17.4
+>125%       81       0.4344 3.927    6.932
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 26.23%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 26.23%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 26.23%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 26.23%
+
+==================================================================
+ssp126   564,160 rows   gcm_annual_ssp126.csv
+==================================================================
+
+ssp126 / GPP   n=35260   median |rel|=1.37%   max |rel|=1.954e+06%
+             n  med_abs_rel       p95   max_abs
+bin                                            
+<1%         27          100 1.974e+05 1.954e+06
+1-5%        95          100     968.6     2,478
+5-25%       71          206     1,274     1,540
+25-50%     162        3.015     190.5       286
+50-75%    1085         1.65     9.775     84.64
+75-125%  32409        1.324     11.53       100
+>125%     1173        1.873     9.502     25.32
+    guard   0.1% of site mean -> drop    261 ( 0.74%), max |rel| becomes 2,478%
+    guard   0.5% of site mean -> drop    261 ( 0.74%), max |rel| becomes 2,478%
+    guard   1.0% of site mean -> drop    265 ( 0.75%), max |rel| becomes 2,478%
+    guard   5.0% of site mean -> drop    360 ( 1.02%), max |rel| becomes 1,540%
+
+ssp126 / LAI   n=35260   median |rel|=5.95%   max |rel|=5.957e+05%
+             n  med_abs_rel   p95   max_abs
+bin                                        
+<1%         97          100 4,757 5.957e+05
+1-5%        65        180.5 2,873     3,551
+5-25%       43        389.2 1,146     1,535
+25-50%      55        16.56 170.8     255.2
+50-75%     677        8.384 25.13     102.8
+75-125%  33353        5.822 26.92     101.1
+>125%      732        7.979 30.02     70.06
+    guard   0.1% of site mean -> drop    261 ( 0.74%), max |rel| becomes 3,551%
+    guard   0.5% of site mean -> drop    271 ( 0.77%), max |rel| becomes 3,551%
+    guard   1.0% of site mean -> drop    335 ( 0.95%), max |rel| becomes 3,551%
+    guard   5.0% of site mean -> drop    400 ( 1.13%), max |rel| becomes 1,535%
+
+ssp126 / TR   n=35260   median |rel|=1.74%   max |rel|=3.752e+08%
+             n  med_abs_rel       p95   max_abs
+bin                                            
+<1%         23          100 4.986e+05 3.752e+08
+1-5%        64          100     267.5     1,571
+5-25%       82          100     676.4     1,099
+25-50%     111        2.798     202.7     328.8
+50-75%     691        1.083     10.71     91.33
+75-125%  33020        1.717     11.13       100
+>125%     1031        2.582     16.46       100
+    guard   0.1% of site mean -> drop    261 ( 0.74%), max |rel| becomes 1,571%
+    guard   0.5% of site mean -> drop    261 ( 0.74%), max |rel| becomes 1,571%
+    guard   1.0% of site mean -> drop    261 ( 0.74%), max |rel| becomes 1,571%
+    guard   5.0% of site mean -> drop    325 ( 0.92%), max |rel| becomes 1,099%
+
+ssp126 / ET   n=35260   median |rel|=1.32%   max |rel|=125.8%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        5       0.8882 19.38    23.94
+25-50%     112        1.255 20.57    125.8
+50-75%     843        0.794 8.178    80.58
+75-125%  33647        1.325 7.606    80.77
+>125%      653         1.63  8.39    21.23
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 125.8%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 125.8%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 125.8%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 125.8%
+
+ssp126 / LE   n=35260   median |rel|=1.27%   max |rel|=125.1%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        5       0.9566 22.39    27.71
+25-50%     109        1.098 18.15    92.57
+50-75%     833       0.7633 8.427    125.1
+75-125%  33689        1.278 7.434    78.44
+>125%      624        1.482  8.11    19.24
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 125.1%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 125.1%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 125.1%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 125.1%
+
+ssp126 / H   n=35260   median |rel|=1.13%   max |rel|=83.72%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        1        53.46 53.46    53.46
+25-50%       6        12.37 21.55    21.84
+50-75%     190        3.308  12.1    29.51
+75-125%  34659        1.137 6.365    83.72
+>125%      404       0.3948 5.824    36.22
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 83.72%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 83.72%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 83.72%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 83.72%
+
+==================================================================
+ssp585   564,160 rows   gcm_annual_ssp585.csv
+==================================================================
+
+ssp585 / GPP   n=35260   median |rel|=1.32%   max |rel|=2.354e+07%
+             n  med_abs_rel      p95   max_abs
+bin                                           
+<1%         82          100 1.98e+06 2.354e+07
+1-5%       234          100    1,555     8,345
+5-25%      141        80.14    764.4     1,484
+25-50%     314        2.534    201.8     397.2
+50-75%    2607        1.691    11.74     161.2
+75-125%  26076         1.18    10.71       100
+>125%     5189        1.607    10.09       100
+    guard   0.1% of site mean -> drop    695 ( 1.97%), max |rel| becomes 8,345%
+    guard   0.5% of site mean -> drop    696 ( 1.97%), max |rel| becomes 8,345%
+    guard   1.0% of site mean -> drop    699 ( 1.98%), max |rel| becomes 8,345%
+    guard   5.0% of site mean -> drop    933 ( 2.65%), max |rel| becomes 1,484%
+
+ssp585 / LAI   n=35260   median |rel|=6.87%   max |rel|=1.425e+06%
+             n  med_abs_rel       p95   max_abs
+bin                                            
+<1%        242          100 1.149e+04 1.425e+06
+1-5%       171        99.92     3,647     7,834
+5-25%      108        153.3     1,021     1,621
+25-50%      98        14.59       205     313.5
+50-75%    1390        7.899     30.76     119.5
+75-125%  28491        6.471     28.71       100
+>125%     4142          8.7     30.29       100
+    guard   0.1% of site mean -> drop    694 ( 1.97%), max |rel| becomes 1.043e+04%
+    guard   0.5% of site mean -> drop    707 ( 2.01%), max |rel| becomes 1.043e+04%
+    guard   1.0% of site mean -> drop    860 ( 2.44%), max |rel| becomes 7,834%
+    guard   5.0% of site mean -> drop   1031 ( 2.92%), max |rel| becomes 1,621%
+
+ssp585 / TR   n=35260   median |rel|=1.91%   max |rel|=3.004e+08%
+             n  med_abs_rel       p95   max_abs
+bin                                            
+<1%         78          100 5.924e+06 3.004e+08
+1-5%       194          100     980.1     5,362
+5-25%      172        99.89     641.6     1,323
+25-50%     204        2.956     189.2     285.7
+50-75%     940        1.282      12.2     145.7
+75-125%  30211         1.81     11.45       100
+>125%     2843        2.859     13.53       100
+    guard   0.1% of site mean -> drop    696 ( 1.97%), max |rel| becomes 5,362%
+    guard   0.5% of site mean -> drop    696 ( 1.97%), max |rel| becomes 5,362%
+    guard   1.0% of site mean -> drop    696 ( 1.97%), max |rel| becomes 5,362%
+    guard   5.0% of site mean -> drop    890 ( 2.52%), max |rel| becomes 1,323%
+
+ssp585 / ET   n=35260   median |rel|=1.40%   max |rel|=219.9%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        6       0.9562 65.36    86.61
+25-50%     259        1.228 70.53    219.9
+50-75%    1225       0.6562 8.401     84.9
+75-125%  32565        1.419 7.664    84.66
+>125%     1205        1.761 10.09    24.55
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 219.9%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 219.9%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 219.9%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 219.9%
+
+ssp585 / LE   n=35260   median |rel|=1.35%   max |rel|=218.6%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+5-25%        6       0.8962 64.76    85.84
+25-50%     260        1.278 69.39    218.6
+50-75%    1206       0.5949 8.453    84.52
+75-125%  32598        1.372 7.526    83.71
+>125%     1190        1.751 9.947    24.41
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 218.6%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 218.6%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 218.6%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 218.6%
+
+ssp585 / H   n=35260   median |rel|=1.19%   max |rel|=103.2%
+             n  med_abs_rel   p95  max_abs
+bin                                       
+25-50%       4        10.47  14.2    14.82
+50-75%     391        3.695  12.2    90.66
+75-125%  34240        1.195 7.264    103.2
+>125%      625       0.3957 12.37     29.8
+    guard   0.1% of site mean -> drop      0 ( 0.00%), max |rel| becomes 103.2%
+    guard   0.5% of site mean -> drop      0 ( 0.00%), max |rel| becomes 103.2%
+    guard   1.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 103.2%
+    guard   5.0% of site mean -> drop      0 ( 0.00%), max |rel| becomes 103.2%
+
+finished   : 2026-08-28T02:48:17Z
+exit status: 0

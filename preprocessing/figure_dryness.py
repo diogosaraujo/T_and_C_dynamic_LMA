@@ -1,0 +1,231 @@
+#!/usr/bin/env python3
+"""LMA sensitivity against dryness, one figure per dataset.
+
+Six panels, one per flux, each plotting a station's dFlux/dLMA slope against
+its dryness index phi = PET/P, split deciduous and evergreen, with an OLS line
+per forest type and its slope, R2 and p in the corner.
+
+    era5 | historical | ssp126 | ssp585        4 figures
+
+WHY phi ON THE X AXIS. It places every station on the Budyko axis, so the
+question becomes whether the LMA effect depends on where a site sits between
+energy limitation (phi < 1, water to spare) and water limitation (phi > 1,
+demand exceeds supply). The dashed line at phi = 1 is that boundary, and the
+panels are shaded either side of it.
+
+OLS, NOT LOESS. A straight line with a reported slope, R2 and p is a testable
+claim; a smoother is a picture. The template's running lines are visibly
+jagged, and those steps read as structure when they are the window crossing
+individual points. If the relationship turns out to be genuinely non-monotonic
+the residuals will say so.
+
+MEDIAN ACROSS GCMS AT THE METRIC LEVEL, as everywhere else in this analysis.
+Both the slope and phi are computed within one GCM and then reduced across
+models, so a station is one point per figure rather than five. Averaging the
+underlying fluxes or PET first would mix models whose internal variability is
+out of phase.
+
+Reads station_sensitivity.csv (predictor == LMA) and station_dryness.csv.
+"""
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from results_dir import NoResultsDir, resolve_figure, resolve_out  # noqa: E402
+
+VARS = [("GPP", "GPP"), ("LAI", "LAI_H"), ("TR", "T"),
+        ("ET", "ET"), ("LE", "QE"), ("H", "H")]
+FLUX_UNITS = {"GPP": "gC m$^{-2}$ yr$^{-1}$", "LAI": "m$^2$ m$^{-2}$",
+              "TR": "mm yr$^{-1}$", "ET": "mm yr$^{-1}$",
+              "LE": "W m$^{-2}$", "H": "W m$^{-2}$"}
+C_DEC, C_EVE = "#1b7837", "#2166ac"
+PFTS = [("deciduous", C_DEC, "o"), ("evergreen", C_EVE, "^")]
+PANELS = [("era5", "ERA5-Land"), ("historical", "GCM historical"),
+          ("ssp126", "GCM ssp126"), ("ssp585", "GCM ssp585")]
+
+
+class Missing(Exception):
+    """A required table or column is absent. Never substituted."""
+
+
+def ols(x: np.ndarray, y: np.ndarray) -> dict:
+    """Slope, intercept, R2 and a two-sided p. NaNs where n is too small."""
+    m = np.isfinite(x) & np.isfinite(y)
+    n = int(m.sum())
+    if n < 3 or np.std(x[m]) == 0:
+        return {"n": n, "b": np.nan, "a": np.nan, "r2": np.nan, "p": np.nan}
+    xx, yy = x[m], y[m]
+    b, a = np.polyfit(xx, yy, 1)
+    res = yy - (a + b * xx)
+    ss_res, ss_tot = float(np.sum(res ** 2)), float(np.sum((yy - yy.mean()) ** 2))
+    r2 = 1 - ss_res / ss_tot if ss_tot > 0 else np.nan
+    sxx = float(np.sum((xx - xx.mean()) ** 2))
+    se = float(np.sqrt(ss_res / (n - 2) / sxx)) if n > 2 and sxx > 0 else np.nan
+    p = np.nan
+    if np.isfinite(se) and se > 0:
+        from scipy import stats as st
+        p = float(2 * st.t.sf(abs(b / se), n - 2))
+    return {"n": n, "b": float(b), "a": float(a), "r2": r2, "p": p}
+
+
+def load(root: Path) -> pd.DataFrame:
+    """One row per (dataset, station, pft, variable): slope and phi."""
+    sp = Path(root) / "station_sensitivity.csv"
+    dp = Path(root) / "station_dryness.csv"
+    for p, why in ((sp, "run station_metrics.py"),
+                   (dp, "run build_dryness.py")):
+        if not p.is_file():
+            raise Missing(f"{p.name} not found -- {why} first")
+    S = pd.read_csv(sp, low_memory=False)
+    S = S[(S["freq"] == "annual") & (S["subset"] == "all")
+          & (S["predictor"] == "LMA")].copy()
+    if S.empty:
+        have = sorted(pd.read_csv(sp, usecols=["predictor"],
+                                  low_memory=False)["predictor"].unique())
+        raise Missing(f"no annual LMA sensitivity rows; predictors present: {have}")
+    S["slope"] = pd.to_numeric(S["slope_dyn"], errors="coerce")
+    # Median across GCMs at the metric level, per station.
+    s = (S.groupby(["dataset", "station", "pft", "variable"],
+                   as_index=False)["slope"].median())
+
+    D = pd.read_csv(dp, low_memory=False)
+    if "phi" not in D.columns:
+        raise Missing("station_dryness.csv has no phi column")
+    D["phi"] = pd.to_numeric(D["phi"], errors="coerce")
+    d = (D.groupby(["dataset", "station"], as_index=False)["phi"].median())
+
+    out = s.merge(d, on=["dataset", "station"], how="inner")
+    if out.empty:
+        raise Missing("no station matched between the sensitivity and dryness "
+                      "tables -- check that both use the same station IDs "
+                      "and dataset names")
+    lost = s["station"].nunique() - out["station"].nunique()
+    if lost:
+        print(f"  note: {lost} station(s) have a slope but no phi")
+    return out
+
+
+def build(d: pd.DataFrame, ds: str, label: str, out_png: Path, figsize):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+
+    sub = d[d["dataset"] == ds]
+    if sub.empty:
+        raise Missing(f"{ds}: no rows")
+    fig, axes = plt.subplots(3, 2, figsize=figsize, constrained_layout=True,
+                             sharex=True)
+    lo = float(np.nanmin(sub["phi"])) * 0.9
+    hi = float(np.nanmax(sub["phi"])) * 1.05
+    total = 0
+    for ax, (disp, col) in zip(axes.ravel(), VARS):
+        # Energy- and water-limited sides of the Budyko boundary.
+        ax.axvspan(lo, 1.0, color="#eef2f7", zorder=0)
+        ax.axvspan(1.0, hi, color="#fbf0ea", zorder=0)
+        ax.axvline(1.0, color="0.35", lw=0.9, ls="--", zorder=2)
+        ax.axhline(0.0, color="0.15", lw=0.8, zorder=2)
+        txt = []
+        for pft, colr, mk in PFTS:
+            w = sub[(sub["variable"] == col) & (sub["pft"] == pft)]
+            x = w["phi"].to_numpy(float)
+            y = w["slope"].to_numpy(float)
+            m = np.isfinite(x) & np.isfinite(y)
+            if not m.any():
+                continue
+            total += int(m.sum())
+            ax.scatter(x[m], y[m], marker=mk, s=17, facecolor=colr,
+                       edgecolor="white", linewidth=0.3, alpha=0.85, zorder=4)
+            r = ols(x, y)
+            if np.isfinite(r["b"]):
+                xs = np.linspace(np.nanmin(x[m]), np.nanmax(x[m]), 50)
+                ax.plot(xs, r["a"] + r["b"] * xs, color=colr, lw=1.6, zorder=5)
+                star = ("***" if r["p"] < 0.001 else "**" if r["p"] < 0.01
+                        else "*" if r["p"] < 0.05 else "")
+                txt.append((colr, f"b={r['b']:.3g}  R$^2$={r['r2']:.2f}"
+                                  f"  p={r['p']:.3g}{star}  n={r['n']}"))
+        for i, (colr, t) in enumerate(txt):
+            # Boxed: unboxed it sat on the zero line and the points, and the
+            # numbers are the reportable part of the panel.
+            ax.text(0.02, 0.97 - 0.085 * i, t, transform=ax.transAxes,
+                    fontsize=5.6, color=colr, va="top", ha="left", zorder=6,
+                    bbox=dict(facecolor="white", alpha=0.78, edgecolor="none",
+                              boxstyle="round,pad=0.18"))
+        ax.set_title(disp, fontsize=9, loc="left", pad=2)
+        ax.set_ylabel(FLUX_UNITS.get(disp, "") + " / (g m$^{-2}$)", fontsize=6)
+        ax.tick_params(labelsize=7)
+        ax.set_xlim(lo, hi)
+        ax.grid(color="0.92", lw=0.5)
+        ax.set_axisbelow(True)
+        for sp_ in ("top", "right"):
+            ax.spines[sp_].set_visible(False)
+    if total == 0:
+        raise Missing(f"{ds}: every panel empty")
+    handles = [Line2D([], [], marker=mk, ls="", color=c, label=p)
+               for p, c, mk in PFTS]
+    fig.suptitle(f"dFlux/dLMA vs dryness   —   {label}", fontsize=10,
+                 x=0.01, ha="left")
+    fig.supxlabel(r"dryness index  $\phi$ = PET / P"
+                  "        (left of the dashed line: energy-limited)",
+                  fontsize=8)
+    fig.legend(handles=handles, loc="upper center", ncol=2, frameon=False,
+               fontsize=8, bbox_to_anchor=(0.5, 0.0))
+    fig.savefig(out_png, dpi=220, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  -> {out_png}   ({total} points)")
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--results", type=Path, default=None)
+    ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--datasets", default=",".join(k for k, _ in PANELS))
+    ap.add_argument("--size", default="6.5x8")
+    a = ap.parse_args(argv)
+
+    def dims(s):
+        w, h = s.lower().split("x")
+        return float(w), float(h)
+
+    try:
+        root = Path(a.results or resolve_out(".", create=False))
+        out_dir = Path(a.out or resolve_figure("."))
+    except NoResultsDir as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    try:
+        d = load(root)
+    except Missing as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
+    print(f"stations with slope and phi: {d['station'].nunique()}  "
+          f"rows: {len(d)}")
+
+    failures = []
+    want = [x.strip() for x in a.datasets.split(",")]
+    for ds, label in PANELS:
+        if ds not in want:
+            continue
+        try:
+            build(d, ds, label, out_dir / f"dryness_{ds}.png", dims(a.size))
+        except Missing as e:
+            failures.append(str(e)); print(f"SKIP {ds}: {e}")
+    if failures:
+        print(f"\n{len(failures)} figure(s) not produced:", file=sys.stderr)
+        for f in failures:
+            print(f"  {f}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

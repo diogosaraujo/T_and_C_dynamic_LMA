@@ -282,7 +282,7 @@ def main(argv=None) -> int:
             # evaporation with reference-style PET across panels.
             got = []
             for g in gcms:
-                pg = gcm_pet(st, "historical", y0, y1) if False else                      gcm_pet(st, g, "historical", y0, y1)
+                pg = gcm_pet(st, g, "historical", y0, y1)
                 if pg is None:
                     missing.append(f"era5(via historical)/{g}: no pet files")
                     continue

@@ -29,12 +29,13 @@ station relative to phi = 1, which is the line the figure is read against.
                 hyper-humid, the whole sample crushed against the left edge,
                 and phi = 1 never reached. Multiply by days in month.
 
-READ CONTIGUOUS LATITUDE ROWS FROM THE .mat. It is MATLAB v7.3, so column
-major: h5py reports (time, lat, lon) but lon is the fastest-varying axis.
-Slicing axis 0 gathers millions of scattered elements out of a 27 GB file and
-stalls. One latitude row is 3600 contiguous values and returns instantly, so
-stations are grouped by latitude row and every station on a row is read at
-once.
+READ ONE CHUNK PER STATION. The .mat is chunked (516, 15, 1) with gzip, so
+every chunk holds the COMPLETE time series for 15 latitudes at ONE longitude.
+d[:, lat, lon] is therefore a single chunk, while d[t, lat, :] touches 3600
+chunks and decompresses 516 months of each to keep one value. Reading by
+latitude row -- the obvious layout given h5py reports (time, lat, lon) -- did
+the second ~51,000 times and had to be cancelled after the fifteen GCM jobs
+had all finished in minutes.
 
 THE LONGITUDE CONVENTION IS DETERMINED, NOT ASSUMED. ERA5-Land grids appear
 both as 0..359.9 and as -180..179.9, and at 40N a probe lands on land under
@@ -90,42 +91,49 @@ def station_coords() -> pd.DataFrame:
 
 # ----------------------------------------------------------------- ERA5
 def era5_pet(st: pd.DataFrame, y0: int, y1: int) -> pd.DataFrame:
-    """Annual PET (mm) per station from the ERA5-Land monthly .mat."""
+    """Annual PET (mm) per station from the ERA5-Land monthly .mat.
+
+    ONE CHUNK PER STATION. The dataset is chunked (516, 15, 1) with gzip:
+    every chunk holds the COMPLETE time series for 15 latitudes at a single
+    longitude. So d[:, lat, lon] -- a whole time series at one point -- costs
+    exactly one chunk read, while d[t, lat, :] -- one month of one latitude --
+    touches 3600 separate compressed chunks and decodes all 516 months of each
+    to keep one value. The first version did the latter ~51,000 times and had
+    to be cancelled; this does the former 118 times.
+    """
     import h5py
 
     lat_i = np.clip(np.round((90.0 - st["lat"].to_numpy(float)) / ERA5_DLAT),
                     0, 1800).astype(int)
     lon = st["lon"].to_numpy(float)
-    # The two candidate conventions, resolved below by which one lands on land.
     cand = {"0-360": np.round(np.mod(lon, 360.0) / ERA5_DLAT).astype(int)
                      % ERA5_NLON,
             "-180-180": np.round((lon + 180.0) / ERA5_DLAT).astype(int)
                         % ERA5_NLON}
 
     months = [(y, m) for y in range(y0, y1 + 1) for m in range(12)]
-    idx = [(y - ERA5_YEAR0) * 12 + m for y, m in months]
     with h5py.File(ERA5_PET, "r") as f:
         d = f["data_all"]
         n_t = d.shape[0]
-        idx = [i for i in idx if 0 <= i < n_t]
-        if not idx:
+        idx = np.array([(y - ERA5_YEAR0) * 12 + m for y, m in months])
+        keep = (idx >= 0) & (idx < n_t)
+        if not keep.any():
             raise SystemExit(f"ERROR: {y0}-{y1} outside the ERA5 PET record")
+        idx, months = idx[keep], [mm for mm, k in zip(months, keep) if k]
         probe = int(idx[len(idx) // 2])
-        rows = sorted(set(lat_i.tolist()))
-        # ONE READ PER LATITUDE ROW, not per station: contiguous and instant,
-        # where slicing the time axis gathers scattered elements and stalls.
-        strip = {r: np.asarray(d[probe, r, :], dtype=float) for r in rows}
-        # DECIDE ON THE LAND MASK, NOT ON THE STATIONS. Counting finite
-        # stations cannot separate the two conventions: a site at -105 maps to
-        # 255E (Colorado) under one and 75E (central Asia) under the other, and
-        # BOTH are land in ERA5-Land. The first version scored 116 against 118
-        # and picked the wrong one on two stations of noise, which would have
-        # sampled Asia and produced entirely plausible-looking numbers.
-        # The Atlantic at 40N is ocean, hence NaN, and that is unambiguous.
-        row40 = np.asarray(d[probe, 500, :], dtype=float)
-        fin = np.isfinite(row40)
-        frac = {"0-360": float(fin[2900:3500].mean()),      # lon -70..-10
-                "-180-180": float(fin[1100:1700].mean())}
+
+        # Convention decided on the LAND MASK, using point reads rather than a
+        # whole row: the Atlantic at 40N is ocean and therefore NaN, while a
+        # US station maps to land under BOTH conventions, so counting finite
+        # stations cannot separate them (job 40398 scored 116 vs 118 and chose
+        # wrong). Ten probes per candidate, one chunk each.
+        probes = np.linspace(0, 599, 10).astype(int)
+        frac = {}
+        for k, (lo_j, hi_j) in (("0-360", (2900, 3500)),
+                                ("-180-180", (1100, 1700))):
+            cols = lo_j + probes
+            v = np.array([d[probe, 500, int(c)] for c in cols], dtype=float)
+            frac[k] = float(np.isfinite(v).mean())
         best = min(frac, key=frac.get)
         print(f"  longitude convention: {best}   (finite fraction where the "
               f"Atlantic must be: " +
@@ -136,25 +144,18 @@ def era5_pet(st: pd.DataFrame, y0: int, y1: int) -> pd.DataFrame:
                 "candidate puts ocean where the Atlantic is at 40N. Refusing "
                 "to sample on a guess; check the grid before rerunning.")
         lon_i = cand[best]
-        n_ok = int(np.isfinite([strip[r][j]
-                                for r, j in zip(lat_i, lon_i)]).sum())
-        print(f"  stations on finite cells: {n_ok} of {len(lat_i)}")
 
-        out = []
-        for r in rows:
-            sel = np.where(lat_i == r)[0]
-            cols = lon_i[sel]
-            series = np.full((len(idx), len(sel)), np.nan)
-            for k, t in enumerate(idx):
-                series[k] = np.asarray(d[t, r, :], dtype=float)[cols]
-            # m/day, negative -> mm/day, positive.
-            series = -1000.0 * series
-            dd = np.array([days_per_month(y)[m] for y, m in months
-                           if 0 <= (y - ERA5_YEAR0) * 12 + m < n_t])
-            annual = (series * dd[:, None]).reshape(-1, 12, len(sel)).sum(axis=1)
-            for j, s in enumerate(sel):
-                out.append({"station": st["station"].iloc[s],
-                            "pet_mm_yr": float(np.nanmean(annual[:, j]))})
+        dd = np.array([days_per_month(y)[m] for y, m in months], dtype=float)
+        out, n_ok = [], 0
+        for s in range(len(st)):
+            ts = np.asarray(d[:, int(lat_i[s]), int(lon_i[s])], dtype=float)
+            v = -1000.0 * ts[idx]                 # m/day, negative -> mm/day
+            if np.isfinite(v).any():
+                n_ok += 1
+            annual = (v * dd).reshape(-1, 12).sum(axis=1)
+            out.append({"station": st["station"].iloc[s],
+                        "pet_mm_yr": float(np.nanmean(annual))})
+        print(f"  stations on finite cells: {n_ok} of {len(st)}")
     return pd.DataFrame(out)
 
 

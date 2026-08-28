@@ -1,0 +1,55 @@
+job        : 40369
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T04:08:08Z
+
+files matching *lma*annual*.csv: lma_effect_annual.csv, lma_effect_era5_land_ic_annual.csv, lma_effect_historical_annual.csv, lma_effect_ssp126_annual.csv, lma_effect_ssp585_annual.csv
+  lma_effect_annual.csv: no dataset in the name -- SKIPPED
+  lma_effect_era5_land_ic_annual.csv: 99360 rows -> dataset=era5
+  lma_effect_historical_annual.csv: 382500 rows -> dataset=historical
+  lma_effect_ssp126_annual.csv: 1057800 rows -> dataset=ssp126
+  lma_effect_ssp585_annual.csv: 1057800 rows -> dataset=ssp585
+  WARNING: 16654 of 19966 station-years have >1 distinct LMA and no gcm column to separate them; per-GCM attribution is impossible from these files
+
+historical envelope from 5862 rows, 92 stations
+
+IS COLLAPSE-YEAR LMA OUTSIDE THE HISTORICAL RANGE?
+                  station_years  pct_outside  pct_above    med_LMA  med_excess_spans  max_excess_spans
+dataset collapse                                                                                      
+ssp126  False              6289         4.52       3.78  108.09290               0.0          0.272858
+        True                763        30.41       2.62   98.76110               0.0          0.129563
+ssp585  False              6166        11.69       8.38  110.52500               0.0          0.674483
+        True                886        38.94      11.06   94.65115               0.0          0.403896
+
+Read: if pct_outside is far higher for collapse=True, the collapses sit where the PLSR is extrapolating.
+If the two rows are similar, collapse-year LMA is ordinary and the feedback is real.
+
+LMA RELATIVE TO ONSET (lag 0 = first collapse year), median across stations:
+              n   med_LMA  pct_outside
+dataset lag                           
+ssp126  -5   11  90.53610          9.1
+        -4   11  88.56250          0.0
+        -3   11  89.11630          0.0
+        -2   11  92.13190          9.1
+        -1   13  91.32930          7.7
+         0   26  96.80960         11.5
+         1   25  93.38410          4.0
+         2   25  93.95890         12.0
+ssp585  -5   19  90.34810         10.5
+        -4   19  91.93010         36.8
+        -3   19  90.29100         21.1
+        -2   19  91.91070         26.3
+        -1   21  88.99430         19.0
+         0   34  94.63420         26.5
+         1   32  98.00995         18.8
+         2   30  92.81500          6.7
+
+Read: LMA rising in the years BEFORE lag 0 means the input drives the collapse.
+LMA flat until lag 0 means the feedback is running.
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dieoff_lma_check.csv  (14104 rows)
+
+finished   : 2026-08-28T04:08:16Z
+exit status: 0

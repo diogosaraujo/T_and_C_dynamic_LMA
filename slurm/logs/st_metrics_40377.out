@@ -1,0 +1,29 @@
+job        : 40377
+node       : soenode75
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+started    : 2026-08-28T05:48:08Z
+
+labels era5 : ok
+labels gcm  : ok
+  labels matched 557600/564160 rows
+  ssp585     annual      564160 rows ->   19680 metric rows
+  labels matched 6756294/6769413 rows
+  ssp585     monthly    6769413 rows ->  255632 metric rows
+  labels matched 2250080/2263200 rows
+  ssp585     seasonal   2263200 rows ->   78512 metric rows
+  note: lma_effect_ssp585_annual.csv has no gcm column; LMA cannot be attributed per model for ssp585
+  lma ssp585      1057800 rows ->     7052 unique on ['station', 'year'], 1 model(s)
+  ssp585     sens annual     51660 regression rows
+  note: lma_effect_ssp585_annual.csv has no gcm column; LMA cannot be attributed per model for ssp585
+  lma ssp585      1057800 rows ->     7052 unique on ['station', 'year'], 1 model(s)
+  ssp585     sens monthly   619374 regression rows
+  note: lma_effect_ssp585_annual.csv has no gcm column; LMA cannot be attributed per model for ssp585
+  lma ssp585      1057800 rows ->     7052 unique on ['station', 'year'], 1 model(s)
+  ssp585     sens seasonal  206094 regression rows
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/s585_metrics.csv  (353824 rows)
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/s585_sensitivity.csv  (877128 rows)
+
+finished   : 2026-08-28T06:21:45Z
+exit status: 0  (1 = an input was missing; read the list above)

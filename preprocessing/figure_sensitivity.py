@@ -63,6 +63,25 @@ METRICS = {
     "spei_fixed": ("SPEI12", "slope_fixed", "dFlux/dSPEI12   fixed LMA"),
     "spei_dyn":   ("SPEI12", "slope_dyn", "dFlux/dSPEI12   dynamic LMA"),
 }
+
+# APPENDIX: goodness of fit for the same regressions, 10 figures.
+# Pearson r rather than R2, because for a single-predictor OLS R2 = r^2 and the
+# square discards the SIGN -- whether the flux rises or falls with the
+# predictor, which is the thing worth reading off a sensitivity panel. p is
+# plotted as -log10(p) and is orthogonal to r rather than derived from it: it
+# folds in sample size, so r=0.5 over 30 years and r=0.5 over 8 years separate
+# here and are identical under r alone.
+# LMA has no fixed arm -- that arm holds LMA constant, so no regression exists
+# -- which is why this is 10 figures and not 12.
+for _pred, _tag in (("Ta", "ta"), ("SPEI12", "spei"), ("LMA", "lma")):
+    for _arm in ("fixed", "dyn"):
+        if _pred == "LMA" and _arm == "fixed":
+            continue
+        _a = "fixed LMA" if _arm == "fixed" else "dynamic LMA"
+        METRICS[f"fit_r_{_tag}_{_arm}"] = (
+            _pred, f"__r_{_arm}", f"Pearson r,  flux vs {_pred},  {_a}")
+        METRICS[f"fit_p_{_tag}_{_arm}"] = (
+            _pred, f"__p_{_arm}", f"-log10(p),  flux vs {_pred},  {_a}")
 # Numerator: the flux's own units. These panels plot SLOPES, so the axis unit
 # is flux per unit of predictor -- the denominator below. Labelling them with
 # the bare flux unit said the panel showed a flux, which it does not.
@@ -159,7 +178,25 @@ def build(S, metric, out_png, figsize, clip_pct):
         have = sorted(S["predictor"].dropna().unique())
         raise Missing(f"{metric}: no rows for predictor={pred!r}; "
                       f"table has {have}")
-    if col not in d.columns:
+    fit = col.startswith("__")
+    if fit:
+        kind, arm = col[2:].split("_", 1)
+        need = [f"r2_{arm}", f"p_{arm}", f"slope_{arm}"]
+        for c in need:
+            if c not in d.columns:
+                raise Missing(f"{metric}: column {c!r} absent from the table")
+        if kind == "r":
+            # r = sign(slope) * sqrt(R2). Recovering the sign from the slope is
+            # exact for a single predictor and avoids recomputing anything.
+            r2 = pd.to_numeric(d[f"r2_{arm}"], errors="coerce").clip(lower=0)
+            sg = np.sign(pd.to_numeric(d[f"slope_{arm}"], errors="coerce"))
+            d[col] = sg * np.sqrt(r2)
+        else:
+            pv = pd.to_numeric(d[f"p_{arm}"], errors="coerce")
+            # p == 0 underflows to +inf in log space; floor it at the smallest
+            # value the fit can resolve rather than drawing an infinite bar.
+            d[col] = -np.log10(pv.clip(lower=1e-12))
+    elif col not in d.columns:
         raise Missing(f"{metric}: column {col!r} absent from the table")
     for c in ("dataset", "pft", "variable"):
         if c not in d.columns:
@@ -173,9 +210,16 @@ def build(S, metric, out_png, figsize, clip_pct):
     fig, axes = plt.subplots(3, 2, figsize=figsize, constrained_layout=True)
     total = 0
     for ax, (disp, vcol) in zip(axes.ravel(), VARS):
-        total += panel(ax, d, vcol, pos, clip_pct)
+        total += panel(ax, d, vcol, pos, 0.0 if fit else clip_pct)
         ax.set_title(disp, fontsize=9, loc="left")
-        ax.set_ylabel(yunit(disp, pred), fontsize=6.5)
+        ax.set_ylabel("" if fit else yunit(disp, pred), fontsize=6.5)
+        if fit and col.startswith("__p"):
+            for lev, lab in ((1.30103, "p=0.05"), (2.0, "p=0.01")):
+                ax.axhline(lev, color="0.55", lw=0.6, ls="--", zorder=1)
+                ax.text(ax.get_xlim()[1], lev, lab, fontsize=5, color="0.45",
+                        ha="right", va="bottom")
+        if fit and col.startswith("__r"):
+            ax.set_ylim(-1.05, 1.05)
         ax.set_xticks(ticks)
         ax.set_xticklabels([LABELS[x] for x in DATASETS], fontsize=7)
         ax.tick_params(axis="y", labelsize=7)

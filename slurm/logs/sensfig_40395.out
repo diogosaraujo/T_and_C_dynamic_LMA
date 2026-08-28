@@ -1,0 +1,17 @@
+job        : 40395
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T08:11:08Z
+
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/sens_ta.png   (8022 station values)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/sens_spei.png   (8022 station values)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/sens_lma.png   (8022 station values)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/sens_ta_fixed.png   (8022 station values)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/sens_ta_dyn.png   (8022 station values)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/sens_spei_fixed.png   (8022 station values)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/sens_spei_dyn.png   (8022 station values)
+
+finished   : 2026-08-28T08:11:46Z
+exit status: 0

@@ -1,0 +1,14 @@
+job        : 40393
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T07:42:08Z
+
+near-zero denominators: 3118 station-year-models before the median, 656 station-years still majority-tiny after it (0.548% of 119796)
+  -> the median did NOT remove them; a denominator guard is still required if these dominate the axis
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/effect_flux.png   (119763 values)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/effect_variability.png   (2046 values)
+
+finished   : 2026-08-28T07:42:33Z
+exit status: 0

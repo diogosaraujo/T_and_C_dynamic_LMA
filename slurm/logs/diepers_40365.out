@@ -1,0 +1,10 @@
+job        : 40365
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T03:53:08Z
+
+
+finished   : 2026-08-28T03:53:08Z
+exit status: 2

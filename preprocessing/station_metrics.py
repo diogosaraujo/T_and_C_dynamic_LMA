@@ -338,19 +338,20 @@ def read_lma(root: Path, ds: str) -> pd.DataFrame | None:
         # instead, and say exactly which command regenerates the file --
         # analyze_lma_effect.py has an extract stage and a report stage, and
         # only the REPORT stage writes this table.
-        raise SystemExit(
-            f"ERROR: {p.name} has no gcm column, so LMA cannot be attributed "
-            f"per model for {ds}.
-"
-            f"       Regenerate it first:
-"
-            f"         sbatch -p SOE_legacy -A efthymios "
-            f"slurm/submit_lma_effect.sh --report
-"
-            f"       then confirm:  head -1 {p}
-"
-            f"       Re-running station_metrics before that reproduces the "
-            f"previous output exactly.")
+        raise SystemExit(f"""\
+ERROR: {p.name} has no gcm column, so LMA cannot be attributed per model
+       for {ds}. Regenerate the table first -- note that the wrapper's
+       DEFAULT invocation only runs the extract stage, and it is the
+       report stage that writes this file:
+
+         sbatch -p SOE_legacy -A efthymios slurm/submit_lma_effect.sh --report
+
+       then confirm the header:
+
+         head -1 {p}
+
+       Re-running station_metrics before that reproduces the previous
+       output exactly and takes 35 minutes to do it.""")
     else:
         out["gcm"] = ""
         keys = ["station", "year"]

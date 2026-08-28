@@ -650,9 +650,19 @@ def report(out_dir: Path, pair: str | None = None):
                        + [i.get(k, "") for k in keys])
     with open(out_dir / f"lma_effect_{tag}_annual.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
-        w.writerow(["StationID", "ForestType", "year", "flux", "fixed", "dynamic",
-                    "diff", "LMA", "SLA"])
+        # gcm and scenario COME FROM r["key"], which is "<scenario>/<GCM>:<arm>"
+        # for GCM runs and "era5_land:<arm>" otherwise. Without them every
+        # model's LMA landed in one file with nothing to tell them apart: 83%
+        # of station-years carried several distinct LMA values and no way to
+        # attribute any of them, which left the GCM LMA sensitivity empty and
+        # made per-model analysis impossible downstream.
+        w.writerow(["StationID", "ForestType", "gcm", "scenario", "year",
+                    "flux", "fixed", "dynamic", "diff", "LMA", "SLA"])
         for r in ok:
+            key = str(r.get("key", ""))
+            m = re.match(r"^([^/]+)/([^:]+):", key)
+            gcm = m.group(2) if m else ""
+            scen = m.group(1) if m else key.split(":")[0]
             lm = dict(zip(r.get("lma_years", []), r.get("lma", [])))
             Fx, Dy = r["arms"]["fixed_lma"], r["arms"]["dyn_lma"]
             for k in FLUXES:
@@ -664,7 +674,7 @@ def report(out_dir: Path, pair: str | None = None):
                     a = Fx[k][Fx["years"].index(y)]
                     b = Dy[k][Dy["years"].index(y)]
                     L_ = lm.get(y)
-                    w.writerow([r["station"], r["forest_type"], y, k,
+                    w.writerow([r["station"], r["forest_type"], gcm, scen, y, k,
                                 f"{a:.6g}", f"{b:.6g}", f"{b-a:.6g}",
                                 "" if L_ is None else f"{L_:.4f}",
                                 "" if L_ is None else f"{1/(L_*F_C):.6f}"])

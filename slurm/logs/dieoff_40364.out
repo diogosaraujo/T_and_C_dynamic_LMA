@@ -1,0 +1,41 @@
+job        : 40364
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T03:41:08Z
+
+
+======================================================================
+era5: 19,872 station-years, 0 with a collapse in either arm
+
+======================================================================
+historical: 76,500 station-years, 0 with a collapse in either arm
+
+======================================================================
+ssp126: 211,560 station-years, 3,033 with a collapse in either arm
+  GPP  both    162   fixed only    103   dynamic only    741   stations  26   years 2015-2100
+  LAI  both    283   fixed only     52   dynamic only    688   stations  26   years 2015-2100
+  TR   both    157   fixed only    104   dynamic only    743   stations  26   years 2015-2100
+
+======================================================================
+ssp585: 211,560 station-years, 4,635 with a collapse in either arm
+  GPP  both    496   fixed only    203   dynamic only    829   stations  44   years 2015-2100
+  LAI  both    753   fixed only    108   dynamic only    719   stations  44   years 2015-2100
+  TR   both    494   fixed only    203   dynamic only    830   stations  44   years 2015-2100
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dieoff_events.csv  (7668 rows)
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dieoff_by_station.csv  (388 rows)
+
+stations affected per dataset (canopy variables):
+                      station_years  stations
+dataset arm                                  
+ssp126  both                    602        12
+        dynamic_only           2172        25
+        fixed_only              259        12
+ssp585  both                   1743        19
+        dynamic_only           2378        33
+        fixed_only              514        30
+
+finished   : 2026-08-28T03:41:17Z
+exit status: 0

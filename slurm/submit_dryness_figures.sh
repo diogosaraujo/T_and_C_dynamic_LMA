@@ -49,6 +49,9 @@ echo
 source "$TC_VENV/bin/activate" || { echo "ERROR: venv $TC_VENV missing" >&2; exit 1; }
 cd "$REPO_ROOT/preprocessing" || exit 1
 
+# ZR95_H is read from the MOD_PARAM files under MODEL_RUN when
+# --x zr95 is used; harmless otherwise.
+export MODEL_RUN="${MODEL_RUN:-$TC_MODEL_RUN}"
 python -u figure_dryness.py "$@"
 rc=$?
 echo

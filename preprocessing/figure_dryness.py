@@ -49,6 +49,16 @@ PFTS = [("deciduous", C_DEC, "o"), ("evergreen", C_EVE, "^")]
 PANELS = [("era5", "ERA5-Land"), ("historical", "GCM historical"),
           ("ssp126", "GCM ssp126"), ("ssp585", "GCM ssp585")]
 
+# The x axis. phi is climate and varies by dataset; rooting depth is a static
+# site parameter, so its four panels share one x and differ only in the slopes.
+XAXIS = {
+    "phi": dict(col="phi", label=r"dryness index  $\phi$ = PET / P",
+                note="        (left of the dashed line: energy-limited)",
+                vline=1.0, prefix="dryness"),
+    "zr95": dict(col="zr95", label="rooting depth  ZR95$_H$  (mm)",
+                 note="", vline=None, prefix="rootdepth"),
+}
+
 
 # Where the fit text sits, per dataset and variable. Defaults to top-left;
 # these move it clear of the points, which run down-right in most panels.
@@ -93,12 +103,48 @@ def ols(x: np.ndarray, y: np.ndarray) -> dict:
     return {"n": n, "b": float(b), "a": float(a), "r2": r2, "p": p}
 
 
-def load(root: Path) -> pd.DataFrame:
+def root_depth(root: Path) -> pd.DataFrame:
+    """Station -> ZR95_H in mm, from the MOD_PARAM files the runs used.
+
+    NOT from the fetched D95 product. T&C requires ZR95_H <= the deepest soil
+    layer or Root_Fraction_General aborts, so build_model_run caps it; the
+    fetched value and the value the model actually rooted with are different
+    numbers at any site where the cap bit. Only the second explains model
+    behaviour, so it is read back out of MOD_PARAM.
+    """
+    import os
+    import re
+    mr = os.environ.get("MODEL_RUN") or os.environ.get("TC_MODEL_RUN")
+    if not mr or not Path(mr).is_dir():
+        raise Missing("MODEL_RUN is not set, so ZR95_H cannot be read from "
+                      "the MOD_PARAM files the runs actually used")
+    rows = []
+    for f in sorted(Path(mr).glob("*/**/MOD_PARAM_*.m")):
+        st = f.parent
+        while st.parent != Path(mr) and st.parent != st:
+            st = st.parent
+        m = re.search(r"^\s*ZR95_H\s*=\s*\[?\s*([0-9.]+)",
+                      f.read_text(errors="replace"), re.M)
+        if m:
+            rows.append({"station": st.name, "zr95": float(m.group(1))})
+    if not rows:
+        raise Missing(f"no ZR95_H found in any MOD_PARAM under {mr}")
+    d = (pd.DataFrame(rows).groupby("station", as_index=False)["zr95"]
+           .median())
+    print(f"  ZR95_H from MOD_PARAM: {len(d)} stations, "
+          f"{d.zr95.min():.0f}-{d.zr95.max():.0f} mm, "
+          f"median {d.zr95.median():.0f}")
+    return d
+
+
+def load(root: Path, xkind: str = "phi") -> pd.DataFrame:
     """One row per (dataset, station, pft, variable): slope and phi."""
     sp = Path(root) / "station_sensitivity.csv"
     dp = Path(root) / "station_dryness.csv"
-    for p, why in ((sp, "run station_metrics.py"),
-                   (dp, "run build_dryness.py")):
+    need = [(sp, "run station_metrics.py")]
+    if xkind == "phi":
+        need.append((dp, "run build_dryness.py"))
+    for p, why in need:
         if not p.is_file():
             raise Missing(f"{p.name} not found -- {why} first")
     S = pd.read_csv(sp, low_memory=False)
@@ -113,24 +159,26 @@ def load(root: Path) -> pd.DataFrame:
     s = (S.groupby(["dataset", "station", "pft", "variable"],
                    as_index=False)["slope"].median())
 
-    D = pd.read_csv(dp, low_memory=False)
-    if "phi" not in D.columns:
-        raise Missing("station_dryness.csv has no phi column")
-    D["phi"] = pd.to_numeric(D["phi"], errors="coerce")
-    d = (D.groupby(["dataset", "station"], as_index=False)["phi"].median())
-
-    out = s.merge(d, on=["dataset", "station"], how="inner")
+    if xkind == "zr95":
+        d = root_depth(root)
+        out = s.merge(d, on="station", how="inner")   # static: no dataset key
+    else:
+        D = pd.read_csv(dp, low_memory=False)
+        if "phi" not in D.columns:
+            raise Missing("station_dryness.csv has no phi column")
+        D["phi"] = pd.to_numeric(D["phi"], errors="coerce")
+        d = (D.groupby(["dataset", "station"], as_index=False)["phi"].median())
+        out = s.merge(d, on=["dataset", "station"], how="inner")
     if out.empty:
-        raise Missing("no station matched between the sensitivity and dryness "
-                      "tables -- check that both use the same station IDs "
-                      "and dataset names")
+        raise Missing(f"no station matched between the sensitivity table and "
+                      f"the {xkind} values -- check the station IDs")
     lost = s["station"].nunique() - out["station"].nunique()
     if lost:
-        print(f"  note: {lost} station(s) have a slope but no phi")
+        print(f"  note: {lost} station(s) have a slope but no {xkind}")
     return out
 
 
-def build(d: pd.DataFrame, ds: str, label: str, out_png: Path, figsize):
+def build(d, ds, label, out_png, figsize, xk):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -141,19 +189,21 @@ def build(d: pd.DataFrame, ds: str, label: str, out_png: Path, figsize):
         raise Missing(f"{ds}: no rows")
     fig, axes = plt.subplots(3, 2, figsize=figsize, constrained_layout=True,
                              sharex=True)
-    lo = float(np.nanmin(sub["phi"])) * 0.9
-    hi = float(np.nanmax(sub["phi"])) * 1.05
+    xc = xk["col"]
+    lo = float(np.nanmin(sub[xc])) * 0.95
+    hi = float(np.nanmax(sub[xc])) * 1.05
     total = 0
     for ax, (disp, col) in zip(axes.ravel(), VARS):
         # Energy- and water-limited sides of the Budyko boundary.
-        ax.axvspan(lo, 1.0, color="#eef2f7", zorder=0)
-        ax.axvspan(1.0, hi, color="#fbf0ea", zorder=0)
-        ax.axvline(1.0, color="0.35", lw=0.9, ls="--", zorder=2)
+        if xk["vline"] is not None:
+            ax.axvspan(lo, xk["vline"], color="#eef2f7", zorder=0)
+            ax.axvspan(xk["vline"], hi, color="#fbf0ea", zorder=0)
+            ax.axvline(xk["vline"], color="0.35", lw=0.9, ls="--", zorder=2)
         ax.axhline(0.0, color="0.15", lw=0.8, zorder=2)
         txt = []
         for pft, colr, mk in PFTS:
             w = sub[(sub["variable"] == col) & (sub["pft"] == pft)]
-            x = w["phi"].to_numpy(float)
+            x = w[xc].to_numpy(float)
             y = w["slope"].to_numpy(float)
             m = np.isfinite(x) & np.isfinite(y)
             if not m.any():
@@ -191,11 +241,8 @@ def build(d: pd.DataFrame, ds: str, label: str, out_png: Path, figsize):
         raise Missing(f"{ds}: every panel empty")
     handles = [Line2D([], [], marker=mk, ls="", color=c, label=p)
                for p, c, mk in PFTS]
-    fig.suptitle(f"dFlux/dLMA vs dryness   —   {label}", fontsize=10,
-                 x=0.01, ha="left")
-    fig.supxlabel(r"dryness index  $\phi$ = PET / P"
-                  "        (left of the dashed line: energy-limited)",
-                  fontsize=8)
+    fig.suptitle(f"dFlux/dLMA   —   {label}", fontsize=10, x=0.01, ha="left")
+    fig.supxlabel(xk["label"] + xk["note"], fontsize=8)
     fig.legend(handles=handles, loc="upper center", ncol=2, frameon=False,
                fontsize=8, bbox_to_anchor=(0.5, 0.0))
     fig.savefig(out_png, dpi=220, bbox_inches="tight")
@@ -210,6 +257,8 @@ def main(argv=None) -> int:
     ap.add_argument("--out", type=Path, default=None)
     ap.add_argument("--datasets", default=",".join(k for k, _ in PANELS))
     ap.add_argument("--size", default="6.5x8")
+    ap.add_argument("--x", default="phi", choices=list(XAXIS),
+                    help="x axis: dryness index or rooting depth")
     a = ap.parse_args(argv)
 
     def dims(s):
@@ -225,20 +274,22 @@ def main(argv=None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     try:
-        d = load(root)
+        d = load(root, a.x)
     except Missing as e:
         print(f"ERROR: {e}", file=sys.stderr)
         return 1
-    print(f"stations with slope and phi: {d['station'].nunique()}  "
+    print(f"stations with slope and {a.x}: {d['station'].nunique()}  "
           f"rows: {len(d)}")
 
+    xk = XAXIS[a.x]
     failures = []
     want = [x.strip() for x in a.datasets.split(",")]
     for ds, label in PANELS:
         if ds not in want:
             continue
         try:
-            build(d, ds, label, out_dir / f"dryness_{ds}.png", dims(a.size))
+            build(d, ds, label, out_dir / f"{xk['prefix']}_{ds}.png",
+                  dims(a.size), xk)
         except Missing as e:
             failures.append(str(e)); print(f"SKIP {ds}: {e}")
     if failures:

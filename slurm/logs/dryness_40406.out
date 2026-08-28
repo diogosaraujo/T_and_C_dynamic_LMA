@@ -1,0 +1,24 @@
+job        : 40406
+node       : soenode76
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T09:26:08Z
+
+stations with coordinates: 118
+
+ssp126: P from the annual table, 2015-2100, 82 stations
+    window rows 350:430 cols 942:1168 (2.1% of the grid)
+  GFDL-ESM4        PET mean   1088.2 mm/yr
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dryness_part_ssp126_GFDL-ESM4.csv  (82 rows)
+
+phi by dataset (median across GCMs first, then across stations):
+         count   min   25%   50%   75%   max
+dataset                                     
+ssp126  82.000 0.457 0.925 0.999 1.194 3.038
+
+fraction water-limited (phi > 1): 41.5%
+
+finished   : 2026-08-28T09:32:05Z
+exit status: 0

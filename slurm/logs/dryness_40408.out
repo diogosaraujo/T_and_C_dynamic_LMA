@@ -1,0 +1,24 @@
+job        : 40408
+node       : soenode76
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T09:26:08Z
+
+stations with coordinates: 118
+
+ssp126: P from the annual table, 2015-2100, 82 stations
+    window rows 0:3 cols 942:1168 (0.1% of the grid)
+  MPI-ESM1-2-HR    PET mean      nan mm/yr
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dryness_part_ssp126_MPI-ESM1-2-HR.csv  (82 rows)
+
+phi by dataset (median across GCMs first, then across stations):
+         count  min  25%  50%  75%  max
+dataset                                
+ssp126   0.000  NaN  NaN  NaN  NaN  NaN
+
+fraction water-limited (phi > 1): 0.0%
+
+finished   : 2026-08-28T09:32:05Z
+exit status: 0

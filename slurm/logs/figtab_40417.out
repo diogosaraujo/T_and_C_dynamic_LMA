@@ -1,0 +1,21 @@
+job        : 40417
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T09:41:08Z
+
+flux (station-years):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_flux.csv  (48 rows)
+variability (stations):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_variability.csv  (48 rows)
+absolute fluxes (stations, native units):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_absolute.csv  (96 rows)
+sensitivity slopes (stations, flux per predictor unit):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_sensitivity.csv  (432 rows)
+goodness of fit (median Pearson r, share significant):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_fit.csv  (288 rows)
+  SKIP dryness: needs station_dryness.csv (run build_dryness.py)
+
+finished   : 2026-08-28T09:41:35Z
+exit status: 0

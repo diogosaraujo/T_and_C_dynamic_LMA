@@ -1,0 +1,24 @@
+job        : 40405
+node       : soenode75
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-28T09:26:08Z
+
+stations with coordinates: 118
+
+historical: P from the annual table, 1985-2014, 85 stations
+    window rows 350:430 cols 942:1168 (2.1% of the grid)
+  UKESM1-0-LL      PET mean   1043.4 mm/yr
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/dryness_part_historical_UKESM1-0-LL.csv  (85 rows)
+
+phi by dataset (median across GCMs first, then across stations):
+            count   min   25%   50%   75%   max
+dataset                                        
+historical 85.000 0.453 0.985 1.025 1.219 3.136
+
+fraction water-limited (phi > 1): 69.4%
+
+finished   : 2026-08-28T09:29:59Z
+exit status: 0

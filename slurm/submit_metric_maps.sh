@@ -25,10 +25,15 @@
 ## submit_station_metrics.sh must have run first; the flux metric additionally
 ## reads the annual effect tables.
 ##
-## --basemap is optional and takes the us_eco_l3 shapefile already downloaded by
-## submit_verify_pairing.sh. Without it the panels plot but have no CONUS
-## outline, which leaves the stations floating and is much harder to read --
-## pass it if the shapefile is on disk.
+## THE CONUS OUTLINE IS AUTOMATIC. The wrapper looks for the us_eco_l3 shapefile
+## that submit_verify_pairing.sh downloads to $TC_INPUT_DATA/ecoregions and
+## passes it as --basemap; override with an explicit --basemap, or set ECO_DIR.
+## If the file is missing the job still runs and says so loudly on stderr.
+##
+## It is drawn with pyshp + pyproj, both in requirements.txt. NOT geopandas,
+## which requirements.txt deliberately excludes -- the earlier geopandas version
+## of this could not draw an outline under any arguments, since a valid
+## --basemap raised ImportError and an absent one printed a note.
 
 #SBATCH -N 1
 #SBATCH --ntasks=1
@@ -59,6 +64,24 @@ echo
 # shellcheck disable=SC1091
 source "$TC_VENV/bin/activate" || { echo "ERROR: venv $TC_VENV missing" >&2; exit 1; }
 cd "$REPO_ROOT/preprocessing" || exit 1
+
+# THE OUTLINE IS ON BY DEFAULT. It used to need an explicit --basemap, and a run
+# without one produced perfectly good figures with no CONUS behind them and a
+# single "note:" line to say so -- easy to miss in a log, and the figures look
+# finished. Auto-detect the shapefile submit_verify_pairing.sh already downloads,
+# and only fall back to no outline if it genuinely is not there.
+ECO_DIR="${ECO_DIR:-$TC_INPUT_DATA/ecoregions}"
+SHP="$ECO_DIR/us_eco_l3.shp"
+case " $* " in
+    *" --basemap "*) ;;                     # caller chose; leave it alone
+    *)  if [ -f "$SHP" ]; then
+            echo "basemap    : $SHP"
+            set -- "$@" --basemap "$SHP"
+        else
+            echo "basemap    : $SHP   <-- NOT FOUND, panels will have no outline" >&2
+            echo "             run slurm/submit_verify_pairing.sh to download it" >&2
+        fi ;;
+esac
 
 python -u figure_metric_maps.py "$@"
 rc=$?

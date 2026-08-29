@@ -151,6 +151,65 @@ def quartile_bins(mag: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return np.clip(idx, 0, 3).astype(int), edges
 
 
+def read_outline(path: Path, max_pts: int = 220) -> list:
+    """CONUS land polygons in EPSG:5070, as a list of (N,2) rings.
+
+    pyshp AND pyproj, NOT geopandas. requirements.txt excludes geopandas on
+    purpose -- "optional and only used for the --basemap outline, so it is
+    deliberately NOT listed" -- so the geopandas call this replaced could never
+    run on the cluster: passing a valid --basemap raised ImportError and killed
+    the job, and passing none printed a note. Either way there was no outline,
+    and no combination of arguments could produce one. pyshp and pyproj are both
+    listed, so this draws with the venv as it already is.
+
+    NO DISSOLVE. geopandas got the silhouette by dissolving ~1250 Level III
+    polygons into one; without shapely that is expensive to do properly. Filling
+    every polygon in the same flat grey gives the identical picture, because the
+    union of the fills IS the landmass and the seams are invisible when the
+    edges are not drawn.
+
+    Rings are decimated to max_pts. At 220 dpi a panel is ~440 px across 4750 km,
+    so one pixel is ~11 km and vertices finer than that cannot be seen; keeping
+    all ~500k of them would render 24 panels of invisible detail.
+    """
+    import shapefile                                            # pyshp
+    from pyproj import CRS, Transformer
+
+    p = Path(path)
+    if not p.is_file():
+        raise Missing(f"--basemap {p} does not exist. The EPA shapefile is "
+                      f"downloaded by slurm/submit_verify_pairing.sh to "
+                      f"$TC_INPUT_DATA/ecoregions/us_eco_l3.shp")
+    prj = p.with_suffix(".prj")
+    if not prj.is_file():
+        raise Missing(f"no .prj beside {p.name}; the shapefile's projection "
+                      f"cannot be read and the outline would be misplaced")
+    # The EPA distributes us_eco_l3 in USA Contiguous Albers (GRS80), which is
+    # NOT the same datum as EPSG:5070 (NAD83). Reproject from the file's own
+    # .prj rather than assuming they match.
+    tr = Transformer.from_crs(CRS.from_wkt(prj.read_text()), "EPSG:5070",
+                              always_xy=True)
+    rings = []
+    for shp in shapefile.Reader(str(p)).iterShapes():
+        pts = np.asarray(shp.points, float)
+        if pts.size == 0:
+            continue
+        bounds = list(shp.parts) + [len(pts)]
+        for a, b in zip(bounds[:-1], bounds[1:]):
+            ring = pts[a:b]
+            if len(ring) < 3:
+                continue
+            if len(ring) > max_pts:
+                idx = np.linspace(0, len(ring) - 1, max_pts).astype(int)
+                ring = ring[idx]
+            x, y = tr.transform(ring[:, 0], ring[:, 1])
+            rings.append(np.column_stack([x, y]))
+    if not rings:
+        raise Missing(f"{p.name} yielded no polygons")
+    print(f"  basemap: {len(rings)} rings from {p.name}")
+    return rings
+
+
 def albers(lat, lon):
     """CONUS Albers Equal Area (EPSG:5070), one transformer for the whole run."""
     global _TR
@@ -163,20 +222,16 @@ def albers(lat, lon):
     return np.asarray(x, float), np.asarray(y, float)
 
 
-def build(d: pd.DataFrame, yk: dict, out_png: Path, figsize, basemap: Path | None,
+def build(d: pd.DataFrame, yk: dict, out_png: Path, figsize, outline: list | None,
           vmax_pct: float) -> pd.DataFrame:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    from matplotlib.collections import PolyCollection
     from matplotlib.colors import LinearSegmentedColormap, Normalize
     from matplotlib.lines import Line2D
 
     cmap = LinearSegmentedColormap.from_list("puor", PUOR)
-
-    outline = None
-    if basemap is not None and Path(basemap).exists():
-        import geopandas as gpd
-        outline = gpd.read_file(basemap).to_crs("EPSG:5070").dissolve()
 
     fig, axes = plt.subplots(len(VARS), len(PANELS), figsize=figsize,
                              constrained_layout=True, squeeze=False)
@@ -202,8 +257,10 @@ def build(d: pd.DataFrame, yk: dict, out_png: Path, figsize, basemap: Path | Non
         for j, (ds, label) in enumerate(PANELS):
             ax = axes[i, j]
             if outline is not None:
-                outline.boundary.plot(ax=ax, color="0.62", linewidth=0.35,
-                                      zorder=1)
+                # A new collection per axes -- matplotlib will not share one --
+                # but the projected vertex arrays behind them are read once.
+                ax.add_collection(PolyCollection(
+                    outline, facecolors="#eaeef2", edgecolors="none", zorder=1))
             sub = row[row["dataset"] == ds]
             for pft, _colr, mk in PFTS:
                 w = sub[sub["pft"] == pft]
@@ -360,8 +417,20 @@ def main(argv=None) -> int:
               f"{list(YAXIS)}", file=sys.stderr)
         return 1
 
-    if a.basemap is None or not Path(a.basemap).exists():
-        print("note: no --basemap, so the panels have no CONUS outline")
+    # A WRONG PATH IS AN ERROR, NOT A NOTE. This used to print "no --basemap"
+    # whether the flag was absent or pointed at a file that was not there, so a
+    # typo and a deliberate omission produced the same line and the same
+    # outline-less figures.
+    if a.basemap is None:
+        print("note: no --basemap given, so the panels have no CONUS outline.\n"
+              "      The EPA shapefile is downloaded by "
+              "slurm/submit_verify_pairing.sh to\n"
+              "      $TC_INPUT_DATA/ecoregions/us_eco_l3.shp")
+    elif not Path(a.basemap).is_file():
+        print(f"ERROR: --basemap {a.basemap} does not exist.\n"
+              f"       Run slurm/submit_verify_pairing.sh to download it, or "
+              f"omit --basemap to draw without an outline.", file=sys.stderr)
+        return 1
 
     try:
         coords = read_site_coords()
@@ -380,6 +449,14 @@ def main(argv=None) -> int:
               f"{', '.join(off['station'].head(8))}", file=sys.stderr)
         return 1
 
+    # Read the 41 MB shapefile ONCE, not once per metric: the rings are the same
+    # in all five figures and reprojecting them five times is pure waste.
+    try:
+        outline = read_outline(a.basemap) if a.basemap else None
+    except Missing as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
+
     tables, failures = [], []
     for m in want:
         yk = YAXIS[m]
@@ -388,7 +465,7 @@ def main(argv=None) -> int:
             d = load(root, yk, coords, a.fleet)
             print(f"  stations {d['station'].nunique()}   rows {len(d)}")
             tables.append(build(d, yk, out_dir / f"map_{yk['prefix']}.png",
-                                (w, h), a.basemap, a.vmax_pct))
+                                (w, h), outline, a.vmax_pct))
         except Missing as e:
             failures.append(f"{m}: {e}")
             print(f"SKIP {m}: {e}")

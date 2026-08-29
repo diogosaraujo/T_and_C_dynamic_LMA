@@ -1,0 +1,2 @@
+ERROR: python-docx is not installed in /volume/NFS/dd1136/envs/tc-preproc.
+       pip install python-docx    (it is in requirements.txt)

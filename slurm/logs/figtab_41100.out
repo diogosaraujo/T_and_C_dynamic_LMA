@@ -1,0 +1,35 @@
+job        : 41100
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-29T03:44:09Z
+
+flux (station-years):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_flux.csv  (48 rows)
+variability (stations):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_variability.csv  (48 rows)
+absolute fluxes (stations, native units):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_absolute.csv  (96 rows)
+sensitivity slopes (stations, flux per predictor unit):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_sensitivity.csv  (432 rows)
+goodness of fit (median Pearson r, share significant):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_fit.csv  (288 rows)
+dryness (the OLS printed on each panel):
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_dryness.csv  (112 rows)
+scatter (the OLS printed on every panel of all 15 combinations):
+  ZR95_H from MOD_PARAM: 98 stations, 330.0-2300.0, median 1100.0, 22 distinct
+  hc_H from MOD_PARAM: 98 stations, 3.0-60.0, median 18.0, 35 distinct
+  ZR95_H from MOD_PARAM: 98 stations, 330.0-2300.0, median 1100.0, 22 distinct
+  hc_H from MOD_PARAM: 98 stations, 3.0-60.0, median 18.0, 35 distinct
+  ZR95_H from MOD_PARAM: 98 stations, 330.0-2300.0, median 1100.0, 22 distinct
+  hc_H from MOD_PARAM: 98 stations, 3.0-60.0, median 18.0, 35 distinct
+  ZR95_H from MOD_PARAM: 98 stations, 330.0-2300.0, median 1100.0, 22 distinct
+  hc_H from MOD_PARAM: 98 stations, 3.0-60.0, median 18.0, 35 distinct
+  ZR95_H from MOD_PARAM: 98 stations, 330.0-2300.0, median 1100.0, 22 distinct
+  hc_H from MOD_PARAM: 98 stations, 3.0-60.0, median 18.0, 35 distinct
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/table_scatter.csv  (720 rows)
+  15 of 15 combinations covered
+
+finished   : 2026-08-29T03:47:50Z
+exit status: 0

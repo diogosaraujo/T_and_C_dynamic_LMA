@@ -1,0 +1,8 @@
+job        : 41101
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+model run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-29T05:03:09Z
+

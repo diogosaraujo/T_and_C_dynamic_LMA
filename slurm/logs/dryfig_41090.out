@@ -1,0 +1,16 @@
+job        : 41090
+node       : soenode76
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-29T03:28:09Z
+
+  hc_H from MOD_PARAM: 98 stations, 3.0-60.0, median 18.0, 35 distinct
+stations with slope and hc: 92  rows: 2046
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/flux_vs_height_era5.png   (552 points)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/flux_vs_height_historical.png   (510 points)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/flux_vs_height_ssp126.png   (492 points)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/flux_vs_height_ssp585.png   (492 points)
+
+finished   : 2026-08-29T03:28:49Z
+exit status: 0

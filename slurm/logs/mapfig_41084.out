@@ -1,0 +1,69 @@
+job        : 41084
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-29T03:27:09Z
+
+note: no --basemap, so the panels have no CONUS outline
+station coordinates: 118
+
+lma: dFlux/dLMA, dynamic arm
+  fleet: 82 stations in all 4 datasets; dropped 10 incomplete (US-CPk, US-CS2, US-CZ2, US-MtB, US-Oho, US-SHC, ...)
+  stations 82   rows 1968
+  GPP  vmax       54.5   size edges 978.7 / 1266 / 1662
+  LAI  vmax     0.1834   size edges 2.283 / 3.1 / 5.348
+  TR   vmax      11.99   size edges 325.4 / 390 / 454.1
+  ET   vmax      11.61   size edges 527.6 / 625 / 788.2
+  LE   vmax     0.9003   size edges 40.46 / 47.49 / 60.84
+  H    vmax      1.243   size edges 45.85 / 52.19 / 67.02
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/map_lma.png   (1968 points)
+
+flux: median change in annual flux
+  fleet: 82 stations in all 4 datasets; dropped 10 incomplete (US-CPk, US-CS2, US-CZ2, US-MtB, US-Oho, US-SHC, ...)
+  stations 82   rows 1968
+  GPP  vmax      2.786   size edges 977.5 / 1280 / 1678
+  LAI  vmax      10.05   size edges 2.341 / 3.139 / 5.343
+  TR   vmax      3.527   size edges 330 / 394.3 / 449.6
+  ET   vmax      2.175   size edges 527.5 / 624.1 / 786.5
+  LE   vmax      2.127   size edges 40.38 / 47.49 / 60.91
+  H    vmax      2.137   size edges 45.51 / 52.37 / 66.99
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/map_flux.png   (1968 points)
+
+sd: change in interannual SD
+  fleet: 82 stations in all 4 datasets; dropped 10 incomplete (US-CPk, US-CS2, US-CZ2, US-MtB, US-Oho, US-SHC, ...)
+  stations 82   rows 1968
+  GPP  vmax      17.99   size edges 977.5 / 1280 / 1678
+  LAI  vmax      217.4   size edges 2.341 / 3.139 / 5.343
+  TR   vmax      25.89   size edges 330 / 394.3 / 449.6
+  ET   vmax      38.55   size edges 527.5 / 624.1 / 786.5
+  LE   vmax      27.32   size edges 40.38 / 47.49 / 60.91
+  H    vmax      23.54   size edges 45.51 / 52.37 / 66.99
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/map_sd.png   (1968 points)
+
+spei: $\Delta$ dFlux/dSPEI12, dynamic - fixed
+  fleet: 82 stations in all 4 datasets; dropped 10 incomplete (US-CPk, US-CS2, US-CZ2, US-MtB, US-Oho, US-SHC, ...)
+  stations 82   rows 1968
+  GPP  vmax      25.67   size edges 977.5 / 1280 / 1678
+  LAI  vmax     0.3215   size edges 2.341 / 3.139 / 5.343
+  TR   vmax      13.23   size edges 330 / 394.3 / 449.6
+  ET   vmax      14.43   size edges 527.5 / 624.1 / 786.5
+  LE   vmax      0.937   size edges 40.38 / 47.49 / 60.91
+  H    vmax      1.172   size edges 45.51 / 52.37 / 66.99
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/map_spei.png   (1968 points)
+
+ta: $\Delta$ dFlux/dTa, dynamic - fixed
+  fleet: 82 stations in all 4 datasets; dropped 10 incomplete (US-CPk, US-CS2, US-CZ2, US-MtB, US-Oho, US-SHC, ...)
+  stations 82   rows 1968
+  GPP  vmax      23.49   size edges 977.5 / 1280 / 1678
+  LAI  vmax     0.2329   size edges 2.341 / 3.139 / 5.343
+  TR   vmax      10.33   size edges 330 / 394.3 / 449.6
+  ET   vmax      11.81   size edges 527.5 / 624.1 / 786.5
+  LE   vmax     0.6379   size edges 40.38 / 47.49 / 60.91
+  H    vmax     0.7642   size edges 45.51 / 52.37 / 66.99
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/map_ta.png   (1968 points)
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/figures/map_stations.csv
+
+finished   : 2026-08-29T03:28:34Z
+exit status: 0

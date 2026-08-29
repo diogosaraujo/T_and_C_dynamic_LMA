@@ -1,0 +1,15 @@
+job        : 41097
+node       : soenode04
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+figures    : /vol_efthymios/NFS07/dd1136/T_and_C/figures
+started    : 2026-08-29T03:28:09Z
+
+stations with slope and phi: 92  rows: 4774
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/ta_vs_dryness_era5.png   (552 points)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/ta_vs_dryness_historical.png   (510 points)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/ta_vs_dryness_ssp126.png   (492 points)
+  -> /vol_efthymios/NFS07/dd1136/T_and_C/figures/ta_vs_dryness_ssp585.png   (492 points)
+
+finished   : 2026-08-29T03:29:15Z
+exit status: 0

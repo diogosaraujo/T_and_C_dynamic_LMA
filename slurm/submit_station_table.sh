@@ -74,11 +74,6 @@ echo
 source "$TC_VENV/bin/activate" || { echo "ERROR: venv $TC_VENV missing" >&2; exit 1; }
 cd "$REPO_ROOT/preprocessing" || exit 1
 
-python -c "import docx" 2>/dev/null || {
-    echo "ERROR: python-docx is not installed in $TC_VENV." >&2
-    echo "       pip install python-docx    (it is in requirements.txt)" >&2
-    exit 1; }
-
 export MODEL_RUN
 
 # STEP 1 -- the summary. Reads MOD_PARAM, the forcing .mat files, the uncapped
@@ -96,8 +91,22 @@ rc=$?
 [ $rc -eq 0 ] || { echo "ERROR: the summary step failed; not building tables" >&2; exit $rc; }
 
 # STEP 2 -- the tables, from what step 1 just wrote.
+#
+# THE DOCX CHECK BELONGS HERE, NOT BEFORE STEP 1. Job 41101 died on this check
+# before extracting anything, so a missing formatting library cost the whole
+# cluster-only half of the work. Step 1 is the part that can ONLY run here; step
+# 2 runs anywhere. If python-docx is absent the CSVs are already on disk and can
+# be copied down and formatted locally, so this reports the fix and exits with
+# the summary intact rather than leaving nothing behind.
 echo
 echo "--- step 2: building the tables ---"
+if ! python -c "import docx" 2>/dev/null; then
+    echo "ERROR: python-docx is not installed in $TC_VENV, so the .docx cannot" >&2
+    echo "       be written. The step-1 CSVs above ARE complete -- either" >&2
+    echo "         sbatch -p SOE_legacy -A efthymios slurm/submit_setup_env.sh" >&2
+    echo "       and resubmit, or copy the CSVs down and build the tables there." >&2
+    exit 1
+fi
 python -u build_station_table.py --csv station_table.csv "$@"
 rc=$?
 

@@ -189,8 +189,18 @@ def read_outline(path: Path, max_pts: int = 220) -> list:
     # .prj rather than assuming they match.
     tr = Transformer.from_crs(CRS.from_wkt(prj.read_text()), "EPSG:5070",
                               always_xy=True)
+    # The shapefile often lives in a shared tree the job does not own
+    # (/vol_efthymios/NFS07/Data/...), where an unreadable file or a missing
+    # sidecar raises from deep inside pyshp as a bare traceback. Name the file
+    # and the reason instead.
+    try:
+        reader = shapefile.Reader(str(p))
+    except (OSError, PermissionError, shapefile.ShapefileException) as e:
+        raise Missing(f"cannot open {p}: {type(e).__name__}: {e}. Check read "
+                      f"permission and that us_eco_l3.shx sits beside the .shp")
+
     rings = []
-    for shp in shapefile.Reader(str(p)).iterShapes():
+    for shp in reader.iterShapes():
         pts = np.asarray(shp.points, float)
         if pts.size == 0:
             continue

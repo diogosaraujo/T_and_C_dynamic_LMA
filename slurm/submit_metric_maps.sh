@@ -70,16 +70,36 @@ cd "$REPO_ROOT/preprocessing" || exit 1
 # single "note:" line to say so -- easy to miss in a log, and the figures look
 # finished. Auto-detect the shapefile submit_verify_pairing.sh already downloads,
 # and only fall back to no outline if it genuinely is not there.
+# SEARCH SEVERAL LOCATIONS, not just the download target. The shapefile is not
+# necessarily where submit_verify_pairing.sh would put it -- on SOE the copy in
+# use lives in the shared /vol_efthymios/NFS07/Data tree, so an auto-detect that
+# only checked $TC_INPUT_DATA/ecoregions reported NOT FOUND and the maps were
+# drawn without a CONUS outline twice before anyone noticed. $ECO_SHP overrides
+# the search outright.
 ECO_DIR="${ECO_DIR:-$TC_INPUT_DATA/ecoregions}"
-SHP="$ECO_DIR/us_eco_l3.shp"
+ECO_CANDIDATES="
+${ECO_SHP:-}
+$ECO_DIR/us_eco_l3.shp
+/vol_efthymios/NFS07/Data/vegetation_indices/us_eco_l3.shp
+$TC_INPUT_DATA/vegetation_indices/us_eco_l3.shp
+"
 case " $* " in
     *" --basemap "*) ;;                     # caller chose; leave it alone
-    *)  if [ -f "$SHP" ]; then
+    *)  SHP=""
+        for c in $ECO_CANDIDATES; do
+            [ -n "$c" ] && [ -f "$c" ] && { SHP="$c"; break; }
+        done
+        if [ -n "$SHP" ]; then
             echo "basemap    : $SHP"
             set -- "$@" --basemap "$SHP"
         else
-            echo "basemap    : $SHP   <-- NOT FOUND, panels will have no outline" >&2
-            echo "             run slurm/submit_verify_pairing.sh to download it" >&2
+            echo "basemap    : NOT FOUND -- panels will have no CONUS outline." >&2
+            echo "             looked in:" >&2
+            for c in $ECO_CANDIDATES; do
+                [ -n "$c" ] && echo "               $c" >&2
+            done
+            echo "             pass --basemap <path>, set ECO_SHP, or run" >&2
+            echo "             slurm/submit_verify_pairing.sh to download it." >&2
         fi ;;
 esac
 

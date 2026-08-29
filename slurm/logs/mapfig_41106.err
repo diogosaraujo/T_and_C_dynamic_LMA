@@ -1,0 +1,2 @@
+basemap    : /vol_efthymios/NFS07/dd1136/T_and_C/input_data/ecoregions/us_eco_l3.shp   <-- NOT FOUND, panels will have no outline
+             run slurm/submit_verify_pairing.sh to download it

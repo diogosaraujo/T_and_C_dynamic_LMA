@@ -1,0 +1,40 @@
+job        : 41108
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+model run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-29T07:21:09Z
+
+--- step 1: extracting the inputs summary ---
+fleets: 92 ERA5, 82 with the full GCM set
+MOD_PARAM: 92/92 stations
+  fetched root depth: 117 station(s) from root_depth_schenk_jackson.csv [station_id / ZR95_H_mm]
+  tower: 42 station(s) unusable, e.g. US-Blk: no YY file
+  tower annual: 46 station(s) with any usable pair
+  tower: 42 station(s) unusable, e.g. US-Blk: no MM file
+  tower monthly: 64 station(s) with any usable pair
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/station_inputs.csv  (92 stations, 32 columns)
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/mod_param_values.csv  (20424 rows, 222 distinct parameters)
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/tower_overlap.csv  (421 rows)
+
+   ZR95 capped at the column depth: 15 station(s)
+     US-CPk, US-CZ2, US-CZ3, US-GBT, US-GLE, US-MRf, US-Me1, US-Me2, US-Me7, US-MtB, US-SSH, US-xNW, US-xSP, US-xTE, US-xUK
+   entering the flux comparison (n >= 3, any frequency): 64
+     annual    25
+     monthly   64
+
+--- step 2: building the tables ---
+  fleets: 92 ERA5, 82 with the full GCM set, 10 asterisked
+  dump: 92 stations from station_inputs.csv, 222 parameters from mod_param_values.csv
+  Table 3: 67 parameters constant within a vegetation type, 1 rejected as varying
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/station_table.docx
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/station_table.csv
+   92 stations, 10 asterisked
+   parameters from MOD_PARAM: 92/92
+   BASE DOI: 92/92   FLUXNET DOI: 73/92
+
+finished   : 2026-08-29T07:21:56Z
+exit status: 0

@@ -1,0 +1,66 @@
+node    : soenode78
+started : 2026-08-29T05:17:09Z
+
+==> loading Python/3.13.7
+Python 3.13.7
+==> reusing existing venv at /volume/NFS/dd1136/envs/tc-preproc
+Requirement already satisfied: pip in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (26.2.1)
+==> installing from /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt
+Requirement already satisfied: cdsapi>=0.7.4 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (0.7.7)
+Requirement already satisfied: xarray>=2024.1.0 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 7)) (2026.7.0)
+Requirement already satisfied: netCDF4>=1.6.0 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 8)) (1.7.4)
+Requirement already satisfied: numpy>=1.24 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 9)) (2.5.1)
+Requirement already satisfied: openpyxl>=3.1 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 13)) (3.1.5)
+Requirement already satisfied: rasterio>=1.3 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 18)) (1.5.0)
+Requirement already satisfied: h5py>=3.8 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 24)) (3.16.0)
+Requirement already satisfied: scipy>=1.10 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 25)) (1.18.0)
+Requirement already satisfied: pyshp>=2.3 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 31)) (3.1.6)
+Requirement already satisfied: pandas>=2.0 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 42)) (3.0.5)
+Requirement already satisfied: matplotlib>=3.7 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 43)) (3.11.1)
+Requirement already satisfied: pyproj>=3.5 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 44)) (3.7.2)
+Collecting python-docx>=1.1 (from -r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 52))
+  Downloading python_docx-1.2.0-py3-none-any.whl.metadata (2.0 kB)
+Requirement already satisfied: ecmwf-datastores-client>=0.4.0 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from cdsapi>=0.7.4->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (0.5.3)
+Requirement already satisfied: requests>=2.5.0 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from cdsapi>=0.7.4->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (2.34.2)
+Requirement already satisfied: tqdm in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from cdsapi>=0.7.4->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (4.70.0)
+Requirement already satisfied: packaging>=24.2 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from xarray>=2024.1.0->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 7)) (26.3)
+Requirement already satisfied: cftime in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from netCDF4>=1.6.0->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 8)) (1.6.5)
+Requirement already satisfied: certifi in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from netCDF4>=1.6.0->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 8)) (2026.7.22)
+Requirement already satisfied: et-xmlfile in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from openpyxl>=3.1->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 13)) (2.0.0)
+Requirement already satisfied: affine in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from rasterio>=1.3->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 18)) (2.4.0)
+Requirement already satisfied: attrs in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from rasterio>=1.3->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 18)) (26.1.0)
+Requirement already satisfied: click!=8.2.*,>=4.0 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from rasterio>=1.3->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 18)) (8.4.2)
+Requirement already satisfied: cligj>=0.5 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from rasterio>=1.3->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 18)) (0.7.2)
+Requirement already satisfied: pyparsing in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from rasterio>=1.3->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 18)) (3.3.2)
+Requirement already satisfied: python-dateutil>=2.8.2 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from pandas>=2.0->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 42)) (2.9.0.post0)
+Requirement already satisfied: contourpy>=1.0.1 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from matplotlib>=3.7->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 43)) (1.3.3)
+Requirement already satisfied: cycler>=0.10 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from matplotlib>=3.7->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 43)) (0.12.1)
+Requirement already satisfied: fonttools>=4.28.2 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from matplotlib>=3.7->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 43)) (4.63.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from matplotlib>=3.7->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 43)) (1.5.0)
+Requirement already satisfied: pillow>=9 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from matplotlib>=3.7->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 43)) (12.3.0)
+Collecting lxml>=3.1.0 (from python-docx>=1.1->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 52))
+  Downloading lxml-6.1.2-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (3.3 kB)
+Requirement already satisfied: typing_extensions>=4.9.0 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from python-docx>=1.1->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 52)) (4.16.0)
+Requirement already satisfied: multiurl>=0.3.7 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from ecmwf-datastores-client>=0.4.0->cdsapi>=0.7.4->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (0.3.9)
+Requirement already satisfied: pytz in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from multiurl>=0.3.7->ecmwf-datastores-client>=0.4.0->cdsapi>=0.7.4->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (2026.3.post1)
+Requirement already satisfied: six>=1.5 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from python-dateutil>=2.8.2->pandas>=2.0->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 42)) (1.17.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from requests>=2.5.0->cdsapi>=0.7.4->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (3.4.9)
+Requirement already satisfied: idna<4,>=2.5 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from requests>=2.5.0->cdsapi>=0.7.4->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (3.18)
+Requirement already satisfied: urllib3<3,>=1.26 in /volume/NFS/dd1136/envs/tc-preproc/lib/python3.13/site-packages (from requests>=2.5.0->cdsapi>=0.7.4->-r /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/requirements.txt (line 4)) (2.7.0)
+Downloading python_docx-1.2.0-py3-none-any.whl (252 kB)
+Downloading lxml-6.1.2-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (5.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.2/5.2 MB 17.3 MB/s  0:00:00
+Installing collected packages: lxml, python-docx
+
+Successfully installed lxml-6.1.2 python-docx-1.2.0
+
+==> installed:
+    cdsapi imports OK
+    cdsapi 0.7.7
+
+==> found /volume/NFS/dd1136/.cdsapirc
+
+Setup complete. Next: bash slurm/check_cds_access.sh
+
+finished   : 2026-08-29T05:17:20Z
+exit status: 0

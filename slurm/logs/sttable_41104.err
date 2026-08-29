@@ -1,0 +1,103 @@
+    ! Meteo_US_Bar_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Blk_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_CPF_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_CPk_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_CRK_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_CS2_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_CZ2_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_CZ3_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_CZ4_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_ChR_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Cst_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Cwt_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Dk2_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Dk3_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Fmf_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Fuf_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_GBT_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_GLE_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_HBK_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Ha1_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Ha2_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Ho1_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Ho2_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Ho3_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_LPH_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_MEF_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_MMS_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_MOz_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_MRf_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Me1_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Me2_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Me4_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Me6_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Me7_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_MtB_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_NC2_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_NC3_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_NC5_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_NR1_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Oho_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFL_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFb_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFc_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFg_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFh_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFi_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFj_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFk_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFm_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFn_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFp_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFq_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFs_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_PFt_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_SB1_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_SHC_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_SP1_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_SP2_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_SP3_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_SP4_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_SSH_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Slt_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_TEF_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_UMB_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_UMd_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Vcp_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Vcs_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_WBW_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_WCr_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Wi3_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_Wrc_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xAB_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xBL_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xBR_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xGR_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xHA_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xJE_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xLE_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xML_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xNW_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xRM_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xRN_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xSC_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xSE_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xSP_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xST_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xTA_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xTE_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xTR_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xUK_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xWR_1985_2020.mat: OSError: Reader needs file name or open file-like object
+    ! Meteo_US_xYE_1985_2020.mat: OSError: Reader needs file name or open file-like object
+Traceback (most recent call last):
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_station_table.py", line 708, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_station_table.py", line 687, in main
+    write_docx(d, out, a.layout, a.font, t3)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/build_station_table.py", line 588, in write_docx
+    if (d.get("elev_src") == "forcing .mat").any()
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'bool' object has no attribute 'any'

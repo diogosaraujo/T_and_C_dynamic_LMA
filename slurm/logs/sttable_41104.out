@@ -1,0 +1,29 @@
+job        : 41104
+node       : soenode78
+cluster    : soe   partition: SOE_legacy
+results    : /vol_efthymios/NFS07/dd1136/T_and_C/result_summary
+model run  : /vol_efthymios/NFS07/dd1136/T_and_C/model_run
+towers     : /vol_efthymios/NFS07/dd1136/T_and_C/T_and_C_dynamic_LMA/preprocessing/fluxnet
+started    : 2026-08-29T05:23:10Z
+
+--- step 1: extracting the inputs summary ---
+fleets: 92 ERA5, 82 with the full GCM set
+MOD_PARAM: 92/92 stations
+  fetched root depth: 1 station(s)
+  tower: 42 station(s) unusable, e.g. US-Blk: no YY file
+  tower overlap: 46 station(s) with any usable pair
+
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/station_inputs.csv  (92 stations, 24 columns)
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/mod_param_values.csv  (20424 rows, 222 distinct parameters)
+-> /vol_efthymios/NFS07/dd1136/T_and_C/result_summary/tower_overlap.csv  (173 rows)
+
+   ZR95 capped at the column depth: 0 station(s)
+   entering the flux comparison (n >= 3): 25
+
+--- step 2: building the tables ---
+  fleets: 92 ERA5, 82 with the full GCM set, 10 asterisked
+  dump: 92 stations from station_inputs.csv, 222 parameters from mod_param_values.csv
+  Table 3: 67 parameters constant within a vegetation type, 1 rejected as varying
+
+finished   : 2026-08-29T05:23:44Z
+exit status: 1

@@ -83,3 +83,18 @@ LMA_ecoregion_no*_projection.csv
 
 # Rendered figures pulled down from $TC_FIGURES.
 /figures/
+
+# Station-table products pulled down from $TC_RESULTS. They belong in
+# result_summary/ (ignored above), but a scp or FileZilla transfer without an
+# explicit destination drops them at the repo root instead, which is how they
+# keep reappearing in git status. Root-anchored so an intentional copy inside a
+# subdirectory is still visible.
+/station_inputs.csv
+/mod_param_values.csv
+/tower_overlap.csv
+/station_table*.csv
+/station_table*.docx
+
+# Word lock files. Word writes ~$<name>.docx beside any open document and
+# deletes it on close, so it appears and vanishes as the file is reviewed.
+~$*

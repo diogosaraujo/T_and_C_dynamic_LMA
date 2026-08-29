@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import os
 import re
 import sys
 from pathlib import Path
@@ -50,6 +51,16 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from results_dir import NoResultsDir, resolve_out                 # noqa: E402
+
+# HDF5 ADVISORY LOCKING FAILS ON SOME NETWORK FILESYSTEMS, raising
+# "unable to lock file, errno = 37, No locks available" from h5py on NFS or
+# BeeGFS while the identical call works on a local disk. $MODEL_RUN is on
+# /vol_efthymios/NFS07, and the forcing .mat files are the only HDF5 this script
+# opens, so this is a prime suspect for why mat_Zbas came back empty from a
+# cluster run whose other fixes worked. Every access here is read-only, so
+# disabling the lock cannot corrupt anything. It must be set BEFORE the HDF5
+# library initialises, hence module scope rather than inside read_forcing.
+os.environ.setdefault("HDF5_USE_FILE_LOCKING", "FALSE")
 
 PREPROC = Path(__file__).resolve().parent
 REPO_ROOT = PREPROC.parent
@@ -156,6 +167,43 @@ def read_forcing(path: Path) -> dict:
         errs.append(f"scipy: {type(e).__name__}: {e}")
     print(f"    ! {path.name}: {' | '.join(errs)}", file=sys.stderr)
     return out
+
+
+def read_zbas(ameriflux_dir: Path | None):
+    """{station: (Zbas, source)} exactly as build_meteo_input.py resolved it.
+
+    THE FORCING .mat FILES ARE GONE. build_model_run.py symlinks each arm's
+    Meteo_*.mat to $TC_INPUT_DATA/meteo/, and every one of the 196 links is now
+    broken -- the targets were deleted after the runs finished. So Zbas cannot be
+    read back from the file the model actually opened, and regenerating ~2.4 GB
+    of forcing to recover one scalar per station would be absurd.
+
+    It does not have to be. build_meteo_input.py did not invent Zbas; it read it
+    from the AmeriFlux data already on disk, in a documented order of preference.
+    Calling ITS OWN read_elevation here reproduces the number the forcing was
+    built with, from the same files, without the .mat existing.
+
+    This is NOT the same as the live site_display API the table falls back to.
+    The API returns 2743 m for US-xRM where the AmeriFlux BADM/coverage value is
+    2753 -- and 2753 is what went into the forcing. Reading the API would have
+    quietly reported a value no run ever used.
+    """
+    if not ameriflux_dir or not Path(ameriflux_dir).is_dir():
+        print(f"  ! AmeriFlux dir not found ({ameriflux_dir}); Zbas cannot be "
+              f"resolved the way the forcing resolved it", file=sys.stderr)
+        return {}, {}
+    try:
+        from build_meteo_input import read_elevation
+    except Exception as e:                            # noqa: BLE001
+        print(f"  ! cannot import read_elevation: {type(e).__name__}: {e}",
+              file=sys.stderr)
+        return {}, {}
+    elev, src = read_elevation(Path(ameriflux_dir))
+    if elev:
+        from collections import Counter
+        where = ", ".join(f"{k}={v}" for k, v in Counter(src.values()).items())
+        print(f"  Zbas: {len(elev)} station(s) from AmeriFlux ({where})")
+    return elev, src
 
 
 def rank_dir(p: Path) -> tuple:
@@ -276,6 +324,10 @@ def main(argv=None) -> int:
     ap.add_argument("--tower-dir", type=Path, default=None)
     ap.add_argument("--root-depth", type=Path, default=None,
                     help="root_depth_schenk_jackson.csv, for the uncapped D95")
+    ap.add_argument("--ameriflux", type=Path, default=None,
+                    help="downloaded AmeriFlux dir; Zbas is resolved from it the "
+                         "same way build_meteo_input.py did, since the forcing "
+                         ".mat files it was written into are gone")
     ap.add_argument("--min-n", type=int, default=3,
                     help="annual pairs a station needs before it counts as "
                          "entering the flux comparison")
@@ -314,6 +366,9 @@ def main(argv=None) -> int:
     fetched = fetched_zr95(a.root_depth or
                            (Path(os.environ.get("TC_INPUT_DATA", "")) /
                             "root_depth" / "root_depth_schenk_jackson.csv"))
+    zbas, zbas_src = read_zbas(a.ameriflux or
+                               (Path(os.environ.get("TC_INPUT_DATA", "")) /
+                                "ameriflux"))
 
     rows, long_rows = [], []
     for sid in era5:
@@ -358,6 +413,11 @@ def main(argv=None) -> int:
             if met:
                 rec.update(read_forcing(met[0]))
                 rec["forcing_mat"] = met[0].name
+        # Same name the .mat path used, so the table needs no change: whichever
+        # route supplied it, mat_Zbas is "the elevation the model was built with".
+        if sid in zbas and "mat_Zbas" not in rec:
+            rec["mat_Zbas"] = float(zbas[sid])
+            rec["zbas_src"] = zbas_src.get(sid, "ameriflux")
         rec["zr95_fetched_mm"] = fetched.get(sid)
         # Capped where the uncapped D95 exceeds the column: that is the exact
         # condition build_model_run applies, so it is reproduced, not inferred

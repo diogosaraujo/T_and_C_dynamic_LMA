@@ -35,9 +35,17 @@ substitution list, not from a guess about what looks site-like:
     ZR95_H       rooting depth, capped at the column depth
     zatm         measurement height (BASE height, else max EC height, else hc+12)
     hc_H         canopy height
-    Sl_H         SLA from the station's own LMA series; reported here as the
-                 equivalent LMA = 2/Sl_H, which is the study's input variable
+    Sl_H         SLA from the station's own LMA series. NOT TABULATED -- see
+                 below. Carried in the CSV as lma_g_m2 = 1/(Sl_H*f_C).
     aSE_H        phenology switch = the vegetation-type column
+
+LMA IS THE ONE STATION-SPECIFIC INPUT THAT IS NOT A PROPERTY OF THE STATION, so
+Table 2 omits it by choice, not by oversight. MOD_PARAM's Sl_H is the FIXED arm's
+temporal mean over its own forcing period; the dynamic arm varies around that
+value every year, and both shift again under GCM forcing because the mean is then
+taken over that model's period. Printing one number per station would invite it
+to be read as "this station's LMA", and no such quantity exists. The value stays
+in station_table.csv, where the arm and period it belongs to are explicit.
 
 Everything else in MOD_PARAM is PFT-prescribed and identical across all stations
 of a vegetation type, so it does not belong in a per-station table.
@@ -278,6 +286,79 @@ def pft_rows(long: pd.DataFrame, sites: pd.DataFrame, layers=("H", "both"),
     return rows, varying
 
 
+def _list(s):
+    """A MATLAB bracketed list as floats, or None.
+
+    Distinct from _vec above, which searches a whole MOD_PARAM text for a
+    named assignment. This one parses a value already extracted into the
+    dump. Naming both _vec silently shadowed the first and broke the
+    no-dump fallback path with a TypeError.
+    """
+    parts = [p for p in re.split(r"[,\s]+", str(s).strip().strip("[]")) if p]
+    try:
+        return np.array([float(p) for p in parts], float)
+    except ValueError:
+        return None
+
+
+def layer_rows(long: pd.DataFrame, stations) -> tuple:
+    """(blocks, max_layers) for the depth-resolved soil table.
+
+    Each block is (station, [(label, [cell, ...]), ...]) -- four sub-rows per
+    site: sand, clay, organic and the layer's BOTTOM depth.
+
+    DEPTH IS IN CENTIMETRES, not the millimetres Zs stores. That is purely a
+    width decision and worth being explicit about: mm reaches 5000, four digits,
+    ~20.4 pt at 10 pt, which does not fit an 18-column table inside 6.5 inches.
+    In cm the maximum is 500 and every cell is at most three characters, so the
+    table stays at 10 pt. Sand and clay are whole percent; organic keeps one
+    decimal because it spans 0-8% and rounding would collapse most of it to 0.
+
+    Sites with fewer than max_layers layers get an em dash in the unused columns
+    rather than a blank, so a short profile is visibly short rather than looking
+    like missing data.
+    """
+    if long is None or long.empty:
+        raise Missing("mod_param_values.csv not found -- run "
+                      "dump_station_inputs.py on the cluster first")
+    per: dict = {}
+    for r in long.itertuples():
+        per.setdefault(r.station, {})[r.parameter] = r.value
+
+    blocks, widths = [], []
+    for st in stations:
+        p = per.get(st)
+        if not p:
+            continue
+        zs = _list(p.get("Zs"))
+        if zs is None or zs.size < 2:
+            continue
+        series = {}
+        for label, name, scale, nd in (("Sand (%)", "Psan_Zs", 100.0, 0),
+                                       ("Clay (%)", "Pcla_Zs", 100.0, 0),
+                                       ("Org. (%)", "Porg_Zs", 100.0, 1)):
+            v = _list(p.get(name))
+            series[label] = (None if v is None else
+                             [f"{x * scale:.{nd}f}" for x in v])
+        # Layer k spans Zs[k-1]..Zs[k]; the bottom interface is what a reader
+        # needs to place the layer, so Zs[1:] is the row, not Zs[0].
+        series["Depth (cm)"] = [f"{x / 10.0:.0f}" for x in zs[1:]]
+        n = max((len(v) for v in series.values() if v), default=0)
+        widths.append(n)
+        blocks.append((st, series))
+
+    if not blocks:
+        raise Missing("no station had a readable Zs / texture profile")
+    maxl = max(widths)
+    rows = []
+    for st, series in blocks:
+        rows.append((st, [(lab, (series.get(lab) or []) +
+                                ["—"] * (maxl - len(series.get(lab) or [])))
+                          for lab in ("Sand (%)", "Clay (%)", "Org. (%)",
+                                      "Depth (cm)")]))
+    return rows, maxl
+
+
 def _tidy(v: str) -> str:
     """Trim MATLAB brackets and pointless trailing zeros for display."""
     s = str(v).strip()
@@ -444,9 +525,20 @@ def fmt(v, nd=0, dash="—"):
 T1 = [("Site", 0.62), ("Site name", 1.62), ("Lat (°N)", 0.55), ("Lon (°E)", 0.62),
       ("Veg.", 0.48), ("Elev. (m)", 0.55), ("AmeriFlux DOI (10.17190/…)", 2.06)]
 # TABLE 2 -- the station-specific model parameters.
+# LMA IS DELIBERATELY NOT A COLUMN. It is the one station-specific input whose
+# value is not a property of the station: MOD_PARAM's Sl_H is the FIXED arm's
+# temporal mean, the dynamic arm varies around it yearly, and both change again
+# under GCM forcing because the mean is taken over that model's own period. A
+# single number in a station table would therefore be read as "this station's
+# LMA" when no such quantity exists. It stays in station_table.csv, where the
+# arm and period are explicit.
+# Texture is NOT here. A profile mean duplicated what Table 3 shows properly,
+# and the two disagreed in appearance even though they agreed arithmetically:
+# US-Bar reads 81% sand as a thickness-weighted mean while its surface layers
+# are 59%. One depth-resolved statement is better than a summary that invites
+# the surface to be read off it.
 T2 = [("Site", 0.62), ("Veg.", 0.48), ("hc (m)", 0.6), ("zatm (m)", 0.68),
-      ("ZR95 (mm)", 0.78), ("Soil depth (mm)", 0.95), ("Layers", 0.55),
-      ("Sand / clay / org. (%)", 1.24), ("LMA (g m⁻²)", 0.6)]
+      ("ZR95 (mm)", 0.78), ("Soil depth (mm)", 0.95), ("Soil Layers", 0.7)]
 # TABLE 3 -- parameters prescribed per vegetation type.
 T3 = [("Parameter", 0.85), ("Description", 2.7), ("Units", 0.9),
       ("Deciduous", 1.0), ("Evergreen", 1.05)]
@@ -504,10 +596,6 @@ def rows_t1(d: pd.DataFrame) -> list:
 def rows_t2(d: pd.DataFrame) -> list:
     out = []
     for _, r in d.iterrows():
-        tex = "—"
-        if all(np.isfinite(r.get(k, np.nan)) for k in ("sand_pct", "clay_pct", "org_pct")):
-            tex = (f"{r['sand_pct']:.0f} / {r['clay_pct']:.0f} / "
-                   f"{r['org_pct']:.1f}")
         depth = fmt(r.get("soil_depth_mm"), 0)
         # A dagger marks a bedrock lower boundary (Kbot = 0.01 mm/h); everything
         # else drains freely. It is a per-station choice, so it belongs here.
@@ -518,17 +606,17 @@ def rows_t2(d: pd.DataFrame) -> list:
         out.append([markers(r),
                     {"deciduous": "Dec.", "evergreen": "Eve."}.get(r["pft"], "—"),
                     fmt(r.get("hc_m"), 1), fmt(r.get("zatm_m"), 1),
-                    fmt(r.get("zr95_mm"), 0), depth, fmt(r.get("ms"), 0), tex,
-                    fmt(r.get("lma_g_m2"), 1)])
+                    fmt(r.get("zr95_mm"), 0), depth, fmt(r.get("ms"), 0)])
     return out
 
 
 def write_docx(d: pd.DataFrame, out: Path, layout: str, pt: float,
-               t3=None) -> None:
+               t3=None, layers=None, layer_font: float = 10.0) -> None:
     from docx import Document
     from docx.enum.section import WD_ORIENT
     from docx.enum.table import WD_TABLE_ALIGNMENT
     from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.oxml import OxmlElement
     from docx.oxml.ns import qn
     from docx.shared import Inches, Pt
 
@@ -590,6 +678,67 @@ def write_docx(d: pd.DataFrame, out: Path, layout: str, pt: float,
                     para.alignment = WD_ALIGN_PARAGRAPH.CENTER
         doc.add_paragraph()
 
+    def set_cell_margins(table, pt_margin=1.5):
+        """Shrink the table's cell padding.
+
+        Word defaults to 0.08 in per side, which is 11.5 pt of the ~21 pt each
+        column gets in an 18-column table -- enough room for two characters.
+        python-docx has no API for this, so it is set on w:tblCellMar directly.
+        """
+        tw = str(int(pt_margin * 20))                      # points -> twips
+        mar = OxmlElement("w:tblCellMar")
+        for side in ("top", "left", "bottom", "right"):
+            el = OxmlElement(f"w:{side}")
+            el.set(qn("w:w"), tw)
+            el.set(qn("w:type"), "dxa")
+            mar.append(el)
+        table._tbl.tblPr.append(mar)
+
+    def add_layer_table(title, caption, blocks, maxl, fpt):
+        h = doc.add_paragraph()
+        h.add_run(title).bold = True
+        doc.add_paragraph(caption)
+        ncol = 2 + maxl
+        w_site, w_lab = 0.55, 0.62
+        w_layer = (usable - w_site - w_lab) / maxl
+        t = doc.add_table(rows=1, cols=ncol)
+        t.style = "Table Grid"
+        t.alignment = WD_TABLE_ALIGNMENT.CENTER
+        t.autofit = False
+        set_cell_margins(t)
+        heads = ["Site", ""] + [str(i) for i in range(1, maxl + 1)]
+        for j, head in enumerate(heads):
+            c = t.rows[0].cells[j]
+            c.text = ""
+            r = c.paragraphs[0].add_run(head)
+            r.bold = True
+            r.font.size = Pt(fpt)
+            c.width = Inches(w_site if j == 0 else w_lab if j == 1 else w_layer)
+            c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        for st, subrows in blocks:
+            first = None
+            for k, (label, vals) in enumerate(subrows):
+                cells = t.add_row().cells
+                for j in range(ncol):
+                    cells[j].width = Inches(w_site if j == 0
+                                            else w_lab if j == 1 else w_layer)
+                if k == 0:
+                    first = cells[0]
+                    run = cells[0].paragraphs[0].add_run(st)
+                    run.font.size = Pt(fpt)
+                else:
+                    # Vertically merge the Site cell down the block so the id
+                    # appears once per station rather than four times.
+                    first = first.merge(cells[0])
+                r = cells[1].paragraphs[0].add_run(label)
+                r.font.size = Pt(fpt)
+                for j, v in enumerate(vals):
+                    p = cells[2 + j].paragraphs[0]
+                    rr = p.add_run(str(v))
+                    rr.font.size = Pt(fpt)
+                    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        doc.add_paragraph()
+
     doc.add_paragraph()
     if layout == "single":
         add_table("Table 1. AmeriFlux stations used in this study.",
@@ -627,18 +776,33 @@ def write_docx(d: pd.DataFrame, out: Path, layout: str, pt: float,
             "Table 2. Station-specific model parameters.",
             f"Values as read by the model from each station's MOD_PARAM file. "
             f"All other T&C parameters are prescribed per vegetation type "
-            f"(Table 3) and are identical across stations of that type. ZR95 is "
+            f"(Table 4) and are identical across stations of that type. ZR95 is "
             f"the Schenk & Jackson rooting depth, capped at the soil column "
             f"depth where it would otherwise exceed it (ᵃ, n = {n_cap}); T&C "
-            f"aborts in Root_Fraction_General without that cap. Texture is the "
-            f"thickness-weighted mean over the soil profile. † marks a bedrock "
+            f"aborts in Root_Fraction_General without that cap. Soil layers is "
+            f"the number of layers in the station's mesh; the layer depths and "
+            f"the texture of each are given in Table 3. † marks a bedrock "
             f"lower boundary (Kbot = 0.01 mm h⁻¹); all others drain freely. "
             f"{foot}",
             T2, rows_t2(d))
+        if layers is not None:
+            blocks, maxl = layers
+            add_layer_table(
+                "Table 3. Depth-resolved soil texture and layer geometry.",
+                f"The soil profile each station was run with, layer by layer. "
+                f"Saxton & Rawls is applied per layer, so these are the values "
+                f"behind the hydraulic and thermal properties, and the "
+                f"profile-mean texture in Table 2 is a summary of them. Depth is "
+                f"the BOTTOM of each layer, in cm. Column count is the deepest "
+                f"profile in the fleet ({maxl} layers); an em dash marks layers a "
+                f"shallower site does not have. Silt is not tabulated because it "
+                f"is not a model input — T&C derives it internally as "
+                f"1 − sand − clay − organic.",
+                blocks, maxl, layer_font)
         if t3 is not None:
             rows3, varying = t3
             add_table(
-                "Table 3. Parameters prescribed per vegetation type.",
+                "Table 4. Parameters prescribed per vegetation type.",
                 "Every parameter that is constant across all stations of a "
                 "vegetation type, verified station by station against the "
                 "MOD_PARAM files rather than assumed from a list. Values are "
@@ -674,6 +838,11 @@ def main(argv=None) -> int:
                          "single: one landscape table")
     ap.add_argument("--font", type=float, default=10.0)
     ap.add_argument("--refresh-meta", action="store_true")
+    ap.add_argument("--no-layer-table", action="store_true",
+                    help="skip Table 3, the depth-resolved soil profile")
+    ap.add_argument("--layer-font", type=float, default=10.0,
+                    help="point size for Table 3, which is much denser than the "
+                         "others; drop to 9 if depths are shown in mm")
     ap.add_argument("--no-pft-table", action="store_true",
                     help="skip Table 3, the per-vegetation-type parameters")
     ap.add_argument("--pft-differing-only", action="store_true",
@@ -696,17 +865,26 @@ def main(argv=None) -> int:
         print(f"ERROR: {e}", file=sys.stderr)
         return 1
 
+    layers = None
+    if not a.no_layer_table and a.layout != "single":
+        try:
+            layers = layer_rows(d.attrs.get("long"), list(d["station"]))
+            print(f"  Table 3: {len(layers[0])} stations, deepest profile "
+                  f"{layers[1]} layers")
+        except Missing as e:
+            print(f"  note: Table 3 omitted -- {e}", file=sys.stderr)
+
     t3 = None
     if not a.no_pft_table and a.layout != "single":
         try:
             t3 = pft_rows(d.attrs.get("long"), d, differing_only=a.pft_differing_only)
-            print(f"  Table 3: {len(t3[0])} parameters constant within a "
+            print(f"  Table 4: {len(t3[0])} parameters constant within a "
                   f"vegetation type"
                   + (f", {len(t3[1])} rejected as varying" if t3[1] else ""))
         except Missing as e:
             print(f"  note: Table 3 omitted -- {e}", file=sys.stderr)
 
-    write_docx(d, out, a.layout, a.font, t3)
+    write_docx(d, out, a.layout, a.font, t3, layers, a.layer_font)
     print(f"\n-> {out}")
     if a.csv:
         p = Path(a.csv) if Path(a.csv).is_absolute() else resolve_out(a.csv)

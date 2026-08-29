@@ -452,6 +452,24 @@ T3 = [("Parameter", 0.85), ("Description", 2.7), ("Units", 0.9),
       ("Deciduous", 1.0), ("Evergreen", 1.05)]
 
 
+def _flag(v) -> bool:
+    """True only for a genuine true. NaN IS NOT TRUE.
+
+    bool(float("nan")) is True in Python, and missing columns are filled with
+    NaN, so a plain bool() marked all 92 stations as capped -- a footnote saying
+    every station's rooting depth was cut, which is both wrong and exactly the
+    kind of wrong that looks deliberate. v == v is False for NaN.
+    """
+    if v is None:
+        return False
+    if isinstance(v, str):
+        return v.strip().lower() in ("true", "1", "yes")
+    try:
+        return bool(v) and v == v
+    except (TypeError, ValueError):
+        return False
+
+
 def markers(r) -> tuple:
     """(site id, superscript) -- the fleet asterisk plus the two data flags.
 
@@ -462,9 +480,9 @@ def markers(r) -> tuple:
     m = []
     if not r["gcm"]:
         m.append("*")
-    if bool(r.get("zr95_capped")) is True:
+    if _flag(r.get("zr95_capped")):
         m.append("a")
-    if bool(r.get("tower_used")) is True:
+    if _flag(r.get("tower_used")):
         m.append("b")
     return str(r["station"]), ",".join(m)
 
@@ -582,10 +600,14 @@ def write_docx(d: pd.DataFrame, out: Path, layout: str, pt: float,
                   [a[:-1] + b[2:] + a[-1:]
                    for a, b in zip(rows_t1(d), rows_t2(d))])
     else:
-        n_cap = int(d["zr95_capped"].fillna(False).astype(bool).sum())
-        n_tow = int(d["tower_used"].fillna(False).astype(bool).sum())
+        n_cap = int(d["zr95_capped"].map(_flag).sum())
+        n_tow = int(d["tower_used"].map(_flag).sum())
+        # d.get() on a MISSING column returns None, and None == "..." is a plain
+        # bool with no .any(), which crashed job 41104 after both steps had done
+        # their work. Check the column exists before comparing.
         elev_src = ("the model forcing files"
-                    if (d.get("elev_src") == "forcing .mat").any()
+                    if ("elev_src" in d.columns
+                        and (d["elev_src"] == "forcing .mat").any())
                     else "the AmeriFlux site registry")
         foot = (f"* the {n_ast} stations that do not also carry the complete "
                 f"GCM set (historical and both SSP scenarios, five models, both "

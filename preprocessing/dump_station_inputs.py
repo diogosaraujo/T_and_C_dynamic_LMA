@@ -119,30 +119,42 @@ def vec(v: str):
 
 
 def read_forcing(path: Path) -> dict:
-    """Lat/Lon/Zbas and the timing constants, as the run actually received them."""
+    """Lat/Lon/Zbas and the timing constants, as the run actually received them.
+
+    HDF5 IS TRIED FIRST, because every Meteo_*.mat this project writes is
+    '-v7.3'. The previous order was scipy-then-h5py, and it fell back only on
+    NotImplementedError -- which is what scipy raises locally, but on the cluster
+    it raised OSError("Reader needs file name or open file-like object") instead.
+    That hit the generic handler, which returned before h5py was ever tried, so
+    all 92 stations reported no Zbas and the elevation column silently stayed on
+    the registry value. Both readers are attempted now, and only a failure of
+    BOTH is reported.
+    """
     want = ("Lat", "Lon", "Zbas", "DeltaGMT", "t_bef", "t_aft")
-    out = {}
-    try:
-        import scipy.io as sio
-        m = sio.loadmat(path, squeeze_me=True,
-                        variable_names=want)          # v7 and earlier
-        for k in want:
-            if k in m:
-                out[f"mat_{k}"] = float(np.asarray(m[k]).ravel()[0])
-        return out
-    except NotImplementedError:
-        pass                                          # -v7.3, fall through
-    except Exception as e:                            # noqa: BLE001
-        print(f"    ! {path.name}: {type(e).__name__}: {e}", file=sys.stderr)
-        return out
+    out, errs = {}, []
     try:
         import h5py
         with h5py.File(path, "r") as f:
             for k in want:
                 if k in f:
                     out[f"mat_{k}"] = float(np.array(f[k]).ravel()[0])
+        if out:
+            return out
+        errs.append("h5py: opened but none of the wanted variables present")
     except Exception as e:                            # noqa: BLE001
-        print(f"    ! {path.name}: {type(e).__name__}: {e}", file=sys.stderr)
+        errs.append(f"h5py: {type(e).__name__}: {e}")
+    try:
+        import scipy.io as sio
+        m = sio.loadmat(path, squeeze_me=True, variable_names=list(want))
+        for k in want:
+            if k in m:
+                out[f"mat_{k}"] = float(np.asarray(m[k]).ravel()[0])
+        if out:
+            return out
+        errs.append("scipy: opened but none of the wanted variables present")
+    except Exception as e:                            # noqa: BLE001
+        errs.append(f"scipy: {type(e).__name__}: {e}")
+    print(f"    ! {path.name}: {' | '.join(errs)}", file=sys.stderr)
     return out
 
 
@@ -174,54 +186,86 @@ def fetched_zr95(path: Path | None) -> dict:
         return {}
     out = {}
     with Path(path).open(newline="", encoding="utf-8-sig") as fh:
-        for r in csv.DictReader(fh):
-            sid = (r.get("StationID") or r.get("station") or "").strip()
-            for key in ("ZR95_H_mm", "ZR95_mm", "zr95_mm", "ZR95"):
-                if r.get(key):
-                    try:
-                        out[sid] = float(r[key])
-                    except ValueError:
-                        pass
-                    break
-    print(f"  fetched root depth: {len(out)} station(s)")
+        rd = csv.DictReader(fh)
+        cols = list(rd.fieldnames or [])
+        # FIND THE ID COLUMN, do not guess two names and fall through. The first
+        # version tried "StationID" then "station"; the real file uses neither,
+        # so every row keyed on the empty string, they overwrote one another and
+        # the table reported "1 station" without an error. Any column whose name
+        # looks like a site id counts, and the header is printed when none does.
+        idc = next((c for c in cols if c.strip().lower().replace("_", "")
+                    in ("stationid", "station", "siteid", "site", "id")), None)
+        valc = next((c for c in cols if c.strip().lower().replace("_", "")
+                     in ("zr95hmm", "zr95mm", "zr95", "rootdepthmm", "d95mm")), None)
+        if idc is None or valc is None:
+            print(f"  ! {Path(path).name}: cannot find "
+                  f"{'an id' if idc is None else 'a ZR95'} column. Header: {cols}",
+                  file=sys.stderr)
+            return {}
+        for r in rd:
+            sid = (r.get(idc) or "").strip()
+            if not sid:
+                continue
+            try:
+                out[sid] = float(r[valc])
+            except (TypeError, ValueError):
+                pass
+    print(f"  fetched root depth: {len(out)} station(s) from "
+          f"{Path(path).name} [{idc} / {valc}]")
     return out
 
 
-def tower_overlap(model_dir: Path, tower_dir: Path | None, stations) -> pd.DataFrame:
-    """Usable model/tower annual pairs per station and variable.
+def tower_overlap(model_dir: Path, tower_dir: Path | None, stations,
+                  freqs=("annual", "monthly")) -> pd.DataFrame:
+    """Usable model/tower pairs per station, variable AND frequency.
 
     Uses figure_skill_maps' own readers so this subset is exactly the one the
     skill figures drew, not a second definition of "has tower data".
+
+    BOTH FREQUENCIES, because the annual answer alone is misleading. The archive
+    ships one file per resolution, and 42 of the 92 stations have no YY file at
+    all -- so an annual-only test marked 25 stations when the expectation was
+    nearer 70. Those sites still have MM files and still entered the monthly
+    comparison. Reporting per frequency lets the table mark whichever the figures
+    used, instead of silently under-reporting the tower subset by a factor of
+    two.
     """
+    empty = pd.DataFrame(columns=["station", "variable", "freq", "n"])
     if not tower_dir or not Path(tower_dir).is_dir():
         print(f"  ! tower dir not found ({tower_dir}); the flux-comparison "
               f"subset cannot be identified", file=sys.stderr)
-        return pd.DataFrame(columns=["station", "variable", "n"])
+        return empty
     try:
         import figure_skill_maps as SK
         sites = SK.read_sites()
-        model = SK.read_model(Path(model_dir) / "era5_annual.csv", "annual")
-        tower = SK.read_tower(Path(tower_dir), "annual", sites)
     except Exception as e:                            # noqa: BLE001
         print(f"  ! tower overlap unavailable: {type(e).__name__}: {e}",
               file=sys.stderr)
-        return pd.DataFrame(columns=["station", "variable", "n"])
+        return empty
 
-    rows = []
-    for (sid, year, period, var), (f, d) in model.items():
-        if sid not in stations:
+    out = []
+    for freq in freqs:
+        try:
+            model = SK.read_model(Path(model_dir) / f"era5_{freq}.csv", freq)
+            tower = SK.read_tower(Path(tower_dir), freq, sites)
+        except Exception as e:                        # noqa: BLE001
+            print(f"  ! tower {freq}: {type(e).__name__}: {e}", file=sys.stderr)
             continue
-        obs = tower.get((sid, year, period, var))
-        if obs is None or not np.isfinite(obs) or not np.isfinite(f):
-            continue
-        rows.append({"station": sid, "variable": var})
-    if not rows:
-        return pd.DataFrame(columns=["station", "variable", "n"])
-    d = (pd.DataFrame(rows).groupby(["station", "variable"])
-           .size().reset_index(name="n"))
-    print(f"  tower overlap: {d['station'].nunique()} station(s) with any "
-          f"usable pair")
-    return d
+        rows = []
+        for (sid, year, period, var), (f, d) in model.items():
+            if sid not in stations:
+                continue
+            obs = tower.get((sid, year, period, var))
+            if obs is None or not np.isfinite(obs) or not np.isfinite(f):
+                continue
+            rows.append({"station": sid, "variable": var, "freq": freq})
+        if rows:
+            g = (pd.DataFrame(rows).groupby(["station", "variable", "freq"])
+                   .size().reset_index(name="n"))
+            out.append(g)
+            print(f"  tower {freq}: {g['station'].nunique()} station(s) with "
+                  f"any usable pair")
+    return pd.concat(out, ignore_index=True) if out else empty
 
 
 def main(argv=None) -> int:
@@ -320,18 +364,35 @@ def main(argv=None) -> int:
         # from a difference that rounding could fake.
         if rec.get("zr95_fetched_mm") and rec.get("soil_depth_mm"):
             rec["zr95_capped"] = bool(rec["zr95_fetched_mm"] > rec["soil_depth_mm"])
+            rec["zr95_cap_basis"] = "fetched vs column"
+        elif rec.get("zr95_mm") and rec.get("soil_depth_mm"):
+            # FALLBACK, and a weaker test. ZR95 = min(fetched, depth), so an
+            # applied depth sitting exactly on the column depth is the cap's
+            # signature -- but it would also be true of a station whose uncapped
+            # D95 happened to equal the column. Checked against the 15 stations
+            # the soil build logged as capped: this finds all 15, plus 6 more it
+            # cannot confirm. The basis is recorded so the table can say which
+            # test produced the mark.
+            rec["zr95_capped"] = bool(rec["zr95_mm"] == rec["soil_depth_mm"])
+            rec["zr95_cap_basis"] = "equals column depth"
         rows.append(rec)
 
     ov = tower_overlap(results, a.tower_dir, set(era5))
-    used = set()
-    if not ov.empty:
-        used = set(ov[ov["n"] >= a.min_n]["station"].unique())
+    ok = ov[ov["n"] >= a.min_n] if not ov.empty else ov
+    per_freq = ({f: set(g["station"]) for f, g in ok.groupby("freq")}
+                if not ok.empty else {})
+    used = set().union(*per_freq.values()) if per_freq else set()
     for rec in rows:
+        # "Entered the comparison" = enough steps at ANY frequency the figures
+        # were drawn at. The per-frequency flags are kept beside it so the table
+        # can narrow to one if the manuscript reports only one.
         rec["tower_used"] = rec["station"] in used
+        for f, s in per_freq.items():
+            rec[f"tower_used_{f}"] = rec["station"] in s
         if not ov.empty:
             g = ov[ov["station"] == rec["station"]]
             for _, r in g.iterrows():
-                rec[f"tower_n_{r['variable']}"] = int(r["n"])
+                rec[f"tower_n_{r['variable']}_{r['freq']}"] = int(r["n"])
 
     d = pd.DataFrame(rows)
     out1 = resolve_out(f"{a.out_prefix}station_inputs.csv")
@@ -352,7 +413,10 @@ def main(argv=None) -> int:
     print(f"\n   ZR95 capped at the column depth: {n_cap} station(s)")
     if n_cap:
         print("     " + ", ".join(d[d["zr95_capped"].fillna(False)]["station"]))
-    print(f"   entering the flux comparison (n >= {a.min_n}): {len(used)}")
+    print(f"   entering the flux comparison (n >= {a.min_n}, any frequency): "
+          f"{len(used)}")
+    for f, s in sorted(per_freq.items()):
+        print(f"     {f:<9} {len(s)}")
     non_era5 = d[d.get("arm_is_era5") == False]["station"].tolist()  # noqa: E712
     if non_era5:
         print(f"   ! read from a non-ERA5 arm (LMA is a GCM-period mean): "

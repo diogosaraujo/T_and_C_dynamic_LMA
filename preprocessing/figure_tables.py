@@ -18,6 +18,21 @@ no table.
     table_sensitivity.csv  dataset x variable x pft x predictor  (3 slopes)
     table_fit.csv          dataset x variable x pft x predictor x arm
     table_dryness.csv      dataset x variable x pft   (OLS b, R2, p, n)
+    table_scatter.csv      metric x axis x dataset x variable x pft (OLS)
+
+table_scatter.csv IS EVERY SCATTER PANEL, table_dryness.csv only one of them.
+figure_dryness draws 5 y metrics x 3 x axes x 4 datasets = 60 figures, each with
+six panels and two OLS fits, and the dryness table covers the single default
+combination (y=lma, x=phi). The scatter table loops all fifteen, so every number
+printed at 5.6 pt on any panel is quotable.
+
+table_scatter is restricted to the SIX PLOTTED VARIABLES. y_values applies that
+filter for the flux metric but not for the sensitivity ones, so the unfiltered
+result also carries Bowen, EG, EIn, Lk, NPP, Rn, Tfrac and WUE -- 14 variables,
+not 6. Those are real numbers with no panel behind them, and this file's rule is
+that a table matches the figure it describes. table_dryness.csv is left as it
+was, unfiltered, so anything already citing it still resolves; where they
+overlap the statistics are identical, and table_scatter supersedes it.
 
 Read-only over station_metrics.csv, station_sensitivity.csv and
 station_dryness.csv. Nothing is recomputed from the model output.
@@ -34,7 +49,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from results_dir import NoResultsDir, resolve_out                 # noqa: E402
 from station_metrics import DATASETS, load as load_effect, read_sites  # noqa: E402
-from figure_dryness import ols                                    # noqa: E402
+from figure_dryness import XAXIS, YAXIS, ols                      # noqa: E402
 
 VARS = {"GPP": "GPP", "LAI_H": "LAI", "T": "TR",
         "ET": "ET", "QE": "LE", "H": "H"}
@@ -206,6 +221,44 @@ def main(argv=None) -> int:
             put(t, "dryness")
     else:
         print("  SKIP dryness: needs station_dryness.csv (run build_dryness.py)")
+
+    # Every scatter panel, not just the default one. Same load() the figures
+    # call, so the fit here and the fit drawn on the panel are one computation.
+    # A combination whose inputs are absent is NAMED and skipped -- x=zr95 and
+    # x=hc need $MODEL_RUN to read ZR95_H/hc_H back out of the MOD_PARAM files
+    # the runs actually used, and x=phi needs station_dryness.csv.
+    print("scatter (the OLS printed on every panel of all 15 combinations):")
+    from figure_dryness import load as load_scatter
+    rows, skipped = [], []
+    for ykey, yk in YAXIS.items():
+        for xkey, xk in XAXIS.items():
+            try:
+                d = load_scatter(root, xkey, yk)
+            except Exception as e:                               # noqa: BLE001
+                skipped.append(f"{ykey} vs {xkey}: {type(e).__name__}: {e}")
+                continue
+            # THE SIX PLOTTED VARIABLES ONLY. y_values filters to them for the
+            # flux metric but not for the sensitivity ones, which return every
+            # variable in the table -- Bowen, EG, EIn, Lk, NPP, Rn, Tfrac, WUE
+            # as well. Those have no panel, so a row for them in a table
+            # described as "the OLS printed on each panel" is a row that cannot
+            # be checked against anything. Same filter the other tables here use.
+            d = d[d["variable"].isin(VARS)]
+            for k, g in d.groupby(["dataset", "variable", "pft"],
+                                  observed=True, dropna=False):
+                r = ols(g[xk["col"]].to_numpy(float),
+                        g["slope"].to_numpy(float))
+                rows.append({"metric": ykey, "axis": xkey}
+                            | dict(zip(["dataset", "variable", "pft"], k)) | r)
+    if rows:
+        t = pd.DataFrame(rows)
+        t["variable"] = t["variable"].map(VARS).fillna(t["variable"])
+        t = t.rename(columns={"b": "ols_slope", "a": "ols_intercept"})
+        put(t, "scatter")
+        print(f"  {t.groupby(['metric', 'axis']).ngroups} of "
+              f"{len(YAXIS) * len(XAXIS)} combinations covered")
+    for s in skipped:
+        print(f"  SKIP {s}")
     return 0
 
 

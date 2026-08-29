@@ -49,6 +49,16 @@ echo
 source "$TC_VENV/bin/activate" || { echo "ERROR: venv $TC_VENV missing" >&2; exit 1; }
 cd "$REPO_ROOT/preprocessing" || exit 1
 
+# table_scatter.csv covers the zr95 and hc axes as well as phi, and those read
+# ZR95_H/hc_H back out of the MOD_PARAM files the runs actually used. Without
+# MODEL_RUN set, 10 of the 15 combinations skip with a note instead of failing,
+# so the table would look complete and silently be a third of itself.
+# config.sh already sets MODEL_RUN; this only has to export it. Written with
+# ${TC_MODEL_RUN:-} rather than a bare $TC_MODEL_RUN because that variable does
+# not exist in config.sh, and under "set -u" expanding it would abort the job.
+export MODEL_RUN="${MODEL_RUN:-${TC_MODEL_RUN:-}}"
+[ -d "$MODEL_RUN" ] || echo "  ! MODEL_RUN='$MODEL_RUN' is not a directory;" \
+    "the zr95 and hc axes of table_scatter.csv will be skipped" >&2
 python -u figure_tables.py "$@"
 rc=$?
 echo

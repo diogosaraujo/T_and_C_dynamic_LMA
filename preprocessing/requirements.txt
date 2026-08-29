@@ -42,3 +42,11 @@ pyshp>=2.3
 pandas>=2.0
 matplotlib>=3.7
 pyproj>=3.5
+
+# build_station_table.py writes the station table straight to .docx, so the
+# column widths, point size and page margins are set once here rather than being
+# re-done by hand in Word every time the fleet or a parameter changes. LISTED
+# DELIBERATELY: geopandas was left out on the same "optional" reasoning and the
+# result was a --basemap that could not work on the cluster under any arguments.
+# If an import is required for a script to do its job, it belongs in this file.
+python-docx>=1.1
